@@ -25,6 +25,8 @@ Hooks.once('init', () => {
     CONFIG.Actor.dataModels = dataModels.actor.config;
     CONFIG.Actor.documentClass = documents.CosmereActor as any;
 
+    CONFIG.Item.dataModels = dataModels.item.config;
+
     Actors.unregisterSheet('core', ActorSheet);
     Actors.registerSheet('cosmere-rpg', applications.actor.CharacterSheet, {
         types: [ 'character' ],
