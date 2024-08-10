@@ -95,8 +95,14 @@ export class BaseSheet extends ActorSheet {
         return skillIds.map(skillId => ({
             id: skillId,
             config: CONFIG.COSMERE.skills[skillId],
-            ...this.actor.system.skills[skillId]
-        }))
+            ...this.actor.system.skills[skillId],
+            active: !CONFIG.COSMERE.skills[skillId].hiddenUntilAquired ||
+                this.actor.system.skills[skillId].rank >= 1
+        })).sort((a, b) => {
+            const _a = a.config.hiddenUntilAquired ? 1 : 0;
+            const _b = b.config.hiddenUntilAquired ? 1 : 0;
+            return _a - _b;
+        })
     }
 
     private getResourceDataForAttributeGroup(groupId: AttributeGroup) {

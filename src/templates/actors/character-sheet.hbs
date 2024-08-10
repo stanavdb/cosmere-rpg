@@ -67,6 +67,8 @@
                     <ul class="skill-list">
                         {{#each attrGroup.skills as |skill|}}
 
+                        {{#if skill.active}}
+
                         <li class="skill" data-id="{{skill.id}}">
                             <div class="mod-box rollable">
                                 <span class="mod">+{{ skill.mod }}</span>
@@ -95,6 +97,8 @@
                                 </li>
                             </ul>
                         </li>
+
+                        {{/if}}
 
                         {{/each}}
                     </ul>

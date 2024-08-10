@@ -60,7 +60,9 @@ const COSMERE: CosmereRPGConfig = {
             label: 'Willpower',
             skills: [
                 Skill.Discipline,
-                Skill.Intimidation
+                Skill.Intimidation,
+
+                Skill.Transformation
             ]
         },
         [Attribute.Awareness]: {
@@ -68,7 +70,9 @@ const COSMERE: CosmereRPGConfig = {
             skills: [
                 Skill.Insight,
                 Skill.Perception,
-                Skill.Survival
+                Skill.Survival,
+
+                Skill.Gravitation
             ]
         },
         [Attribute.Presence]: {
@@ -76,7 +80,10 @@ const COSMERE: CosmereRPGConfig = {
             skills: [
                 Skill.Deception,
                 Skill.Leadership,
-                Skill.Persuasion
+                Skill.Persuasion,
+
+                Skill.Adhesion,
+                Skill.Illumination,
             ]
         }
     },
@@ -168,6 +175,28 @@ const COSMERE: CosmereRPGConfig = {
         [Skill.Survival]: {
             label: 'Survival',
             attribute: Attribute.Awareness
+        },
+
+        // Surges,
+        [Skill.Adhesion]: {
+            label: 'Adhesion',
+            attribute: Attribute.Presence,
+            hiddenUntilAquired: true,
+        },
+        [Skill.Gravitation]: {
+            label: 'Gravitation',
+            attribute: Attribute.Awareness,
+            hiddenUntilAquired: true,
+        },
+        [Skill.Illumination]: {
+            label: 'Illumination',
+            attribute: Attribute.Presence,
+            hiddenUntilAquired: true,
+        },
+        [Skill.Transformation]: {
+            label: 'Transformation',
+            attribute: Attribute.Willpower,
+            hiddenUntilAquired: true,
         }
     }
 };

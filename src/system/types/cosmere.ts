@@ -39,7 +39,13 @@ export enum Skill {
     Leadership = 'lea',
     Perception = 'prc',
     Persuasion = 'prs',
-    Survival = 'sur'
+    Survival = 'sur',
+
+    // Surge skills
+    Adhesion = 'adh',
+    Gravitation = 'gra',
+    Illumination = 'ill',
+    Transformation = 'tra'
 }
 
 export enum DerivedStatistic {
