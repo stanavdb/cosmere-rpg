@@ -35,5 +35,8 @@ Hooks.once('init', () => {
         label: 'Adversary'
     });
 
+    CONFIG.Dice.types.push(dice.PlotDie);
+    CONFIG.Dice.terms['p'] = dice.PlotDie;
+    CONFIG.Dice.termTypes[dice.PlotDie.name] = dice.PlotDie;
     CONFIG.Dice.rolls.push(dice.D20Roll);
 });

@@ -3,6 +3,7 @@ import { D20Roll, D20RollOptions } from './d20-roll';
 import { RollMode } from './types';
 
 export * from './d20-roll';
+export * from './plot-die';
 
 interface D20RollConfigration extends D20RollOptions {
     /**

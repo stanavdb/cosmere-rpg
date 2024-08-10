@@ -73,7 +73,7 @@ export class D20Roll extends Roll {
 
     public constructor(formula: string, data: Object, options: D20RollOptions = {}) {
         super(formula, data, options);
-        
+
         if (!this.options.configured) {
             this.configureModifiers();
         }
@@ -207,7 +207,7 @@ export class D20Roll extends Roll {
         }
 
         this.options.rollMode = form.rollMode.value;
-        this.options.plotDie = form.plotDie.value === 'on';
+        this.options.plotDie = form.plotDie.checked;
 
         this.configureModifiers();
 
@@ -232,10 +232,24 @@ export class D20Roll extends Roll {
             d20.number = 1;
         }
 
-        // TODO
-        // if (this.hasPlotDie) {
-        //     this.terms.push(new PlotDie());
-        // }
+        if (this.hasPlotDie) {
+            if (!this.terms.some(t => t instanceof PlotDie)) {
+                this.terms.push(
+                    new foundry.dice.terms.OperatorTerm({ operator: '+' }),
+                    new PlotDie()
+                );
+            }
+            
+            const plotDieTerm = this.terms.find(t => t instanceof PlotDie)!;
+            
+            if (this.hasPlotAdvantage) {
+                plotDieTerm.number = 2;
+                plotDieTerm.modifiers.push('kh');
+            } else if (this.hasPlotAdvantage) {
+                plotDieTerm.number = 2;
+                plotDieTerm.modifiers.push('kl');
+            }
+        }
 
         if (!!this.options.targetValue) {
             (d20.options as any).targetValue = this.options.targetValue;
