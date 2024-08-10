@@ -25,7 +25,13 @@
             "weapon": {},
             "armor": {},
             "equipment": {},
-            "fabrial": {}
+            "fabrial": {},
+
+            "ancestry": {},
+            "path": {},
+            "talent": {},
+
+            "action": {}
         }
     },
     "socket": true,

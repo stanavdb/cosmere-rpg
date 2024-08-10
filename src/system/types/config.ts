@@ -1,4 +1,12 @@
-import { AttributeGroup, Attribute, Skill, Resource } from './cosmere';
+import { 
+    AttributeGroup, 
+    Attribute, 
+    Skill, 
+    Resource, 
+
+    ActionCostType,
+    DamageType 
+} from './cosmere';
 
 export interface AttributeGroupConfig {
     label: string;
@@ -22,9 +30,23 @@ export interface ResourceConfig {
     deflect?: boolean;
 }
 
+export interface ActionCostConfig {
+    label: string;
+    icon?: string;
+}
+
+export interface DamageTypeConfig {
+    label: string;
+    icon?: string;
+    ignoreDeflect?: boolean;
+}
+
 export interface CosmereRPGConfig {
     attributeGroups: Record<AttributeGroup, AttributeGroupConfig>;
     attributes: Record<Attribute, AttributeConfig>;
     resources: Record<Resource, ResourceConfig>;
     skills: Record<Skill, SkillConfig>;
+
+    actionCosts: Record<ActionCostType, ActionCostConfig>;
+    damageTypes: Record<DamageType, DamageTypeConfig>;
 }

@@ -1,6 +1,15 @@
 // Types
 import { CosmereRPGConfig } from './types/config';
-import { Attribute, AttributeGroup, Resource, Skill } from './types/cosmere';
+import { 
+    Attribute, 
+    AttributeGroup, 
+    Resource, 
+    Skill, 
+
+
+    ActionCostType,
+    DamageType
+} from './types/cosmere';
 
 const COSMERE: CosmereRPGConfig = {
     attributeGroups: {
@@ -197,6 +206,38 @@ const COSMERE: CosmereRPGConfig = {
             label: 'Transformation',
             attribute: Attribute.Willpower,
             hiddenUntilAquired: true,
+        }
+    },
+
+    actionCosts: {
+        [ActionCostType.Action]: {
+            label: 'Action'
+        },
+        [ActionCostType.Reaction]: {
+            label: 'Reaction'
+        },
+        [ActionCostType.FreeAction]: {
+            label: 'Free action'
+        }
+    },
+    
+    damageTypes: {
+        [DamageType.Energy]: {
+            label: 'Energy',
+        },
+        [DamageType.Impact]: {
+            label: 'Impact'
+        },
+        [DamageType.Keen]: {
+            label: 'Keen'
+        },
+        [DamageType.Spirit]: {
+            label: 'Spirit',
+            ignoreDeflect: true
+        },
+        [DamageType.Vital]: {
+            label: 'Vital',
+            ignoreDeflect: true
         }
     }
 };

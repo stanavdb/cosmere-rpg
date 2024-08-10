@@ -53,3 +53,17 @@ export enum DerivedStatistic {
     LiftingCapactiy = 'lif',
     RecoveryDie = 'rcd',
 }
+
+export enum ActionCostType {
+    Action = 'act',
+    Reaction = 'rea',
+    FreeAction = 'fre'
+}
+
+export enum DamageType {
+    Energy = 'energy',
+    Impact = 'impact',
+    Keen = 'keen',
+    Spirit = 'spirit',
+    Vital = 'vital',
+}

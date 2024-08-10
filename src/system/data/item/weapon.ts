@@ -6,12 +6,15 @@ import { TypedItemMixin, TypedItemData } from './mixins/typed';
 import { DescriptionItemMixin, DescriptionItemData } from './mixins/description';
 import { EquippableItemMixin, EquippableItemData } from './mixins/equippable';
 import { ActivatableItemMixin, ActivatableItemData } from './mixins/activatable';
+import { DamagingItemMixin, DamagingItemData } from './mixins/damaging';
 import { TraitsItemMixin, TraitsItemData } from './mixins/traits';
 import { PhysicalItemMixin, PhysicalItemData } from './mixins/physical';
+import { ExpertiseItemMixin, ExpertiseItemData } from './mixins/expertise';
 
 export interface WeaponItemData extends 
     TypedItemData, DescriptionItemData, EquippableItemData, 
-    ActivatableItemData, TraitsItemData, PhysicalItemData {
+    ActivatableItemData, DamagingItemData, TraitsItemData, 
+    PhysicalItemData, ExpertiseItemData {
     range?: {
         value?: number;
         long?: number;
@@ -24,8 +27,10 @@ export class WeaponItemDataModel extends DataModelMixin(
     DescriptionItemMixin(),
     EquippableItemMixin(),
     ActivatableItemMixin(),
+    DamagingItemMixin(),
     TraitsItemMixin(),
-    PhysicalItemMixin()
+    PhysicalItemMixin(),
+    ExpertiseItemMixin()
 ) {
     static defineSchema() {
         return foundry.utils.mergeObject(super.defineSchema(), {
