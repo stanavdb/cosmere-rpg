@@ -1,0 +1,27 @@
+<form>
+    {{#each formulas}}
+    <div class="form-group">
+        <label>Formula</label>
+        <input type="text" name="formula" value="{{formula}}" disabled>
+    </div>
+    {{/each}}
+
+    <div class="form-group">
+        <label>Attribute</label>
+        <select name="attribute">
+            {{selectOptions attributes selected=defaultAttribute}}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Raise the Stakes</label>
+        <input type="checkbox" name="plotDie" {{#if plotDie}}checked{{/if}}>
+    </div>
+
+    <div class="form-group">
+        <label>Roll Mode</label>
+        <select name="rollMode">
+            {{selectOptions rollModes selected=defaultRollMode localize=true}}
+        </select>
+    </div>
+</form>

@@ -1,0 +1,28 @@
+.window-content .sheet > * {
+    flex: unset;
+}
+
+.window-content .sheet, .sheet-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.box-title {
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 9pt;
+    font-weight: bold;
+}
+
+.sheet {
+    .value {
+        text-align: center;
+        font-size: 18pt;
+        font-weight: bold;
+        margin: 0.25ch;
+    }
+}
+
+.rollable {
+    cursor: pointer;
+}

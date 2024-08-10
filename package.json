@@ -1,0 +1,28 @@
+{
+  "name": "cosmere-rpg",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "npx rollup -c",
+    "build:watch": "npx rollup -c -w"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^26.0.1",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-replace": "^5.0.7",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@types/jquery": "^3.5.30",
+    "npm-check-updates": "^16.14.20",
+    "rollup": "^4.19.0",
+    "rollup-plugin-copy": "^3.5.0",
+    "rollup-plugin-scss": "^4.0.0",
+    "tslib": "^2.6.3",
+    "typescript": "^5.5.3",
+    "@types/node": "^18.19.41",
+    "sass": "^1.77.8"
+  },
+  "dependencies": {
+    "@league-of-foundry-developers/foundry-vtt-types": "file:../foundry-vtt-types"
+  }
+}
