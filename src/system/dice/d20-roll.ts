@@ -142,11 +142,11 @@ export class D20Roll extends Roll<D20RollData> {
     public get hasRolledOpportunity() {
         if (!this.validD20Roll || !this._evaluated) return undefined;
 
-        // Get the opporunity value
-        const opporunity = this.options.opportunity ?? DEFAULT_OPPORUNITY_VALUE;
+        // Get the opportunity value
+        const opportunity = this.options.opportunity ?? DEFAULT_OPPORUNITY_VALUE;
 
-        if (!Number.isNumeric(opporunity)) return false;
-        return (this.dice[0].total as number) >= opporunity;
+        if (!Number.isNumeric(opportunity)) return false;
+        return (this.dice[0].total as number) >= opportunity;
     }
 
     /**

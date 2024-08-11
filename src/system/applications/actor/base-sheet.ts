@@ -88,11 +88,11 @@ export class BaseSheet extends ActorSheet {
             id: skillId,
             config: CONFIG.COSMERE.skills[skillId],
             ...this.actor.system.skills[skillId],
-            active: !CONFIG.COSMERE.skills[skillId].hiddenUntilAquired ||
+            active: !CONFIG.COSMERE.skills[skillId].hiddenUntilAcquired ||
                 this.actor.system.skills[skillId].rank >= 1
         })).sort((a, b) => {
-            const _a = a.config.hiddenUntilAquired ? 1 : 0;
-            const _b = b.config.hiddenUntilAquired ? 1 : 0;
+            const _a = a.config.hiddenUntilAcquired ? 1 : 0;
+            const _b = b.config.hiddenUntilAcquired ? 1 : 0;
             return _a - _b;
         })
     }
