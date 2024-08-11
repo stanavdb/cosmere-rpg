@@ -50,7 +50,7 @@ export class CosmereActor<T extends CommonActorDataModel = CommonActorDataModel>
         data.defaultAttribute = options.attribute ?? skill.attribute;
 
         // Prepare roll data
-        const flavor = `${CONFIG.COSMERE.skills[skillId].label} Skill Test`;
+        const flavor = `${CONFIG.COSMERE.skills[skillId].label} ${game.i18n.localize("COSEMERE.SkillTest")}`;
         const rollData = foundry.utils.mergeObject({
             data,
             title: `${flavor}: ${this.name}`,
@@ -63,9 +63,8 @@ export class CosmereActor<T extends CommonActorDataModel = CommonActorDataModel>
         }, options);
         rollData.parts = [ '@mod' ].concat(options.parts ?? []);
 
-        // Perform roll
-        const roll = await d20Roll(rollData);
-        return roll;
+        // Perform and return roll
+        return await d20Roll(rollData);
     }
 
     public getRollData() {
