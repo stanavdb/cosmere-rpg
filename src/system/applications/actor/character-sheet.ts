@@ -1,8 +1,10 @@
-import { AttributeConfig, ResourceConfig, SkillConfig } from '@src/system/types/config';
-import { Attribute, Resource, Skill } from '@src/system/types/cosmere';
+import { ItemType } from '@src/system/types/cosmere';
 import { BaseSheet } from './base-sheet';
 import { CosmereActor } from '@system/documents/actor';
 import { CharacterActorData } from '@system/data/actor/character';
+
+const DEFAULT_ANCESTRY_LABEL = '[Ancestry]';
+const DEFAULT_PATH_LABEL = '[Path]';
 
 export class CharacterSheet extends BaseSheet {
     static get defaultOptions() {
@@ -19,11 +21,17 @@ export class CharacterSheet extends BaseSheet {
     }
 
     getData(options?: Partial<ActorSheet.Options>) {
+        // Find the ancestry
+        const ancestryItem = this.actor.items.find(item => item.type === ItemType.Ancestry);
+
+        // Find the path
+        const pathItem = this.actor.items.find(item => item.type === ItemType.Path);
+
         return {
             ...super.getData(options),
 
-            ancestryLabel: 'Human', // TEMP
-            pathsLabel: 'Warrior', //TEMP
+            ancestryLabel: ancestryItem?.name ?? DEFAULT_ANCESTRY_LABEL,
+            pathsLabel: pathItem?.name ?? DEFAULT_PATH_LABEL,
 
             recovery: {
                 die: this.actor.system.recovery.die

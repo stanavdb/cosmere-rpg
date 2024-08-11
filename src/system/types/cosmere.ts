@@ -67,3 +67,23 @@ export enum DamageType {
     Spirit = 'spirit',
     Vital = 'vital',
 }
+
+/* --- System --- */
+
+export enum ActorType {
+    Character = 'character',
+    Adversary = 'adversary'
+}
+
+export enum ItemType {
+    Weapon = 'weapon',
+    Armor = 'armor',
+    Equipment = 'equipment',
+    Fabrial = 'fabrial',
+
+    Ancestry = 'ancestry',
+    Path = 'path',
+    Talent = 'talent',
+
+    Action = 'action'
+}

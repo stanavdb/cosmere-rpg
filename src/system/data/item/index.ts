@@ -1,3 +1,5 @@
+import { ItemType } from '@system/types/cosmere';
+
 import { WeaponItemDataModel } from './weapon';
 import { ArmorItemDataModel } from './armor';
 import { EquipmentItemDataModel } from './equipment';
@@ -9,17 +11,17 @@ import { TalentItemDataModel } from './talent';
 
 import { ActionItemDataModel } from './action';
 
-export const config = {
-    weapon: WeaponItemDataModel,
-    armor: ArmorItemDataModel,
-    equipment: EquipmentItemDataModel,
-    fabrial: FabrialItemDataModel,
+export const config: Record<ItemType, typeof foundry.abstract.TypeDataModel> = {
+    [ItemType.Weapon]: WeaponItemDataModel,
+    [ItemType.Armor]: ArmorItemDataModel,
+    [ItemType.Equipment]: EquipmentItemDataModel,
+    [ItemType.Fabrial]: FabrialItemDataModel,
 
-    ancestry: AncestryItemDataModel,
-    path: PathItemDataModel,
-    talent: TalentItemDataModel,
+    [ItemType.Ancestry]: AncestryItemDataModel,
+    [ItemType.Path]: PathItemDataModel,
+    [ItemType.Talent]: TalentItemDataModel,
 
-    action: ActionItemDataModel
+    [ItemType.Action]: ActionItemDataModel
 }
 
 export * from './weapon';
