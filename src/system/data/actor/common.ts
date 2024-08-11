@@ -124,7 +124,7 @@ export class CommonActorDataModel extends foundry.abstract.TypeDataModel {
         return new foundry.data.fields.SchemaField(
             Object.keys(resources)
             .reduce((schemas, key) => {
-                const resource = resources[key as Resource];
+                const resource = resources[key as unknown as Resource];
 
                 schemas[key] = new foundry.data.fields.SchemaField({
                     value: new foundry.data.fields.NumberField({
@@ -160,7 +160,7 @@ export class CommonActorDataModel extends foundry.abstract.TypeDataModel {
             .reduce((schemas, key) => {
                 schemas[key] = new foundry.data.fields.SchemaField({
                     attribute: new foundry.data.fields.StringField({
-                        required: true, nullable: false, blank: false, initial: skills[key as Skill].attribute
+                        required: true, nullable: false, blank: false, initial: skills[key as unknown as Skill].attribute
                     }),
                     rank: new foundry.data.fields.NumberField({
                         required: true, nullable: false, integer: true, min: 0, max: 5, initial: 0,
@@ -182,7 +182,7 @@ export class CommonActorDataModel extends foundry.abstract.TypeDataModel {
         this.senses.obscuredAffected = this.attributes.awa.value < 9;
 
         // Derive defenses
-        (Object.keys(this.defenses) as AttributeGroup[])
+        (Object.keys(this.defenses) as unknown as AttributeGroup[])
             .forEach(group => {
                 // Get bonus
                 const bonus = this.defenses[group].bonus;
@@ -203,7 +203,7 @@ export class CommonActorDataModel extends foundry.abstract.TypeDataModel {
             });
 
         // Derive resource max
-        (Object.keys(this.resources) as Resource[])
+        (Object.keys(this.resources) as unknown as Resource[])
             .forEach(key => {
                 // Get the resource
                 const resource = this.resources[key];
@@ -222,12 +222,12 @@ export class CommonActorDataModel extends foundry.abstract.TypeDataModel {
                     resource.max = 2 + willpower + resource.bonus;
                 }
 
-                // Ensure resource value is between max mand min
+                // Ensure resource value is between max and min
                 resource.value = Math.max(0, Math.min(resource.max, resource.value));
             });
 
         // Derive skill modifiers
-        (Object.keys(this.skills) as Skill[])
+        (Object.keys(this.skills) as unknown as Skill[])
             .forEach(skill => {
                 // Get the skill config
                 const skillConfig = CONFIG.COSMERE.skills[skill];
