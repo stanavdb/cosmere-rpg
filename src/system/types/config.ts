@@ -9,6 +9,9 @@ import {
     ArmorId,
     ExpertiseType,
 
+    WeaponTraitId,
+    ArmorTraitId,
+
     ActionCostType,
     DamageType 
 } from './cosmere';
@@ -54,6 +57,12 @@ export interface ExpertiseTypeConfig {
     icon?: string;
 }
 
+export interface TraitConfig {
+    label: string;
+    reference?: string;
+    hasValue?: boolean;
+}
+
 export interface ActionCostConfig {
     label: string;
     icon?: string;
@@ -72,10 +81,14 @@ export interface CosmereRPGConfig {
     skills: Record<Skill, SkillConfig>;
 
     weaponTypes: Record<WeaponType, WeaponTypeConfig>;
-    weaponIds: Record<WeaponId, WeaponConfig>;
-    armorIds: Record<ArmorId, ArmorConfig>;
-
+    weapons: Record<WeaponId, WeaponConfig>;
+    armors: Record<ArmorId, ArmorConfig>;
     expertiseTypes: Record<ExpertiseType, ExpertiseTypeConfig>;
+
+    traits: {
+        weaponTraits: Record<WeaponTraitId, TraitConfig>;
+        armorTraits: Record<ArmorTraitId, TraitConfig>;
+    };
 
     actionCosts: Record<ActionCostType, ActionCostConfig>;
     damageTypes: Record<DamageType, DamageTypeConfig>;

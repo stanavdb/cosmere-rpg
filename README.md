@@ -1,9 +1,9 @@
 To do 
 =====
 - [x] Expertises config
-- [ ] Traits
-  - [ ] Weapon
-  - [ ] Armor
+- [x] Traits
+  - [x] Weapon
+  - [x] Armor
 - [ ] Advancements
 - [ ] Actor data models
   - [ ] Character
@@ -22,6 +22,8 @@ To do
     - [ ] Add advancement
   - [ ] Path
     - [ ] Add advancement
+  - [x] Expertise mixin
+    - [x] Derive expertise status from actor
 - [ ] Item document class
 - [ ] Item sheets
     - [ ] Weapons
@@ -32,3 +34,5 @@ To do
     - [ ] Path
     - [ ] Talent
     - [ ] Action
+- [ ] Global config validation
+- [ ] Utility functions for adding skills, etc.

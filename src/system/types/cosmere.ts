@@ -66,7 +66,7 @@ export enum WeaponType {
 /**
  * The ids of all default system weapons.  
  * This is not an exhaustive list of all possible weapons,
- * but is used to populate the `CONFIG.COSMERE.weaponIds` property.
+ * but is used to populate the `CONFIG.COSMERE.weapons` property.
  */
 export enum WeaponId {
     // Light weapons
@@ -100,7 +100,7 @@ export enum WeaponId {
 /**
  * The ids of all default system armors.
  * This is not an exhaustive list of all possible weapons,
- * but is used to populate the `CONFIG.COSMERE.armorIds` property.
+ * but is used to populate the `CONFIG.COSMERE.armors` property.
  */
 export enum ArmorId {
     Uniform = 'uniform',
@@ -118,6 +118,40 @@ export enum ExpertiseType {
     Specialist = 'specialist',
     Utility = 'utility',
     Weapon = 'weapon'
+}
+
+/**
+ * The ids of all default system weapon traits.
+ * This is not an exhaustive list of all possible weapon traits,
+ * but is used to populate the `CONFIG.COSMERE.traits.weaponTraitIds` property.
+ */
+export enum WeaponTraitId {
+    Cumbersome = 'cumbersome',
+    Dangerous = 'dangerous',
+    Deadly = 'deadly',
+    Defensive = 'defensive',
+    Discreet = 'discreet',
+    Indirect = 'indirect',
+    Loaded = 'loaded',
+    Momentum = 'momentum',
+    Offhand = 'offhand',
+    Pierce = 'pierce',
+    Quickdraw = 'quickdraw',
+    Thrown = 'thrown',
+    TwoHanded = 'two_handed',
+    Unique = 'unique',
+    Fragile = 'fragile',
+}
+
+/**
+ * The ids of all default system armor traits.
+ * This is not an exhaustive list of all possible armor traits,
+ * but is used to populate the `CONFIG.COSMERE.traits.armorTraitIds` property.
+ */
+export enum ArmorTraitId {
+    Cumbersome = 'cumbersome',
+    Dangerous = 'dangerous',
+    Presentable = 'presentable',
 }
 
 export enum ActionCostType {

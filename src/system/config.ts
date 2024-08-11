@@ -11,6 +11,9 @@ import {
     ArmorId,
     ExpertiseType,
 
+    WeaponTraitId,
+    ArmorTraitId,
+
     ActionCostType,
     DamageType
 } from './types/cosmere';
@@ -226,7 +229,7 @@ const COSMERE: CosmereRPGConfig = {
     },
 
     // TODO: These should reference their respective item ids in the compendium
-    weaponIds: {
+    weapons: {
         [WeaponId.Javelin]: { reference: '' },
         [WeaponId.Knife]: { reference: '' },
         [WeaponId.Mace]: { reference: '' },
@@ -256,7 +259,7 @@ const COSMERE: CosmereRPGConfig = {
     },
 
     // TODO: These should reference their respective item ids in the compendium
-    armorIds: {
+    armors: {
         [ArmorId.Uniform]: { reference: '' },
         [ArmorId.Leather]: { reference: '' },
         [ArmorId.Chain]: { reference: '' },
@@ -284,6 +287,71 @@ const COSMERE: CosmereRPGConfig = {
         },
         [ExpertiseType.Weapon]: {
             label: 'Weapon'
+        }
+    },
+
+    traits: {
+        weaponTraits: {
+            [WeaponTraitId.Cumbersome]: {
+                label: 'Cumbersome',
+                hasValue: true
+            },
+            [WeaponTraitId.Dangerous]: {
+                label: 'Dangerous'
+            },
+            [WeaponTraitId.Deadly]: {
+                label: 'Deadly'
+            },
+            [WeaponTraitId.Defensive]: {
+                label: 'Defensive'
+            },
+            [WeaponTraitId.Discreet]: {
+                label: 'Discreet'
+            },
+            [WeaponTraitId.Indirect]: {
+                label: 'Indirect'
+            },
+            [WeaponTraitId.Loaded]: {
+                label: 'Loaded',
+                hasValue: true
+            },
+            [WeaponTraitId.Momentum]: {
+                label: 'Momentum'
+            },
+            [WeaponTraitId.Offhand]: {
+                label: 'Offhand'
+            },
+            [WeaponTraitId.Pierce]: {
+                label: 'Pierce'
+            },
+            [WeaponTraitId.Quickdraw]: {
+                label: 'Quickdraw'
+            },
+            [WeaponTraitId.Thrown]: {
+                label: 'Thrown'
+            },
+            [WeaponTraitId.TwoHanded]: {
+                label: 'Two-Handed'
+            },
+            [WeaponTraitId.Unique]: {
+                label: 'Unique'
+            },
+            [WeaponTraitId.Fragile]: {
+                label: 'Fragile'
+            }
+        },
+
+        armorTraits: {
+            [ArmorTraitId.Cumbersome]: {
+                label: 'Cumbersome',
+                hasValue: true
+            },
+            [ArmorTraitId.Dangerous]: {
+                label: 'Dangerous'
+            },
+            [ArmorTraitId.Presentable]: {
+                label: 'Presentable'
+            }
         }
     },
 
