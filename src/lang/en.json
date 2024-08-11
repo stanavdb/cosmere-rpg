@@ -4,15 +4,15 @@
     "AttributeGroup": {
       "Physical": {
         "long": "Physical",
-        "short": "Phy"
+        "short": "PHY"
       },
       "Cognitive": {
         "long": "Cognitive",
-        "short": "Cog"
+        "short": "COG"
       },
       "Spiritual": {
         "long": "Spiritual",
-        "short": "Spi"
+        "short": "SPI"
       }
     },
     "Atrribute": {
@@ -42,18 +42,9 @@
       }
     },
     "Resource": {
-      "Health": {
-        "long": "Health",
-        "short": "hea"
-      },
-      "Focus": {
-        "long": "Focus",
-        "short": "foc"
-      },
-      "Investiture": {
-        "long": "Investiture",
-        "short": "inv"
-      }
+      "Health": "Health",
+      "Focus": "Focus",
+      "Investiture": "Investiture"
     },
     "Skill": {
       "Agility": "Agility",
@@ -177,9 +168,19 @@
       "Vital": "Vital"
     }
   },
-  "Roll": {
-    "None": "none",
-    "Advantage": "advantage",
-    "Disadvantage": "disadvantage"
+  "Dice": {
+    "Plot":{
+      "Complication": "Complication",
+      "Opportunity": "Opportunity"
+    },
+    "Roll": {
+      "None": "None",
+      "Advantage": "Advantage",
+      "Disadvantage": "Disadvantage"
+    }
+  },
+  "SkillTest": "Skill Test",
+  "GENERIC":{
+    "Unknown": "Unknown"
   }
 }
