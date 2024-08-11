@@ -6,8 +6,8 @@ To do
   - [x] Armor
 - [ ] Advancements
 - [ ] Actor data models
-  - [ ] Character
-    - [ ] Expertises
+  - [x] Character
+    - [x] Expertises
   - [ ] Adversary
 - [ ] Actor sheets
   - [ ] Character
@@ -25,6 +25,7 @@ To do
   - [x] Expertise mixin
     - [x] Derive expertise status from actor
 - [ ] Item document class
+  - [ ] Make items rollable
 - [ ] Item sheets
     - [ ] Weapons
     - [ ] Armor
