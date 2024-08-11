@@ -4,7 +4,7 @@ export interface IdItemData {
 
 export function IdItemMixin() {
     return (base: typeof foundry.abstract.TypeDataModel) => {
-        return class extends base {
+        return class mixin<P extends Document> extends base<P> {
             static defineSchema() {
                 return foundry.utils.mergeObject(super.defineSchema(), {
                     id: new foundry.data.fields.StringField({

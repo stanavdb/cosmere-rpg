@@ -11,7 +11,7 @@ export interface ActivatableItemData {
 
 export function ActivatableItemMixin() {
     return (base: typeof foundry.abstract.TypeDataModel) => {
-        return class extends base {
+        return class mixin<P extends Document> extends base<P> {
             static defineSchema() {
                 return foundry.utils.mergeObject(super.defineSchema(), {
                     activation: new foundry.data.fields.SchemaField({

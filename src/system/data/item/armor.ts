@@ -15,6 +15,7 @@ export interface ArmorItemData extends
     deflect?: number;
 }
 
+export interface ArmorItemDataModel extends ArmorItemData {}
 export class ArmorItemDataModel extends DataModelMixin(
     TypedItemMixin(),
     DescriptionItemMixin(),

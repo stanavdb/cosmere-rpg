@@ -22,10 +22,10 @@ declare global {
 Hooks.once('init', () => {
     CONFIG.COSMERE = COSMERE;
 
-    CONFIG.Actor.dataModels = dataModels.actor.config;
+    CONFIG.Actor.dataModels = dataModels.actor.config as any;
     CONFIG.Actor.documentClass = documents.CosmereActor as any;
 
-    CONFIG.Item.dataModels = dataModels.item.config;
+    CONFIG.Item.dataModels = dataModels.item.config as any;
     CONFIG.Item.documentClass = documents.CosmereItem as any;
 
     Actors.unregisterSheet('core', ActorSheet);
@@ -41,5 +41,5 @@ Hooks.once('init', () => {
     CONFIG.Dice.types.push(dice.PlotDie);
     CONFIG.Dice.terms['p'] = dice.PlotDie;
     CONFIG.Dice.termTypes[dice.PlotDie.name] = dice.PlotDie;
-    CONFIG.Dice.rolls.push(dice.D20Roll);
+    CONFIG.Dice.rolls.push(dice.D20Roll as any);
 });

@@ -7,7 +7,7 @@ export interface ExpertiseItemData {
 
 export function ExpertiseItemMixin() {
     return (base: typeof foundry.abstract.TypeDataModel) => {
-        return class extends base {
+        return class mixin<P extends Document> extends base<P> {
             static defineSchema() {
                 const superSchema = super.defineSchema();
 
@@ -27,7 +27,7 @@ export function ExpertiseItemMixin() {
                 super.prepareDerivedData();
                 
                 const system = this as any as ExpertiseItemData & TypedItemData;
-                const parent = this.parent as CosmereItem;
+                const parent = this.parent as any as CosmereItem;
 
                 // Check if item type can be found in expertise types
                 const isKnownExpertiseType = parent!.type in CONFIG.COSMERE.expertiseTypes;

@@ -12,16 +12,16 @@ import { TalentItemDataModel } from './talent';
 import { ActionItemDataModel } from './action';
 
 export const config: Record<ItemType, typeof foundry.abstract.TypeDataModel> = {
-    [ItemType.Weapon]: WeaponItemDataModel,
-    [ItemType.Armor]: ArmorItemDataModel,
-    [ItemType.Equipment]: EquipmentItemDataModel,
-    [ItemType.Fabrial]: FabrialItemDataModel,
+    [ItemType.Weapon]: WeaponItemDataModel as any,
+    [ItemType.Armor]: ArmorItemDataModel as any,
+    [ItemType.Equipment]: EquipmentItemDataModel as any,
+    [ItemType.Fabrial]: FabrialItemDataModel as any,
 
-    [ItemType.Ancestry]: AncestryItemDataModel,
-    [ItemType.Path]: PathItemDataModel,
-    [ItemType.Talent]: TalentItemDataModel,
+    [ItemType.Ancestry]: AncestryItemDataModel as any,
+    [ItemType.Path]: PathItemDataModel as any,
+    [ItemType.Talent]: TalentItemDataModel as any,
 
-    [ItemType.Action]: ActionItemDataModel
+    [ItemType.Action]: ActionItemDataModel as any
 }
 
 export * from './weapon';

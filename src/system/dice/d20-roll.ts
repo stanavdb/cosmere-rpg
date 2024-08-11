@@ -189,9 +189,9 @@ export class D20Roll extends Roll {
         options.rollMode ??= this.options.rollMode;
         if (options.rollMode === 'roll')
             options.rollMode = undefined;
-        options.rollMode ??= game.settings.get('core', 'rollMode');
+        options.rollMode ??= game.settings!.get('core', 'rollMode');
 
-        return super.toMessage(messageData, options);
+        return super.toMessage(messageData, options as any);
     }
 
     /* --- Internal Functions --- */
@@ -217,7 +217,7 @@ export class D20Roll extends Roll {
     private configureModifiers() {
         if (!this.validD20Roll) return;
 
-        const d20 = this.terms[0] as foundry.dice.terms.Die;
+        const d20 = this.terms[0] as any as foundry.dice.terms.Die;
         d20.modifiers = [];
 
         if (this.hasAdvantage) {
@@ -235,10 +235,11 @@ export class D20Roll extends Roll {
         if (this.hasPlotDie) {
             if (!this.terms.some(t => t instanceof PlotDie)) {
                 this.terms.push(
-                    new foundry.dice.terms.OperatorTerm({ operator: '+' }),
-                    new PlotDie()
+                    new foundry.dice.terms.OperatorTerm({ operator: '+' }) as any,
+                    new PlotDie() as any as RollTerm
                 );
             }
+            
             
             const plotDieTerm = this.terms.find(t => t instanceof PlotDie)!;
             

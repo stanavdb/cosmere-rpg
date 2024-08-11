@@ -52,7 +52,7 @@ interface D20RollConfigration extends D20RollOptions {
 export async function d20Roll(config: D20RollConfigration): Promise<D20Roll | null> {
     // Roll parameters
     const formula = ['1d20'].concat(config.parts ?? []).join(' + ');
-    const defaultRollMode = config.rollMode ?? game.settings.get('core', 'rollMode');
+    const defaultRollMode = config.rollMode ?? game.settings!.get('core', 'rollMode');
 
     // Construct the roll
     const roll = new D20Roll(formula, config.data ?? {}, {

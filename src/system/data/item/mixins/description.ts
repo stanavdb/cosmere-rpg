@@ -7,7 +7,7 @@ export interface DescriptionItemData {
 
 export function DescriptionItemMixin() {
     return (base: typeof foundry.abstract.TypeDataModel) => {
-        return class extends base {
+        return class mixin<P extends Document> extends base<P> {
             static defineSchema() {
                 return foundry.utils.mergeObject(super.defineSchema(), {
                     description: new foundry.data.fields.SchemaField({

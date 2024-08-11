@@ -1,7 +1,7 @@
 import { CosmereActor } from './actor';
 
-type TypeDataModel = foundry.abstract.TypeDataModel;
+type DataModel = foundry.abstract.DataModel<any>;
 
-export class CosmereItem<T extends TypeDataModel = TypeDataModel> extends Item<T, CosmereActor> {
-
+export class CosmereItem<T extends DataModel = DataModel> extends Item<T, CosmereActor> {
+    
 }
