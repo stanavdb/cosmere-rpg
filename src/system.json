@@ -11,10 +11,10 @@
         "discord": "stanvdb"
     }],
     "esmodules": [
-        "index.js"
+        "index.ts"
     ],
     "styles": [
-        "output.css"
+        "style.scss"
     ],
     "documentTypes": {
         "Actor": {
