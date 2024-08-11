@@ -22,6 +22,7 @@ To do
     - [ ] Add advancement
   - [ ] Path
     - [ ] Add advancement
+- [ ] Item document class
 - [ ] Item sheets
     - [ ] Weapons
     - [ ] Armor
