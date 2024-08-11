@@ -1,4 +1,16 @@
-import { Attribute, Resource, AttributeGroup, Skill } from '@system/types/cosmere';
+import { 
+    Attribute, 
+    Resource, 
+    AttributeGroup, 
+    Skill,
+    ExpertiseType,
+} from '@system/types/cosmere';
+
+interface ExpertiseData {
+    type: ExpertiseType;
+    id: string;
+    label: string;
+}
 
 export interface CommonActorData {
     senses: { range: number; obscuredAffected: boolean; }
@@ -12,9 +24,11 @@ export interface CommonActorData {
     encumbrance: {
         lift: number;
         carry: number;
-    }
+    };
+    expertises: ExpertiseData[];
 }
 
+export interface CommonActorDataModel extends CommonActorData {};
 export class CommonActorDataModel extends foundry.abstract.TypeDataModel {
     static defineSchema() {
         return {
@@ -42,7 +56,24 @@ export class CommonActorDataModel extends foundry.abstract.TypeDataModel {
                 carry: new foundry.data.fields.NumberField({
                     required: true, nullable: false, integer: true, min: 0, initial: 0
                 }),
-            })
+            }),
+            expertises: new foundry.data.fields.ArrayField(
+                new foundry.data.fields.SchemaField({
+                    type: new foundry.data.fields.StringField({
+                        required: true, 
+                        nullable: false, 
+                        blank: false, 
+                        initial: ExpertiseType.Cultural,
+                        choices: Object.keys(CONFIG.COSMERE.expertiseTypes)
+                    }),
+                    id: new foundry.data.fields.StringField({
+                        required: true, nullable: false, blank: false
+                    }),
+                    label: new foundry.data.fields.StringField({
+                        required: true, nullable: false, blank: false
+                    })
+                })
+            )
         }
     }
 
@@ -143,47 +174,45 @@ export class CommonActorDataModel extends foundry.abstract.TypeDataModel {
     public prepareDerivedData(): void {
         super.prepareDerivedData();
 
-        const system = this as any as CommonActorData;
-
-        system.senses.range = awarenessToSensesRange(system.attributes.awa.value);
-        system.senses.obscuredAffected = system.attributes.awa.value < 9;
+        this.senses.range = awarenessToSensesRange(this.attributes.awa.value);
+        this.senses.obscuredAffected = this.attributes.awa.value < 9;
 
         // Derive defenses
-        (Object.keys(system.defenses) as AttributeGroup[])
+        (Object.keys(this.defenses) as AttributeGroup[])
             .forEach(group => {
                 // Get bonus
-                const bonus = system.defenses[group].bonus;
+                const bonus = this.defenses[group].bonus;
 
                 // Get attributes
                 const attrs = CONFIG.COSMERE.attributeGroups[group].attributes;
 
                 // Get attribute values
                 const attrValues = attrs.map(
-                    key => system.attributes[key].value
+                    key => this.attributes[key].value
                 );
 
                 // Sum attribute values
                 const attrsSum = attrValues.reduce((sum, v) => sum + v, 0);
 
                 // Assign defense
-                system.defenses[group].value = 10 + attrsSum + bonus;
+                this.defenses[group].value = 10 + attrsSum + bonus;
             });
 
         // Derive resource max
-        (Object.keys(system.resources) as Resource[])
+        (Object.keys(this.resources) as Resource[])
             .forEach(key => {
                 // Get the resource
-                const resource = system.resources[key];
+                const resource = this.resources[key];
 
                 if (key === Resource.Health) {
                     // Get strength value
-                    const strength = system.attributes.str.value;
+                    const strength = this.attributes.str.value;
                     
                     // Assign max
                     resource.max = 10 + strength + resource.bonus;
                 } else if (key === Resource.Focus) {
                     // Get willpower value
-                    const willpower = system.attributes.wil.value;
+                    const willpower = this.attributes.wil.value;
 
                     // Assign max
                     resource.max = 2 + willpower + resource.bonus;
@@ -194,7 +223,7 @@ export class CommonActorDataModel extends foundry.abstract.TypeDataModel {
             });
 
         // Derive skill modifiers
-        (Object.keys(system.skills) as Skill[])
+        (Object.keys(this.skills) as Skill[])
             .forEach(skill => {
                 // Get the skill config
                 const skillConfig = CONFIG.COSMERE.skills[skill];
@@ -203,21 +232,21 @@ export class CommonActorDataModel extends foundry.abstract.TypeDataModel {
                 const attribute = skillConfig.attribute;
 
                 // Get skill rank
-                const rank = system.skills[skill].rank;
+                const rank = this.skills[skill].rank;
 
                 // Get attribute value
-                const attrValue = system.attributes[attribute].value;
+                const attrValue = this.attributes[attribute].value;
 
                 // Calculate mod
-                system.skills[skill].mod = attrValue + rank;
+                this.skills[skill].mod = attrValue + rank;
             });
 
         // Movement
-        system.movement.rate = speedToMovementRate(system.attributes.spd.value);
+        this.movement.rate = speedToMovementRate(this.attributes.spd.value);
 
         // Lifting & Carrying
-        system.encumbrance.lift = strengthToLiftingCapacity(system.attributes.str.value);
-        system.encumbrance.carry = strengthToCarryingCapacity(system.attributes.str.value);
+        this.encumbrance.lift = strengthToLiftingCapacity(this.attributes.str.value);
+        this.encumbrance.carry = strengthToCarryingCapacity(this.attributes.str.value);
     }
 }
 

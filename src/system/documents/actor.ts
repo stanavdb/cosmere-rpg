@@ -1,9 +1,14 @@
 import { Skill, Attribute } from '@system/types/cosmere';
-import { CommonActorData } from '@system/data/actor/common';
+import { CommonActorDataModel } from '@system/data/actor/common';
+import { CharacterActorDataModel } from '@system/data/actor/character';
+import { AdversaryActorDataModel } from '@system/data/actor/adversary';
 
 import { d20Roll, D20Roll } from '@system/dice';
 
-export class CosmereActor<T extends CommonActorData = CommonActorData> extends Actor<T> {
+export type CharacterActor = CosmereActor<CharacterActorDataModel>;
+export type AdversaryActor = CosmereActor<AdversaryActorDataModel>;
+
+export class CosmereActor<T extends CommonActorDataModel = CommonActorDataModel> extends Actor<T> {
     public async rollSkill(skillId: Skill, options: any = {}): Promise<D20Roll | null> {
         const skill = this.system.skills[skillId];
         const attribute = this.system.attributes[options.attribute as Attribute ?? skill.attribute];

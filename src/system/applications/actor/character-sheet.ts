@@ -1,7 +1,7 @@
 import { ItemType } from '@src/system/types/cosmere';
 import { BaseSheet } from './base-sheet';
 import { CosmereActor } from '@system/documents/actor';
-import { CharacterActorData } from '@system/data/actor/character';
+import { CharacterActorDataModel } from '@system/data/actor/character';
 
 const DEFAULT_ANCESTRY_LABEL = '[Ancestry]';
 const DEFAULT_PATH_LABEL = '[Path]';
@@ -17,7 +17,7 @@ export class CharacterSheet extends BaseSheet {
     }
 
     get actor() {
-        return super.actor as CosmereActor<CharacterActorData>;
+        return super.actor as CosmereActor<CharacterActorDataModel>;
     }
 
     getData(options?: Partial<ActorSheet.Options>) {

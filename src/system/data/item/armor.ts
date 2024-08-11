@@ -1,3 +1,5 @@
+import { ArmorId } from '@system/types/cosmere';
+
 // Mixins
 import { DataModelMixin } from '../mixins';
 import { TypedItemMixin, TypedItemData } from './mixins/typed';
@@ -8,7 +10,7 @@ import { PhysicalItemMixin, PhysicalItemData } from './mixins/physical';
 import { ExpertiseItemMixin, ExpertiseItemData } from './mixins/expertise';
 
 export interface ArmorItemData extends 
-    TypedItemData, DescriptionItemData, EquippableItemData, 
+    TypedItemData<ArmorId>, DescriptionItemData, EquippableItemData, 
     TraitsItemData, PhysicalItemData, ExpertiseItemData {
     deflect?: number;
 }

@@ -4,6 +4,7 @@ export interface CharacterActorData extends CommonActorData {
     recovery: { die: string; }
 }
 
+export interface CharacterActorDataModel extends CharacterActorData {}
 export class CharacterActorDataModel extends CommonActorDataModel {
     public static defineSchema() {
         return foundry.utils.mergeObject(super.defineSchema(), {
@@ -18,9 +19,7 @@ export class CharacterActorDataModel extends CommonActorDataModel {
     public prepareDerivedData() {
         super.prepareDerivedData();
 
-        const system = this as any as CharacterActorData;
-
-        system.recovery.die = willpowerToRecoveryDie(system.attributes.wil.value);
+        this.recovery.die = willpowerToRecoveryDie(this.attributes.wil.value);
     }
 }
 

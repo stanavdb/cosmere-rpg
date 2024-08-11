@@ -16,14 +16,6 @@ export class BaseSheet extends ActorSheet {
 
             attributeGroups: (Object.keys(CONFIG.COSMERE.attributeGroups) as AttributeGroup[])
                 .map(this.getDataForAttributeGroup.bind(this)),
-
-            config: {
-                attributeGroups: Object.keys(CONFIG.COSMERE.attributeGroups)
-                    .map(key => ({ key, ...CONFIG.COSMERE.attributeGroups[key as AttributeGroup] })),
-                attributes: CONFIG.COSMERE.attributes,
-                resources: CONFIG.COSMERE.resources,
-                skills: CONFIG.COSMERE.skills
-            }
         }
     }
 

@@ -6,6 +6,10 @@ import {
     Resource, 
     Skill, 
 
+    WeaponType,
+    WeaponId,
+    ArmorId,
+    ExpertiseType,
 
     ActionCostType,
     DamageType
@@ -206,6 +210,80 @@ const COSMERE: CosmereRPGConfig = {
             label: 'Transformation',
             attribute: Attribute.Willpower,
             hiddenUntilAquired: true,
+        }
+    },
+
+    weaponTypes: {
+        [WeaponType.Light]: {
+            label: 'Light'
+        },
+        [WeaponType.Heavy]: {
+            label: 'Heavy'
+        },
+        [WeaponType.Special]: {
+            label: 'Special'
+        }
+    },
+
+    // TODO: These should reference their respective item ids in the compendium
+    weaponIds: {
+        [WeaponId.Javelin]: { reference: '' },
+        [WeaponId.Knife]: { reference: '' },
+        [WeaponId.Mace]: { reference: '' },
+        [WeaponId.Rapier]: { reference: '' },
+        [WeaponId.Shortspear]: { reference: '' },
+        [WeaponId.Sidesword]: { reference: '' },
+        [WeaponId.Staff]: { reference: '' },
+        [WeaponId.Shortbow]: { reference: '' },
+        [WeaponId.Sling]: { reference: '' },
+
+        [WeaponId.Axe]: { reference: '' },
+        [WeaponId.Greatsword]: { reference: '' },
+        [WeaponId.Hammer]: { reference: '' },
+        [WeaponId.Longspear]: { reference: '' },
+        [WeaponId.Longsword]: { reference: '' },
+        [WeaponId.Poleaxe]: { reference: '' },
+        [WeaponId.Shield]: { reference: '' },
+        [WeaponId.Crossbow]: { reference: '' },
+        [WeaponId.Longbow]: { reference: '' },
+
+        [WeaponId.Improvised]: { reference: '' },
+        [WeaponId.Unarmed]: { reference: '' },
+        [WeaponId.Shardblade]: { 
+            reference: '',
+            specialExpertise: true 
+        }
+    },
+
+    // TODO: These should reference their respective item ids in the compendium
+    armorIds: {
+        [ArmorId.Uniform]: { reference: '' },
+        [ArmorId.Leather]: { reference: '' },
+        [ArmorId.Chain]: { reference: '' },
+        [ArmorId.Breastplate]: { reference: '' },
+        [ArmorId.HalfPlate]: { reference: '' },
+        [ArmorId.FullPlate]: { reference: '' },
+        [ArmorId.Shardplate]: {
+            reference: '',
+            specialExpertise: true
+        }
+    },
+
+    expertiseTypes: {
+        [ExpertiseType.Armor]: {
+            label: 'Armor'
+        },
+        [ExpertiseType.Cultural]: {
+            label: 'Cultural'
+        },
+        [ExpertiseType.Specialist]: {
+            label: 'Specialist'
+        },
+        [ExpertiseType.Utility]: {
+            label: 'Utility'
+        },
+        [ExpertiseType.Weapon]: {
+            label: 'Weapon'
         }
     },
 

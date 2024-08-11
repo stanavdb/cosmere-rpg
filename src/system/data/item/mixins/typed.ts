@@ -1,5 +1,5 @@
-export interface TypedItemData {
-    type: string;
+export interface TypedItemData<T extends string = string> {
+    type: T;
 }
 
 export function TypedItemMixin() {

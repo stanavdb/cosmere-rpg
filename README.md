@@ -1,6 +1,9 @@
 To do 
 =====
-- [ ] Expertises config
+- [x] Expertises config
+- [ ] Traits
+  - [ ] Weapon
+  - [ ] Armor
 - [ ] Advancements
 - [ ] Actor data models
   - [ ] Character
@@ -8,10 +11,11 @@ To do
   - [ ] Adversary
 - [ ] Actor sheets
   - [ ] Character
-    - [ ] Expertises
+    - [x] Expertises
     - [ ] Inventory
     - [ ] Talents
     - [ ] Actions
+    - [ ] Make editable
   - [ ] Adversary
 - [ ] Item data models
   - [ ] Ancestry

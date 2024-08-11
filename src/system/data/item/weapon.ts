@@ -1,4 +1,4 @@
-import { Skill } from '@system/types/cosmere';
+import { WeaponId } from '@system/types/cosmere';
 
 // Mixins
 import { DataModelMixin } from '../mixins';
@@ -12,7 +12,7 @@ import { PhysicalItemMixin, PhysicalItemData } from './mixins/physical';
 import { ExpertiseItemMixin, ExpertiseItemData } from './mixins/expertise';
 
 export interface WeaponItemData extends 
-    TypedItemData, DescriptionItemData, EquippableItemData, 
+    TypedItemData<WeaponId>, DescriptionItemData, EquippableItemData, 
     ActivatableItemData, DamagingItemData, TraitsItemData, 
     PhysicalItemData, ExpertiseItemData {
     range?: {
