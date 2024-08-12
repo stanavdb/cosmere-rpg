@@ -1,6 +1,14 @@
 {
   "COSMERE": {
     "title": "Cosmere RPG",
+    "Character":{
+      "Ancestry":{
+        "placeholder": "[Ancestry]"
+      },
+      "Path":{
+        "placeholder": "[Path]"
+      }
+    },
     "AttributeGroup": {
       "Defense": "Defense",
       "Physical": {
