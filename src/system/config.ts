@@ -5,6 +5,7 @@ import {
     AttributeGroup, 
     Resource, 
     Skill, 
+    SkillModLabel,
 
     WeaponType,
     WeaponId,
@@ -121,99 +122,121 @@ const COSMERE: CosmereRPGConfig = {
     skills: {
         [Skill.Agility]: {
             label: 'COSMERE.Skill.Agility',
-            attribute: Attribute.Speed
+            attribute: Attribute.Speed,
+            attrLabel: SkillModLabel.Speed
         },
         [Skill.Athletics]: {
             label: 'COSMERE.Skill.Athletics',
-            attribute: Attribute.Strength
+            attribute: Attribute.Strength,
+            attrLabel: SkillModLabel.Strength
         },
         [Skill.HeavyWeapons]: {
             label: 'COSMERE.Skill.HeavyWeapons',
-            attribute: Attribute.Strength
+            attribute: Attribute.Strength,
+            attrLabel: SkillModLabel.Strength
         },
         [Skill.LightWeapons]: {
             label: 'COSMERE.Skill.LightWeapons',
-            attribute: Attribute.Speed
+            attribute: Attribute.Speed,
+            attrLabel: SkillModLabel.Speed
         },
         [Skill.Stealth]: {
             label: 'COSMERE.Skill.Stealth',
-            attribute: Attribute.Speed
+            attribute: Attribute.Speed,
+            attrLabel: SkillModLabel.Speed
         },
         [Skill.Thievery]: {
             label: 'COSMERE.Skill.Thievery',
-            attribute: Attribute.Speed
+            attribute: Attribute.Speed,
+            attrLabel: SkillModLabel.Speed
         },
-
+    
         [Skill.Crafting]: {
             label: 'COSMERE.Skill.Crafting',
-            attribute: Attribute.Intellect
+            attribute: Attribute.Intellect,
+            attrLabel: SkillModLabel.Intellect
         },
         [Skill.Deduction]: {
             label: 'COSMERE.Skill.Deduction',
-            attribute: Attribute.Intellect
+            attribute: Attribute.Intellect,
+            attrLabel: SkillModLabel.Intellect
         },
         [Skill.Discipline]: {
             label: 'COSMERE.Skill.Discipline',
-            attribute: Attribute.Willpower
+            attribute: Attribute.Willpower,
+            attrLabel: SkillModLabel.Willpower
         },
         [Skill.Intimidation]: {
             label: 'COSMERE.Skill.Intimidation',
-            attribute: Attribute.Willpower
+            attribute: Attribute.Willpower,
+            attrLabel: SkillModLabel.Willpower
         },
         [Skill.Lore]: {
             label: 'COSMERE.Skill.Lore',
-            attribute: Attribute.Intellect
+            attribute: Attribute.Intellect,
+            attrLabel: SkillModLabel.Intellect
         },
         [Skill.Medicine]: {
             label: 'COSMERE.Skill.Medicine',
-            attribute: Attribute.Intellect
+            attribute: Attribute.Intellect,
+            attrLabel: SkillModLabel.Intellect
         },
-
+    
         [Skill.Deception]: {
             label: 'COSMERE.Skill.Deception',
-            attribute: Attribute.Presence
+            attribute: Attribute.Presence,
+            attrLabel: SkillModLabel.Presence
         },
         [Skill.Insight]: {
             label: 'COSMERE.Skill.Insight',
-            attribute: Attribute.Awareness
+            attribute: Attribute.Awareness,
+            attrLabel: SkillModLabel.Awareness
         },
         [Skill.Leadership]: {
             label: 'COSMERE.Skill.Leadership',
-            attribute: Attribute.Presence
+            attribute: Attribute.Presence,
+            attrLabel: SkillModLabel.Presence
         },
         [Skill.Perception]: {
             label: 'COSMERE.Skill.Perception',
-            attribute: Attribute.Awareness
+            attribute: Attribute.Awareness,
+            attrLabel: SkillModLabel.Awareness
         },
         [Skill.Persuasion]: {
             label: 'COSMERE.Skill.Persuasion',
-            attribute: Attribute.Presence
+            attribute: Attribute.Presence,
+            attrLabel: SkillModLabel.Presence
         },
         [Skill.Survival]: {
             label: 'COSMERE.Skill.Survival',
-            attribute: Attribute.Awareness
+            attribute: Attribute.Awareness,
+            attrLabel: SkillModLabel.Awareness
         },
-
+    
         // Surges,
         [Skill.Adhesion]: {
             label: 'COSMERE.Skill.Adhesion',
             attribute: Attribute.Presence,
-            hiddenUntilAcquired: true,
+            attrLabel: SkillModLabel.Presence,
+            hiddenUntilAcquired: true
         },
         [Skill.Gravitation]: {
             label: 'COSMERE.Skill.Gravitation',
             attribute: Attribute.Awareness,
-            hiddenUntilAcquired: true,
+            attrLabel: SkillModLabel.Awareness,
+            hiddenUntilAcquired: true
         },
         [Skill.Illumination]: {
             label: 'COSMERE.Skill.Illumination',
             attribute: Attribute.Presence,
-            hiddenUntilAcquired: true,
+            attrLabel: SkillModLabel.Presence,
+            hiddenUntilAcquired: true
         },
         [Skill.Transformation]: {
             label: 'COSMERE.Skill.Transformation',
             attribute: Attribute.Willpower,
-            hiddenUntilAcquired: true,
+            attrLabel: SkillModLabel.Willpower,
+            hiddenUntilAcquired: true
         }
     },
 

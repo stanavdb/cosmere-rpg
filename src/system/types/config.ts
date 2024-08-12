@@ -2,6 +2,7 @@ import {
     AttributeGroup, 
     Attribute, 
     Skill, 
+    SkillModLabel,
     Resource, 
 
     WeaponType,
@@ -30,6 +31,7 @@ export interface AttributeConfig {
 export interface SkillConfig {
     label: string;
     attribute: Attribute;
+    attrLabel: SkillModLabel;
     hiddenUntilAcquired?: boolean;
 }
 

@@ -13,6 +13,15 @@ export enum Attribute {
     Presence = 'pre'
 }
 
+export enum SkillModLabel {
+    Strength = 'COSMERE.Attribute.Strength.short',
+    Speed = 'COSMERE.Attribute.Speed.short',
+    Intellect = 'COSMERE.Attribute.Intellect.short',
+    Willpower = 'COSMERE.Attribute.Willpower.short',
+    Awareness = 'COSMERE.Attribute.Awareness.short',
+    Presence = 'COSMERE.Attribute.Presence.short'
+}
+
 export enum Resource {
     Health = 'hea',
     Focus = 'foc',
