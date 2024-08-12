@@ -6,6 +6,8 @@
   "scripts": {
     "build": "npx rollup -c",
     "build:watch": "npx rollup -c -w",
+    "build:install:windows": "npx rollup -c & robocopy .\\build\\ %localappdata%\\FoundryVTT\\Data\\systems\\cosmere-rpg /e /mir",
+    "build:install:linux": "npx rollup -c && cp -r ./build/ ./local/share/FoundryVTT/Data/systems/cosmere-rpg"
     "prepare": "husky"
   },
   "devDependencies": {
