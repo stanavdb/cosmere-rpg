@@ -26,7 +26,8 @@ export default {
         // Copy system.json & templates
         copy({
             targets: [
-                { src: 'src/system.json', dest: 'build' },
+                { src: 'src/system.json', dest: 'build/' },
+                { src: 'src/fonts/*.otf', dest: 'build/fonts/'},
                 { src: 'src/lang/*.json', dest: 'build/lang/'},
                 { src: 'src/templates/*.hbs', dest: 'build/templates/' },
                 { src: 'src/templates/actors/*.hbs', dest: 'build/templates/actors/' },
