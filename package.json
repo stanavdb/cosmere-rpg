@@ -6,7 +6,8 @@
   "scripts": {
     "build": "npx rollup -c",
     "build:watch": "npx rollup -c -w",
-    "prepare": "husky"
+    "prepare": "husky",
+    "lint": "eslint"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.4.0",

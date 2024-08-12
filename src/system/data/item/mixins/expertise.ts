@@ -44,7 +44,7 @@ export function ExpertiseItemMixin<P extends CosmereItem>() {
 
         if (isKnownExpertiseType && !!parent.actor) {
           // Check if the actor has the expertise
-          const actorHasExpertise = parent.actor.system.expertises.some(
+          const actorHasExpertise = parent.actor.system.expertises?.some(
             (expertise) => expertise.id === this.type,
           );
 

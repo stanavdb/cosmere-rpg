@@ -31,7 +31,7 @@
                     <div class="defense">
                         <span class="box-title">{{ localize "COSMERE.Actor.Statistics.Defense"}}</span>
                         <div class="defense-box">
-                            <span class="value">{{ defense.value }}</span>
+                            <span class="value">{{derived defense.value }}</span>
                         </div>
                     </div>
                     {{/with}}
@@ -71,7 +71,7 @@
 
                         <li class="skill" data-id="{{skill.id}}">
                             <div class="mod-box rollable">
-                                <span class="mod">+{{ skill.mod }}</span>
+                                <span class="mod">+{{derived skill.mod }}</span>
                             </div>
 
                             <div class="label rollable">
@@ -109,17 +109,17 @@
                 <section class="flexrow">
                     <div class="derived-attribute flexcol">
                         <span class="label">{{ localize "COSMERE.Actor.Statistics.MovementRate"}}</span>
-                        <span class="value">{{../actor.system.movement.rate}} ft.</span>
+                        <span class="value">{{derived ../actor.system.movement.rate}} ft.</span>
                     </div>
                     <div class="derived-attribute flexcol">
                         <span class="label">{{ localize "COSMERE.Actor.Statistics.RecoveryDie"}}</span>
-                        <span class="value">{{../actor.system.recovery.die}}</span>
+                        <span class="value">{{derived ../actor.system.recovery.die}}</span>
                     </div>
                     <div class="derived-attribute flexcol">
                         <span class="label">{{ localize "COSMERE.Actor.Statistics.SensesRange"}}</span>
                         <span class="value">
-                            {{#if ../actor.system.senses.obscuredAffected}}
-                                {{../actor.system.senses.range}} ft.
+                            {{#if (derived ../actor.system.senses.obscuredAffected)}}
+                                {{derived ../actor.system.senses.range}} ft.
                             {{else}}
                                 {{ localize "COSMERE.Actor.Statistics.NoObscuredSense"}}
                             {{/if}}

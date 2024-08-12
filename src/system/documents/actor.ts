@@ -3,6 +3,7 @@ import { CosmereItem } from "@system/documents/item";
 import { CommonActorDataModel } from "@system/data/actor/common";
 import { CharacterActorDataModel } from "@system/data/actor/character";
 import { AdversaryActorDataModel } from "@system/data/actor/adversary";
+import { Derived } from "@system/data/fields";
 
 import { d20Roll, D20Roll, D20RollData } from "@system/dice";
 
@@ -45,7 +46,7 @@ export class CosmereActor<
     const data = this.getRollData() as D20RollData;
 
     // Add attribute mod
-    data.mod = skill.mod;
+    data.mod = Derived.getValue(skill.mod)!;
     data.skill = skill;
     data.attribute = attribute;
     data.attributes = this.system.attributes;

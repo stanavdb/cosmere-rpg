@@ -1,6 +1,9 @@
 // Types
 import { CosmereRPGConfig } from "./types/config";
 import {
+  Size,
+  CreatureType,
+  Condition,
   Attribute,
   AttributeGroup,
   Resource,
@@ -12,12 +15,98 @@ import {
   ExpertiseType,
   WeaponTraitId,
   ArmorTraitId,
+  AdversaryRole,
+  DeflectSource,
   ActionCostType,
   DamageType,
 } from "./types/cosmere";
 
 const COSMERE: CosmereRPGConfig = {
-  attributeGroups: {
+  sizes: {
+    [Size.Small]: {
+      label: "COSMERE.Actor.Size.Small",
+      size: 2.5,
+      unit: "feet",
+    },
+    [Size.Medium]: {
+      label: "COSMERE.Actor.Size.Medium",
+      size: 5,
+      unit: "feet",
+    },
+    [Size.Large]: {
+      label: "COSMERE.Actor.Size.Large",
+      size: 10,
+      unit: "feet",
+    },
+    [Size.Huge]: {
+      label: "COSMERE.Actor.Size.Huge",
+      size: 15,
+      unit: "feet",
+    },
+    [Size.Garguantuan]: {
+      label: "COSMERE.Actor.Size.Gargantuan",
+      size: 20,
+      unit: "feet",
+    },
+  },
+  creatureTypes: {
+    [CreatureType.Humanoid]: {
+      label: "COSMERE.Actor.Type.Humanoid",
+    },
+    [CreatureType.Animal]: {
+      label: "COSMERE.Actor.Type.Animal",
+    },
+    [CreatureType.Spren]: {
+      label: "COSMERE.Actor.Type.Spren",
+    },
+  },
+
+  conditions: {
+    [Condition.Afflicted]: {
+      label: "COSMERE.Actor.Conditions.Afflicted",
+    },
+    [Condition.Determined]: {
+      label: "COSMERE.Actor.Conditions.Determined",
+    },
+    [Condition.Disoriented]: {
+      label: "COSMERE.Actor.Conditions.Disoriented",
+    },
+    [Condition.Empowered]: {
+      label: "COSMERE.Actor.Conditions.Empowered",
+    },
+    [Condition.Enhanced]: {
+      label: "COSMERE.Actor.Conditions.Enhanced",
+    },
+    [Condition.Exhausted]: {
+      label: "COSMERE.Actor.Conditions.Exhausted",
+    },
+    [Condition.Focused]: {
+      label: "COSMERE.Actor.Conditions.Focused",
+    },
+    [Condition.Immobilized]: {
+      label: "COSMERE.Actor.Conditions.Immobilized",
+    },
+    [Condition.Prone]: {
+      label: "COSMERE.Actor.Conditions.Prone",
+    },
+    [Condition.Restrained]: {
+      label: "COSMERE.Actor.Conditions.Restrained",
+    },
+    [Condition.Slowed]: {
+      label: "COSMERE.Actor.Conditions.Slowed",
+    },
+    [Condition.Stunned]: {
+      label: "COSMERE.Actor.Conditions.Stunned",
+    },
+    [Condition.Surprised]: {
+      label: "COSMERE.Actor.Conditions.Surprised",
+    },
+    [Condition.Unconcious]: {
+      label: "COSMERE.Actor.Conditions.Unconcious",
+    },
+  },
+
+attributeGroups: {
     [AttributeGroup.Physical]: {
       label: "COSMERE.AttributeGroup.Physical.long",
       attributes: [Attribute.Strength, Attribute.Speed],
@@ -90,8 +179,6 @@ const COSMERE: CosmereRPGConfig = {
     },
     [Resource.Investiture]: {
       label: "COSMERE.Actor.Resource.Investiture",
-    },
-  },
 
   skills: {
     [Skill.Agility]: {
@@ -270,6 +357,20 @@ const COSMERE: CosmereRPGConfig = {
     },
   },
 
+  // TODO: These should reference their respective item ids in the compendium
+  armors: {
+    [ArmorId.Uniform]: { reference: "" },
+    [ArmorId.Leather]: { reference: "" },
+    [ArmorId.Chain]: { reference: "" },
+    [ArmorId.Breastplate]: { reference: "" },
+    [ArmorId.HalfPlate]: { reference: "" },
+    [ArmorId.FullPlate]: { reference: "" },
+    [ArmorId.Shardplate]: {
+      reference: "",
+      specialExpertise: true,
+    },
+  },
+
   expertiseTypes: {
     [ExpertiseType.Armor]: {
       label: "COSMERE.Actor.Character.Expertise.Armor",
@@ -349,6 +450,31 @@ const COSMERE: CosmereRPGConfig = {
       },
       [ArmorTraitId.Presentable]: {
         label: "COSMERE.Item.Armor.Trait.Presentable",
+      },
+    },
+  },
+
+  adversary: {
+    roles: {
+      [AdversaryRole.Minion]: {
+        label: "COSMERE.Actor.Adversary.Role.Minion",
+      },
+      [AdversaryRole.Rival]: {
+        label: "COSMERE.Actor.Adversary.Role.Rival",
+      },
+      [AdversaryRole.Boss]: {
+        label: "COSMERE.Actor.Adversary.Role.Boss",
+      },
+    },
+  },
+
+  deflect: {
+    sources: {
+      [DeflectSource.None]: {
+        label: "GENERIC.None",
+      },
+      [DeflectSource.Armor]: {
+        label: "COSMERE.Item.Type.Armor",
       },
     },
   },

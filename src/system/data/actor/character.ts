@@ -1,24 +1,25 @@
 import { CommonActorDataModel, CommonActorData } from "./common";
 
+// Fields
+import { DerivedValueField, Derived } from "../fields";
+
 export interface CharacterActorData extends CommonActorData {
-  recovery: { die: string };
+  recovery: { die: Derived<string> };
 }
 
-// NOTE: Empty interface is used to merge definitions here,
-// which is used to merge schema properties onto data model
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type, @typescript-eslint/no-unsafe-declaration-merging
-export interface CharacterActorDataModel extends CharacterActorData {}
-// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
-export class CharacterActorDataModel extends CommonActorDataModel {
+export class CharacterActorDataModel extends CommonActorDataModel<CharacterActorData> {
   public static defineSchema() {
     return foundry.utils.mergeObject(super.defineSchema(), {
       recovery: new foundry.data.fields.SchemaField({
-        die: new foundry.data.fields.StringField({
-          required: true,
-          nullable: false,
-          blank: false,
-          initial: "d4",
-        }),
+        die: new DerivedValueField(
+          new foundry.data.fields.StringField({
+            required: true,
+            nullable: false,
+            blank: false,
+            initial: "d4",
+            choices: RECOVERY_DICE,
+          }),
+        ),
       }),
     });
   }
@@ -26,7 +27,7 @@ export class CharacterActorDataModel extends CommonActorDataModel {
   public prepareDerivedData() {
     super.prepareDerivedData();
 
-    this.recovery.die = willpowerToRecoveryDie(this.attributes.wil.value);
+    this.recovery.die.value = willpowerToRecoveryDie(this.attributes.wil.value);
   }
 }
 

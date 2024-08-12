@@ -1,8 +1,11 @@
 import {
+  Size,
+  CreatureType,
+  Condition,
   AttributeGroup,
   Attribute,
-  Skill,
   AttributeShortLabel,
+  Skill,
   Resource,
   WeaponType,
   WeaponId,
@@ -10,9 +13,26 @@ import {
   ExpertiseType,
   WeaponTraitId,
   ArmorTraitId,
+  AdversaryRole,
+  DeflectSource,
   ActionCostType,
   DamageType,
 } from "./cosmere";
+
+export interface SizeConfig {
+  label: string;
+  size?: number;
+  unit?: string;
+}
+
+export interface CreatureTypeConfig {
+  label: string;
+}
+
+export interface ConditionConfig {
+  label: string;
+  reference?: string;
+}
 
 export interface AttributeGroupConfig {
   label: string;
@@ -62,6 +82,14 @@ export interface TraitConfig {
   hasValue?: boolean;
 }
 
+export interface AdversaryRoleConfig {
+  label: string;
+}
+
+export interface DeflectSourceConfig {
+  label: string;
+}
+
 export interface ActionCostConfig {
   label: string;
   icon?: string;
@@ -74,6 +102,10 @@ export interface DamageTypeConfig {
 }
 
 export interface CosmereRPGConfig {
+  sizes: Record<Size, SizeConfig>;
+  creatureTypes: Record<CreatureType, CreatureTypeConfig>;
+  conditions: Record<Condition, ConditionConfig>;
+
   attributeGroups: Record<AttributeGroup, AttributeGroupConfig>;
   attributes: Record<Attribute, AttributeConfig>;
   resources: Record<Resource, ResourceConfig>;
@@ -87,6 +119,14 @@ export interface CosmereRPGConfig {
   traits: {
     weaponTraits: Record<WeaponTraitId, TraitConfig>;
     armorTraits: Record<ArmorTraitId, TraitConfig>;
+  };
+
+  adversary: {
+    roles: Record<AdversaryRole, AdversaryRoleConfig>;
+  };
+
+  deflect: {
+    sources: Record<DeflectSource, DeflectSourceConfig>;
   };
 
   actionCosts: Record<ActionCostType, ActionCostConfig>;

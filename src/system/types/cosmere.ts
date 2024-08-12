@@ -1,3 +1,41 @@
+export enum Size {
+  Small = "small",
+  Medium = "medium",
+  Large = "large",
+  Huge = "huge",
+  Garguantuan = "gargantuan",
+}
+
+/**
+ * A non-exhaustive list of creature types.
+ * Used to provide standard options.
+ */
+export enum CreatureType {
+  Humanoid = "humanoid",
+  Animal = "animal",
+  Spren = "spren",
+}
+
+/**
+ * A non-exhaustive list of conditions
+ */
+export enum Condition {
+  Afflicted = "afflicted",
+  Determined = "determined",
+  Disoriented = "disoriented",
+  Empowered = "empowered",
+  Enhanced = "enhanced",
+  Exhausted = "exhausted",
+  Focused = "focused",
+  Immobilized = "immobilized",
+  Prone = "prone",
+  Restrained = "restrained",
+  Slowed = "slowed",
+  Stunned = "stunned",
+  Surprised = "surprised",
+  Unconcious = "unconcious",
+}
+
 export enum AttributeGroup {
   Physical = "phy",
   Cognitive = "cog",
@@ -163,6 +201,17 @@ export enum ArmorTraitId {
   Presentable = "presentable",
 }
 
+export enum AdversaryRole {
+  Minion = "minion",
+  Rival = "rival",
+  Boss = "boss",
+}
+
+export enum DeflectSource {
+  None = "none",
+  Armor = "armor",
+}
+
 export enum ActionCostType {
   Action = "act",
   Reaction = "rea",
@@ -193,6 +242,7 @@ export enum ItemType {
   Ancestry = "ancestry",
   Path = "path",
   Talent = "talent",
+  Trait = "trait",
 
   Action = "action",
 }

@@ -47,6 +47,9 @@ export interface TraitsItemData {
   traits: Set<TraitData>;
 }
 
+/**
+ * Mixin for weapon & armor traits
+ */
 export function TraitsItemMixin<P extends CosmereItem>() {
   return (base: typeof foundry.abstract.TypeDataModel<TraitsItemData, P>) => {
     return class extends base {

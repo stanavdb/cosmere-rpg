@@ -1,4 +1,5 @@
 import { CharacterActor } from "@system/documents/actor";
+import { Derived } from "@system/data/fields";
 
 Handlebars.registerHelper(
   "greaterThan",
@@ -8,7 +9,7 @@ Handlebars.registerHelper(
 Handlebars.registerHelper(
   "expertisesList",
   (actor: CharacterActor, defaultValue = "-"): string => {
-    if (actor.system.expertises.length === 0) return defaultValue;
+    if (!actor.system.expertises?.length) return defaultValue;
     return actor.system.expertises
       .map(
         (expertise) =>
@@ -17,3 +18,8 @@ Handlebars.registerHelper(
       .join(", ");
   },
 );
+
+Handlebars.registerHelper("derived", (derived: Derived<string | number>) => {
+  return Derived.getValue(derived);
+});
+

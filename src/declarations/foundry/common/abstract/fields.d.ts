@@ -70,8 +70,13 @@ declare namespace foundry {
         parent?: DataField;
       }
 
-      class DataField {
-        constructor(option?: DataFieldOptions, context?: DataFieldContext);
+      class DataField<Options extends DataFieldOptions = DataFieldOptions> {
+        constructor(option?: Options, context?: DataFieldContext);
+
+        /**
+         * The initially provided options which configure the data field
+         */
+        options: Options;
       }
 
       class SchemaField extends DataField {

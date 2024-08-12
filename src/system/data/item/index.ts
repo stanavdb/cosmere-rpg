@@ -9,6 +9,8 @@ import { FabrialItemDataModel } from "./fabrial";
 import { AncestryItemDataModel } from "./ancestry";
 import { PathItemDataModel } from "./path";
 import { TalentItemDataModel } from "./talent";
+import { TraitItemDataModel } from "./trait";
+
 
 import { ActionItemDataModel } from "./action";
 
@@ -24,6 +26,7 @@ export const config: Record<
   [ItemType.Ancestry]: AncestryItemDataModel,
   [ItemType.Path]: PathItemDataModel,
   [ItemType.Talent]: TalentItemDataModel,
+  [ItemType.Trait]: TraitItemDataModel,
 
   [ItemType.Action]: ActionItemDataModel,
 };
