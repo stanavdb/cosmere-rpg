@@ -1,12 +1,12 @@
-import { ActorType } from '@system/types/cosmere';
+import { ActorType } from "@system/types/cosmere";
 
-import { AdversaryActorDataModel } from './adversary';
-import { CharacterActorDataModel } from './character';
+import { AdversaryActorDataModel } from "./adversary";
+import { CharacterActorDataModel } from "./character";
 
 export const config = {
-    [ActorType.Character]: CharacterActorDataModel,
-    [ActorType.Adversary]: AdversaryActorDataModel
-}
+  [ActorType.Character]: CharacterActorDataModel,
+  [ActorType.Adversary]: AdversaryActorDataModel,
+};
 
-export { AdversaryActorData } from './adversary';
-export { CharacterActorData } from './character';
+export { AdversaryActorData } from "./adversary";
+export { CharacterActorData } from "./character";

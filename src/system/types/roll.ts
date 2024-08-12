@@ -1,5 +1,5 @@
 export enum AdvantageMode {
-    None = 'none',
-    Advantage = 'advantage',
-    Disadvantage = 'disadvantage'
+  None = "none",
+  Advantage = "advantage",
+  Disadvantage = "disadvantage",
 }

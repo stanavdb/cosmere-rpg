@@ -1,1 +1,1 @@
-export * as actor from './actor';
+export * as actor from "./actor";

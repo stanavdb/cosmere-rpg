@@ -23,16 +23,16 @@ export default {
     typescript(),
     commonjs(),
 
-        // Copy system.json & templates
-        copy({
-            targets: [
-                { src: 'src/system.json', dest: 'build/' },
-                { src: 'src/fonts/*.otf', dest: 'build/fonts/'},
-                { src: 'src/lang/*.json', dest: 'build/lang/'},
-                { src: 'src/templates/*.hbs', dest: 'build/templates/' },
-                { src: 'src/templates/actors/*.hbs', dest: 'build/templates/actors/' },
-                { src: 'src/templates/roll/*.hbs', dest: 'build/templates/roll/' },
-            ]
-        }),
-    ]
+    // Copy system.json & templates
+    copy({
+      targets: [
+        { src: "src/system.json", dest: "build/" },
+        { src: "src/fonts/*.otf", dest: "build/fonts/" },
+        { src: "src/lang/*.json", dest: "build/lang/" },
+        { src: "src/templates/*.hbs", dest: "build/templates/" },
+        { src: "src/templates/actors/*.hbs", dest: "build/templates/actors/" },
+        { src: "src/templates/roll/*.hbs", dest: "build/templates/roll/" },
+      ],
+    }),
+  ],
 };

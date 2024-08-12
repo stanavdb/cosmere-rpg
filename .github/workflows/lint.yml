@@ -1,6 +1,6 @@
 name: lint
 run-name: Executing ESLint
-on: [ pull_request, workflow_dispatch ]
+on: [pull_request, workflow_dispatch]
 jobs:
   lint:
     name: Executing ESLint
@@ -10,11 +10,11 @@ jobs:
       - name: Use Node 20
         uses: actions/setup-node@v4
         with:
-            node-version: '20'
+          node-version: "20"
 
       - name: NPM install
         run: |
           npm ci
-      
+
       - name: Lint
         run: npx eslint

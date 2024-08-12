@@ -1,109 +1,109 @@
 export enum AttributeGroup {
-    Physical = 'phy',
-    Cognitive = 'cog',
-    Spiritual = 'spi'
+  Physical = "phy",
+  Cognitive = "cog",
+  Spiritual = "spi",
 }
 
 export enum Attribute {
-    Strength = 'str',
-    Speed = 'spd',
-    Intellect = 'int',
-    Willpower = 'wil',
-    Awareness = 'awa',
-    Presence = 'pre'
+  Strength = "str",
+  Speed = "spd",
+  Intellect = "int",
+  Willpower = "wil",
+  Awareness = "awa",
+  Presence = "pre",
 }
 
 export enum AttributeShortLabel {
-    Strength = 'COSMERE.Character.Attribute.Strength.short',
-    Speed = 'COSMERE.Character.Attribute.Speed.short',
-    Intellect = 'COSMERE.Character.Attribute.Intellect.short',
-    Willpower = 'COSMERE.Character.Attribute.Willpower.short',
-    Awareness = 'COSMERE.Character.Attribute.Awareness.short',
-    Presence = 'COSMERE.Character.Attribute.Presence.short'
+  Strength = "COSMERE.Actor.Attribute.Strength.short",
+  Speed = "COSMERE.Actor.Attribute.Speed.short",
+  Intellect = "COSMERE.Actor.Attribute.Intellect.short",
+  Willpower = "COSMERE.Actor.Attribute.Willpower.short",
+  Awareness = "COSMERE.Actor.Attribute.Awareness.short",
+  Presence = "COSMERE.Actor.Attribute.Presence.short",
 }
 
 export enum Resource {
-    Health = 'hea',
-    Focus = 'foc',
-    Investiture = 'inv'
+  Health = "hea",
+  Focus = "foc",
+  Investiture = "inv",
 }
 
 export enum Skill {
-    Agility = 'agi',
-    Athletics = 'ath',
-    HeavyWeapons = 'hwp',
-    LightWeapons = 'lwp',
-    Stealth = 'stl',
-    Thievery = 'thv',
+  Agility = "agi",
+  Athletics = "ath",
+  HeavyWeapons = "hwp",
+  LightWeapons = "lwp",
+  Stealth = "stl",
+  Thievery = "thv",
 
-    Crafting = 'cra',
-    Deduction = 'ded',
-    Discipline = 'dis',
-    Intimidation = 'inm',
-    Lore = 'lor',
-    Medicine = 'med',
+  Crafting = "cra",
+  Deduction = "ded",
+  Discipline = "dis",
+  Intimidation = "inm",
+  Lore = "lor",
+  Medicine = "med",
 
-    Deception = 'dec',
-    Insight = 'ins',
-    Leadership = 'lea',
-    Perception = 'prc',
-    Persuasion = 'prs',
-    Survival = 'sur',
+  Deception = "dec",
+  Insight = "ins",
+  Leadership = "lea",
+  Perception = "prc",
+  Persuasion = "prs",
+  Survival = "sur",
 
-    // Surge skills
-    Adhesion = 'adh',
-    Gravitation = 'gra',
-    Illumination = 'ill',
-    Transformation = 'tra'
+  // Surge skills
+  Adhesion = "adh",
+  Gravitation = "gra",
+  Illumination = "ill",
+  Transformation = "tra",
 }
 
 export enum DerivedStatistic {
-    MovementRate = 'mvr',
-    LiftingCapactiy = 'lif',
-    RecoveryDie = 'rcd',
+  MovementRate = "mvr",
+  LiftingCapactiy = "lif",
+  RecoveryDie = "rcd",
 }
 
 /**
  * The categories of weapon available
  */
 export enum WeaponType {
-    Light = 'light_wpn',
-    Heavy = 'heavy_wpn',
-    Special = 'special_wpn'
+  Light = "light_wpn",
+  Heavy = "heavy_wpn",
+  Special = "special_wpn",
 }
 
 /**
- * The ids of all default system weapons.  
+ * The ids of all default system weapons.
  * This is not an exhaustive list of all possible weapons,
  * but is used to populate the `CONFIG.COSMERE.weapons` property.
  */
 export enum WeaponId {
-    // Light weapons
-    Javelin = 'javelin',
-    Knife = 'knife',
-    Mace = 'mace',
-    Rapier = 'rapier',
-    Shortspear = 'shortspear',
-    Sidesword = 'sidesword',
-    Staff = 'staff',
-    Shortbow = 'shortbow',
-    Sling = 'sling',
+  // Light weapons
+  Javelin = "javelin",
+  Knife = "knife",
+  Mace = "mace",
+  Rapier = "rapier",
+  Shortspear = "shortspear",
+  Sidesword = "sidesword",
+  Staff = "staff",
+  Shortbow = "shortbow",
+  Sling = "sling",
 
-    // Heavy weapons
-    Axe = 'axe',
-    Greatsword = 'greatsword',
-    Hammer = 'hammer',
-    Longspear = 'longspear',
-    Longsword = 'longsword',
-    Poleaxe = 'poleaxe',
-    Shield = 'shield',
-    Crossbow = 'crossbow',
-    Longbow = 'longbow',
+  // Heavy weapons
+  Axe = "axe",
+  Greatsword = "greatsword",
+  Hammer = "hammer",
+  Longspear = "longspear",
+  Longsword = "longsword",
+  Poleaxe = "poleaxe",
+  Shield = "shield",
+  Crossbow = "crossbow",
+  Longbow = "longbow",
 
-    // Special
-    Improvised = 'improvised',
-    Unarmed = 'unarmed',
-    Shardblade = 'shardblade'
+  // Special
+  Improvised = "improvised",
+  Unarmed = "unarmed",
+  Shardblade = "shardblade",
 }
 
 /**
@@ -112,21 +112,21 @@ export enum WeaponId {
  * but is used to populate the `CONFIG.COSMERE.armors` property.
  */
 export enum ArmorId {
-    Uniform = 'uniform',
-    Leather = 'leather',
-    Chain = 'chain',
-    Breastplate = 'breastplate',
-    HalfPlate = 'half_plate',
-    FullPlate = 'plate',
-    Shardplate = 'shardplate'
+  Uniform = "uniform",
+  Leather = "leather",
+  Chain = "chain",
+  Breastplate = "breastplate",
+  HalfPlate = "half_plate",
+  FullPlate = "plate",
+  Shardplate = "shardplate",
 }
 
 export enum ExpertiseType {
-    Armor = 'armor',
-    Cultural = 'cultural',
-    Specialist = 'specialist',
-    Utility = 'utility',
-    Weapon = 'weapon'
+  Armor = "armor",
+  Cultural = "cultural",
+  Specialist = "specialist",
+  Utility = "utility",
+  Weapon = "weapon",
 }
 
 /**
@@ -135,21 +135,21 @@ export enum ExpertiseType {
  * but is used to populate the `CONFIG.COSMERE.traits.weaponTraitIds` property.
  */
 export enum WeaponTraitId {
-    Cumbersome = 'cumbersome',
-    Dangerous = 'dangerous',
-    Deadly = 'deadly',
-    Defensive = 'defensive',
-    Discreet = 'discreet',
-    Indirect = 'indirect',
-    Loaded = 'loaded',
-    Momentum = 'momentum',
-    Offhand = 'offhand',
-    Pierce = 'pierce',
-    Quickdraw = 'quickdraw',
-    Thrown = 'thrown',
-    TwoHanded = 'two_handed',
-    Unique = 'unique',
-    Fragile = 'fragile',
+  Cumbersome = "cumbersome",
+  Dangerous = "dangerous",
+  Deadly = "deadly",
+  Defensive = "defensive",
+  Discreet = "discreet",
+  Indirect = "indirect",
+  Loaded = "loaded",
+  Momentum = "momentum",
+  Offhand = "offhand",
+  Pierce = "pierce",
+  Quickdraw = "quickdraw",
+  Thrown = "thrown",
+  TwoHanded = "two_handed",
+  Unique = "unique",
+  Fragile = "fragile",
 }
 
 /**
@@ -158,41 +158,41 @@ export enum WeaponTraitId {
  * but is used to populate the `CONFIG.COSMERE.traits.armorTraitIds` property.
  */
 export enum ArmorTraitId {
-    Cumbersome = 'cumbersome',
-    Dangerous = 'dangerous',
-    Presentable = 'presentable',
+  Cumbersome = "cumbersome",
+  Dangerous = "dangerous",
+  Presentable = "presentable",
 }
 
 export enum ActionCostType {
-    Action = 'act',
-    Reaction = 'rea',
-    FreeAction = 'fre'
+  Action = "act",
+  Reaction = "rea",
+  FreeAction = "fre",
 }
 
 export enum DamageType {
-    Energy = 'energy',
-    Impact = 'impact',
-    Keen = 'keen',
-    Spirit = 'spirit',
-    Vital = 'vital',
+  Energy = "energy",
+  Impact = "impact",
+  Keen = "keen",
+  Spirit = "spirit",
+  Vital = "vital",
 }
 
 /* --- System --- */
 
 export enum ActorType {
-    Character = 'character',
-    Adversary = 'adversary'
+  Character = "character",
+  Adversary = "adversary",
 }
 
 export enum ItemType {
-    Weapon = 'weapon',
-    Armor = 'armor',
-    Equipment = 'equipment',
-    Fabrial = 'fabrial',
+  Weapon = "weapon",
+  Armor = "armor",
+  Equipment = "equipment",
+  Fabrial = "fabrial",
 
-    Ancestry = 'ancestry',
-    Path = 'path',
-    Talent = 'talent',
+  Ancestry = "ancestry",
+  Path = "path",
+  Talent = "talent",
 
-    Action = 'action'
+  Action = "action",
 }

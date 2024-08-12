@@ -29,7 +29,7 @@
 
                     {{#with attrGroup.defense as |defense|}}
                     <div class="defense">
-                        <span class="box-title">{{ localize "COSMERE.AttributeGroup.Defense"}}</span>
+                        <span class="box-title">{{ localize "COSMERE.Actor.Statistics.Defense"}}</span>
                         <div class="defense-box">
                             <span class="value">{{ defense.value }}</span>
                         </div>
@@ -54,7 +54,7 @@
                         </div>
                         {{#if resource.deflect includeZero=true}}
                         <div class="deflect flexcol">
-                            <span class="label">{{ localize "COSMERE.Statistics.Deflect"}}</span>
+                            <span class="label">{{ localize "COSMERE.Actor.Statistics.Deflect"}}</span>
                             <span class="value">{{ resource.deflect }}</span>
                         </div>
                         {{/if}}
@@ -108,20 +108,20 @@
                 {{!-- Remaining physical traits --}}
                 <section class="flexrow">
                     <div class="derived-attribute flexcol">
-                        <span class="label">{{ localize "COSMERE.Statistics.MovementRate"}}</span>
+                        <span class="label">{{ localize "COSMERE.Actor.Statistics.MovementRate"}}</span>
                         <span class="value">{{../actor.system.movement.rate}} ft.</span>
                     </div>
                     <div class="derived-attribute flexcol">
-                        <span class="label">{{ localize "COSMERE.Statistics.RecoveryDie"}}</span>
+                        <span class="label">{{ localize "COSMERE.Actor.Statistics.RecoveryDie"}}</span>
                         <span class="value">{{../actor.system.recovery.die}}</span>
                     </div>
                     <div class="derived-attribute flexcol">
-                        <span class="label">{{ localize "COSMERE.Statistics.SensesRange"}}</span>
+                        <span class="label">{{ localize "COSMERE.Actor.Statistics.SensesRange"}}</span>
                         <span class="value">
                             {{#if ../actor.system.senses.obscuredAffected}}
                                 {{../actor.system.senses.range}} ft.
                             {{else}}
-                                {{ localize "COSMERE.Statistics.NoObscuredSense"}}
+                                {{ localize "COSMERE.Actor.Statistics.NoObscuredSense"}}
                             {{/if}}
                         </span>
                     </div>
@@ -131,7 +131,7 @@
                 {{#if (eq attrGroup.id 'spi')}}
                 {{!-- Expertises --}}
                 <section class="expertises flexcol">
-                    <span class="label">{{ localize "COSMERE.Expertise.name"}}</span>
+                    <span class="label">{{ localize "COSMERE.Actor.Character.Expertise.name"}}</span>
                     <p class="list-value">
                         {{expertisesList ../actor '-'}}
                     </p>

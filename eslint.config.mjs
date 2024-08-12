@@ -11,7 +11,7 @@ export default tseslint.config(
       "eslint.config.mjs",
       "rollup.config.js",
       "commitlint.config.js",
-      "lint-staged-config.mjs"
+      "lint-staged-config.mjs",
     ],
   },
   eslint.configs.recommended,
