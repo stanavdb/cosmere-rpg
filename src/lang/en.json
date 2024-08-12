@@ -131,6 +131,17 @@
         "Health": "Health",
         "Focus": "Focus",
         "Investiture": "Investiture"
+      },
+      "Actions": {
+        "TODO": "TODO",
+        "Aid": "Aid",
+        "AvoidDanger": "Avoid Danger"
+      },
+      "Surge": {
+        "Adhesion": "Adhesion",
+        "Gravitation": "Gravitation",
+        "Illumination": "Illumination",
+        "Transformation": "Transformation"
       }
     },
     "AttributeGroup": {
