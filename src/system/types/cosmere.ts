@@ -13,13 +13,13 @@ export enum Attribute {
     Presence = 'pre'
 }
 
-export enum SkillModLabel {
-    Strength = 'COSMERE.Attribute.Strength.short',
-    Speed = 'COSMERE.Attribute.Speed.short',
-    Intellect = 'COSMERE.Attribute.Intellect.short',
-    Willpower = 'COSMERE.Attribute.Willpower.short',
-    Awareness = 'COSMERE.Attribute.Awareness.short',
-    Presence = 'COSMERE.Attribute.Presence.short'
+export enum AttributeShortLabel {
+    Strength = 'COSMERE.Character.Attribute.Strength.short',
+    Speed = 'COSMERE.Character.Attribute.Speed.short',
+    Intellect = 'COSMERE.Character.Attribute.Intellect.short',
+    Willpower = 'COSMERE.Character.Attribute.Willpower.short',
+    Awareness = 'COSMERE.Character.Attribute.Awareness.short',
+    Presence = 'COSMERE.Character.Attribute.Presence.short'
 }
 
 export enum Resource {

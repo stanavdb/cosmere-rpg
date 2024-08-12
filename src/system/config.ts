@@ -5,7 +5,7 @@ import {
     AttributeGroup, 
     Resource, 
     Skill, 
-    SkillModLabel,
+    AttributeShortLabel,
 
     WeaponType,
     WeaponId,
@@ -50,14 +50,14 @@ const COSMERE: CosmereRPGConfig = {
 
     attributes: {
         [Attribute.Strength]: {
-            label: 'COSMERE.Attribute.Strength.long',
+            label: 'COSMERE.Character.Attribute.Strength.long',
             skills: [
                 Skill.Athletics,
                 Skill.HeavyWeapons
             ]
         },
         [Attribute.Speed]: {
-            label: 'COSMERE.Attribute.Speed.long',
+            label: 'COSMERE.Character.Attribute.Speed.long',
             skills: [
                 Skill.Agility,
                 Skill.LightWeapons,
@@ -66,7 +66,7 @@ const COSMERE: CosmereRPGConfig = {
             ]
         },
         [Attribute.Intellect]: {
-            label: 'COSMERE.Attribute.Intellect.long',
+            label: 'COSMERE.Character.Attribute.Intellect.long',
             skills: [
                 Skill.Crafting,
                 Skill.Deduction,
@@ -75,7 +75,7 @@ const COSMERE: CosmereRPGConfig = {
             ]
         },
         [Attribute.Willpower]: {
-            label: 'COSMERE.Attribute.Willpower.long',
+            label: 'COSMERE.Character.Attribute.Willpower.long',
             skills: [
                 Skill.Discipline,
                 Skill.Intimidation,
@@ -84,7 +84,7 @@ const COSMERE: CosmereRPGConfig = {
             ]
         },
         [Attribute.Awareness]: {
-            label: 'COSMERE.Attribute.Awareness.long',
+            label: 'COSMERE.Character.Attribute.Awareness.long',
             skills: [
                 Skill.Insight,
                 Skill.Perception,
@@ -94,7 +94,7 @@ const COSMERE: CosmereRPGConfig = {
             ]
         },
         [Attribute.Presence]: {
-            label: 'COSMERE.Attribute.Presence.long',
+            label: 'COSMERE.Character.Attribute.Presence.long',
             skills: [
                 Skill.Deception,
                 Skill.Leadership,
@@ -108,147 +108,147 @@ const COSMERE: CosmereRPGConfig = {
 
     resources: {
         [Resource.Health]: {
-            label: 'COSMERE.Resource.Health',
+            label: 'COSMERE.Character.Resource.Health',
             deflect: true
         },
         [Resource.Focus]: {
-            label: 'COSMERE.Resource.Focus'
+            label: 'COSMERE.Character.Resource.Focus'
         },
         [Resource.Investiture]: {
-            label: 'COSMERE.Resource.Investiture'
+            label: 'COSMERE.Character.Resource.Investiture'
         }
     },
 
     skills: {
         [Skill.Agility]: {
-            label: 'COSMERE.Skill.Agility',
+            label: 'COSMERE.Character.Skill.Agility',
             attribute: Attribute.Speed,
-            attrLabel: SkillModLabel.Speed
+            attrLabel: AttributeShortLabel.Speed
         },
         [Skill.Athletics]: {
-            label: 'COSMERE.Skill.Athletics',
+            label: 'COSMERE.Character.Skill.Athletics',
             attribute: Attribute.Strength,
-            attrLabel: SkillModLabel.Strength
+            attrLabel: AttributeShortLabel.Strength
         },
         [Skill.HeavyWeapons]: {
-            label: 'COSMERE.Skill.HeavyWeapons',
+            label: 'COSMERE.Character.Skill.HeavyWeapons',
             attribute: Attribute.Strength,
-            attrLabel: SkillModLabel.Strength
+            attrLabel: AttributeShortLabel.Strength
         },
         [Skill.LightWeapons]: {
-            label: 'COSMERE.Skill.LightWeapons',
+            label: 'COSMERE.Character.Skill.LightWeapons',
             attribute: Attribute.Speed,
-            attrLabel: SkillModLabel.Speed
+            attrLabel: AttributeShortLabel.Speed
         },
         [Skill.Stealth]: {
-            label: 'COSMERE.Skill.Stealth',
+            label: 'COSMERE.Character.Skill.Stealth',
             attribute: Attribute.Speed,
-            attrLabel: SkillModLabel.Speed
+            attrLabel: AttributeShortLabel.Speed
         },
         [Skill.Thievery]: {
-            label: 'COSMERE.Skill.Thievery',
+            label: 'COSMERE.Character.Skill.Thievery',
             attribute: Attribute.Speed,
-            attrLabel: SkillModLabel.Speed
+            attrLabel: AttributeShortLabel.Speed
         },
     
         [Skill.Crafting]: {
-            label: 'COSMERE.Skill.Crafting',
+            label: 'COSMERE.Character.Skill.Crafting',
             attribute: Attribute.Intellect,
-            attrLabel: SkillModLabel.Intellect
+            attrLabel: AttributeShortLabel.Intellect
         },
         [Skill.Deduction]: {
-            label: 'COSMERE.Skill.Deduction',
+            label: 'COSMERE.Character.Skill.Deduction',
             attribute: Attribute.Intellect,
-            attrLabel: SkillModLabel.Intellect
+            attrLabel: AttributeShortLabel.Intellect
         },
         [Skill.Discipline]: {
-            label: 'COSMERE.Skill.Discipline',
+            label: 'COSMERE.Character.Skill.Discipline',
             attribute: Attribute.Willpower,
-            attrLabel: SkillModLabel.Willpower
+            attrLabel: AttributeShortLabel.Willpower
         },
         [Skill.Intimidation]: {
-            label: 'COSMERE.Skill.Intimidation',
+            label: 'COSMERE.Character.Skill.Intimidation',
             attribute: Attribute.Willpower,
-            attrLabel: SkillModLabel.Willpower
+            attrLabel: AttributeShortLabel.Willpower
         },
         [Skill.Lore]: {
-            label: 'COSMERE.Skill.Lore',
+            label: 'COSMERE.Character.Skill.Lore',
             attribute: Attribute.Intellect,
-            attrLabel: SkillModLabel.Intellect
+            attrLabel: AttributeShortLabel.Intellect
         },
         [Skill.Medicine]: {
-            label: 'COSMERE.Skill.Medicine',
+            label: 'COSMERE.Character.Skill.Medicine',
             attribute: Attribute.Intellect,
-            attrLabel: SkillModLabel.Intellect
+            attrLabel: AttributeShortLabel.Intellect
         },
     
         [Skill.Deception]: {
-            label: 'COSMERE.Skill.Deception',
+            label: 'COSMERE.Character.Skill.Deception',
             attribute: Attribute.Presence,
-            attrLabel: SkillModLabel.Presence
+            attrLabel: AttributeShortLabel.Presence
         },
         [Skill.Insight]: {
-            label: 'COSMERE.Skill.Insight',
+            label: 'COSMERE.Character.Skill.Insight',
             attribute: Attribute.Awareness,
-            attrLabel: SkillModLabel.Awareness
+            attrLabel: AttributeShortLabel.Awareness
         },
         [Skill.Leadership]: {
-            label: 'COSMERE.Skill.Leadership',
+            label: 'COSMERE.Character.Skill.Leadership',
             attribute: Attribute.Presence,
-            attrLabel: SkillModLabel.Presence
+            attrLabel: AttributeShortLabel.Presence
         },
         [Skill.Perception]: {
-            label: 'COSMERE.Skill.Perception',
+            label: 'COSMERE.Character.Skill.Perception',
             attribute: Attribute.Awareness,
-            attrLabel: SkillModLabel.Awareness
+            attrLabel: AttributeShortLabel.Awareness
         },
         [Skill.Persuasion]: {
-            label: 'COSMERE.Skill.Persuasion',
+            label: 'COSMERE.Character.Skill.Persuasion',
             attribute: Attribute.Presence,
-            attrLabel: SkillModLabel.Presence
+            attrLabel: AttributeShortLabel.Presence
         },
         [Skill.Survival]: {
-            label: 'COSMERE.Skill.Survival',
+            label: 'COSMERE.Character.Skill.Survival',
             attribute: Attribute.Awareness,
-            attrLabel: SkillModLabel.Awareness
+            attrLabel: AttributeShortLabel.Awareness
         },
     
         // Surges,
         [Skill.Adhesion]: {
-            label: 'COSMERE.Skill.Adhesion',
+            label: 'COSMERE.Character.Skill.Adhesion',
             attribute: Attribute.Presence,
-            attrLabel: SkillModLabel.Presence,
+            attrLabel: AttributeShortLabel.Presence,
             hiddenUntilAcquired: true
         },
         [Skill.Gravitation]: {
-            label: 'COSMERE.Skill.Gravitation',
+            label: 'COSMERE.Character.Skill.Gravitation',
             attribute: Attribute.Awareness,
-            attrLabel: SkillModLabel.Awareness,
+            attrLabel: AttributeShortLabel.Awareness,
             hiddenUntilAcquired: true
         },
         [Skill.Illumination]: {
-            label: 'COSMERE.Skill.Illumination',
+            label: 'COSMERE.Character.Skill.Illumination',
             attribute: Attribute.Presence,
-            attrLabel: SkillModLabel.Presence,
+            attrLabel: AttributeShortLabel.Presence,
             hiddenUntilAcquired: true
         },
         [Skill.Transformation]: {
-            label: 'COSMERE.Skill.Transformation',
+            label: 'COSMERE.Character.Skill.Transformation',
             attribute: Attribute.Willpower,
-            attrLabel: SkillModLabel.Willpower,
+            attrLabel: AttributeShortLabel.Willpower,
             hiddenUntilAcquired: true
         }
     },
 
     weaponTypes: {
         [WeaponType.Light]: {
-            label: 'COSMERE.WeaponType.Light'
+            label: 'COSMERE.Item.Weapon.Type.Light'
         },
         [WeaponType.Heavy]: {
-            label: 'COSMERE.WeaponType.Heavy'
+            label: 'COSMERE.Item.Weapon.Type.Heavy'
         },
         [WeaponType.Special]: {
-            label: 'COSMERE.WeaponType.Special'
+            label: 'COSMERE.Item.Weapon.Type.Special'
         }
     },
 
@@ -298,83 +298,83 @@ const COSMERE: CosmereRPGConfig = {
 
     expertiseTypes: {
         [ExpertiseType.Armor]: {
-            label: 'COSMERE.Expertise.Armor'
+            label: 'COSMERE.Character.Expertise.Armor'
         },
         [ExpertiseType.Cultural]: {
-            label: 'COSMERE.Expertise.Cultural'
+            label: 'COSMERE.Character.Expertise.Cultural'
         },
         [ExpertiseType.Specialist]: {
-            label: 'COSMERE.Expertise.Specialist'
+            label: 'COSMERE.Character.Expertise.Specialist'
         },
         [ExpertiseType.Utility]: {
-            label: 'COSMERE.Expertise.Utility'
+            label: 'COSMERE.Character.Expertise.Utility'
         },
         [ExpertiseType.Weapon]: {
-            label: 'COSMERE.Expertise.Weapon'
+            label: 'COSMERE.Character.Expertise.Weapon'
         }
     },
 
     traits: {
         weaponTraits: {
             [WeaponTraitId.Cumbersome]: {
-                label: 'COSMERE.WeaponTrait.Cumbersome',
+                label: 'COSMERE.Item.Weapon.Trait.Cumbersome',
                 hasValue: true
             },
             [WeaponTraitId.Dangerous]: {
-                label: 'COSMERE.WeaponTrait.Dangerous'
+                label: 'COSMERE.Item.Weapon.Trait.Dangerous'
             },
             [WeaponTraitId.Deadly]: {
-                label: 'COSMERE.WeaponTrait.Deadly'
+                label: 'COSMERE.Item.Weapon.Trait.Deadly'
             },
             [WeaponTraitId.Defensive]: {
-                label: 'COSMERE.WeaponTrait.Defensive'
+                label: 'COSMERE.Item.Weapon.Trait.Defensive'
             },
             [WeaponTraitId.Discreet]: {
-                label: 'COSMERE.WeaponTrait.Discreet'
+                label: 'COSMERE.Item.Weapon.Trait.Discreet'
             },
             [WeaponTraitId.Indirect]: {
-                label: 'COSMERE.WeaponTrait.Indirect'
+                label: 'COSMERE.Item.Weapon.Trait.Indirect'
             },
             [WeaponTraitId.Loaded]: {
-                label: 'COSMERE.WeaponTrait.Loaded',
+                label: 'COSMERE.Item.Weapon.Trait.Loaded',
                 hasValue: true
             },
             [WeaponTraitId.Momentum]: {
-                label: 'COSMERE.WeaponTrait.Momentum'
+                label: 'COSMERE.Item.Weapon.Trait.Momentum'
             },
             [WeaponTraitId.Offhand]: {
-                label: 'COSMERE.WeaponTrait.Offhand'
+                label: 'COSMERE.Item.Weapon.Trait.Offhand'
             },
             [WeaponTraitId.Pierce]: {
-                label: 'COSMERE.WeaponTrait.Pierce'
+                label: 'COSMERE.Item.Weapon.Trait.Pierce'
             },
             [WeaponTraitId.Quickdraw]: {
-                label: 'COSMERE.WeaponTrait.Quickdraw'
+                label: 'COSMERE.Item.Weapon.Trait.Quickdraw'
             },
             [WeaponTraitId.Thrown]: {
-                label: 'COSMERE.WeaponTrait.Thrown'
+                label: 'COSMERE.Item.Weapon.Trait.Thrown'
             },
             [WeaponTraitId.TwoHanded]: {
-                label: 'COSMERE.WeaponTrait.TwoHanded'
+                label: 'COSMERE.Item.Weapon.Trait.TwoHanded'
             },
             [WeaponTraitId.Unique]: {
-                label: 'COSMERE.WeaponTrait.Unique'
+                label: 'COSMERE.Item.Weapon.Trait.Unique'
             },
             [WeaponTraitId.Fragile]: {
-                label: 'COSMERE.WeaponTrait.Fragile'
+                label: 'COSMERE.Item.Weapon.Trait.Fragile'
             }
         },
 
         armorTraits: {
             [ArmorTraitId.Cumbersome]: {
-                label: 'COSMERE.ArmorTrait.Cumbersome',
+                label: 'COSMERE.Item.Armor.Trait.Cumbersome',
                 hasValue: true
             },
             [ArmorTraitId.Dangerous]: {
-                label: 'COSMERE.ArmorTrait.Dangerous'
+                label: 'COSMERE.Item.Armor.Trait.Dangerous'
             },
             [ArmorTraitId.Presentable]: {
-                label: 'COSMERE.ArmorTrait.Presentable'
+                label: 'COSMERE.Item.Armor.Trait.Presentable'
             }
         }
     },
