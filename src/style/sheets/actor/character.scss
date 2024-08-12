@@ -5,7 +5,7 @@
   flex-direction: column;
   margin: 0 5pt;
 
-  > .label {
+  >.label {
     text-align: center;
     font-size: 12pt;
     text-transform: uppercase;
@@ -16,7 +16,7 @@
     padding: 2.5pt 0;
   }
 
-  > section {
+  >section {
     margin-bottom: 0.5rem;
   }
 }
@@ -63,6 +63,7 @@
 }
 
 .skills {
+
   .skill-list,
   .ranks {
     list-style-type: none;
@@ -110,6 +111,7 @@
 
 .derived-attribute,
 .expertises {
+
   .label,
   p {
     text-align: center;
