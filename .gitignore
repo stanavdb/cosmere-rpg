@@ -2,4 +2,6 @@ node_modules/
 build/
 
 .vscode/
+!i18n-ally-custom-framework.yml
+!additional_settings.json
 .idea/
