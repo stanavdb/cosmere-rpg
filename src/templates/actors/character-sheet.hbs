@@ -31,7 +31,7 @@
                     <div class="defense">
                         <span class="box-title">Defense</span>
                         <div class="defense-box">
-                            <span class="value">{{ defense.value }}</span>
+                            <span class="value">{{derived defense.value }}</span>
                         </div>
                     </div>
                     {{/with}}
@@ -50,7 +50,7 @@
                     <div class="resource flexrow" data-id="{{resource.id}}">
                         <div class="flexcol">
                             <span class="label">{{resource.config.label}}</span>
-                            <span class="value">{{resource.value}} / {{resource.max}}</span>
+                            <span class="value">{{resource.value}} / {{derived resource.max}}</span>
                         </div>
                         {{#if resource.deflect includeZero=true}}
                         <div class="deflect flexcol">
@@ -71,7 +71,7 @@
 
                         <li class="skill" data-id="{{skill.id}}">
                             <div class="mod-box rollable">
-                                <span class="mod">+{{ skill.mod }}</span>
+                                <span class="mod">+{{derived skill.mod }}</span>
                             </div>
 
                             <div class="label rollable">
@@ -109,17 +109,17 @@
                 <section class="flexrow">
                     <div class="derived-attribute flexcol">
                         <span class="label">Movement</span>
-                        <span class="value">{{../actor.system.movement.rate}} ft.</span>
+                        <span class="value">{{derived ../actor.system.movement.rate}} ft.</span>
                     </div>
                     <div class="derived-attribute flexcol">
                         <span class="label">Recovery die</span>
-                        <span class="value">{{../actor.system.recovery.die}}</span>
+                        <span class="value">{{derived ../actor.system.recovery.die}}</span>
                     </div>
                     <div class="derived-attribute flexcol">
                         <span class="label">Senses range</span>
                         <span class="value">
-                            {{#if ../actor.system.senses.obscuredAffected}}
-                                {{../actor.system.senses.range}} ft.
+                            {{#if (derived ../actor.system.senses.obscuredAffected)}}
+                                {{derived ../actor.system.senses.range}} ft.
                             {{else}}
                                 Unaffected by obscured senses
                             {{/if}}

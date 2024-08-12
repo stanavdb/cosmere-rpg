@@ -1,95 +1,132 @@
-import { 
-    AttributeGroup, 
-    Attribute, 
-    Skill, 
-    Resource, 
+import {
+  Size,
+  CreatureType,
+  Condition,
+  AttributeGroup,
+  Attribute,
+  Skill,
+  Resource,
+  WeaponType,
+  WeaponId,
+  ArmorId,
+  ExpertiseType,
+  WeaponTraitId,
+  ArmorTraitId,
+  AdversaryRole,
+  DeflectSource,
+  ActionCostType,
+  DamageType,
+} from "./cosmere";
 
-    WeaponType,
-    WeaponId,
-    ArmorId,
-    ExpertiseType,
+export interface SizeConfig {
+  label: string;
+  size?: number;
+  unit?: string;
+}
 
-    WeaponTraitId,
-    ArmorTraitId,
+export interface CreatureTypeConfig {
+  label: string;
+}
 
-    ActionCostType,
-    DamageType 
-} from './cosmere';
+export interface ConditionConfig {
+  label: string;
+  reference?: string;
+}
 
 export interface AttributeGroupConfig {
-    label: string;
-    attributes: [ Attribute, Attribute ];
-    resource: Resource;
+  label: string;
+  attributes: [Attribute, Attribute];
+  resource: Resource;
 }
 
 export interface AttributeConfig {
-    label: string;
-    skills: Skill[];
+  label: string;
+  skills: Skill[];
 }
 
 export interface SkillConfig {
-    label: string;
-    attribute: Attribute;
-    hiddenUntilAquired?: boolean;
+  label: string;
+  attribute: Attribute;
+  hiddenUntilAquired?: boolean;
 }
 
 export interface ResourceConfig {
-    label: string;
-    deflect?: boolean;
+  label: string;
+  deflect?: boolean;
 }
 
 export interface WeaponTypeConfig {
-    label: string;
+  label: string;
 }
 
 export interface WeaponConfig {
-    reference: string;
-    specialExpertise?: boolean;
+  reference: string;
+  specialExpertise?: boolean;
 }
 
 export interface ArmorConfig {
-    reference: string;
-    specialExpertise?: boolean;
+  reference: string;
+  specialExpertise?: boolean;
 }
 
 export interface ExpertiseTypeConfig {
-    label: string;
-    icon?: string;
+  label: string;
+  icon?: string;
 }
 
 export interface TraitConfig {
-    label: string;
-    reference?: string;
-    hasValue?: boolean;
+  label: string;
+  reference?: string;
+  hasValue?: boolean;
+}
+
+export interface AdversaryRoleConfig {
+  label: string;
+}
+
+export interface DeflectSourceConfig {
+  label: string;
 }
 
 export interface ActionCostConfig {
-    label: string;
-    icon?: string;
+  label: string;
+  icon?: string;
 }
 
 export interface DamageTypeConfig {
-    label: string;
-    icon?: string;
-    ignoreDeflect?: boolean;
+  label: string;
+  icon?: string;
+  ignoreDeflect?: boolean;
 }
 
 export interface CosmereRPGConfig {
-    attributeGroups: Record<AttributeGroup, AttributeGroupConfig>;
-    attributes: Record<Attribute, AttributeConfig>;
-    resources: Record<Resource, ResourceConfig>;
-    skills: Record<Skill, SkillConfig>;
+  sizes: Record<Size, SizeConfig>;
+  creatureTypes: Record<CreatureType, CreatureTypeConfig>;
+  conditions: Record<Condition, ConditionConfig>;
 
-    weaponTypes: Record<WeaponType, WeaponTypeConfig>;
-    weapons: Record<WeaponId, WeaponConfig>;
-    armors: Record<ArmorId, ArmorConfig>;
-    expertiseTypes: Record<ExpertiseType, ExpertiseTypeConfig>;
+  attributeGroups: Record<AttributeGroup, AttributeGroupConfig>;
+  attributes: Record<Attribute, AttributeConfig>;
+  resources: Record<Resource, ResourceConfig>;
+  skills: Record<Skill, SkillConfig>;
 
-    traits: {
-        weaponTraits: Record<WeaponTraitId, TraitConfig>;
-        armorTraits: Record<ArmorTraitId, TraitConfig>;
-    };
+  weaponTypes: Record<WeaponType, WeaponTypeConfig>;
+  weapons: Record<WeaponId, WeaponConfig>;
+  armors: Record<ArmorId, ArmorConfig>;
+  expertiseTypes: Record<ExpertiseType, ExpertiseTypeConfig>;
 
-    actionCosts: Record<ActionCostType, ActionCostConfig>;
-    damageTypes: Record<DamageType, DamageTypeConfig>;
+  traits: {
+    weaponTraits: Record<WeaponTraitId, TraitConfig>;
+    armorTraits: Record<ArmorTraitId, TraitConfig>;
+  };
+
+  adversary: {
+    roles: Record<AdversaryRole, AdversaryRoleConfig>;
+  };
+
+  deflect: {
+    sources: Record<DeflectSource, DeflectSourceConfig>;
+  };
+
+  actionCosts: Record<ActionCostType, ActionCostConfig>;
+  damageTypes: Record<DamageType, DamageTypeConfig>;
 }

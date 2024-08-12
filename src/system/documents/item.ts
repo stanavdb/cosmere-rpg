@@ -1,8 +1,8 @@
-import { ItemType } from '@system/types/cosmere';
-import { CosmereActor } from './actor';
+import { ItemType } from "@system/types/cosmere";
+import { CosmereActor } from "./actor";
 
-type DataModel = foundry.abstract.DataModel<DataSchema>;
-
-export class CosmereItem<T extends DataModel = DataModel> extends Item<T, CosmereActor> {
-    declare type: ItemType;
+export class CosmereItem<
+  T extends foundry.abstract.DataModel = foundry.abstract.DataModel,
+> extends Item<T, CosmereActor> {
+  declare type: ItemType;
 }

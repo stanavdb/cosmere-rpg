@@ -9,6 +9,9 @@
   - [x] Character
     - [x] Expertises
   - [ ] Adversary
+  - [x] Common
+    - [x] Sizes
+    - [x] Creature types
 - [ ] Actor sheets
   - [ ] Character
     - [x] Expertises
