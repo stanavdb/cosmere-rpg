@@ -12,7 +12,7 @@ export class BaseSheet extends ActorSheet {
 
     getData(options?: Partial<ActorSheet.Options>) {
         return {
-            ...super.getData(options),
+            ...(super.getData(options) as ActorSheet.ActorSheetData),
 
             attributeGroups: (Object.keys(CONFIG.COSMERE.attributeGroups) as AttributeGroup[])
                 .map(this.getDataForAttributeGroup.bind(this)),
@@ -35,8 +35,8 @@ export class BaseSheet extends ActorSheet {
     private onRollSkillTest(event: Event) {
         event.preventDefault();
 
-        const skillId: Skill = $(event.currentTarget!).closest('[data-id]').data('id');
-        this.actor.rollSkill(skillId, { event });
+        const skillId = $(event.currentTarget!).closest('[data-id]').data('id') as Skill;
+        void this.actor.rollSkill(skillId);
     }
 
     /* ---------------------- */

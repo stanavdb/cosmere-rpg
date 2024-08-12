@@ -15,7 +15,11 @@ export interface ArmorItemData extends
     deflect?: number;
 }
 
+// NOTE: Empty interface is used to merge definitions here,
+// which is used to merge schema properties onto data model
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type, @typescript-eslint/no-unsafe-declaration-merging
 export interface ArmorItemDataModel extends ArmorItemData {}
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class ArmorItemDataModel extends DataModelMixin(
     TypedItemMixin(),
     DescriptionItemMixin(),

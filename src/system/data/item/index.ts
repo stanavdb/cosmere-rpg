@@ -1,4 +1,5 @@
 import { ItemType } from '@system/types/cosmere';
+import { CosmereItem } from '@system/documents/item';
 
 import { WeaponItemDataModel } from './weapon';
 import { ArmorItemDataModel } from './armor';
@@ -11,17 +12,20 @@ import { TalentItemDataModel } from './talent';
 
 import { ActionItemDataModel } from './action';
 
-export const config: Record<ItemType, typeof foundry.abstract.TypeDataModel> = {
-    [ItemType.Weapon]: WeaponItemDataModel as any,
-    [ItemType.Armor]: ArmorItemDataModel as any,
-    [ItemType.Equipment]: EquipmentItemDataModel as any,
-    [ItemType.Fabrial]: FabrialItemDataModel as any,
+export const config: Record<ItemType, typeof foundry.abstract.TypeDataModel<
+    foundry.abstract.DataModel,
+    CosmereItem
+>> = {
+    [ItemType.Weapon]: WeaponItemDataModel,
+    [ItemType.Armor]: ArmorItemDataModel,
+    [ItemType.Equipment]: EquipmentItemDataModel,
+    [ItemType.Fabrial]: FabrialItemDataModel,
 
-    [ItemType.Ancestry]: AncestryItemDataModel as any,
-    [ItemType.Path]: PathItemDataModel as any,
-    [ItemType.Talent]: TalentItemDataModel as any,
+    [ItemType.Ancestry]: AncestryItemDataModel,
+    [ItemType.Path]: PathItemDataModel,
+    [ItemType.Talent]: TalentItemDataModel,
 
-    [ItemType.Action]: ActionItemDataModel as any
+    [ItemType.Action]: ActionItemDataModel
 }
 
 export * from './weapon';

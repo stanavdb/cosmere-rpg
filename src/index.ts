@@ -22,11 +22,11 @@ declare global {
 Hooks.once('init', () => {
     CONFIG.COSMERE = COSMERE;
 
-    CONFIG.Actor.dataModels = dataModels.actor.config as any;
-    CONFIG.Actor.documentClass = documents.CosmereActor as any;
+    CONFIG.Actor.dataModels = dataModels.actor.config;
+    CONFIG.Actor.documentClass = documents.CosmereActor;
 
-    CONFIG.Item.dataModels = dataModels.item.config as any;
-    CONFIG.Item.documentClass = documents.CosmereItem as any;
+    CONFIG.Item.dataModels = dataModels.item.config;
+    CONFIG.Item.documentClass = documents.CosmereItem;
 
     Actors.unregisterSheet('core', ActorSheet);
     Actors.registerSheet('cosmere-rpg', applications.actor.CharacterSheet, {
@@ -39,7 +39,13 @@ Hooks.once('init', () => {
     });
 
     CONFIG.Dice.types.push(dice.PlotDie);
-    CONFIG.Dice.terms['p'] = dice.PlotDie;
+    CONFIG.Dice.terms.p = dice.PlotDie;
     CONFIG.Dice.termTypes[dice.PlotDie.name] = dice.PlotDie;
-    CONFIG.Dice.rolls.push(dice.D20Roll as any);
+
+    // NOTE: foundry-vtt-types has two version of the RollTerm class which do not match
+    // causing this to error. Bug?
+    // @league-of-foundry-developers/foundry-vtt-types/src/foundry/client/dice/term.d.mts
+    // @league-of-foundry-developers/foundry-vtt-types/src/foundry/client-esm/dice/terms/term.d.mts
+    // @ts-expect-error see note
+    CONFIG.Dice.rolls.push(dice.D20Roll);
 });

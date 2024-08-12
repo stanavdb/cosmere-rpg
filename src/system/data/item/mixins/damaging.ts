@@ -1,4 +1,5 @@
 import { Skill, Attribute, DamageType } from '@system/types/cosmere';
+import { CosmereItem } from '@system/documents';
 
 export interface DamagingItemData {
     damage: {
@@ -9,9 +10,9 @@ export interface DamagingItemData {
     };
 }
 
-export function DamagingItemMixin() {
-    return (base: typeof foundry.abstract.TypeDataModel) => {
-        return class mixin<P extends Document> extends base<P> {
+export function DamagingItemMixin<P extends CosmereItem>() {
+    return (base: typeof foundry.abstract.TypeDataModel<DamagingItemData, P>) => {
+        return class extends base {
             static defineSchema() {
                 return foundry.utils.mergeObject(super.defineSchema(), {
                     damage: new foundry.data.fields.SchemaField({

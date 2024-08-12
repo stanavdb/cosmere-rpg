@@ -1,4 +1,5 @@
-import { Skill, ActionCostType } from '@system/types/cosmere';
+import { ActionCostType } from '@system/types/cosmere';
+import { CosmereItem } from '@system/documents';
 
 export interface ActivatableItemData {
     activation: {
@@ -9,9 +10,9 @@ export interface ActivatableItemData {
     }
 }
 
-export function ActivatableItemMixin() {
-    return (base: typeof foundry.abstract.TypeDataModel) => {
-        return class mixin<P extends Document> extends base<P> {
+export function ActivatableItemMixin<P extends CosmereItem>() {
+    return (base: typeof foundry.abstract.TypeDataModel<ActivatableItemData, P>) => {
+        return class mixin extends base {
             static defineSchema() {
                 return foundry.utils.mergeObject(super.defineSchema(), {
                     activation: new foundry.data.fields.SchemaField({

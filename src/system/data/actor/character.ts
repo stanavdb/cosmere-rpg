@@ -4,7 +4,11 @@ export interface CharacterActorData extends CommonActorData {
     recovery: { die: string; }
 }
 
+// NOTE: Empty interface is used to merge definitions here,
+// which is used to merge schema properties onto data model
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type, @typescript-eslint/no-unsafe-declaration-merging
 export interface CharacterActorDataModel extends CharacterActorData {}
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class CharacterActorDataModel extends CommonActorDataModel {
     public static defineSchema() {
         return foundry.utils.mergeObject(super.defineSchema(), {

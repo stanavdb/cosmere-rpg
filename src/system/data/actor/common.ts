@@ -28,7 +28,11 @@ export interface CommonActorData {
     expertises: ExpertiseData[];
 }
 
+// NOTE: Empty interface is used to merge definitions here,
+// which is used to merge schema properties onto data model
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type, @typescript-eslint/no-unsafe-declaration-merging
 export interface CommonActorDataModel extends CommonActorData {};
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class CommonActorDataModel extends foundry.abstract.TypeDataModel {
     static defineSchema() {
         return {
@@ -134,7 +138,7 @@ export class CommonActorDataModel extends foundry.abstract.TypeDataModel {
                     }),
 
                     ...(
-                        !!resource.deflect ? 
+                        resource.deflect ? 
                             {
                                 deflect: new foundry.data.fields.NumberField({
                                     required: true, nullable: false, integer: true, min: 0, initial: 0

@@ -5,22 +5,29 @@
   "type": "module",
   "scripts": {
     "build": "npx rollup -c",
-    "build:watch": "npx rollup -c -w"
+    "build:watch": "npx rollup -c -w",
+    "prepare": "husky"
   },
   "devDependencies": {
+    "@eslint/js": "^9.9.0",
     "@rollup/plugin-commonjs": "^26.0.1",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-replace": "^5.0.7",
     "@rollup/plugin-typescript": "^11.1.6",
+    "@types/eslint__js": "^8.42.3",
     "@types/jquery": "^3.5.30",
     "@types/node": "^18.19.41",
+    "eslint": "^9.9.0",
+    "husky": "^9.1.4",
+    "lint-staged": "^15.2.8",
     "npm-check-updates": "^16.14.20",
     "rollup": "^4.19.0",
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-scss": "^4.0.0",
     "sass": "^1.77.8",
     "tslib": "^2.6.3",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.0.1"
   },
   "dependencies": {
     "@league-of-foundry-developers/foundry-vtt-types": "github:League-of-Foundry-Developers/foundry-vtt-types#v12/main"

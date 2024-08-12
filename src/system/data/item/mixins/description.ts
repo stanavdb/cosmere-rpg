@@ -1,3 +1,5 @@
+import { CosmereItem } from '@system/documents';
+
 export interface DescriptionItemData {
     description?: {
         value?: string;
@@ -5,9 +7,9 @@ export interface DescriptionItemData {
     }
 }
 
-export function DescriptionItemMixin() {
-    return (base: typeof foundry.abstract.TypeDataModel) => {
-        return class mixin<P extends Document> extends base<P> {
+export function DescriptionItemMixin<P extends CosmereItem>() {
+    return (base: typeof foundry.abstract.TypeDataModel<DescriptionItemData, P>) => {
+        return class extends base {
             static defineSchema() {
                 return foundry.utils.mergeObject(super.defineSchema(), {
                     description: new foundry.data.fields.SchemaField({

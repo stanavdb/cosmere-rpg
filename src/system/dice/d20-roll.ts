@@ -1,4 +1,5 @@
-import { Attribute } from '@system/types/cosmere';
+import { Attribute, Skill } from '@system/types/cosmere';
+import { CommonActorData } from '@system/data/actor/common';
 import { AdvantageMode } from '@system/types/roll';
 import { PlotDie } from './plot-die';
 import { RollToMessageOptions, RollMode } from './types';
@@ -7,6 +8,17 @@ import { RollToMessageOptions, RollMode } from './types';
 const CONFIGURATION_DIALOG_TEMPLATE = 'systems/cosmere-rpg/templates/roll/dialog.hbs';
 const DEFAULT_OPPORUNITY_VALUE = 20;
 const DEFAULT_COMPLICATION_VALUE = 1;
+
+// NOTE: Need to use type instead of interface here, 
+// as the generic of Roll doesn't handle interfaces properly
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+export type D20RollData = {
+    mod: number;
+    skill: CommonActorData['skills'][Skill];
+    attribute: CommonActorData['attributes'][Attribute];
+    attributes: CommonActorData['attributes'];
+    defaultAttribute: Attribute;
+};
 
 export interface D20RollOptions extends Partial<RollTerm.EvaluationOptions> {
     rollMode?: RollMode;
@@ -67,11 +79,10 @@ interface RollDialogConfigurationData {
     defaultRollMode?: RollMode;
 }
 
-export class D20Roll extends Roll {
+export class D20Roll extends Roll<D20RollData> {
     declare options: D20RollOptions & { configured: boolean };
-    declare data: any;
 
-    public constructor(formula: string, data: Object, options: D20RollOptions = {}) {
+    public constructor(formula: string, data: D20RollData, options: D20RollOptions = {}) {
         super(formula, data, options);
 
         if (!this.options.configured) {
@@ -185,28 +196,33 @@ export class D20Roll extends Roll {
         });
     }
 
-    public toMessage(messageData = {}, options: RollToMessageOptions = {}) {
+    public toMessage(messageData: Partial<ChatMessage.MessageData> = {}, options: RollToMessageOptions = {}) {
         options.rollMode ??= this.options.rollMode;
         if (options.rollMode === 'roll')
             options.rollMode = undefined;
         options.rollMode ??= game.settings!.get('core', 'rollMode');
 
-        return super.toMessage(messageData, options as any);
+        // NOTE: Typing won't properly resolve due to overloads, have to any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
+        return super.toMessage(messageData, options) as any;
     }
 
     /* --- Internal Functions --- */
 
     private processDialogSubmit(html: JQuery): D20Roll {
-        const form = html[0].querySelector('form')!;
+        const form = html[0].querySelector('form')! as HTMLFormElement & {
+            attribute: HTMLSelectElement;
+            rollMode: HTMLSelectElement;
+            plotDie: HTMLInputElement;
+        };
 
-        if (form.attribute?.value) {
+        if (form.attribute.value as Attribute !== this.data.defaultAttribute) {
             const skill = this.data.skill;
-            const attribute = this.data.attributes[form.attribute.value];
-
+            const attribute = this.data.attributes[form.attribute.value as Attribute];
             this.terms[2] = new NumericTerm({ number: skill.rank + attribute.value });
         }
 
-        this.options.rollMode = form.rollMode.value;
+        this.options.rollMode = form.rollMode.value as RollMode;
         this.options.plotDie = form.plotDie.checked;
 
         this.configureModifiers();
@@ -217,17 +233,15 @@ export class D20Roll extends Roll {
     private configureModifiers() {
         if (!this.validD20Roll) return;
 
-        const d20 = this.terms[0] as any as foundry.dice.terms.Die;
+        const d20 = this.terms[0] as unknown as foundry.dice.terms.Die;
         d20.modifiers = [];
 
         if (this.hasAdvantage) {
             d20.number = 2;
             d20.modifiers.push('kh');
-            (d20.options as any).advantage = true;
         } else if (this.hasDisadvantage) {
             d20.number = 2;
             d20.modifiers.push('kl');
-            (d20.options as any).disadvantage = true;
         } else {
             d20.number = 1;
         }
@@ -235,26 +249,26 @@ export class D20Roll extends Roll {
         if (this.hasPlotDie) {
             if (!this.terms.some(t => t instanceof PlotDie)) {
                 this.terms.push(
-                    new foundry.dice.terms.OperatorTerm({ operator: '+' }) as any,
-                    new PlotDie() as any as RollTerm
+                    new foundry.dice.terms.OperatorTerm({ operator: '+' }) as unknown as RollTerm,
+                    new PlotDie() as unknown as RollTerm
                 );
             }
-            
-            
+        
             const plotDieTerm = this.terms.find(t => t instanceof PlotDie)!;
             
             if (this.hasPlotAdvantage) {
                 plotDieTerm.number = 2;
                 plotDieTerm.modifiers.push('kh');
-            } else if (this.hasPlotAdvantage) {
+            } else if (this.hasPlotDisadvantage) {
                 plotDieTerm.number = 2;
                 plotDieTerm.modifiers.push('kl');
             }
         }
 
-        if (!!this.options.targetValue) {
-            (d20.options as any).targetValue = this.options.targetValue;
-        }
+        // NOTE: Unused right now
+        // if (!!this.options.targetValue) {
+        //     (d20.options as any).targetValue = this.options.targetValue;
+        // }
 
         // Re-compile the underlying formula
         this._formula = Roll.getFormula(this.terms);

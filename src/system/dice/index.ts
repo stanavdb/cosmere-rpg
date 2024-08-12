@@ -1,11 +1,11 @@
 import { Attribute } from '@system/types/cosmere';
-import { D20Roll, D20RollOptions } from './d20-roll';
+import { D20Roll, D20RollOptions, D20RollData } from './d20-roll';
 import { RollMode } from './types';
 
 export * from './d20-roll';
 export * from './plot-die';
 
-interface D20RollConfigration extends D20RollOptions {
+export interface D20RollConfigration extends D20RollOptions {
     /**
      * The dice roll component parts, excluding the initial d20
      * @default []
@@ -16,7 +16,7 @@ interface D20RollConfigration extends D20RollOptions {
      * Data that will be used when parsing this roll
      * @default {}
      */
-    data?: any;
+    data: D20RollData;
 
     /* -- Chat message -- */
 
@@ -55,7 +55,7 @@ export async function d20Roll(config: D20RollConfigration): Promise<D20Roll | nu
     const defaultRollMode = config.rollMode ?? game.settings!.get('core', 'rollMode');
 
     // Construct the roll
-    const roll = new D20Roll(formula, config.data ?? {}, {
+    const roll = new D20Roll(formula, config.data, {
         ...config,
     });
 

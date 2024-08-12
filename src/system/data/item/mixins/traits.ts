@@ -1,5 +1,5 @@
+import { CosmereItem } from '@system/documents';
 import { ExpertiseItemData } from './expertise';
-
 
 interface TraitData {
     id: string;
@@ -47,9 +47,9 @@ export interface TraitsItemData {
     traits: Set<TraitData>;
 }
 
-export function TraitsItemMixin() {
-    return (base: typeof foundry.abstract.TypeDataModel) => {
-        return class mixin<P extends Document> extends base<P> {
+export function TraitsItemMixin<P extends CosmereItem>() {
+    return (base: typeof foundry.abstract.TypeDataModel<TraitsItemData, P>) => {
+        return class extends base {
             static defineSchema() {
                 return foundry.utils.mergeObject(super.defineSchema(), {
                     traits: new foundry.data.fields.SetField(
@@ -77,7 +77,7 @@ export function TraitsItemMixin() {
             public prepareDerivedData(): void {
                 super.prepareDerivedData();
 
-                const system = this as any as TraitsItemData & ExpertiseItemData;
+                const system = this as unknown as TraitsItemData & ExpertiseItemData;
 
                 // Do we have expertise
                 const hasExpertise = system.expertise;
@@ -87,7 +87,7 @@ export function TraitsItemMixin() {
                         trait.active = trait.defaultActive;
                         trait.value = trait.defaultValue;
                     } else {
-                        if (!!trait.expertise.toggleActive) {
+                        if (trait.expertise.toggleActive) {
                             trait.active = !trait.defaultActive;
                         }
 

@@ -1,3 +1,5 @@
+import { CosmereItem } from '@system/documents';
+
 export interface PhysicalItemData {
     weight?: {
         value?: number;
@@ -9,9 +11,9 @@ export interface PhysicalItemData {
     }
 }
 
-export function PhysicalItemMixin() {
-    return (base: typeof foundry.abstract.TypeDataModel) => {
-        return class mixin<P extends Document> extends base<P> {
+export function PhysicalItemMixin<P extends CosmereItem>() {
+    return (base: typeof foundry.abstract.TypeDataModel<PhysicalItemData, P>) => {
+        return class extends base {
             static defineSchema() {
                 return foundry.utils.mergeObject(super.defineSchema(), {
                     weight: new foundry.data.fields.SchemaField({

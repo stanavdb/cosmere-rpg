@@ -5,9 +5,9 @@ export interface ExpertiseItemData {
     expertise: boolean;
 }
 
-export function ExpertiseItemMixin() {
-    return (base: typeof foundry.abstract.TypeDataModel) => {
-        return class mixin<P extends Document> extends base<P> {
+export function ExpertiseItemMixin<P extends CosmereItem>() {
+    return (base: typeof foundry.abstract.TypeDataModel<ExpertiseItemData & TypedItemData, P>) => {
+        return class extends base {
             static defineSchema() {
                 const superSchema = super.defineSchema();
 
@@ -26,21 +26,20 @@ export function ExpertiseItemMixin() {
             public prepareDerivedData(): void {
                 super.prepareDerivedData();
                 
-                const system = this as any as ExpertiseItemData & TypedItemData;
-                const parent = this.parent as any as CosmereItem;
+                const parent = this.parent;
 
                 // Check if item type can be found in expertise types
-                const isKnownExpertiseType = parent!.type in CONFIG.COSMERE.expertiseTypes;
+                const isKnownExpertiseType = parent.type in CONFIG.COSMERE.expertiseTypes;
                 
                 if (isKnownExpertiseType && !!parent.actor) {
                     // Check if the actor has the expertise
                     const actorHasExpertise = parent.actor.system.expertises.some(
-                        expertise => expertise.id === system.type
+                        expertise => expertise.id === this.type
                     );
 
                     // If the actor has the expertise, enable it
                     if (actorHasExpertise) {
-                        system.expertise = true;
+                        this.expertise = true;
                     }
                 }
             }

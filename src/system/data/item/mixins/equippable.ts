@@ -1,10 +1,12 @@
+import { CosmereItem } from '@system/documents';
+
 export interface EquippableItemData {
     equipped: boolean;
 }
 
-export function EquippableItemMixin() {
-    return (base: typeof foundry.abstract.TypeDataModel) => {
-        return class mixin<P extends Document> extends base<P> {
+export function EquippableItemMixin<P extends CosmereItem>() {
+    return (base: typeof foundry.abstract.TypeDataModel<EquippableItemData, P>) => {
+        return class mixin extends base {
             static defineSchema() {
                 return foundry.utils.mergeObject(super.defineSchema(), {
                     equipped: new foundry.data.fields.BooleanField({

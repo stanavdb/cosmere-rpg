@@ -1,10 +1,12 @@
+import { CosmereItem } from '@system/documents';
+
 export interface IdItemData {
     id: string;
 }
 
-export function IdItemMixin() {
-    return (base: typeof foundry.abstract.TypeDataModel) => {
-        return class mixin<P extends Document> extends base<P> {
+export function IdItemMixin<P extends CosmereItem>() {
+    return (base: typeof foundry.abstract.TypeDataModel<IdItemData, P>) => {
+        return class extends base {
             static defineSchema() {
                 return foundry.utils.mergeObject(super.defineSchema(), {
                     id: new foundry.data.fields.StringField({
