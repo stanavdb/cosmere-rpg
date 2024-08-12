@@ -31,11 +31,11 @@ Hooks.once('init', () => {
     Actors.unregisterSheet('core', ActorSheet);
     Actors.registerSheet('cosmere-rpg', applications.actor.CharacterSheet, {
         types: [ 'character' ],
-        label: `${game.i18n?.localize("COSMERE.ActorType.Character")}`
+        label: `${game.i18n?.localize("COSMERE.Character.Character")}`
     });
     Actors.registerSheet('cosmere-rpg', applications.actor.AdversarySheet, {
         types: [ 'adversary' ],
-        label: `${game.i18n?.localize("COSMERE.ActorType.Adversary")}`
+        label: `${game.i18n?.localize("COSMERE.Adversary.Adversary")}`
     });
 
     CONFIG.Dice.types.push(dice.PlotDie);

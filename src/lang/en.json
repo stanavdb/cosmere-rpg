@@ -2,6 +2,21 @@
   "COSMERE": {
     "title": "Cosmere RPG",
     "Character": {
+      "Cultures":{
+        "Alethi": "Alethi",
+        "Azish": "Azish",
+        "Herdazian": "Herdazian",
+        "Iriali": "Iriali",
+        "Kharbranthian": "Kharbranthian",
+        "Listener": "Listener",
+        "Natan": "Natan",
+        "Reshi": "Reshi",
+        "Shin": "Shin",
+        "Tashikki": "Tashikki",
+        "Thaylen": "Thaylen",
+        "Unkalaki": "Unkalaki",
+        "Veden": "Veden"
+      },
       "Ancestry": {
         "placeholder": "[Ancestry]",
         "Human": "Human",
