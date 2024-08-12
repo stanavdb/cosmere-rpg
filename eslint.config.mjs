@@ -10,6 +10,8 @@ export default tseslint.config(
       "src/declarations/",
       "eslint.config.mjs",
       "rollup.config.js",
+      "commitlint.config.js",
+      "lint-staged-config.mjs"
     ],
   },
   eslint.configs.recommended,
