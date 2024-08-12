@@ -3,8 +3,8 @@ import { BaseSheet } from './base-sheet';
 import { CosmereActor } from '@system/documents/actor';
 import { CharacterActorDataModel } from '@system/data/actor/character';
 
-const DEFAULT_ANCESTRY_LABEL = '[Ancestry]';
-const DEFAULT_PATH_LABEL = '[Path]';
+const DEFAULT_ANCESTRY_LABEL = 'COSMERE.Character.Ancestry.placeholder';
+const DEFAULT_PATH_LABEL = 'COSMERE.Character.Path.placeholder';
 
 export class CharacterSheet extends BaseSheet {
     static get defaultOptions() {
