@@ -18,10 +18,11 @@ import {
     DamageType
 } from './types/cosmere';
 
+
 const COSMERE: CosmereRPGConfig = {
     attributeGroups: {
         [AttributeGroup.Physical]: {
-            label: 'Physical',
+            label: 'COSMERE.AttributeGroup.Physical.long',
             attributes: [
                 Attribute.Strength,
                 Attribute.Speed
@@ -29,7 +30,7 @@ const COSMERE: CosmereRPGConfig = {
             resource: Resource.Health
         },
         [AttributeGroup.Cognitive]: {
-            label: 'Cognitive',
+            label: 'COSMERE.AttributeGroup.Cognitive.long',
             attributes: [
                 Attribute.Intellect,
                 Attribute.Willpower
@@ -37,7 +38,7 @@ const COSMERE: CosmereRPGConfig = {
             resource: Resource.Focus
         },
         [AttributeGroup.Spiritual]: {
-            label: 'Spiritual',
+            label: 'COSMERE.AttributeGroup.Spiritual.long',
             attributes: [
                 Attribute.Awareness,
                 Attribute.Presence
@@ -48,14 +49,14 @@ const COSMERE: CosmereRPGConfig = {
 
     attributes: {
         [Attribute.Strength]: {
-            label: 'Strength',
+            label: 'COSMERE.Attribute.Strength.long',
             skills: [
                 Skill.Athletics,
                 Skill.HeavyWeapons
             ]
         },
         [Attribute.Speed]: {
-            label: 'Speed',
+            label: 'COSMERE.Attribute.Speed.long',
             skills: [
                 Skill.Agility,
                 Skill.LightWeapons,
@@ -64,7 +65,7 @@ const COSMERE: CosmereRPGConfig = {
             ]
         },
         [Attribute.Intellect]: {
-            label: 'Intellect',
+            label: 'COSMERE.Attribute.Intellect.long',
             skills: [
                 Skill.Crafting,
                 Skill.Deduction,
@@ -73,7 +74,7 @@ const COSMERE: CosmereRPGConfig = {
             ]
         },
         [Attribute.Willpower]: {
-            label: 'Willpower',
+            label: 'COSMERE.Attribute.Willpower.long',
             skills: [
                 Skill.Discipline,
                 Skill.Intimidation,
@@ -82,7 +83,7 @@ const COSMERE: CosmereRPGConfig = {
             ]
         },
         [Attribute.Awareness]: {
-            label: 'Awareness',
+            label: 'COSMERE.Attribute.Awareness.long',
             skills: [
                 Skill.Insight,
                 Skill.Perception,
@@ -92,7 +93,7 @@ const COSMERE: CosmereRPGConfig = {
             ]
         },
         [Attribute.Presence]: {
-            label: 'Presence',
+            label: 'COSMERE.Attribute.Presence.long',
             skills: [
                 Skill.Deception,
                 Skill.Leadership,
@@ -106,125 +107,125 @@ const COSMERE: CosmereRPGConfig = {
 
     resources: {
         [Resource.Health]: {
-            label: 'Health',
+            label: 'COSMERE.Resource.Health',
             deflect: true
         },
         [Resource.Focus]: {
-            label: 'Focus'
+            label: 'COSMERE.Resource.Focus'
         },
         [Resource.Investiture]: {
-            label: 'Investiture'
+            label: 'COSMERE.Resource.Investiture'
         }
     },
 
     skills: {
         [Skill.Agility]: {
-            label: 'Agility',
+            label: 'COSMERE.Skill.Agility',
             attribute: Attribute.Speed
         },
         [Skill.Athletics]: {
-            label: 'Athletics',
+            label: 'COSMERE.Skill.Athletics',
             attribute: Attribute.Strength
         },
         [Skill.HeavyWeapons]: {
-            label: 'Heavy Weapons',
+            label: 'COSMERE.Skill.HeavyWeapons',
             attribute: Attribute.Strength
         },
         [Skill.LightWeapons]: {
-            label: 'Light Weapons',
+            label: 'COSMERE.Skill.LightWeapons',
             attribute: Attribute.Speed
         },
         [Skill.Stealth]: {
-            label: 'Stealth',
+            label: 'COSMERE.Skill.Stealth',
             attribute: Attribute.Speed
         },
         [Skill.Thievery]: {
-            label: 'Thievery',
+            label: 'COSMERE.Skill.Thievery',
             attribute: Attribute.Speed
         },
 
         [Skill.Crafting]: {
-            label: 'Crafting',
+            label: 'COSMERE.Skill.Crafting',
             attribute: Attribute.Intellect
         },
         [Skill.Deduction]: {
-            label: 'Deduction',
+            label: 'COSMERE.Skill.Deduction',
             attribute: Attribute.Intellect
         },
         [Skill.Discipline]: {
-            label: 'Discipline',
+            label: 'COSMERE.Skill.Discipline',
             attribute: Attribute.Willpower
         },
         [Skill.Intimidation]: {
-            label: 'Intimidation',
+            label: 'COSMERE.Skill.Intimidation',
             attribute: Attribute.Willpower
         },
         [Skill.Lore]: {
-            label: 'Lore',
+            label: 'COSMERE.Skill.Lore',
             attribute: Attribute.Intellect
         },
         [Skill.Medicine]: {
-            label: 'Medicine',
+            label: 'COSMERE.Skill.Medicine',
             attribute: Attribute.Intellect
         },
 
         [Skill.Deception]: {
-            label: 'Deception',
+            label: 'COSMERE.Skill.Deception',
             attribute: Attribute.Presence
         },
         [Skill.Insight]: {
-            label: 'Insight',
+            label: 'COSMERE.Skill.Insight',
             attribute: Attribute.Awareness
         },
         [Skill.Leadership]: {
-            label: 'Leadership',
+            label: 'COSMERE.Skill.Leadership',
             attribute: Attribute.Presence
         },
         [Skill.Perception]: {
-            label: 'Perception',
+            label: 'COSMERE.Skill.Perception',
             attribute: Attribute.Awareness
         },
         [Skill.Persuasion]: {
-            label: 'Persuasion',
+            label: 'COSMERE.Skill.Persuasion',
             attribute: Attribute.Presence
         },
         [Skill.Survival]: {
-            label: 'Survival',
+            label: 'COSMERE.Skill.Survival',
             attribute: Attribute.Awareness
         },
 
         // Surges,
         [Skill.Adhesion]: {
-            label: 'Adhesion',
+            label: 'COSMERE.Skill.Adhesion',
             attribute: Attribute.Presence,
-            hiddenUntilAquired: true,
+            hiddenUntilAcquired: true,
         },
         [Skill.Gravitation]: {
-            label: 'Gravitation',
+            label: 'COSMERE.Skill.Gravitation',
             attribute: Attribute.Awareness,
-            hiddenUntilAquired: true,
+            hiddenUntilAcquired: true,
         },
         [Skill.Illumination]: {
-            label: 'Illumination',
+            label: 'COSMERE.Skill.Illumination',
             attribute: Attribute.Presence,
-            hiddenUntilAquired: true,
+            hiddenUntilAcquired: true,
         },
         [Skill.Transformation]: {
-            label: 'Transformation',
+            label: 'COSMERE.Skill.Transformation',
             attribute: Attribute.Willpower,
-            hiddenUntilAquired: true,
+            hiddenUntilAcquired: true,
         }
     },
 
     weaponTypes: {
         [WeaponType.Light]: {
-            label: 'Light'
+            label: 'COSMERE.WeaponType.Light'
         },
         [WeaponType.Heavy]: {
-            label: 'Heavy'
+            label: 'COSMERE.WeaponType.Heavy'
         },
         [WeaponType.Special]: {
-            label: 'Special'
+            label: 'COSMERE.WeaponType.Special'
         }
     },
 
@@ -274,115 +275,115 @@ const COSMERE: CosmereRPGConfig = {
 
     expertiseTypes: {
         [ExpertiseType.Armor]: {
-            label: 'Armor'
+            label: 'COSMERE.Expertise.Armor'
         },
         [ExpertiseType.Cultural]: {
-            label: 'Cultural'
+            label: 'COSMERE.Expertise.Cultural'
         },
         [ExpertiseType.Specialist]: {
-            label: 'Specialist'
+            label: 'COSMERE.Expertise.Specialist'
         },
         [ExpertiseType.Utility]: {
-            label: 'Utility'
+            label: 'COSMERE.Expertise.Utility'
         },
         [ExpertiseType.Weapon]: {
-            label: 'Weapon'
+            label: 'COSMERE.Expertise.Weapon'
         }
     },
 
     traits: {
         weaponTraits: {
             [WeaponTraitId.Cumbersome]: {
-                label: 'Cumbersome',
+                label: 'COSMERE.WeaponTrait.Cumbersome',
                 hasValue: true
             },
             [WeaponTraitId.Dangerous]: {
-                label: 'Dangerous'
+                label: 'COSMERE.WeaponTrait.Dangerous'
             },
             [WeaponTraitId.Deadly]: {
-                label: 'Deadly'
+                label: 'COSMERE.WeaponTrait.Deadly'
             },
             [WeaponTraitId.Defensive]: {
-                label: 'Defensive'
+                label: 'COSMERE.WeaponTrait.Defensive'
             },
             [WeaponTraitId.Discreet]: {
-                label: 'Discreet'
+                label: 'COSMERE.WeaponTrait.Discreet'
             },
             [WeaponTraitId.Indirect]: {
-                label: 'Indirect'
+                label: 'COSMERE.WeaponTrait.Indirect'
             },
             [WeaponTraitId.Loaded]: {
-                label: 'Loaded',
+                label: 'COSMERE.WeaponTrait.Loaded',
                 hasValue: true
             },
             [WeaponTraitId.Momentum]: {
-                label: 'Momentum'
+                label: 'COSMERE.WeaponTrait.Momentum'
             },
             [WeaponTraitId.Offhand]: {
-                label: 'Offhand'
+                label: 'COSMERE.WeaponTrait.Offhand'
             },
             [WeaponTraitId.Pierce]: {
-                label: 'Pierce'
+                label: 'COSMERE.WeaponTrait.Pierce'
             },
             [WeaponTraitId.Quickdraw]: {
-                label: 'Quickdraw'
+                label: 'COSMERE.WeaponTrait.Quickdraw'
             },
             [WeaponTraitId.Thrown]: {
-                label: 'Thrown'
+                label: 'COSMERE.WeaponTrait.Thrown'
             },
             [WeaponTraitId.TwoHanded]: {
-                label: 'Two-Handed'
+                label: 'COSMERE.WeaponTrait.TwoHanded'
             },
             [WeaponTraitId.Unique]: {
-                label: 'Unique'
+                label: 'COSMERE.WeaponTrait.Unique'
             },
             [WeaponTraitId.Fragile]: {
-                label: 'Fragile'
+                label: 'COSMERE.WeaponTrait.Fragile'
             }
         },
 
         armorTraits: {
             [ArmorTraitId.Cumbersome]: {
-                label: 'Cumbersome',
+                label: 'COSMERE.ArmorTrait.Cumbersome',
                 hasValue: true
             },
             [ArmorTraitId.Dangerous]: {
-                label: 'Dangerous'
+                label: 'COSMERE.ArmorTrait.Dangerous'
             },
             [ArmorTraitId.Presentable]: {
-                label: 'Presentable'
+                label: 'COSMERE.ArmorTrait.Presentable'
             }
         }
     },
 
     actionCosts: {
         [ActionCostType.Action]: {
-            label: 'Action'
+            label: 'COSMERE.ActionCosts.Action'
         },
         [ActionCostType.Reaction]: {
-            label: 'Reaction'
+            label: 'COSMERE.ActionCosts.Reaction'
         },
         [ActionCostType.FreeAction]: {
-            label: 'Free action'
+            label: 'COSMERE.ActionCosts.FreeAction'
         }
     },
     
     damageTypes: {
         [DamageType.Energy]: {
-            label: 'Energy',
+            label: 'COSMERE.DamageTypes.Energy',
         },
         [DamageType.Impact]: {
-            label: 'Impact'
+            label: 'COSMERE.DamageTypes.Impact'
         },
         [DamageType.Keen]: {
-            label: 'Keen'
+            label: 'COSMERE.DamageTypes.Keen'
         },
         [DamageType.Spirit]: {
-            label: 'Spirit',
+            label: 'COSMERE.DamageTypes.Spirit',
             ignoreDeflect: true
         },
         [DamageType.Vital]: {
-            label: 'Vital',
+            label: 'COSMERE.DamageTypes.Vital',
             ignoreDeflect: true
         }
     }
