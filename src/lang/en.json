@@ -2,6 +2,7 @@
   "COSMERE": {
     "title": "Cosmere RPG",
     "AttributeGroup": {
+      "Defense": "Defense",
       "Physical": {
         "long": "Physical",
         "short": "PHY"
@@ -15,7 +16,9 @@
         "short": "SPI"
       }
     },
-    "Atrribute": {
+    "Attribute": {
+      "name": "Attribute",
+      "name_plural": "Attributes",
       "Strength": {
         "long": "Strength",
         "short": "STR"
@@ -70,10 +73,13 @@
       "Illumination": "Illumination",
       "Transformation": "Transformation"
     },
-    "DerivedStatistic": {
-      "MovementRate": "Movement Rate",
+    "Statistics": {
+      "SensesRange": "Senses Range",
+      "MovementRate": "Movement",
       "LiftingCapactiy": "Lifting Capactiy",
-      "RecoveryDie": "Recovery Die"
+      "RecoveryDie": "Recovery Die",
+      "Deflect": "Deflect",
+      "NoObscuredSense": "Unaffected by Obscured Senses."
     },
     "WeaponType": {
       "Light": "Light",
@@ -112,7 +118,8 @@
       "FullPlate": "Full Plate",
       "Shardplate": "Shardplate"
     },
-    "ExpertiseType": {
+    "Expertise": {
+      "name": "Expertise",
       "Armor": "Armor",
       "Cultural": "Cultural",
       "Specialist": "Specialist",
@@ -168,8 +175,10 @@
       "Vital": "Vital"
     }
   },
-  "Dice": {
-    "Plot":{
+  "DICE": {
+    "RollMode": "Roll Mode",
+    "Plot": {
+      "RaiseTheStakes": "Raise the Stakes",
       "Complication": "Complication",
       "Opportunity": "Opportunity"
     },
@@ -179,8 +188,11 @@
       "Disadvantage": "Disadvantage"
     }
   },
-  "SkillTest": "Skill Test",
-  "GENERIC":{
-    "Unknown": "Unknown"
-  }
+  "GENERIC": {
+    "Unknown": "Unknown",
+    "Formula": "Formula",
+    "SkillTest": "Skill Test",
+    "DistanceUnit": "ft."
+  },
+  "Test": "TEST"
 }
