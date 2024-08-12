@@ -1,5 +1,6 @@
 export default {
-    "*.{ts,hbs}": [
-        "eslint --fix"
-    ]
-}
+  "*.{ts,hbs}": [
+        "eslint --fix",
+        "prettier . --write"
+    ],
+};

@@ -1,5 +1,5 @@
-To do 
-=====
+# To do
+
 - [x] Expertises config
 - [x] Traits
   - [x] Weapon
@@ -27,13 +27,13 @@ To do
 - [ ] Item document class
   - [ ] Make items rollable
 - [ ] Item sheets
-    - [ ] Weapons
-    - [ ] Armor
-    - [ ] Equipment
-    - [ ] Fabrial
-    - [ ] Ancestry
-    - [ ] Path
-    - [ ] Talent
-    - [ ] Action
+  - [ ] Weapons
+  - [ ] Armor
+  - [ ] Equipment
+  - [ ] Fabrial
+  - [ ] Ancestry
+  - [ ] Path
+  - [ ] Talent
+  - [ ] Action
 - [ ] Global config validation
 - [ ] Utility functions for adding skills, etc.

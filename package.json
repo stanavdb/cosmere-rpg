@@ -9,6 +9,8 @@
     "prepare": "husky"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.4.0",
+    "@commitlint/config-conventional": "^19.2.2",
     "@eslint/js": "^9.9.0",
     "@rollup/plugin-commonjs": "^26.0.1",
     "@rollup/plugin-node-resolve": "^15.2.3",
@@ -21,6 +23,7 @@
     "husky": "^9.1.4",
     "lint-staged": "^15.2.8",
     "npm-check-updates": "^16.14.20",
+    "prettier": "^3.3.3",
     "rollup": "^4.19.0",
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-scss": "^4.0.0",
