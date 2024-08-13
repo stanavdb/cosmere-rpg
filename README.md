@@ -1,42 +1,9 @@
-# To do
+Foundry VTT - Cosmere RPG System
+=============================================
+Welcome to the Foundry VTT Cosmere RPG System! This community project provides the core system for running the Cosmere RPG in Foundry VTT.
 
-- [x] Expertises config
-- [x] Traits
-  - [x] Weapon
-  - [x] Armor
-- [ ] Advancements
-- [ ] Actor data models
-  - [x] Character
-    - [x] Expertises
-  - [ ] Adversary
-  - [x] Common
-    - [x] Sizes
-    - [x] Creature types
-- [ ] Actor sheets
-  - [ ] Character
-    - [x] Expertises
-    - [ ] Inventory
-    - [ ] Talents
-    - [ ] Actions
-    - [ ] Make editable
-  - [ ] Adversary
-- [ ] Item data models
-  - [ ] Ancestry
-    - [ ] Add advancement
-  - [ ] Path
-    - [ ] Add advancement
-  - [x] Expertise mixin
-    - [x] Derive expertise status from actor
-- [ ] Item document class
-  - [ ] Make items rollable
-- [ ] Item sheets
-  - [ ] Weapons
-  - [ ] Armor
-  - [ ] Equipment
-  - [ ] Fabrial
-  - [ ] Ancestry
-  - [ ] Path
-  - [ ] Talent
-  - [ ] Action
-- [ ] Global config validation
-- [ ] Utility functions for adding skills, etc.
+## Feature requests and bug reports
+If you encounter any bugs or have ideas for new features, please report them by creating an [Issue](https://github.com/stanavdb/cosmere-rpg/issues). For guidelines on Issues see [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+## Contributing
+Want to contribute? Check out [CONTRIBUTING.md](./CONTRIBUTING.md).
