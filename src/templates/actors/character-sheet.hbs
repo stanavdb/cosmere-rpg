@@ -50,12 +50,12 @@
                     <div class="resource flexrow" data-id="{{resource.id}}">
                         <div class="flexcol">
                             <span class="label">{{ localize resource.config.label}}</span>
-                            <span class="value">{{resource.value}} / {{resource.max}}</span>
+                            <span class="value">{{resource.value}} / {{resource.max.value}}</span>
                         </div>
                         {{#if resource.deflect includeZero=true}}
                         <div class="deflect flexcol">
                             <span class="label">{{ localize "COSMERE.Actor.Statistics.Deflect"}}</span>
-                            <span class="value">{{ resource.deflect }}</span>
+                            <span class="value">{{ resource.deflect.value }}</span>
                         </div>
                         {{/if}}
                     </div>
