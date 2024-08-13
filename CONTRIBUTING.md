@@ -15,6 +15,10 @@ The Foundry VTT Cosmere RPG system is built using TypeScript and bundled with Ro
 3. **Build the project:** To build the project, you can run `npm run build` for a single build, or `npm run build:watch` to watch for changes and rebuild automatically.
 4. **Testing your changes:** To test your build on your local Foundry instance, you'll need to copy the build folder to your Foundry data/system folder. However, a more efficient method is to set up a symbolic link by using: `npm run link` and following the instructions.
 
+##### Oh no! The execution of scripts is disabled on my system (`npm install` error on windows)
+1. Open Windows PowerShell with Run as Administrator
+2. Run: `Set-ExecutionPolicy RemoteSigned`
+
 ##### What is a symbolic link?
 A symbolic link is a pointer that allows you to reference a folder or file from another location on your system. In this context, it links your project's build output to the appropriate Foundry system folder, so you don’t need to manually copy files every time you make changes.
  
