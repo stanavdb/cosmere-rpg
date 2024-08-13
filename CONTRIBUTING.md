@@ -10,10 +10,14 @@ To start contributing, [fork the repository](https://docs.github.com/en/pull-req
 ### I have forked the project, now what?
 The Foundry VTT Cosmere RPG system is built using TypeScript and bundled with Rollup. Here's how you can set up the project locally:
 
-1. **Install Node.js and npm:** You'll need to install Node.js and npm to manage dependencies and run build scripts. If you haven't installed them yet, follow the instructions [here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).
+1. **Install Node.js and npm:** You'll need to install Node.js (v20) and npm to manage dependencies and run build scripts. If you haven't installed them yet, follow the instructions [here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).
 2. **Install dependencies:** navigate to the project folder in your terminal and install the necessary dependencies by running `npm install`.
 3. **Build the project:** To build the project, you can run `npm run build` for a single build, or `npm run build:watch` to watch for changes and rebuild automatically.
 4. **Testing your changes:** To test your build on your local Foundry instance, you'll need to copy the build folder to your Foundry data/system folder. However, a more efficient method is to set up a symbolic link by using: `npm run link` and following the instructions.
+
+##### Oh no! The execution of scripts is disabled on my system (`npm install` error on windows)
+1. Open Windows PowerShell with Run as Administrator
+2. Run: `Set-ExecutionPolicy RemoteSigned`
 
 ##### What is a symbolic link?
 A symbolic link is a pointer that allows you to reference a folder or file from another location on your system. In this context, it links your project's build output to the appropriate Foundry system folder, so you don’t need to manually copy files every time you make changes.
