@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
+    "@league-of-foundry-developers/foundry-vtt-types": "github:League-of-Foundry-Developers/foundry-vtt-types#6f572e4a63cf6185e0ac8125ecc517abdc7cf1df",
     "@rollup/plugin-commonjs": "^26.0.1",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
@@ -32,8 +33,5 @@
     "tslib": "^2.6.3",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1"
-  },
-  "dependencies": {
-    "@league-of-foundry-developers/foundry-vtt-types": "github:League-of-Foundry-Developers/foundry-vtt-types#v12/main"
   }
 }
