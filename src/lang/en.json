@@ -107,6 +107,11 @@
           "Swarm": "Swarm",
           "TakeAim": "Take Aim",
           "VaryingSpecies": "Varying Species"
+        },
+        "Role": {
+          "Minion": "Minion",
+          "Rival": "Rival",
+          "Boss": "Boss"
         }
       },
       "Actions": {
@@ -169,14 +174,7 @@
         "Determined": "Determined",
         "Disoriented": "Disoriented",
         "Empowered": "Empowered",
-        "Enhanced": {
-          "Awareness": "Enhanced (Awareness)",
-          "Intellect": "Enhanced (Intellect)",
-          "Presence": "Enhanced (Presence)",
-          "Speed": "Enhanced (Speed)",
-          "Strength": "Enhanced (Strength)",
-          "Willpower": "Enhanced (Willpower)"
-        },
+        "Enhanced": "Enhanced",
         "Exhausted": "Exhausted",
         "Focused": "Focused",
         "Immobilized": "Immobilized",
@@ -224,6 +222,18 @@
         "RecoveryDie": "Recovery Die",
         "Deflect": "Deflect",
         "NoObscuredSense": "Unaffected by Obscured Senses."
+      },
+      "Size":{
+        "Small": "Small",
+        "Medium": "Medium",
+        "Large": "Large",
+        "Huge": "Huge",
+        "Gargantuan": "Gargantuan"
+      },
+      "Type":{
+        "Humanoid": "Humanoid",
+        "Animal": "Animla",
+        "Spren": "Spren"
       }
     },
     "AttributeGroup": {
@@ -338,6 +348,7 @@
   },
   "GENERIC": {
     "Unknown": "Unknown",
+    "None": "None",
     "Formula": "Formula",
     "SkillTest": "Skill Test",
     "DistanceUnit": "ft."
