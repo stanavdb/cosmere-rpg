@@ -1,15 +1,13 @@
 type Mixin<
-  MixinClass extends new (...args: any[]) => any,
-  BaseClass extends abstract new (...args: any[]) => any,
+    MixinClass extends new (...args: any[]) => any,
+    BaseClass extends abstract new (...args: any[]) => any,
 > = MixinClass & BaseClass;
 
 declare function _ClientDocumentMixin<
     Schema extends foundry.abstract.DataModel = foundry.abstract.DataModel,
     Parent extends foundry.abstract.Document | null = null,
-    BaseClass extends typeof foundry.abstract.Document<Schema, Parent>
->(
-    base: BaseClass
-): Mixin<ClientDocument, BaseClass>;
+    BaseClass extends typeof foundry.abstract.Document<Schema, Parent>,
+>(base: BaseClass): Mixin<ClientDocument, BaseClass>;
 
 declare class ClientDocument {
     /**

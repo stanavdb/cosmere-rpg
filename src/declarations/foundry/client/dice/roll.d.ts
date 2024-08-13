@@ -33,7 +33,7 @@ interface RollEvaluationOptions {
 }
 
 declare interface Roll<D extends Record<string, unknown> = {}> {
-    new(formula: string, data?: object, options?: object);
+    new (formula: string, data?: object, options?: object);
 
     /**
      * The original provided data object which substitutes into attributes of the roll formula.
@@ -93,8 +93,14 @@ declare interface Roll<D extends Record<string, unknown> = {}> {
      */
     evaluateSync(options?: RollEvaluationOptions): Roll;
 
-    _evaluateASTAsync(node: RollParseNode | RollTerm, options?: Omit<RollEvaluationOptions, 'strict'>): Promise<string | number>;
-    _evaluateASTSync(node: RollParseNode | RollTerm, options?: Omit<RollEvaluationOptions, 'strict'>): string | number;
+    _evaluateASTAsync(
+        node: RollParseNode | RollTerm,
+        options?: Omit<RollEvaluationOptions, 'strict'>,
+    ): Promise<string | number>;
+    _evaluateASTSync(
+        node: RollParseNode | RollTerm,
+        options?: Omit<RollEvaluationOptions, 'strict'>,
+    ): string | number;
 
     /**
      * Propagate flavor text across all terms that do not have any.
@@ -106,9 +112,15 @@ declare interface Roll<D extends Record<string, unknown> = {}> {
         T extends DeepPartial<ChatMessage.MessageData> = Record<
             string,
             unknown
-        >
+        >,
     >(
         messageData: T,
-        options: { rollMode?: keyof CONFIG.Dice.RollModes | 'roll'; create?: boolean }
-    ): Promise<ChatMessage.ConfiguredInstance | undefined> | ChatMessage.MessageData | undefined;
-}   
+        options: {
+            rollMode?: keyof CONFIG.Dice.RollModes | 'roll';
+            create?: boolean;
+        },
+    ):
+        | Promise<ChatMessage.ConfiguredInstance | undefined>
+        | ChatMessage.MessageData
+        | undefined;
+}

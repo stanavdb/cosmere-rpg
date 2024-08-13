@@ -10,10 +10,13 @@ export function IdItemMixin<P extends CosmereItem>() {
             static defineSchema() {
                 return foundry.utils.mergeObject(super.defineSchema(), {
                     id: new foundry.data.fields.StringField({
-                        required: true, nullable: false, blank: false, initial: 'id'
-                    })
+                        required: true,
+                        nullable: false,
+                        blank: false,
+                        initial: 'id',
+                    }),
                 });
             }
-        }
-    }
+        };
+    };
 }

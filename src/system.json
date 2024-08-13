@@ -6,16 +6,14 @@
         "minimum": "12",
         "verified": "12"
     },
-    "authors": [{
-        "name": "Stan",
-        "discord": "stanvdb"
-    }],
-    "esmodules": [
-        "index.js"
+    "authors": [
+        {
+            "name": "Stan",
+            "discord": "stanvdb"
+        }
     ],
-    "styles": [
-        "output.css"
-    ],
+    "esmodules": ["index.js"],
+    "styles": ["output.css"],
     "documentTypes": {
         "Actor": {
             "character": {},

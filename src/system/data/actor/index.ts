@@ -5,8 +5,8 @@ import { CharacterActorDataModel } from './character';
 
 export const config = {
     [ActorType.Character]: CharacterActorDataModel,
-    [ActorType.Adversary]: AdversaryActorDataModel
-}
+    [ActorType.Adversary]: AdversaryActorDataModel,
+};
 
 export { AdversaryActorData } from './adversary';
 export { CharacterActorData } from './character';

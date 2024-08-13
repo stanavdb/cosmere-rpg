@@ -11,24 +11,28 @@ export interface DamagingItemData {
 }
 
 export function DamagingItemMixin<P extends CosmereItem>() {
-    return (base: typeof foundry.abstract.TypeDataModel<DamagingItemData, P>) => {
+    return (
+        base: typeof foundry.abstract.TypeDataModel<DamagingItemData, P>,
+    ) => {
         return class extends base {
             static defineSchema() {
                 return foundry.utils.mergeObject(super.defineSchema(), {
                     damage: new foundry.data.fields.SchemaField({
                         formula: new foundry.data.fields.StringField(),
                         type: new foundry.data.fields.StringField({
-                            choices: Object.keys(CONFIG.COSMERE.damageTypes)
+                            choices: Object.keys(CONFIG.COSMERE.damageTypes),
                         }),
                         skill: new foundry.data.fields.StringField({
-                            initial: Skill.LightWeapons, choices: Object.keys(CONFIG.COSMERE.skills)
+                            initial: Skill.LightWeapons,
+                            choices: Object.keys(CONFIG.COSMERE.skills),
                         }),
                         attribute: new foundry.data.fields.StringField({
-                            initial: Attribute.Speed, choices: Object.keys(CONFIG.COSMERE.attributes)
-                        })
+                            initial: Attribute.Speed,
+                            choices: Object.keys(CONFIG.COSMERE.attributes),
+                        }),
                     }),
                 });
             }
-        }
-    }
+        };
+    };
 }

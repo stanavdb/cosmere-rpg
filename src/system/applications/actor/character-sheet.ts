@@ -9,10 +9,10 @@ const DEFAULT_PATH_LABEL = '[Path]';
 export class CharacterSheet extends BaseSheet {
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
-            classes: [ 'cosmere-rpg', 'sheet', 'actor', 'character' ],
+            classes: ['cosmere-rpg', 'sheet', 'actor', 'character'],
             width: 950,
             height: 1000,
-            resizeable: true
+            resizeable: true,
         });
     }
 
@@ -22,10 +22,14 @@ export class CharacterSheet extends BaseSheet {
 
     getData(options?: Partial<ActorSheet.Options>) {
         // Find the ancestry
-        const ancestryItem = this.actor.items.find(item => item.type === ItemType.Ancestry);
+        const ancestryItem = this.actor.items.find(
+            (item) => item.type === ItemType.Ancestry,
+        );
 
         // Find the path
-        const pathItem = this.actor.items.find(item => item.type === ItemType.Path);
+        const pathItem = this.actor.items.find(
+            (item) => item.type === ItemType.Path,
+        );
 
         return {
             ...super.getData(options),
@@ -34,8 +38,8 @@ export class CharacterSheet extends BaseSheet {
             pathsLabel: pathItem?.name ?? DEFAULT_PATH_LABEL,
 
             recovery: {
-                die: this.actor.system.recovery.die
+                die: this.actor.system.recovery.die,
             },
-        }
+        };
     }
 }

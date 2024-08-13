@@ -1,12 +1,12 @@
 namespace foundry {
     namespace abstract {
         type DataSchema = {
-            [key: string]: any
-        }
+            [key: string]: any;
+        };
 
         abstract class Document<
             Schema extends DataSchema = DataSchema,
-            Parent extends Document | null = Document | null
+            Parent extends Document | null = Document | null,
         > extends DataModel<DataSchema, Parent> {
             readonly system: Schema;
         }
@@ -85,18 +85,20 @@ namespace foundry {
             joint?: boolean;
         }
 
-        declare const DynamicClass: new <_Computed extends object>(...args: any[]) => _Computed;
+        declare const DynamicClass: new <_Computed extends object>(
+            ...args: any[]
+        ) => _Computed;
 
         // @ts-expect-error - This is a workaround to allow for dynamic top level properties in a class.
         declare class _InternalDataModel<
             Schema extends DataSchema,
             // Do not inline. Being a type parameter is an important part of the circumvention of TypeScript's detection of dynamic classes.
             _Computed extends object = Schema,
-        > extends DynamicClass<_Computed> { }
+        > extends DynamicClass<_Computed> {}
 
         declare class DataModel<
             Schema extends DataSchema = DataSchema,
-            Parent extends Document | null = Document | null
+            Parent extends Document | null = Document | null,
         > extends _InternalDataModel<Schema> {
             public readonly parent: Parent;
 
@@ -126,12 +128,12 @@ namespace foundry {
              * The schema is populated the first time it is accessed and cached for future reuse.
              * @virtual
              */
-            static defineSchema(): foundry.data.fields.DataSchema { }
+            static defineSchema(): foundry.data.fields.DataSchema {}
 
             /**
              * The Data Schema for all instances of this DataModel.
              */
-            readonly static schema: foundry.data.fields.DataSchema;
+            static readonly schema: foundry.data.fields.DataSchema;
 
             /**
              * Define the data schema for this document instance.
@@ -164,7 +166,10 @@ namespace foundry {
              * @param options Options provided to the model constructor
              * @returns Migrated and cleaned source data which will be stored to the model instance
              */
-            _initializeSource(data: object | DataModel, options?: object): object;
+            _initializeSource(
+                data: object | DataModel,
+                options?: object,
+            ): object;
 
             /**
              * Clean a data source object to conform to a specific provided schema.
@@ -192,7 +197,10 @@ namespace foundry {
              * @param context Context options passed to the data model constructor
              * @returns The cloned Document instance
              */
-            clone(data?: object, context?: object): Document | Promise<Document>;
+            clone(
+                data?: object,
+                context?: object,
+            ): Document | Promise<Document>;
 
             /**
              * Validate the data contained in the document to check for type and content
@@ -258,9 +266,7 @@ namespace foundry {
 
         declare class TypeDataModel<
             Schema extends DataSchema = DataSchema,
-            Parent extends Document | null = Document | null
-        > extends DataModel<Schema, Parent> {
-
-        }
+            Parent extends Document | null = Document | null,
+        > extends DataModel<Schema, Parent> {}
     }
 }

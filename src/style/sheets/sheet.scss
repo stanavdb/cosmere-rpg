@@ -2,7 +2,8 @@
     flex: unset;
 }
 
-.window-content .sheet, .sheet-body {
+.window-content .sheet,
+.sheet-body {
     display: flex;
     flex-direction: column;
 }
