@@ -28,26 +28,7 @@
             "Adversary": {
                 "Adversary": "Adversary",
                 "Traits": {
-                    "BarbedCarapace": "Barbed Carapace",
-                    "BeastOfBurden": "Beast of Burden",
-                    "Boss": "Boss",
-                    "Capable": "Capable",
-                    "DeadlySpeed": "Deadly Speed",
-                    "EnhancedSenses": "Enhanced Senses",
-                    "ExternalCarapace": "External Carapace",
-                    "InfectiousThrill": "Infectious Thrill",
-                    "KeenSenses": "Keen Senses",
-                    "MartialDrill": "Martial Drill",
-                    "MartialExperience": "Martial Experience",
-                    "MilitaryTactics": "Military Tactics",
-                    "Minion": "Minion",
-                    "Momentum": "Momentum",
-                    "PloddingPace": "Plodding Pace",
-                    "Skilled": "Skilled",
-                    "SternCountenance": "Stern Countenance",
-                    "Swarm": "Swarm",
-                    "TakeAim": "Take Aim",
-                    "VaryingSpecies": "Varying Species"
+                    "placeholder": "[Adversary Trait]"
                 },
                 "Role": {
                     "Minion": "Minion",
