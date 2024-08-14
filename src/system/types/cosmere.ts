@@ -51,15 +51,6 @@ export enum Attribute {
     Presence = 'pre',
 }
 
-export enum AttributeShortLabel {
-    Strength = 'COSMERE.Actor.Attribute.Strength.short',
-    Speed = 'COSMERE.Actor.Attribute.Speed.short',
-    Intellect = 'COSMERE.Actor.Attribute.Intellect.short',
-    Willpower = 'COSMERE.Actor.Attribute.Willpower.short',
-    Awareness = 'COSMERE.Actor.Attribute.Awareness.short',
-    Presence = 'COSMERE.Actor.Attribute.Presence.short',
-}
-
 export enum Resource {
     Health = 'hea',
     Focus = 'foc',

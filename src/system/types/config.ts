@@ -4,7 +4,6 @@ import {
     Condition,
     AttributeGroup,
     Attribute,
-    AttributeShortLabel,
     Skill,
     Resource,
     WeaponType,
@@ -48,7 +47,7 @@ export interface AttributeConfig {
 export interface SkillConfig {
     label: string;
     attribute: Attribute;
-    attrLabel: AttributeShortLabel;
+    attrLabel: string;
     hiddenUntilAcquired?: boolean;
 }
 
