@@ -232,7 +232,7 @@
             },
             "Type": {
                 "Humanoid": "Humanoid",
-                "Animal": "Animla",
+                "Animal": "Animal",
                 "Spren": "Spren"
             }
         },
