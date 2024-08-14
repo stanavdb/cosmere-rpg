@@ -1,49 +1,49 @@
 {
-  "id": "cosmere-rpg",
-  "title": "Cosmere RPG",
-  "version": "0.1.0",
-  "compatibility": {
-    "minimum": "12",
-    "verified": "12"
-  },
-  "authors": [
-    {
-      "name": "Stan",
-      "discord": "stanvdb"
-    }
-  ],
-  "esmodules": ["index.js"],
-  "styles": ["output.css"],
-  "documentTypes": {
-    "Actor": {
-      "character": {},
-      "adversary": {}
+    "id": "cosmere-rpg",
+    "title": "Cosmere RPG",
+    "version": "0.1.0",
+    "compatibility": {
+        "minimum": "12",
+        "verified": "12"
     },
-    "Item": {
-      "weapon": {},
-      "armor": {},
-      "equipment": {},
-      "fabrial": {},
+    "authors": [
+        {
+            "name": "Stan",
+            "discord": "stanvdb"
+        }
+    ],
+    "esmodules": ["index.js"],
+    "styles": ["output.css"],
+    "documentTypes": {
+        "Actor": {
+            "character": {},
+            "adversary": {}
+        },
+        "Item": {
+            "weapon": {},
+            "armor": {},
+            "equipment": {},
+            "fabrial": {},
 
-      "ancestry": {},
-      "path": {},
-      "talent": {},
-      "trait": {},
+            "ancestry": {},
+            "path": {},
+            "talent": {},
+            "trait": {},
 
-      "action": {}
-    }
-  },
-  "languages": [
-    {
-      "lang": "en",
-      "name": "English",
-      "path": "lang/en.json"
-    }
-  ],
-  "socket": true,
-  "grid": {
-    "distance": 5,
-    "units": "ft"
-  },
-  "url": "https://github.com/stanavdb/cosmere-rpg"
+            "action": {}
+        }
+    },
+    "languages": [
+        {
+            "lang": "en",
+            "name": "English",
+            "path": "lang/en.json"
+        }
+    ],
+    "socket": true,
+    "grid": {
+        "distance": 5,
+        "units": "ft"
+    },
+    "url": "https://github.com/stanavdb/cosmere-rpg"
 }

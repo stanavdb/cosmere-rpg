@@ -1,356 +1,356 @@
 {
-  "COSMERE": {
-    "title": "Cosmere RPG",
-    "Actor": {
-      "Character": {
-        "Character": "Character",
-        "Cultures": {
-          "placeholder": "[Culture]",
-          "Alethi": "Alethi",
-          "Azish": "Azish",
-          "Herdazian": "Herdazian",
-          "Iriali": "Iriali",
-          "Kharbranthian": "Kharbranthian",
-          "Listener": "Listener",
-          "Natan": "Natan",
-          "Reshi": "Reshi",
-          "Shin": "Shin",
-          "Tashikki": "Tashikki",
-          "Thaylen": "Thaylen",
-          "Unkalaki": "Unkalaki",
-          "Veden": "Veden"
+    "COSMERE": {
+        "title": "Cosmere RPG",
+        "Actor": {
+            "Character": {
+                "Character": "Character",
+                "Cultures": {
+                    "placeholder": "[Culture]",
+                    "Alethi": "Alethi",
+                    "Azish": "Azish",
+                    "Herdazian": "Herdazian",
+                    "Iriali": "Iriali",
+                    "Kharbranthian": "Kharbranthian",
+                    "Listener": "Listener",
+                    "Natan": "Natan",
+                    "Reshi": "Reshi",
+                    "Shin": "Shin",
+                    "Tashikki": "Tashikki",
+                    "Thaylen": "Thaylen",
+                    "Unkalaki": "Unkalaki",
+                    "Veden": "Veden"
+                },
+                "Ancestry": {
+                    "placeholder": "[Ancestry]",
+                    "Human": "Human",
+                    "Singer": "Singer"
+                },
+                "Path": {
+                    "placeholder": "[Path]",
+                    "Agent": "Agent",
+                    "Envoy": "Envoy",
+                    "Hunter": "Hunter",
+                    "Leader": "Leader",
+                    "Lightweaver": "Lightweaver",
+                    "Scholar": "Scholar",
+                    "Warrior": "Warrior",
+                    "Windrunner": "Windrunner"
+                },
+                "Specialties": {
+                    "placeholder": "[Specialty]",
+                    "Agent": {
+                        "Investigator": "Investigator",
+                        "Spy": "Spy",
+                        "Thief": "Thief"
+                    },
+                    "Envoy": {
+                        "Diplomat": "Diplomat",
+                        "Faithful": "Faithful",
+                        "Mentor": "Mentor"
+                    },
+                    "Hunter": {
+                        "Archer": "Archer",
+                        "Assassin": "Assassin",
+                        "Tracker": "Tracker"
+                    },
+                    "Leader": {
+                        "Champion": "Champion",
+                        "Officer": "Officer",
+                        "Politico": "Politico"
+                    },
+                    "Scholar": {
+                        "Artifabrian": "Artifabrian",
+                        "Strategist": "Strategist",
+                        "Surgeon": "Surgeon"
+                    },
+                    "Warrior": {
+                        "Duelist": "Duelist",
+                        "Shardbearer": "Shardbearer",
+                        "Soldier": "Soldier"
+                    }
+                },
+                "Expertise": {
+                    "name": "Expertise",
+                    "Armor": "Armor",
+                    "Cultural": "Cultural",
+                    "Specialist": "Specialist",
+                    "Utility": "Utility",
+                    "Weapon": "Weapon"
+                },
+                "Surge": {
+                    "Adhesion": "Adhesion",
+                    "Gravitation": "Gravitation",
+                    "Illumination": "Illumination",
+                    "Transformation": "Transformation"
+                }
+            },
+            "Adversary": {
+                "Adversary": "Adversary",
+                "Traits": {
+                    "BarbedCarapace": "Barbed Carapace",
+                    "BeastOfBurden": "Beast of Burden",
+                    "Boss": "Boss",
+                    "Capable": "Capable",
+                    "DeadlySpeed": "Deadly Speed",
+                    "EnhancedSenses": "Enhanced Senses",
+                    "ExternalCarapace": "External Carapace",
+                    "InfectiousThrill": "Infectious Thrill",
+                    "KeenSenses": "Keen Senses",
+                    "MartialDrill": "Martial Drill",
+                    "MartialExperience": "Martial Experience",
+                    "MilitaryTactics": "Military Tactics",
+                    "Minion": "Minion",
+                    "Momentum": "Momentum",
+                    "PloddingPace": "Plodding Pace",
+                    "Skilled": "Skilled",
+                    "SternCountenance": "Stern Countenance",
+                    "Swarm": "Swarm",
+                    "TakeAim": "Take Aim",
+                    "VaryingSpecies": "Varying Species"
+                },
+                "Role": {
+                    "Minion": "Minion",
+                    "Rival": "Rival",
+                    "Boss": "Boss"
+                }
+            },
+            "Actions": {
+                "Aid": "Aid",
+                "AvoidDanger": "Avoid Danger",
+                "Banter": "Banter",
+                "Brace": "Brace",
+                "BreathStormlight": "Breath Stormlight",
+                "Disengage": "Disengage",
+                "Dodge": "Dodge",
+                "Drop": "Drop",
+                "Enhance": "Enhance",
+                "GainAdvantage": "Gain Advantage",
+                "Grapple": "Grapple",
+                "Interact": "Interact",
+                "Move": "Move",
+                "ReactiveStrike": "Reactive Strike",
+                "Ready": "Ready",
+                "Recover": "Recover",
+                "Regenerate": "Regenerate",
+                "Shove": "Shove",
+                "Strike": "Strike",
+                "UseASkill": "Use A Skill"
+            },
+            "ActionCosts": {
+                "Action": "Action",
+                "Reaction": "Reaction",
+                "FreeAction": "Free Action"
+            },
+            "Attribute": {
+                "name": "Attribute",
+                "name_plural": "Attributes",
+                "Strength": {
+                    "long": "Strength",
+                    "short": "STR"
+                },
+                "Speed": {
+                    "long": "Speed",
+                    "short": "SPD"
+                },
+                "Intellect": {
+                    "long": "Intellect",
+                    "short": "INT"
+                },
+                "Willpower": {
+                    "long": "Willpower",
+                    "short": "WIL"
+                },
+                "Awareness": {
+                    "long": "Awareness",
+                    "short": "AWA"
+                },
+                "Presence": {
+                    "long": "Presence",
+                    "short": "PRE"
+                }
+            },
+            "Conditions": {
+                "Afflicted": "Afflicted",
+                "Determined": "Determined",
+                "Disoriented": "Disoriented",
+                "Empowered": "Empowered",
+                "Enhanced": "Enhanced",
+                "Exhausted": "Exhausted",
+                "Focused": "Focused",
+                "Immobilized": "Immobilized",
+                "Prone": "Prone",
+                "Restrained": "Restrained",
+                "Slowed": "Slowed",
+                "Stunned": "Stunned",
+                "Surprised": "Surprised",
+                "Unconscious": "Unconscious"
+            },
+            "Resource": {
+                "Health": "Health",
+                "Focus": "Focus",
+                "Investiture": "Investiture"
+            },
+            "Skill": {
+                "Agility": "Agility",
+                "Athletics": "Athletics",
+                "HeavyWeapons": "Heavy Weapons",
+                "LightWeapons": "Light Weapons",
+                "Stealth": "Stealth",
+                "Thievery": "Thievery",
+                "Crafting": "Crafting",
+                "Deduction": "Deduction",
+                "Discipline": "Discipline",
+                "Intimidation": "Intimidation",
+                "Lore": "Lore",
+                "Medicine": "Medicine",
+                "Deception": "Deception",
+                "Insight": "Insight",
+                "Leadership": "Leadership",
+                "Perception": "Perception",
+                "Persuasion": "Persuasion",
+                "Survival": "Survival",
+                "Adhesion": "Adhesion",
+                "Gravitation": "Gravitation",
+                "Illumination": "Illumination",
+                "Transformation": "Transformation"
+            },
+            "Statistics": {
+                "Defense": "Defense",
+                "SensesRange": "Senses Range",
+                "MovementRate": "Movement",
+                "LiftingCapactiy": "Lifting Capactiy",
+                "RecoveryDie": "Recovery Die",
+                "Deflect": "Deflect",
+                "NoObscuredSense": "Unaffected by Obscured Senses."
+            },
+            "Size": {
+                "Small": "Small",
+                "Medium": "Medium",
+                "Large": "Large",
+                "Huge": "Huge",
+                "Gargantuan": "Gargantuan"
+            },
+            "Type": {
+                "Humanoid": "Humanoid",
+                "Animal": "Animla",
+                "Spren": "Spren"
+            }
         },
-        "Ancestry": {
-          "placeholder": "[Ancestry]",
-          "Human": "Human",
-          "Singer": "Singer"
+        "AttributeGroup": {
+            "Physical": {
+                "long": "Physical",
+                "short": "PHY"
+            },
+            "Cognitive": {
+                "long": "Cognitive",
+                "short": "COG"
+            },
+            "Spiritual": {
+                "long": "Spiritual",
+                "short": "SPI"
+            }
         },
-        "Path": {
-          "placeholder": "[Path]",
-          "Agent": "Agent",
-          "Envoy": "Envoy",
-          "Hunter": "Hunter",
-          "Leader": "Leader",
-          "Lightweaver": "Lightweaver",
-          "Scholar": "Scholar",
-          "Warrior": "Warrior",
-          "Windrunner": "Windrunner"
+        "Item": {
+            "Type": {
+                "Weapon": "Weapon",
+                "Armor": "Armor",
+                "Equipment": "Equipment",
+                "Fabrial": "Fabrial",
+                "Ancestry": "Ancestry",
+                "Path": "Path",
+                "Talent": "Talent",
+                "Action": "Action"
+            },
+            "Weapon": {
+                "Type": {
+                    "Light": "Light",
+                    "Heavy": "Heavy",
+                    "Special": "Special"
+                },
+                "Name": {
+                    "Javelin": "Javelin",
+                    "Knife": "Knife",
+                    "Mace": "Mace",
+                    "Rapier": "Rapier",
+                    "Shortspear": "Shortspear",
+                    "Sidesword": "Sidesword",
+                    "Staff": "Staff",
+                    "Shortbow": "Shortbow",
+                    "Sling": "Sling",
+                    "Axe": "Axe",
+                    "Greatsword": "Greatsword",
+                    "Hammer": "Hammer",
+                    "Longspear": "Longspear",
+                    "Longsword": "Longsword",
+                    "Poleaxe": "Poleaxe",
+                    "Shield": "Shield",
+                    "Crossbow": "Crossbow",
+                    "Longbow": "Longbow",
+                    "Improvised": "Improvised",
+                    "Unarmed": "Unarmed",
+                    "Shardblade": "Shardblade"
+                },
+                "Trait": {
+                    "Cumbersome": "Cumbersome",
+                    "Dangerous": "Dangerous",
+                    "Deadly": "Deadly",
+                    "Defensive": "Defensive",
+                    "Discreet": "Discreet",
+                    "Indirect": "Indirect",
+                    "Loaded": "Loaded",
+                    "Momentum": "Momentum",
+                    "Offhand": "Offhand",
+                    "Pierce": "Pierce",
+                    "Quickdraw": "Quickdraw",
+                    "Thrown": "Thrown",
+                    "TwoHanded": "Two-Handed",
+                    "Unique": "Unique",
+                    "Fragile": "Fragile"
+                }
+            },
+            "Armor": {
+                "Name": {
+                    "Uniform": "Uniform",
+                    "Leather": "Leather",
+                    "Chain": "Chain",
+                    "Breastplate": "Breastplate",
+                    "HalfPlate": "Half Plate",
+                    "FullPlate": "Full Plate",
+                    "Shardplate": "Shardplate"
+                },
+                "Trait": {
+                    "Cumbersome": "Cumbersome",
+                    "Dangerous": "Dangerous",
+                    "Presentable": "Presentable"
+                }
+            }
         },
-        "Specialties": {
-          "placeholder": "[Specialty]",
-          "Agent": {
-            "Investigator": "Investigator",
-            "Spy": "Spy",
-            "Thief": "Thief"
-          },
-          "Envoy": {
-            "Diplomat": "Diplomat",
-            "Faithful": "Faithful",
-            "Mentor": "Mentor"
-          },
-          "Hunter": {
-            "Archer": "Archer",
-            "Assassin": "Assassin",
-            "Tracker": "Tracker"
-          },
-          "Leader": {
-            "Champion": "Champion",
-            "Officer": "Officer",
-            "Politico": "Politico"
-          },
-          "Scholar": {
-            "Artifabrian": "Artifabrian",
-            "Strategist": "Strategist",
-            "Surgeon": "Surgeon"
-          },
-          "Warrior": {
-            "Duelist": "Duelist",
-            "Shardbearer": "Shardbearer",
-            "Soldier": "Soldier"
-          }
-        },
-        "Expertise": {
-          "name": "Expertise",
-          "Armor": "Armor",
-          "Cultural": "Cultural",
-          "Specialist": "Specialist",
-          "Utility": "Utility",
-          "Weapon": "Weapon"
-        },
-        "Surge": {
-          "Adhesion": "Adhesion",
-          "Gravitation": "Gravitation",
-          "Illumination": "Illumination",
-          "Transformation": "Transformation"
+        "DamageTypes": {
+            "Energy": "Energy",
+            "Impact": "Impact",
+            "Keen": "Keen",
+            "Spirit": "Spirit",
+            "Vital": "Vital"
         }
-      },
-      "Adversary": {
-        "Adversary": "Adversary",
-        "Traits": {
-          "BarbedCarapace": "Barbed Carapace",
-          "BeastOfBurden": "Beast of Burden",
-          "Boss": "Boss",
-          "Capable": "Capable",
-          "DeadlySpeed": "Deadly Speed",
-          "EnhancedSenses": "Enhanced Senses",
-          "ExternalCarapace": "External Carapace",
-          "InfectiousThrill": "Infectious Thrill",
-          "KeenSenses": "Keen Senses",
-          "MartialDrill": "Martial Drill",
-          "MartialExperience": "Martial Experience",
-          "MilitaryTactics": "Military Tactics",
-          "Minion": "Minion",
-          "Momentum": "Momentum",
-          "PloddingPace": "Plodding Pace",
-          "Skilled": "Skilled",
-          "SternCountenance": "Stern Countenance",
-          "Swarm": "Swarm",
-          "TakeAim": "Take Aim",
-          "VaryingSpecies": "Varying Species"
-        },
-        "Role": {
-          "Minion": "Minion",
-          "Rival": "Rival",
-          "Boss": "Boss"
-        }
-      },
-      "Actions": {
-        "Aid": "Aid",
-        "AvoidDanger": "Avoid Danger",
-        "Banter": "Banter",
-        "Brace": "Brace",
-        "BreathStormlight": "Breath Stormlight",
-        "Disengage": "Disengage",
-        "Dodge": "Dodge",
-        "Drop": "Drop",
-        "Enhance": "Enhance",
-        "GainAdvantage": "Gain Advantage",
-        "Grapple": "Grapple",
-        "Interact": "Interact",
-        "Move": "Move",
-        "ReactiveStrike": "Reactive Strike",
-        "Ready": "Ready",
-        "Recover": "Recover",
-        "Regenerate": "Regenerate",
-        "Shove": "Shove",
-        "Strike": "Strike",
-        "UseASkill": "Use A Skill"
-      },
-      "ActionCosts": {
-        "Action": "Action",
-        "Reaction": "Reaction",
-        "FreeAction": "Free Action"
-      },
-      "Attribute": {
-        "name": "Attribute",
-        "name_plural": "Attributes",
-        "Strength": {
-          "long": "Strength",
-          "short": "STR"
-        },
-        "Speed": {
-          "long": "Speed",
-          "short": "SPD"
-        },
-        "Intellect": {
-          "long": "Intellect",
-          "short": "INT"
-        },
-        "Willpower": {
-          "long": "Willpower",
-          "short": "WIL"
-        },
-        "Awareness": {
-          "long": "Awareness",
-          "short": "AWA"
-        },
-        "Presence": {
-          "long": "Presence",
-          "short": "PRE"
-        }
-      },
-      "Conditions": {
-        "Afflicted": "Afflicted",
-        "Determined": "Determined",
-        "Disoriented": "Disoriented",
-        "Empowered": "Empowered",
-        "Enhanced": "Enhanced",
-        "Exhausted": "Exhausted",
-        "Focused": "Focused",
-        "Immobilized": "Immobilized",
-        "Prone": "Prone",
-        "Restrained": "Restrained",
-        "Slowed": "Slowed",
-        "Stunned": "Stunned",
-        "Surprised": "Surprised",
-        "Unconscious": "Unconscious"
-      },
-      "Resource": {
-        "Health": "Health",
-        "Focus": "Focus",
-        "Investiture": "Investiture"
-      },
-      "Skill": {
-        "Agility": "Agility",
-        "Athletics": "Athletics",
-        "HeavyWeapons": "Heavy Weapons",
-        "LightWeapons": "Light Weapons",
-        "Stealth": "Stealth",
-        "Thievery": "Thievery",
-        "Crafting": "Crafting",
-        "Deduction": "Deduction",
-        "Discipline": "Discipline",
-        "Intimidation": "Intimidation",
-        "Lore": "Lore",
-        "Medicine": "Medicine",
-        "Deception": "Deception",
-        "Insight": "Insight",
-        "Leadership": "Leadership",
-        "Perception": "Perception",
-        "Persuasion": "Persuasion",
-        "Survival": "Survival",
-        "Adhesion": "Adhesion",
-        "Gravitation": "Gravitation",
-        "Illumination": "Illumination",
-        "Transformation": "Transformation"
-      },
-      "Statistics": {
-        "Defense": "Defense",
-        "SensesRange": "Senses Range",
-        "MovementRate": "Movement",
-        "LiftingCapactiy": "Lifting Capactiy",
-        "RecoveryDie": "Recovery Die",
-        "Deflect": "Deflect",
-        "NoObscuredSense": "Unaffected by Obscured Senses."
-      },
-      "Size":{
-        "Small": "Small",
-        "Medium": "Medium",
-        "Large": "Large",
-        "Huge": "Huge",
-        "Gargantuan": "Gargantuan"
-      },
-      "Type":{
-        "Humanoid": "Humanoid",
-        "Animal": "Animla",
-        "Spren": "Spren"
-      }
     },
-    "AttributeGroup": {
-      "Physical": {
-        "long": "Physical",
-        "short": "PHY"
-      },
-      "Cognitive": {
-        "long": "Cognitive",
-        "short": "COG"
-      },
-      "Spiritual": {
-        "long": "Spiritual",
-        "short": "SPI"
-      }
-    },
-    "Item": {
-      "Type": {
-        "Weapon": "Weapon",
-        "Armor": "Armor",
-        "Equipment": "Equipment",
-        "Fabrial": "Fabrial",
-        "Ancestry": "Ancestry",
-        "Path": "Path",
-        "Talent": "Talent",
-        "Action": "Action"
-      },
-      "Weapon": {
-        "Type": {
-          "Light": "Light",
-          "Heavy": "Heavy",
-          "Special": "Special"
+    "DICE": {
+        "RollMode": "Roll Mode",
+        "Plot": {
+            "RaiseTheStakes": "Raise the Stakes",
+            "Complication": "Complication",
+            "Opportunity": "Opportunity"
         },
-        "Name": {
-          "Javelin": "Javelin",
-          "Knife": "Knife",
-          "Mace": "Mace",
-          "Rapier": "Rapier",
-          "Shortspear": "Shortspear",
-          "Sidesword": "Sidesword",
-          "Staff": "Staff",
-          "Shortbow": "Shortbow",
-          "Sling": "Sling",
-          "Axe": "Axe",
-          "Greatsword": "Greatsword",
-          "Hammer": "Hammer",
-          "Longspear": "Longspear",
-          "Longsword": "Longsword",
-          "Poleaxe": "Poleaxe",
-          "Shield": "Shield",
-          "Crossbow": "Crossbow",
-          "Longbow": "Longbow",
-          "Improvised": "Improvised",
-          "Unarmed": "Unarmed",
-          "Shardblade": "Shardblade"
-        },
-        "Trait": {
-          "Cumbersome": "Cumbersome",
-          "Dangerous": "Dangerous",
-          "Deadly": "Deadly",
-          "Defensive": "Defensive",
-          "Discreet": "Discreet",
-          "Indirect": "Indirect",
-          "Loaded": "Loaded",
-          "Momentum": "Momentum",
-          "Offhand": "Offhand",
-          "Pierce": "Pierce",
-          "Quickdraw": "Quickdraw",
-          "Thrown": "Thrown",
-          "TwoHanded": "Two-Handed",
-          "Unique": "Unique",
-          "Fragile": "Fragile"
+        "Roll": {
+            "None": "None",
+            "Advantage": "Advantage",
+            "Disadvantage": "Disadvantage"
         }
-      },
-      "Armor": {
-        "Name": {
-          "Uniform": "Uniform",
-          "Leather": "Leather",
-          "Chain": "Chain",
-          "Breastplate": "Breastplate",
-          "HalfPlate": "Half Plate",
-          "FullPlate": "Full Plate",
-          "Shardplate": "Shardplate"
-        },
-        "Trait": {
-          "Cumbersome": "Cumbersome",
-          "Dangerous": "Dangerous",
-          "Presentable": "Presentable"
-        }
-      }
     },
-    "DamageTypes": {
-      "Energy": "Energy",
-      "Impact": "Impact",
-      "Keen": "Keen",
-      "Spirit": "Spirit",
-      "Vital": "Vital"
+    "GENERIC": {
+        "Unknown": "Unknown",
+        "None": "None",
+        "Formula": "Formula",
+        "SkillTest": "Skill Test",
+        "DistanceUnit": "ft."
     }
-  },
-  "DICE": {
-    "RollMode": "Roll Mode",
-    "Plot": {
-      "RaiseTheStakes": "Raise the Stakes",
-      "Complication": "Complication",
-      "Opportunity": "Opportunity"
-    },
-    "Roll": {
-      "None": "None",
-      "Advantage": "Advantage",
-      "Disadvantage": "Disadvantage"
-    }
-  },
-  "GENERIC": {
-    "Unknown": "Unknown",
-    "None": "None",
-    "Formula": "Formula",
-    "SkillTest": "Skill Test",
-    "DistanceUnit": "ft."
-  }
 }
