@@ -33,6 +33,13 @@
             "action": {}
         }
     },
+    "languages": [
+        {
+            "lang": "en",
+            "name": "English",
+            "path": "lang/en.json"
+        }
+    ],
     "socket": true,
     "grid": {
         "distance": 5,

@@ -47,7 +47,8 @@ export interface AttributeConfig {
 export interface SkillConfig {
     label: string;
     attribute: Attribute;
-    hiddenUntilAquired?: boolean;
+    attrLabel: string;
+    hiddenUntilAcquired?: boolean;
 }
 
 export interface ResourceConfig {

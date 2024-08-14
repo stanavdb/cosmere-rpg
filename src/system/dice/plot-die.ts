@@ -54,8 +54,10 @@ export class PlotDie extends foundry.dice.terms.DiceTerm {
     }
 
     getResultLabel(result: foundry.dice.terms.DiceTerm.Result): string {
-        if (result.failure) return `complication (${result.result * 2})`;
-        else if (result.success) return 'opporunity';
+        if (result.failure)
+            return `${game.i18n?.localize('DICE.Plot.Complication')} (${result.result * 2})`;
+        else if (result.success)
+            return `${game.i18n?.localize('DICE.Plot.Opportunity')}`;
         else return '-';
     }
 }
