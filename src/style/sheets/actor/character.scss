@@ -1,127 +1,125 @@
-@import "../sheet.scss";
+@import '../sheet.scss';
 
 .attribute-group {
-  display: flex;
-  flex-direction: column;
-  margin: 0 5pt;
+    display: flex;
+    flex-direction: column;
+    margin: 0 5pt;
 
-  >.label {
-    text-align: center;
-    font-size: 12pt;
-    text-transform: uppercase;
-    font-weight: bold;
-  }
+    > .label {
+        text-align: center;
+        font-size: 12pt;
+        text-transform: uppercase;
+        font-weight: bold;
+    }
 
-  .attributes {
-    padding: 2.5pt 0;
-  }
+    .attributes {
+        padding: 2.5pt 0;
+    }
 
-  >section {
-    margin-bottom: 0.5rem;
-  }
+    > section {
+        margin-bottom: 0.5rem;
+    }
 }
 
 .attribute {
-  padding: 0.5ch 0;
-  border: 1px solid black;
-  margin: 0 2.5pt;
+    padding: 0.5ch 0;
+    border: 1px solid black;
+    margin: 0 2.5pt;
 }
 
 .defense {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  .defense-box {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
 
-    border: 1px solid;
-    padding: 8pt 0 10pt;
-    border-bottom-left-radius: 50%;
-    border-bottom-right-radius: 50%;
+    .defense-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
-    width: 3rem;
-    height: 3rem;
+        border: 1px solid;
+        padding: 8pt 0 10pt;
+        border-bottom-left-radius: 50%;
+        border-bottom-right-radius: 50%;
 
-    .value {
-      font-size: 15pt;
+        width: 3rem;
+        height: 3rem;
+
+        .value {
+            font-size: 15pt;
+        }
     }
-  }
 }
 
 .resource {
-  .label {
-    text-align: center;
-  }
+    .label {
+        text-align: center;
+    }
 
-  .value {
-    font-size: 14pt;
-  }
+    .value {
+        font-size: 14pt;
+    }
 }
 
 .skills {
-
-  .skill-list,
-  .ranks {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .skill {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin: 0.25rem 0;
-
-    .mod-box {
-      width: 1.75rem;
-      height: 1.5rem;
-      margin-right: 0.5rem;
-      border: 1px solid black;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      .mod {
-        text-align: center;
-        font-size: 12pt;
-        font-weight: bold;
-      }
-    }
-
-    .label {
-      flex: 1;
-    }
-
+    .skill-list,
     .ranks {
-      width: 7rem;
-      display: flex;
-      flex-direction: row;
-
-      input[type="checkbox"] {
+        list-style-type: none;
         margin: 0;
-      }
+        padding: 0;
     }
-  }
+
+    .skill {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin: 0.25rem 0;
+
+        .mod-box {
+            width: 1.75rem;
+            height: 1.5rem;
+            margin-right: 0.5rem;
+            border: 1px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .mod {
+                text-align: center;
+                font-size: 12pt;
+                font-weight: bold;
+            }
+        }
+
+        .label {
+            flex: 1;
+        }
+
+        .ranks {
+            width: 7rem;
+            display: flex;
+            flex-direction: row;
+
+            input[type='checkbox'] {
+                margin: 0;
+            }
+        }
+    }
 }
 
 .derived-attribute,
 .expertises {
-
-  .label,
-  p {
-    text-align: center;
-    font-size: 10pt;
-  }
+    .label,
+    p {
+        text-align: center;
+        font-size: 10pt;
+    }
 }
 
 .expertises {
-  .value {
-    font-size: 1rem;
-    font-weight: normal;
-  }
+    .value {
+        font-size: 1rem;
+        font-weight: normal;
+    }
 }

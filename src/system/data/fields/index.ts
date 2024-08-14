@@ -1,1 +1,1 @@
-export * from "./derived-value-field";
+export * from './derived-value-field';

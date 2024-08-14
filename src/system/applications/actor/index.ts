@@ -1,2 +1,2 @@
-export * from "./adversary-sheet";
-export * from "./character-sheet";
+export * from './adversary-sheet';
+export * from './character-sheet';
