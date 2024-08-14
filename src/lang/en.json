@@ -5,69 +5,16 @@
             "Character": {
                 "Character": "Character",
                 "Cultures": {
-                    "placeholder": "[Culture]",
-                    "Alethi": "Alethi",
-                    "Azish": "Azish",
-                    "Herdazian": "Herdazian",
-                    "Iriali": "Iriali",
-                    "Kharbranthian": "Kharbranthian",
-                    "Listener": "Listener",
-                    "Natan": "Natan",
-                    "Reshi": "Reshi",
-                    "Shin": "Shin",
-                    "Tashikki": "Tashikki",
-                    "Thaylen": "Thaylen",
-                    "Unkalaki": "Unkalaki",
-                    "Veden": "Veden"
+                    "placeholder": "[Culture]"
                 },
                 "Ancestry": {
-                    "placeholder": "[Ancestry]",
-                    "Human": "Human",
-                    "Singer": "Singer"
+                    "placeholder": "[Ancestry]"
                 },
                 "Path": {
-                    "placeholder": "[Path]",
-                    "Agent": "Agent",
-                    "Envoy": "Envoy",
-                    "Hunter": "Hunter",
-                    "Leader": "Leader",
-                    "Lightweaver": "Lightweaver",
-                    "Scholar": "Scholar",
-                    "Warrior": "Warrior",
-                    "Windrunner": "Windrunner"
+                    "placeholder": "[Path]"
                 },
                 "Specialties": {
-                    "placeholder": "[Specialty]",
-                    "Agent": {
-                        "Investigator": "Investigator",
-                        "Spy": "Spy",
-                        "Thief": "Thief"
-                    },
-                    "Envoy": {
-                        "Diplomat": "Diplomat",
-                        "Faithful": "Faithful",
-                        "Mentor": "Mentor"
-                    },
-                    "Hunter": {
-                        "Archer": "Archer",
-                        "Assassin": "Assassin",
-                        "Tracker": "Tracker"
-                    },
-                    "Leader": {
-                        "Champion": "Champion",
-                        "Officer": "Officer",
-                        "Politico": "Politico"
-                    },
-                    "Scholar": {
-                        "Artifabrian": "Artifabrian",
-                        "Strategist": "Strategist",
-                        "Surgeon": "Surgeon"
-                    },
-                    "Warrior": {
-                        "Duelist": "Duelist",
-                        "Shardbearer": "Shardbearer",
-                        "Soldier": "Soldier"
-                    }
+                    "placeholder": "[Specialty]"            
                 },
                 "Expertise": {
                     "name": "Expertise",
@@ -76,12 +23,6 @@
                     "Specialist": "Specialist",
                     "Utility": "Utility",
                     "Weapon": "Weapon"
-                },
-                "Surge": {
-                    "Adhesion": "Adhesion",
-                    "Gravitation": "Gravitation",
-                    "Illumination": "Illumination",
-                    "Transformation": "Transformation"
                 }
             },
             "Adversary": {
@@ -119,7 +60,6 @@
                 "AvoidDanger": "Avoid Danger",
                 "Banter": "Banter",
                 "Brace": "Brace",
-                "BreathStormlight": "Breath Stormlight",
                 "Disengage": "Disengage",
                 "Dodge": "Dodge",
                 "Drop": "Drop",
@@ -208,11 +148,7 @@
                 "Leadership": "Leadership",
                 "Perception": "Perception",
                 "Persuasion": "Persuasion",
-                "Survival": "Survival",
-                "Adhesion": "Adhesion",
-                "Gravitation": "Gravitation",
-                "Illumination": "Illumination",
-                "Transformation": "Transformation"
+                "Survival": "Survival"
             },
             "Statistics": {
                 "Defense": "Defense",
@@ -232,8 +168,7 @@
             },
             "Type": {
                 "Humanoid": "Humanoid",
-                "Animal": "Animal",
-                "Spren": "Spren"
+                "Animal": "Animal"
             }
         },
         "AttributeGroup": {
@@ -255,7 +190,6 @@
                 "Weapon": "Weapon",
                 "Armor": "Armor",
                 "Equipment": "Equipment",
-                "Fabrial": "Fabrial",
                 "Ancestry": "Ancestry",
                 "Path": "Path",
                 "Talent": "Talent",
@@ -268,27 +202,7 @@
                     "Special": "Special"
                 },
                 "Name": {
-                    "Javelin": "Javelin",
-                    "Knife": "Knife",
-                    "Mace": "Mace",
-                    "Rapier": "Rapier",
-                    "Shortspear": "Shortspear",
-                    "Sidesword": "Sidesword",
-                    "Staff": "Staff",
-                    "Shortbow": "Shortbow",
-                    "Sling": "Sling",
-                    "Axe": "Axe",
-                    "Greatsword": "Greatsword",
-                    "Hammer": "Hammer",
-                    "Longspear": "Longspear",
-                    "Longsword": "Longsword",
-                    "Poleaxe": "Poleaxe",
-                    "Shield": "Shield",
-                    "Crossbow": "Crossbow",
-                    "Longbow": "Longbow",
-                    "Improvised": "Improvised",
-                    "Unarmed": "Unarmed",
-                    "Shardblade": "Shardblade"
+                    "placeholder": "[Weapon Name]"
                 },
                 "Trait": {
                     "Cumbersome": "Cumbersome",
@@ -310,13 +224,7 @@
             },
             "Armor": {
                 "Name": {
-                    "Uniform": "Uniform",
-                    "Leather": "Leather",
-                    "Chain": "Chain",
-                    "Breastplate": "Breastplate",
-                    "HalfPlate": "Half Plate",
-                    "FullPlate": "Full Plate",
-                    "Shardplate": "Shardplate"
+                    "placeholder": "[Armor Name]"
                 },
                 "Trait": {
                     "Cumbersome": "Cumbersome",
