@@ -10,12 +10,13 @@ import {
     Skill,
     WeaponType,
     WeaponId,
-    ArmorId,
     ExpertiseType,
     WeaponTraitId,
     ArmorTraitId,
     AdversaryRole,
     DeflectSource,
+    ActivationType,
+    ItemConsumeType,
     ActionCostType,
     DamageType,
 } from './types/cosmere';
@@ -54,9 +55,6 @@ const COSMERE: CosmereRPGConfig = {
         },
         [CreatureType.Animal]: {
             label: 'COSMERE.Actor.Type.Animal',
-        },
-        [CreatureType.Spren]: {
-            label: 'COSMERE.Actor.Type.Spren',
         },
     },
 
@@ -148,32 +146,15 @@ const COSMERE: CosmereRPGConfig = {
         },
         [Attribute.Willpower]: {
             label: 'COSMERE.Actor.Attribute.Willpower.long',
-            skills: [
-                Skill.Discipline,
-                Skill.Intimidation,
-                Skill.Transformation,
-            ],
+            skills: [Skill.Discipline, Skill.Intimidation],
         },
         [Attribute.Awareness]: {
             label: 'COSMERE.Actor.Attribute.Awareness.long',
-            skills: [
-                Skill.Insight,
-                Skill.Perception,
-                Skill.Survival,
-
-                Skill.Gravitation,
-            ],
+            skills: [Skill.Insight, Skill.Perception, Skill.Survival],
         },
         [Attribute.Presence]: {
             label: 'COSMERE.Actor.Attribute.Presence.long',
-            skills: [
-                Skill.Deception,
-                Skill.Leadership,
-                Skill.Persuasion,
-
-                Skill.Adhesion,
-                Skill.Illumination,
-            ],
+            skills: [Skill.Deception, Skill.Leadership, Skill.Persuasion],
         },
     },
 
@@ -283,31 +264,26 @@ const COSMERE: CosmereRPGConfig = {
             attribute: Attribute.Awareness,
             attrLabel: 'COSMERE.Actor.Attribute.Awareness.short',
         },
+    },
 
-        // Surges,
-        [Skill.Adhesion]: {
-            label: 'COSMERE.Actor.Skill.Adhesion',
-            attribute: Attribute.Presence,
-            attrLabel: 'COSMERE.Actor.Attribute.Presence.short',
-            hiddenUntilAcquired: true,
-        },
-        [Skill.Gravitation]: {
-            label: 'COSMERE.Actor.Skill.Gravitation',
-            attribute: Attribute.Awareness,
-            attrLabel: 'COSMERE.Actor.Attribute.Awareness.short',
-            hiddenUntilAcquired: true,
-        },
-        [Skill.Illumination]: {
-            label: 'COSMERE.Actor.Skill.Illumination',
-            attribute: Attribute.Presence,
-            attrLabel: 'COSMERE.Actor.Attribute.Presence.short',
-            hiddenUntilAcquired: true,
-        },
-        [Skill.Transformation]: {
-            label: 'COSMERE.Actor.Skill.Transformation',
-            attribute: Attribute.Willpower,
-            attrLabel: 'COSMERE.Actor.Attribute.Willpower.short',
-            hiddenUntilAcquired: true,
+    items: {
+        activation: {
+            types: {
+                [ActivationType.SkillTest]: {
+                    label: 'COSMERE.GENERIC.SkillTest',
+                },
+            },
+            consumeTypes: {
+                [ItemConsumeType.Resource]: {
+                    label: 'COSMERE.Item.Activation.ConsumeType.Resource',
+                },
+                [ItemConsumeType.Charge]: {
+                    label: 'COSMERE.Item.Activation.ConsumeType.Charge',
+                },
+                [ItemConsumeType.Item]: {
+                    label: 'COSMERE.Item.Activation.ConsumeType.Item',
+                },
+            },
         },
     },
 
@@ -325,47 +301,11 @@ const COSMERE: CosmereRPGConfig = {
 
     // TODO: These should reference their respective item ids in the compendium
     weapons: {
-        [WeaponId.Javelin]: { reference: '' },
-        [WeaponId.Knife]: { reference: '' },
-        [WeaponId.Mace]: { reference: '' },
-        [WeaponId.Rapier]: { reference: '' },
-        [WeaponId.Shortspear]: { reference: '' },
-        [WeaponId.Sidesword]: { reference: '' },
-        [WeaponId.Staff]: { reference: '' },
-        [WeaponId.Shortbow]: { reference: '' },
-        [WeaponId.Sling]: { reference: '' },
-
-        [WeaponId.Axe]: { reference: '' },
-        [WeaponId.Greatsword]: { reference: '' },
-        [WeaponId.Hammer]: { reference: '' },
-        [WeaponId.Longspear]: { reference: '' },
-        [WeaponId.Longsword]: { reference: '' },
-        [WeaponId.Poleaxe]: { reference: '' },
-        [WeaponId.Shield]: { reference: '' },
-        [WeaponId.Crossbow]: { reference: '' },
-        [WeaponId.Longbow]: { reference: '' },
-
         [WeaponId.Improvised]: { reference: '' },
         [WeaponId.Unarmed]: { reference: '' },
-        [WeaponId.Shardblade]: {
-            reference: '',
-            specialExpertise: true,
-        },
     },
 
-    // TODO: These should reference their respective item ids in the compendium
-    armors: {
-        [ArmorId.Uniform]: { reference: '' },
-        [ArmorId.Leather]: { reference: '' },
-        [ArmorId.Chain]: { reference: '' },
-        [ArmorId.Breastplate]: { reference: '' },
-        [ArmorId.HalfPlate]: { reference: '' },
-        [ArmorId.FullPlate]: { reference: '' },
-        [ArmorId.Shardplate]: {
-            reference: '',
-            specialExpertise: true,
-        },
-    },
+    armors: {},
 
     expertiseTypes: {
         [ExpertiseType.Armor]: {

@@ -13,7 +13,6 @@ export enum Size {
 export enum CreatureType {
     Humanoid = 'humanoid',
     Animal = 'animal',
-    Spren = 'spren',
 }
 
 /**
@@ -78,12 +77,6 @@ export enum Skill {
     Perception = 'prc',
     Persuasion = 'prs',
     Survival = 'sur',
-
-    // Surge skills
-    Adhesion = 'adh',
-    Gravitation = 'gra',
-    Illumination = 'ill',
-    Transformation = 'tra',
 }
 
 export enum DerivedStatistic {
@@ -107,32 +100,9 @@ export enum WeaponType {
  * but is used to populate the `CONFIG.COSMERE.weapons` property.
  */
 export enum WeaponId {
-    // Light weapons
-    Javelin = 'javelin',
-    Knife = 'knife',
-    Mace = 'mace',
-    Rapier = 'rapier',
-    Shortspear = 'shortspear',
-    Sidesword = 'sidesword',
-    Staff = 'staff',
-    Shortbow = 'shortbow',
-    Sling = 'sling',
-
-    // Heavy weapons
-    Axe = 'axe',
-    Greatsword = 'greatsword',
-    Hammer = 'hammer',
-    Longspear = 'longspear',
-    Longsword = 'longsword',
-    Poleaxe = 'poleaxe',
-    Shield = 'shield',
-    Crossbow = 'crossbow',
-    Longbow = 'longbow',
-
     // Special
     Improvised = 'improvised',
     Unarmed = 'unarmed',
-    Shardblade = 'shardblade',
 }
 
 /**
@@ -140,15 +110,7 @@ export enum WeaponId {
  * This is not an exhaustive list of all possible weapons,
  * but is used to populate the `CONFIG.COSMERE.armors` property.
  */
-export enum ArmorId {
-    Uniform = 'uniform',
-    Leather = 'leather',
-    Chain = 'chain',
-    Breastplate = 'breastplate',
-    HalfPlate = 'half_plate',
-    FullPlate = 'plate',
-    Shardplate = 'shardplate',
-}
+export enum ArmorId {}
 
 export enum ExpertiseType {
     Armor = 'armor',
@@ -203,6 +165,16 @@ export enum DeflectSource {
     Armor = 'armor',
 }
 
+export enum ActivationType {
+    SkillTest = 'skill_test',
+}
+
+export enum ItemConsumeType {
+    Resource = 'resource',
+    Charge = 'charge',
+    Item = 'item',
+}
+
 export enum ActionCostType {
     Action = 'act',
     Reaction = 'rea',
@@ -228,7 +200,6 @@ export enum ItemType {
     Weapon = 'weapon',
     Armor = 'armor',
     Equipment = 'equipment',
-    Fabrial = 'fabrial',
 
     Ancestry = 'ancestry',
     Path = 'path',

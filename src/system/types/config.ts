@@ -14,6 +14,8 @@ import {
     ArmorTraitId,
     AdversaryRole,
     DeflectSource,
+    ActivationType,
+    ItemConsumeType,
     ActionCostType,
     DamageType,
 } from './cosmere';
@@ -89,6 +91,14 @@ export interface DeflectSourceConfig {
     label: string;
 }
 
+export interface ActivationTypeConfig {
+    label: string;
+}
+
+export interface ItemConsumeTypeConfig {
+    label: string;
+}
+
 export interface ActionCostConfig {
     label: string;
     icon?: string;
@@ -109,6 +119,13 @@ export interface CosmereRPGConfig {
     attributes: Record<Attribute, AttributeConfig>;
     resources: Record<Resource, ResourceConfig>;
     skills: Record<Skill, SkillConfig>;
+
+    items: {
+        activation: {
+            types: Record<ActivationType, ActivationTypeConfig>;
+            consumeTypes: Record<ItemConsumeType, ItemConsumeTypeConfig>;
+        };
+    };
 
     weaponTypes: Record<WeaponType, WeaponTypeConfig>;
     weapons: Record<WeaponId, WeaponConfig>;

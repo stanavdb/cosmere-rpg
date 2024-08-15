@@ -36,6 +36,10 @@ export default {
                     src: 'src/templates/roll/*.hbs',
                     dest: 'build/templates/roll/',
                 },
+                {
+                    src: 'src/templates/item/dialog/*.hbs',
+                    dest: 'build/templates/item/dialog/',
+                },
                 { src: 'src/lang/*.json', dest: 'build/lang/' }
             ],
         }),

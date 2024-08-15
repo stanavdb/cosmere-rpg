@@ -245,7 +245,7 @@ namespace foundry {
              */
             toJSON(): object;
 
-            update();
+            update(data?: object);
 
             /**
              * Apply transformations of derivations to the values of the source data object.

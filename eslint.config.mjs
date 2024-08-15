@@ -18,6 +18,9 @@ export default tseslint.config(
     ...tseslint.configs.recommendedTypeChecked,
     ...tseslint.configs.stylisticTypeChecked,
     {
+        rules: {
+            '@typescript-eslint/no-namespace': 'off'
+        },
         languageOptions: {
             parserOptions: {
                 projectService: true,

@@ -36,6 +36,9 @@ interface RollSkillOptions {
 export class CosmereActor<
     T extends CommonActorDataModel = CommonActorDataModel,
 > extends Actor<T, CosmereItem> {
+    /**
+     * Roll a skill for this actor
+     */
     public async rollSkill(
         skillId: Skill,
         options: RollSkillOptions = {},
@@ -53,7 +56,9 @@ export class CosmereActor<
         data.defaultAttribute = options.attribute ?? skill.attribute;
 
         // Prepare roll data
-        const flavor = `${CONFIG.COSMERE.skills[skillId].label} Skill Test`;
+        const flavor = `${game.i18n!.localize(
+            CONFIG.COSMERE.skills[skillId].label,
+        )} ${game.i18n!.localize('GENERIC.SkillTest')}`;
         const rollData = foundry.utils.mergeObject(
             {
                 data,
@@ -75,6 +80,26 @@ export class CosmereActor<
         // Perform roll
         const roll = await d20Roll(rollData);
         return roll;
+    }
+
+    /**
+     * Utility function to roll an item for this actor
+     */
+    public async rollItem(
+        item: CosmereItem,
+        options?: Omit<CosmereItem.RollItemOptions, 'actor'>,
+    ): Promise<D20Roll | null> {
+        return item.roll({ ...options, actor: this });
+    }
+
+    /**
+     * Utility function to use an item for this actor
+     */
+    public async useItem(
+        item: CosmereItem,
+        options?: Omit<CosmereItem.UseItemOptions, 'actor'>,
+    ): Promise<D20Roll | null> {
+        return item.use({ ...options, actor: this });
     }
 
     public getRollData() {

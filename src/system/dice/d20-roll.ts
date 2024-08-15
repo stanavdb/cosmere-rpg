@@ -196,7 +196,7 @@ export class D20Roll extends Roll<D20RollData> {
                 content,
                 buttons: {
                     roll: {
-                        label: 'Roll',
+                        label: game.i18n!.localize('GENERIC.Button.Roll'),
                         callback: (html) =>
                             resolve(this.processDialogSubmit($(html))),
                     },
