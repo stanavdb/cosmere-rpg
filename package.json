@@ -8,7 +8,8 @@
         "build:watch": "npx rollup -c -w",
         "prepare": "husky",
         "lint": "eslint",
-        "lint:fix": "eslint --fix"
+        "lint:fix": "eslint --fix",
+        "link": "node ./scripts/link-foundry"
     },
     "devDependencies": {
         "@eslint/js": "^9.9.0",
@@ -25,6 +26,7 @@
         "husky": "^9.1.4",
         "lint-staged": "^15.2.9",
         "prettier": "^3.3.3",
+        "prompts": "^2.4.2",
         "rollup": "^4.20.0",
         "rollup-plugin-copy": "^3.5.0",
         "rollup-plugin-scss": "^4.0.0",
