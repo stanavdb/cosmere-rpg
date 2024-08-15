@@ -96,8 +96,8 @@ export class CosmereItem<
 
         // NOTE: Use boolean or operator (`||`) here instead of nullish coalescing (`??`),
         // as flavor can also be an empty string, which we'd like to replace with the default flavor too
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         const flavor =
+            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
             this.system.activation.flavor ||
             game
                 .i18n!.localize('COSMERE.Item.DefaultFlavor')
