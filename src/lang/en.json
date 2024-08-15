@@ -212,7 +212,21 @@
                     "Dangerous": "Dangerous",
                     "Presentable": "Presentable"
                 }
-            }
+            },
+            "Activation": {
+                "ConsumeType": {
+                    "Resource": "Resource",
+                    "Charge": "Charge",
+                    "Item": "Item"
+                },
+                "Resources": {
+                    "Charge": {
+                        "Singular": "Charge",
+                        "Plural": "Charges"
+                    }
+                }
+            },
+            "DefaultFlavor": "[actor] uses their [item]"
         },
         "DamageTypes": {
             "Energy": "Energy",
@@ -235,11 +249,27 @@
             "Disadvantage": "Disadvantage"
         }
     },
+    "DIALOG": {
+        "ItemConsume": {
+            "Title": "Consume resource",
+            "ShouldConsume": "Consume resource?"
+        }
+    },
     "GENERIC": {
         "Unknown": "Unknown",
         "None": "None",
         "Formula": "Formula",
         "SkillTest": "Skill Test",
-        "DistanceUnit": "ft."
+        "DistanceUnit": "ft.",
+        "Button": {
+            "Roll": "Roll",
+            "Continue": "Continue"
+        },
+        "Warning": {
+            "NotImplemented": "Sorry! [action] is not implemented yet",
+            "NoActor": "No selected or assigned actor found for this roll",
+            "NotEnoughResource": "Cannot consume, not enough of resource",
+            "ItemConsumeResourceNotConfigured": "The resource selected to be consumed as it is not configured on the item"
+        }
     }
 }

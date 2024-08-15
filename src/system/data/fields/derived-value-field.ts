@@ -1,7 +1,6 @@
 import { ConstructorOf } from '@system/util/types';
 
 // NOTE: Specifically use a namespace here to merge with interface declaration
-// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace Derived {
     export function getValue<T extends number | string | boolean>(
         derived: Derived<T>,

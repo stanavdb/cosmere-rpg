@@ -1,4 +1,3 @@
-import { ArmorId } from '@system/types/cosmere';
 import { CosmereItem } from '@src/system/documents';
 
 // Mixins
@@ -14,7 +13,7 @@ import { PhysicalItemMixin, PhysicalItemData } from './mixins/physical';
 import { ExpertiseItemMixin, ExpertiseItemData } from './mixins/expertise';
 
 export interface ArmorItemData
-    extends TypedItemData<ArmorId>,
+    extends TypedItemData,
         DescriptionItemData,
         EquippableItemData,
         TraitsItemData,

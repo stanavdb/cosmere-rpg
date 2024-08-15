@@ -1,5 +1,5 @@
 declare class Item<
-    D extends foundry.abstract.DataModel = foundry.abstract.DataModel,
+    D extends foundry.abstract.DataSchema = foundry.abstract.DataSchema,
     P extends foundry.abstract.Document<
         foundry.abstract.DataModel,
         foundry.abstract.Document | null
@@ -9,5 +9,7 @@ declare class Item<
     public readonly name: string;
     public readonly system: D;
 
-    get actor(): P;
+    get actor(): P | undefined;
+
+    public getRollData(): D;
 }
