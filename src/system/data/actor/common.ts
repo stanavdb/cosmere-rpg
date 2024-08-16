@@ -3,6 +3,8 @@ import {
     Resource,
     AttributeGroup,
     Skill,
+    Currency,
+    CurrencyDenomination,
     ExpertiseType,
     DeflectSource,
     ItemType,
@@ -25,6 +27,16 @@ interface ExpertiseData {
     type: ExpertiseType;
     id: string;
     label: string;
+}
+
+interface CurrencyData {
+    type: Currency;
+    denominations: CurrencyDenominationData[];
+}
+
+interface CurrencyDenominationData {
+    id: CurrencyDenomination;
+    amount: number;
 }
 
 export interface CommonActorData {
@@ -52,6 +64,7 @@ export interface CommonActorData {
         { attribute: Attribute; rank: number; mod: Derived<number> }
     >;
     injuries: Derived<number>;
+    currency: CurrencyData[];
     movement: {
         rate: Derived<number>;
     };
