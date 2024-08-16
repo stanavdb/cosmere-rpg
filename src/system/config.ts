@@ -8,6 +8,8 @@ import {
     AttributeGroup,
     Resource,
     Skill,
+    Currency,
+    CurrencyDenomination,
     WeaponType,
     WeaponId,
     ArmorId,
@@ -286,6 +288,17 @@ const COSMERE: CosmereRPGConfig = {
             label: 'Transformation',
             attribute: Attribute.Willpower,
             hiddenUntilAquired: true,
+        },
+    },
+
+    currencies: {
+        [Currency.Spheres]: {
+            label: 'Spheres',
+            denominations: [
+                CurrencyDenomination.Chips,
+                CurrencyDenomination.Marks,
+                CurrencyDenomination.Broams,
+            ],
         },
     },
 
