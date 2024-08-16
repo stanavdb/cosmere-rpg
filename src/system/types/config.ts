@@ -5,6 +5,8 @@ import {
     AttributeGroup,
     Attribute,
     Skill,
+    Currency,
+    CurrencyDenomination,
     Resource,
     WeaponType,
     WeaponId,
@@ -56,6 +58,11 @@ export interface SkillConfig {
 export interface ResourceConfig {
     label: string;
     deflect?: boolean;
+}
+
+export interface CurrencyConfig {
+    label: string;
+    denominations: CurrencyDenomination[];
 }
 
 export interface WeaponTypeConfig {
@@ -119,6 +126,7 @@ export interface CosmereRPGConfig {
     attributes: Record<Attribute, AttributeConfig>;
     resources: Record<Resource, ResourceConfig>;
     skills: Record<Skill, SkillConfig>;
+    currencies: Record<Currency, CurrencyConfig>;
 
     items: {
         activation: {

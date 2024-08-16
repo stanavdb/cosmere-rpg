@@ -8,6 +8,8 @@ import {
     AttributeGroup,
     Resource,
     Skill,
+    Currency,
+    CurrencyDenomination,
     WeaponType,
     WeaponId,
     ExpertiseType,
@@ -284,6 +286,17 @@ const COSMERE: CosmereRPGConfig = {
                     label: 'COSMERE.Item.Activation.ConsumeType.Item',
                 },
             },
+        },
+    },
+
+    currencies: {
+        [Currency.Spheres]: {
+            label: 'Spheres',
+            denominations: [
+                CurrencyDenomination.Chips,
+                CurrencyDenomination.Marks,
+                CurrencyDenomination.Broams,
+            ],
         },
     },
 

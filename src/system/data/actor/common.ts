@@ -105,6 +105,30 @@ export class CommonActorDataModel<
             defenses: this.getDefensesSchema(),
             resources: this.getResourcesSchema(),
             skills: this.getSkillsSchema(),
+            currency: new foundry.data.fields.ArrayField(
+                new foundry.data.fields.SchemaField({
+                    type: new foundry.data.fields.StringField({
+                        nullable: false,
+                        blank: false,
+                        choices: Object.keys(CONFIG.COSMERE.currencies),
+                    }),
+                    denominations: new foundry.data.fields.ArrayField(
+                        new foundry.data.fields.SchemaField({
+                            id: new foundry.data.fields.StringField({
+                                nullable: false,
+                                blank: false,
+                            }),
+                            amount: new foundry.data.fields.NumberField({
+                                required: true,
+                                nullable: false,
+                                integer: true,
+                                min: 0,
+                                initial: 0,
+                            }),
+                        }),
+                    ),
+                }),
+            ),
             movement: new foundry.data.fields.SchemaField({
                 rate: new DerivedValueField(
                     new foundry.data.fields.NumberField({

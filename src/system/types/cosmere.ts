@@ -85,6 +85,17 @@ export enum DerivedStatistic {
     RecoveryDie = 'rcd',
 }
 
+export enum Currency {
+    Spheres = 'spheres',
+}
+
+export enum CurrencyDenomination {
+    // Sphere denominations
+    Chips = 'chips',
+    Marks = 'marks',
+    Broams = 'broams',
+}
+
 /**
  * The categories of weapon available
  */
