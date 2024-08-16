@@ -322,6 +322,17 @@ const COSMERE: CosmereRPGConfig = {
         },
     },
 
+    currencies: {
+        [Currency.Spheres]: {
+            label: 'Spheres',
+            denominations: [
+                CurrencyDenomination.Chips,
+                CurrencyDenomination.Marks,
+                CurrencyDenomination.Broams,
+            ],
+        },
+    },
+
     weaponTypes: {
         [WeaponType.Light]: {
             label: 'COSMERE.Item.Weapon.Type.Light',
