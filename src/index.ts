@@ -48,4 +48,31 @@ Hooks.once('init', () => {
     // @league-of-foundry-developers/foundry-vtt-types/src/foundry/client-esm/dice/terms/term.d.mts
     // @ts-expect-error see note
     CONFIG.Dice.rolls.push(dice.D20Roll);
+
+    //HandleBars Helper Registration
+    Handlebars.registerHelper(
+        'times',
+        (count: unknown, options: Handlebars.HelperOptions): string =>
+            [...Array(Number(count) || 0).keys()]
+                .map((i) =>
+                    options.fn(i, {
+                        data: options.data as unknown,
+                        blockParams: [i],
+                    }),
+                )
+                .join(''),
+    );
+
+    Handlebars.registerHelper('add', function (thing1, thing2): number {
+        return thing1 + thing2;
+    });
+    Handlebars.registerHelper('sub', function (thing1, thing2): number {
+        return thing1 - thing2;
+    });
+    Handlebars.registerHelper('multi', function (thing1, thing2): number {
+        return thing1 * thing2;
+    });
+    Handlebars.registerHelper('divide', function (thing1, thing2): number {
+        return thing1 / thing2;
+    });
 });

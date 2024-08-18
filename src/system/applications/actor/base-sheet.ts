@@ -30,10 +30,41 @@ export class BaseSheet extends ActorSheet {
                 'click',
                 this.onRollSkillTest.bind(this),
             );
+
+            html.find('a[data-action=adjust-skill-rank]').on(
+                'click',
+                this.onAdjustSkillRank.bind(this),
+            );
+
+            html.find('a[data-action=adjust-skill-rank]').on(
+                'contextmenu',
+                this.onAdjustSkillRank.bind(this),
+            );
+
+            html.find('.attribute .value').on(
+                'change',
+                this.onAttrUpdate.bind(this),
+            );
         }
     }
 
     /* --- Internal functions --- */
+
+    private onAdjustSkillRank(event: Event) {
+        event.preventDefault();
+
+        const incrementBool: boolean = event.type === 'click' ? true : false;
+
+        const skillId = $(event.currentTarget!)
+            .closest('[data-id]')
+            .data('id') as Skill;
+        void this.actor.modifySkillRank(skillId, incrementBool);
+    }
+
+    private onAttrUpdate(event: Event) {
+        event.preventDefault();
+        // TODO: Implement Derived Data Updating
+    }
 
     private onRollSkillTest(event: Event) {
         event.preventDefault();

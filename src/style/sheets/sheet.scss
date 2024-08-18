@@ -27,3 +27,15 @@
 .rollable {
     cursor: pointer;
 }
+
+a.skill-pips {
+    display: flex;
+    flex-direction: row;
+    gap: var(--space-2);
+
+    .pips {
+        display: flex;
+        gap: var(--space-1);
+        justify-content: center;
+    }
+}

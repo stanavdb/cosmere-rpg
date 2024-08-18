@@ -42,17 +42,20 @@ export interface InjuryConfig {
 }
 
 export interface AttributeGroupConfig {
+    key: string;
     label: string;
     attributes: [Attribute, Attribute];
     resource: Resource;
 }
 
 export interface AttributeConfig {
+    key: string;
     label: string;
     skills: Skill[];
 }
 
 export interface SkillConfig {
+    key: string;
     label: string;
     attribute: Attribute;
     attrLabel: string;

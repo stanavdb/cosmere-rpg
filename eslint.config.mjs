@@ -13,6 +13,7 @@ export default tseslint.config(
             'rollup.config.js',
             'commitlint.config.js',
             'lint-staged-config.mjs',
+            'scripts/',
         ],
     },
     eslint.configs.recommended,
@@ -26,6 +27,7 @@ export default tseslint.config(
             parserOptions: {
                 projectService: true,
                 tsconfigRootDir: import.meta.dirname,
+                allowDefaultProject: ['*.js'],
             },
         },
     },
