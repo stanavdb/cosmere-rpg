@@ -112,6 +112,8 @@
                 "Investiture": "Investiture"
             },
             "Skill": {
+                "label": "Skill",
+                "label_p": "Skills",
                 "Agility": "Agility",
                 "Athletics": "Athletics",
                 "HeavyWeapons": "Heavy Weapons",
