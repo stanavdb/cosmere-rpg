@@ -4,11 +4,511 @@ namespace foundry {
             [key: string]: any;
         };
 
+        interface DatabaseGetOperation {
+            /**
+             * A query object which identifies the set of Documents retrieved
+             */
+            query: Record<string, any>;
+
+            /**
+             * Return indices only instead of full Document records
+             */
+            index: boolean;
+
+            /**
+             * An array of field identifiers which should be indexed
+             */
+            indexFields: string[];
+
+            /**
+             * A compendium collection ID which contains the Documents
+             * @default null
+             */
+            pack: string | null;
+
+            /**
+             * A parent Document within which Documents are embedded
+             * @default null
+             */
+            parent: Document | null;
+
+            /**
+             * A parent Document UUID provided when the parent instance is unavailable
+             */
+            parentUuid: string | null;
+        }
+
+        interface DatabaseCreateOperation {
+            /**
+             * Whether the database operation is broadcast to other connected clients
+             */
+            broadcast: boolean;
+
+            /**
+             * An array of data objects from which to create Documents
+             */
+            data: object[];
+
+            /**
+             * Retain the _id values of provided data instead of generating new ids
+             * @default false
+             */
+            keepId: boolean;
+
+            /**
+             * Retain the _id values of embedded document data instead of generating new ids for each embedded document
+             * @default true
+             */
+            keepEmbeddedIds: boolean;
+
+            /**
+             * The timestamp when the operation was performed
+             */
+            modifiedTime: number;
+
+            /**
+             * Block the dispatch of hooks related to this operation
+             * @default false
+             */
+            noHook: boolean;
+
+            /**
+             * Re-render Applications whose display depends on the created Documents
+             * @default true
+             */
+            render: boolean;
+
+            /**
+             * Render the sheet Application for any created Documents
+             * @default false
+             */
+            renderSheet: boolean;
+
+            /**
+             * A parent Document within which Documents are embedded
+             * @default null
+             */
+            parent: Document | null;
+
+            /**
+             * A compendium collection ID which contains the Documents
+             */
+            pack: string | null;
+
+            /**
+             * A parent Document UUID provided when the parent instance is unavailable
+             */
+            parentUuid: string | null;
+
+            /**
+             * An alias for 'data' used internally by the server-side backend
+             */
+            _result: (string | object)[];
+        }
+
+        interface DatabaseUpdateOperation {
+            /**
+             * Whether the database operation is broadcast to other connected clients
+             */
+            broadcast: boolean;
+
+            /**
+             * An array of data objects used to update existing Documents.
+             * Each update object must contain the _id of the target Document
+             */
+            updates: object[];
+
+            /**
+             * Difference each update object against current Document data and only use
+             * differential data for the update operation
+             * @default true
+             */
+            diff: boolean;
+
+            /**
+             * The timestamp when the operation was performed
+             */
+            modifiedTime: number;
+
+            /**
+             * Merge objects recursively. If false, inner objects will be replaced
+             * explicitly. Use with caution!
+             * @default true
+             */
+            recursive: boolean;
+
+            /**
+             * Re-render Applications whose display depends on the created Documents
+             * @default true
+             */
+            render: boolean;
+
+            /**
+             * Block the dispatch of hooks related to this operation
+             * @default false
+             */
+            noHook: boolean;
+
+            /**
+             * A parent Document within which Documents are embedded
+             * @default null
+             */
+            parent: Document | null;
+
+            /**
+             * A compendium collection ID which contains the Documents
+             */
+            pack: string | null;
+
+            /**
+             * A parent Document UUID provided when the parent instance is unavailable
+             */
+            parentUuid: string | null;
+
+            /**
+             * An alias for 'data' used internally by the server-side backend
+             */
+            _result: (string | object)[];
+        }
+
+        interface DatabaseDeleteOperation {
+            /**
+             * Whether the database operation is broadcast to other connected clients
+             */
+            broadcast: boolean;
+
+            /**
+             * An array of Document ids which should be deleted
+             */
+            ids: string[];
+
+            /**
+             * Delete all documents in the Collection, regardless of _id
+             * @default false
+             */
+            deleteAll: boolean;
+
+            /**
+             * The timestamp when the operation was performed
+             */
+            modifiedTime: number;
+
+            /**
+             * Block the dispatch of hooks related to this operation
+             * @default false
+             */
+            noHook: boolean;
+
+            /**
+             * Re-render Applications whose display depends on the created Documents
+             * @default true
+             */
+            render: boolean;
+
+            /**
+             * Render the sheet Application for any created Documents
+             * @default false
+             */
+            renderSheet: boolean;
+
+            /**
+             * A parent Document within which Documents are embedded
+             * @default null
+             */
+            parent: Document | null;
+
+            /**
+             * A compendium collection ID which contains the Documents
+             */
+            pack: string | null;
+
+            /**
+             * A parent Document UUID provided when the parent instance is unavailable
+             */
+            parentUuid: string | null;
+
+            /**
+             * An alias for 'data' used internally by the server-side backend
+             */
+            _result: (string | object)[];
+        }
+
         abstract class Document<
             Schema extends DataSchema = DataSchema,
             Parent extends Document | null = Document | null,
         > extends DataModel<DataSchema, Parent> {
             readonly system: Schema;
+
+            get flags(): Record<string, any>;
+
+            /**
+             * The canonical name of this Document type, for example "Actor".
+             */
+            static get documentName(): string;
+
+            /**
+             * The canonical name of this Document type, for example "Actor".
+             */
+            get documentName(): string;
+
+            /**
+             * The allowed types which may exist for this Document class.
+             */
+            static get TYPES(): string[];
+
+            /**
+             * Does this Document support additional subtypes?
+             */
+            static get hasTypeData(): boolean;
+
+            /* --- Model properties --- */
+
+            /**
+             * Test whether this Document is embedded within a parent Document
+             */
+            get isEmbedded(): boolean;
+
+            /**
+             * A Universally Unique Identifier (uuid) for this Document instance.
+             */
+            get uuid(): string;
+
+            /* --- Model permissions --- */
+
+            /**
+             * Test whether a given User has a sufficient role in order to create Documents of this type in general.
+             * @param user The User being tested
+             * @returns Does the User have a sufficient role to create?
+             */
+            static canUserCreate(user: foundry.documents.BaseUser): boolean;
+
+            /**
+             * Get the explicit permission level that a User has over this Document, a value in CONST.DOCUMENT_OWNERSHIP_LEVELS.
+             * This method returns the value recorded in Document ownership, regardless of the User's role.
+             * To test whether a user has a certain capability over the document, testUserPermission should be used.
+             * @param user The User being tested. Defaults to `game.user`.
+             * @returns  A numeric permission level from CONST.DOCUMENT_OWNERSHIP_LEVELS or null
+             */
+            getUserLevel(user?: foundry.documents.BaseUser): number | null;
+
+            /**
+             * Test whether a certain User has a requested permission level (or greater) over the Document
+             * @param user The User being tested
+             * @param permission The permission level from DOCUMENT_OWNERSHIP_LEVELS to test
+             * @param options Additional options involved in the permission test
+             * @returns Does the user have this permission level over the Document?
+             */
+            testUserPermission(
+                user: foundry.documents.BaseUser,
+                permission: string | number,
+                options?: { exact?: boolean },
+            ): boolean;
+
+            /**
+             * Test whether a given User has permission to perform some action on this Document
+             * @param user The User attempting modification
+             * @param action The attempted action
+             * @param data Data involved in the attempted action
+             * @returns Does the User have permission?
+             */
+            canUserModify(
+                user: foundry.documents.BaseUser,
+                action: string,
+                data: object,
+            ): boolean;
+
+            /* --- Database operations --- */
+
+            /**
+             * Create a new Document using provided input data, saving it to the database.
+             * @param data Initial data used to create this Document, or a Document instance to persist.
+             * @param operation Parameters of the creation operation
+             * @returns The created Document instance
+             *
+             * @example Create a World-level Item
+             * ```js
+             * const data = [{name: "Special Sword", type: "weapon"}];
+             * const created = await Item.create(data);
+             * ```
+             *
+             * @example Create an Actor-owned Item
+             * ```js
+             * const data = [{name: "Special Sword", type: "weapon"}];
+             * const actor = game.actors.getName("My Hero");
+             * const created = await Item.create(data, {parent: actor});
+             * ```
+             *
+             * @example Create an Item in a Compendium pack
+             * ```js
+             * const data = [{name: "Special Sword", type: "weapon"}];
+             * const created = await Item.create(data, {pack: "mymodule.mypack"});
+             * ```
+             */
+            static async create(
+                data: object | Document,
+                operation?: Partial<
+                    Omit<DatabaseCreateOperation, 'data' | '_result'>
+                >,
+            ): Promise<Document>;
+
+            /**
+             * Update this Document using incremental data, saving it to the database.
+             * @param data Differential update data which modifies the existing values of this document
+             * @param operation Parameters of the update operation
+             * @returns The updated Document instance
+             */
+            async update(
+                data?: object,
+                operation?: Partial<
+                    Omit<DatabaseUpdateOperation, 'updates' | '_result'>
+                >,
+            ): Promise<Document>;
+
+            /**
+             * Delete this Document, removing it from the database.
+             * @param operation Parameters of the deletion operation
+             * @returns The deleted Document instance
+             */
+            async delete(
+                operation?: Partial<
+                    Omit<DatabaseDeleteOperation, 'ids' | '_result'>
+                >,
+            ): Promise<Document>;
+
+            /**
+             * Get a World-level Document of this type by its id.
+             * @param documentId The Document ID
+             * @param operation Parameters of the get operation
+             * @returns The retrieved Document, or null
+             */
+            static get(
+                documentId: string,
+                operation?: DatabaseGetOperation,
+            ): Document | null;
+
+            /* --- Embedded operations --- */
+
+            /**
+             * A compatibility method that returns the appropriate name of an embedded collection within this Document.
+             * @param name An existing collection name or a document name.
+             * @returns  The provided collection name if it exists, the first available collection for the
+             *           document name provided, or null if no appropriate embedded collection could be found.
+             *
+             * @example Passing an existing collection name.
+             * ```js
+             * Actor.getCollectionName("items");
+             * // returns "items"
+             * ```
+             *
+             * @example Passing a document name.
+             * ```js
+             * Actor.getCollectionName("Item");
+             * // returns "items"
+             * ```
+             */
+            static getCollectionName(name: string): string | null;
+
+            /**
+             * Obtain a reference to the Array of source data within the data object for a certain embedded Document name
+             * @param embeddedName The name of the embedded Document type
+             * @returns The Collection instance of embedded Documents of the requested type
+             */
+            getEmbeddedCollection(embeddedName: string): DocumentCollection;
+
+            /**
+             * Get an embedded document by its id from a named collection in the parent document.
+             * @param embeddedName The name of the embedded Document type
+             * @param id The id of the child document to retrieve
+             * @param options Additional options which modify how embedded documents are retrieved
+             * @returns The retrieved embedded Document instance, or undefined
+             * @throws If the embedded collection does not exist, or if strict is true and the Embedded Document could not be found.
+             */
+            getEmbeddedDocument(
+                embeddedName: string,
+                id: string,
+                options?: { strict?: boolean; invalid?: boolean },
+            ): Document | undefined;
+
+            /**
+             * Create multiple embedded Document instances within this parent Document using provided input data.
+             * @param embeddedName The name of the embedded Document type
+             * @param data An array of data objects used to create multiple documents
+             * @param opertion Parameters of the database creation workflow
+             * @returns An array of created Document instances
+             */
+            async createEmbeddedDocuments(
+                embeddedName: string,
+                data: object[],
+                opertion?: Partial<DatabaseCreateOperation>,
+            ): Promise<Document[]>;
+
+            /**
+             * Update multiple embedded Document instances within a parent Document using provided differential data.
+             * @param embeddedName The name of the embedded Document type
+             * @param updates An array of differential data objects, each used to update a single Document
+             * @param opertion Parameters of the database update workflow
+             * @returns An array of updated Document instances
+             */
+            async updateEmbeddedDocuments(
+                embeddedName: string,
+                updates: object[],
+                operation?: Partial<DatabaseUpdateOperation>,
+            ): Promise<Document[]>;
+
+            /**
+             * Delete multiple embedded Document instances within a parent Document using provided string ids.
+             * @param embeddedName The name of the embedded Document type
+             * @param ids An array of string ids for each Document to be deleted
+             * @param operation Parameters of the database deletion workflow
+             * @returns An array of deleted Document instances
+             */
+            async deleteEmbeddedDocuments(
+                embeddedName: string,
+                ids: string[],
+                operation?: Partial<DatabaseDeleteOperation>,
+            ): Promise<Document[]>;
+
+            /* --- Flag operations --- */
+
+            /**
+             * Get the value of a "flag" for this document
+             * See the setFlag method for more details on flags
+             * @param scope The flag scope which namespaces the key
+             * @param key The flag key
+             */
+            getFlag<T extends any>(scope: string, key: string): T;
+
+            /**
+             * Assign a "flag" to this document.
+             * Flags represent key-value type data which can be used to store flexible or arbitrary data required by either
+             * the core software, game systems, or user-created modules.
+             *
+             * Each flag should be set using a scope which provides a namespace for the flag to help prevent collisions.
+             *
+             * Flags set by the core software use the "core" scope.
+             * Flags set by game systems or modules should use the canonical name attribute for the module
+             * Flags set by an individual world should "world" as the scope.
+             *
+             * Flag values can assume almost any data type. Setting a flag value to null will delete that flag.
+             *
+             * @param scope The flag scope which namespaces the key
+             * @param key The flag key
+             * @param value The flag value
+             * @returns A Promise resolving to the updated document
+             */
+            async setFlag<T extends any>(
+                scope: string,
+                key: string,
+                value: T,
+            ): Promise<Document>;
+
+            /**
+             * Remove a flag assigned to the document
+             * @param scope The flag scope which namespaces the key
+             * @param key The flag key
+             * @returns The updated document instance
+             */
+            async unsetFlag(scope: string, key: string): Promise<Document>;
         }
 
         interface DataValidationOptions {
@@ -245,7 +745,7 @@ namespace foundry {
              */
             toJSON(): object;
 
-            update();
+            update(data?: object);
 
             /**
              * Apply transformations of derivations to the values of the source data object.
