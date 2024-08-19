@@ -7,6 +7,7 @@ export default tseslint.config(
     {
         ignores: [
             'build/',
+            'scripts/',
             'src/declarations/',
             'eslint.config.mjs',
             'rollup.config.js',
