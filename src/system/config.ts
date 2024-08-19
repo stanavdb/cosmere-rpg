@@ -4,6 +4,7 @@ import {
     Size,
     CreatureType,
     Condition,
+    InjuryDuration,
     Attribute,
     AttributeGroup,
     Resource,
@@ -100,6 +101,27 @@ const COSMERE: CosmereRPGConfig = {
         },
         [Condition.Unconcious]: {
             label: 'COSMERE.Actor.Conditions.Unconscious',
+        },
+    },
+
+    injuries: {
+        [InjuryDuration.FleshWound]: {
+            label: 'Flesh Wound',
+            durationFormula: '1',
+        },
+        [InjuryDuration.ShallowInjury]: {
+            label: 'Shallow Injury',
+            durationFormula: '1d6',
+        },
+        [InjuryDuration.ViciousInjury]: {
+            label: 'Vicious Injury',
+            durationFormula: '6d6',
+        },
+        [InjuryDuration.PermanentInjury]: {
+            label: 'Permanent Injury',
+        },
+        [InjuryDuration.Death]: {
+            label: 'Death',
         },
     },
 
