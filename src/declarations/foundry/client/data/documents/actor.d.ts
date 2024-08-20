@@ -6,7 +6,7 @@ declare class Actor<
     public readonly name: string;
     public readonly system: D;
 
-    get items(): I[];
+    get items(): Collection<I>;
 
     public getRollData(): object;
 }

@@ -17,8 +17,12 @@ import {
     DeflectSource,
     ActivationType,
     ItemConsumeType,
+    ActionType,
     ActionCostType,
+    AttackType,
     DamageType,
+    ItemType,
+    ItemRechargeType,
 } from './cosmere';
 
 export interface SizeConfig {
@@ -49,6 +53,7 @@ export interface AttributeGroupConfig {
 
 export interface AttributeConfig {
     label: string;
+    labelShort: string;
     skills: Skill[];
 }
 
@@ -105,15 +110,33 @@ export interface ItemConsumeTypeConfig {
     label: string;
 }
 
+export interface ItemRechargeTypeConfig {
+    label: string;
+}
+
+export interface ActionTypeConfig {
+    label: string;
+    labelPlural: string;
+}
+
 export interface ActionCostConfig {
     label: string;
     icon?: string;
+}
+
+export interface AttackTypeConfig {
+    label: string;
 }
 
 export interface DamageTypeConfig {
     label: string;
     icon?: string;
     ignoreDeflect?: boolean;
+}
+
+export interface ItemTypeConfig {
+    label: string;
+    labelPlural: string;
 }
 
 export interface CosmereRPGConfig {
@@ -128,9 +151,13 @@ export interface CosmereRPGConfig {
     skills: Record<Skill, SkillConfig>;
 
     items: {
+        types: Record<ItemType, ItemTypeConfig>;
         activation: {
             types: Record<ActivationType, ActivationTypeConfig>;
             consumeTypes: Record<ItemConsumeType, ItemConsumeTypeConfig>;
+            charges: {
+                recharge: Record<ItemRechargeType, ItemRechargeTypeConfig>;
+            };
         };
     };
 
@@ -152,6 +179,14 @@ export interface CosmereRPGConfig {
         sources: Record<DeflectSource, DeflectSourceConfig>;
     };
 
-    actionCosts: Record<ActionCostType, ActionCostConfig>;
+    action: {
+        types: Record<ActionType, ActionTypeConfig>;
+        costs: Record<ActionCostType, ActionCostConfig>;
+    };
+
+    attack: {
+        types: Record<AttackType, AttackTypeConfig>;
+    };
+
     damageTypes: Record<DamageType, DamageTypeConfig>;
 }

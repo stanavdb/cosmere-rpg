@@ -150,6 +150,14 @@
             "Type": {
                 "Humanoid": "Humanoid",
                 "Animal": "Animal"
+            },
+            "Sheet": {
+                "Actions": {
+                    "label": "Actions"
+                },
+                "Inventory": {
+                    "label": "Inventory"
+                }
             }
         },
         "AttributeGroup": {
@@ -168,13 +176,42 @@
         },
         "Item": {
             "Type": {
-                "Weapon": "Weapon",
-                "Armor": "Armor",
-                "Equipment": "Equipment",
-                "Ancestry": "Ancestry",
-                "Path": "Path",
-                "Talent": "Talent",
-                "Action": "Action"
+                "Weapon": {
+                    "label": "Weapon",
+                    "label_plural": "Weapons"
+                },
+                "Armor": {
+                    "label": "Armor",
+                    "label_plural": "Armor"
+                },
+                "Equipment": {
+                    "label": "Equipment",
+                    "label_plural": "Equipment"
+                },
+                "Ancestry": {
+                    "label": "Ancestry",
+                    "label_plural": "Ancestries"
+                },
+                "Path": {
+                    "label": "Path",
+                    "label_plural": "Paths"
+                },
+                "Talent": {
+                    "label": "Talent",
+                    "label_plural": "Talents"
+                },
+                "Action": {
+                    "label": "Action",
+                    "label_plural": "Actions"
+                },
+                "Trait": {
+                    "label": "Trait",
+                    "label_plural": "Traits"
+                },
+                "Injury": {
+                    "label": "Injury",
+                    "label_plural": "Injuries"
+                }
             },
             "Weapon": {
                 "Type": {
@@ -213,7 +250,20 @@
                     "Presentable": "Presentable"
                 }
             },
+            "Action": {
+                "Type": {
+                    "Basic": {
+                        "label": "Basic Action",
+                        "label_plural": "Basic Actions"
+                    }
+                }
+            },
             "Activation": {
+                "Type": {
+                    "Action": "Action",
+                    "SkillTest": "Skill Test",
+                    "Utility": "Utility"
+                },
                 "ConsumeType": {
                     "Resource": "Resource",
                     "Charge": "Charge",
@@ -222,7 +272,10 @@
                 "Resources": {
                     "Charge": {
                         "Singular": "Charge",
-                        "Plural": "Charges"
+                        "Plural": "Charges",
+                        "Recharge": {
+                            "PerScene": "Per scene"
+                        }
                     }
                 }
             },
@@ -238,14 +291,21 @@
                     "Death": "Death"
                 }
             },
-            "DefaultFlavor": "[actor] uses their [item]"
+            "DefaultFlavor": "[actor] uses [item]"
+        },
+        "Attack": {
+            "Type": {
+                "Melee": "Melee",
+                "Ranged": "Ranged"
+            }
         },
         "DamageTypes": {
             "Energy": "Energy",
             "Impact": "Impact",
             "Keen": "Keen",
             "Spirit": "Spirit",
-            "Vital": "Vital"
+            "Vital": "Vital",
+            "Healing": "Healing"
         }
     },
     "DICE": {
@@ -272,6 +332,7 @@
         "None": "None",
         "Formula": "Formula",
         "SkillTest": "Skill Test",
+        "Cost": "Cost",
         "DistanceUnit": "ft.",
         "Button": {
             "Roll": "Roll",

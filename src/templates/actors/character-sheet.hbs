@@ -1,4 +1,4 @@
-<form class="sheet actor character" autocomplete="off">
+<form class="sheet" autocomplete="off">
     <header class="sheet-header">
         <img class="profile" src="{{actor.img}}" data-tooltip="{{actor.name}}" data-edit="img" />
         <section class="header-details flexcol">
@@ -142,6 +142,30 @@
             {{/each}}
         </section>
 
+        <section class="documents">
+            <section class="favorites">
 
+            </section>
+
+            <section class="tabs">
+                {{!-- Navigation --}}
+                <nav class="sheet-navigation flexrow">
+                    <a class="tab-item active" data-tab="actions">{{ localize "COSMERE.Actor.Sheet.Actions.label" }}</a>
+                    <a class="tab-item" data-tab="inventory">{{ localize "COSMERE.Actor.Sheet.Inventory.label" }}</a>
+                </nav>
+
+                <section class="tab-body">
+                    {{!-- Actions tab --}}
+                    <div class="tab actions active" data-tab="actions">
+                        {{> actions sections=items.actions }}
+                    </div>
+
+                    {{!-- Inventory tab --}}
+                    <div class="tab inventory" data-tab="inventory">
+                        {{> inventory sections=items.inventory }}
+                    </div>
+                </section>
+            </section>
+        </section>
     </section>
 </form>

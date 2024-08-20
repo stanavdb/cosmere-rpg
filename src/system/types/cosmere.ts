@@ -174,6 +174,8 @@ export enum DeflectSource {
 }
 
 export enum ActivationType {
+    Action = 'action',
+    Utility = 'utility',
     SkillTest = 'skill_test',
 }
 
@@ -183,10 +185,23 @@ export enum ItemConsumeType {
     Item = 'item',
 }
 
+export enum ItemRechargeType {
+    PerScene = 'per_scene',
+}
+
+export enum ActionType {
+    Basic = 'basic',
+}
+
 export enum ActionCostType {
     Action = 'act',
     Reaction = 'rea',
     FreeAction = 'fre',
+}
+
+export enum AttackType {
+    Melee = 'melee',
+    Ranged = 'ranged',
 }
 
 export enum DamageType {
@@ -195,6 +210,7 @@ export enum DamageType {
     Keen = 'keen',
     Spirit = 'spirit',
     Vital = 'vital',
+    Healing = 'heal',
 }
 
 /* --- System --- */

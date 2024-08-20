@@ -5,6 +5,7 @@ import {
     Resource,
     Skill,
     Attribute,
+    ItemRechargeType,
 } from '@system/types/cosmere';
 import { CosmereItem } from '@system/documents';
 
@@ -32,6 +33,7 @@ export interface ActivatableItemData {
         charge?: {
             value: number;
             max?: number;
+            recharge?: ItemRechargeType;
         };
     };
 }
@@ -58,7 +60,7 @@ export function ActivatableItemMixin<P extends CosmereItem>() {
                                 }),
                                 type: new foundry.data.fields.StringField({
                                     choices: Object.keys(
-                                        CONFIG.COSMERE.actionCosts,
+                                        CONFIG.COSMERE.action.costs,
                                     ),
                                 }),
                             },
@@ -106,6 +108,7 @@ export function ActivatableItemMixin<P extends CosmereItem>() {
                             choices: Object.keys(CONFIG.COSMERE.skills),
                         }),
                         attribute: new foundry.data.fields.StringField({
+                            nullable: true,
                             blank: false,
                             choices: Object.keys(CONFIG.COSMERE.attributes),
                         }),
@@ -125,6 +128,15 @@ export function ActivatableItemMixin<P extends CosmereItem>() {
                                         min: 0,
                                         integer: true,
                                     }),
+                                    recharge:
+                                        new foundry.data.fields.StringField({
+                                            nullable: true,
+                                            blank: false,
+                                            choices: Object.keys(
+                                                CONFIG.COSMERE.items.activation
+                                                    .charges.recharge,
+                                            ),
+                                        }),
                                 },
                                 {
                                     required: false,

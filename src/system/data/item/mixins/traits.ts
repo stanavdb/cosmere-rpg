@@ -1,8 +1,9 @@
+import { WeaponTraitId, ArmorTraitId } from '@system/types/cosmere';
 import { CosmereItem } from '@system/documents';
 import { ExpertiseItemData } from './expertise';
 
 interface TraitData {
-    id: string;
+    id: WeaponTraitId | ArmorTraitId;
 
     /**
      * The default (not expertise) value of this trait

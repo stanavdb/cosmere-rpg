@@ -1,11 +1,11 @@
 import { CosmereItem } from '@system/documents';
 
 export interface PhysicalItemData {
-    weight?: {
+    weight: {
         value?: number;
         unit?: string;
     };
-    price?: {
+    price: {
         value?: number;
         unit?: string;
     };

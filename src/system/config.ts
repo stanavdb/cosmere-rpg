@@ -18,8 +18,12 @@ import {
     DeflectSource,
     ActivationType,
     ItemConsumeType,
+    ActionType,
     ActionCostType,
     DamageType,
+    ItemType,
+    AttackType,
+    ItemRechargeType,
 } from './types/cosmere';
 
 const COSMERE: CosmereRPGConfig = {
@@ -146,10 +150,12 @@ const COSMERE: CosmereRPGConfig = {
     attributes: {
         [Attribute.Strength]: {
             label: 'COSMERE.Actor.Attribute.Strength.long',
+            labelShort: 'COSMERE.Actor.Attribute.Strength.short',
             skills: [Skill.Athletics, Skill.HeavyWeapons],
         },
         [Attribute.Speed]: {
             label: 'COSMERE.Actor.Attribute.Speed.long',
+            labelShort: 'COSMERE.Actor.Attribute.Speed.short',
             skills: [
                 Skill.Agility,
                 Skill.LightWeapons,
@@ -159,6 +165,7 @@ const COSMERE: CosmereRPGConfig = {
         },
         [Attribute.Intellect]: {
             label: 'COSMERE.Actor.Attribute.Intellect.long',
+            labelShort: 'COSMERE.Actor.Attribute.Intellect.short',
             skills: [
                 Skill.Crafting,
                 Skill.Deduction,
@@ -168,14 +175,17 @@ const COSMERE: CosmereRPGConfig = {
         },
         [Attribute.Willpower]: {
             label: 'COSMERE.Actor.Attribute.Willpower.long',
+            labelShort: 'COSMERE.Actor.Attribute.Willpower.short',
             skills: [Skill.Discipline, Skill.Intimidation],
         },
         [Attribute.Awareness]: {
             label: 'COSMERE.Actor.Attribute.Awareness.long',
+            labelShort: 'COSMERE.Actor.Attribute.Awareness.short',
             skills: [Skill.Insight, Skill.Perception, Skill.Survival],
         },
         [Attribute.Presence]: {
             label: 'COSMERE.Actor.Attribute.Presence.long',
+            labelShort: 'COSMERE.Actor.Attribute.Presence.short',
             skills: [Skill.Deception, Skill.Leadership, Skill.Persuasion],
         },
     },
@@ -289,10 +299,54 @@ const COSMERE: CosmereRPGConfig = {
     },
 
     items: {
+        types: {
+            [ItemType.Weapon]: {
+                label: 'COSMERE.Item.Type.Weapon.label',
+                labelPlural: 'COSMERE.Item.Type.Weapon.label_plural',
+            },
+            [ItemType.Armor]: {
+                label: 'COSMERE.Item.Type.Armor.label',
+                labelPlural: 'COSMERE.Item.Type.Armor.label_plural',
+            },
+            [ItemType.Equipment]: {
+                label: 'COSMERE.Item.Type.Equipment.label',
+                labelPlural: 'COSMERE.Item.Type.Equipment.label_plural',
+            },
+            [ItemType.Ancestry]: {
+                label: 'COSMERE.Item.Type.Ancestry.label',
+                labelPlural: 'COSMERE.Item.Type.Ancestry.label_plural',
+            },
+            [ItemType.Path]: {
+                label: 'COSMERE.Item.Type.Path.label',
+                labelPlural: 'COSMERE.Item.Type.Path.label_plural',
+            },
+            [ItemType.Talent]: {
+                label: 'COSMERE.Item.Type.Talent.label',
+                labelPlural: 'COSMERE.Item.Type.Talent.label_plural',
+            },
+            [ItemType.Action]: {
+                label: 'COSMERE.Item.Type.Action.label',
+                labelPlural: 'COSMERE.Item.Type.Action.label_plural',
+            },
+            [ItemType.Trait]: {
+                label: 'COSMERE.Item.Type.Trait.label',
+                labelPlural: 'COSMERE.Item.Type.Trait.label_plural',
+            },
+            [ItemType.Injury]: {
+                label: 'COSMERE.Item.Type.Injury.label',
+                labelPlural: 'COSMERE.Item.Type.Injury.label_plural',
+            },
+        },
         activation: {
             types: {
+                [ActivationType.Action]: {
+                    label: 'COSMERE.Item.Activation.Type.Action',
+                },
                 [ActivationType.SkillTest]: {
-                    label: 'COSMERE.GENERIC.SkillTest',
+                    label: 'COSMERE.Item.Activation.Type.SkillTest',
+                },
+                [ActivationType.Utility]: {
+                    label: 'COSMERE.Item.Activation.Type.Utility',
                 },
             },
             consumeTypes: {
@@ -304,6 +358,13 @@ const COSMERE: CosmereRPGConfig = {
                 },
                 [ItemConsumeType.Item]: {
                     label: 'COSMERE.Item.Activation.ConsumeType.Item',
+                },
+            },
+            charges: {
+                recharge: {
+                    [ItemRechargeType.PerScene]: {
+                        label: 'COSMERE.Item.Activation.Resources.Charge.Recharge.PerScene',
+                    },
                 },
             },
         },
@@ -437,15 +498,34 @@ const COSMERE: CosmereRPGConfig = {
         },
     },
 
-    actionCosts: {
-        [ActionCostType.Action]: {
-            label: 'COSMERE.Actor.ActionCosts.Action',
+    action: {
+        types: {
+            [ActionType.Basic]: {
+                label: 'COSMERE.Item.Action.Type.Basic.label',
+                labelPlural: 'COSMERE.Item.Action.Type.Basic.label_plural',
+            },
         },
-        [ActionCostType.Reaction]: {
-            label: 'COSMERE.Actor.ActionCosts.Reaction',
+        costs: {
+            [ActionCostType.Action]: {
+                label: 'COSMERE.Actor.ActionCosts.Action',
+            },
+            [ActionCostType.Reaction]: {
+                label: 'COSMERE.Actor.ActionCosts.Reaction',
+            },
+            [ActionCostType.FreeAction]: {
+                label: 'COSMERE.Actor.ActionCosts.FreeAction',
+            },
         },
-        [ActionCostType.FreeAction]: {
-            label: 'COSMERE.Actor.ActionCosts.FreeAction',
+    },
+
+    attack: {
+        types: {
+            [AttackType.Melee]: {
+                label: 'COSMERE.Attack.Type.Melee',
+            },
+            [AttackType.Ranged]: {
+                label: 'COSMERE.Attack.Type.Ranged',
+            },
         },
     },
 
@@ -466,6 +546,9 @@ const COSMERE: CosmereRPGConfig = {
         [DamageType.Vital]: {
             label: 'COSMERE.DamageTypes.Vital',
             ignoreDeflect: true,
+        },
+        [DamageType.Healing]: {
+            label: 'COSMERE.DamageTypes.Healing',
         },
     },
 };

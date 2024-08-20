@@ -6,6 +6,7 @@
 .sheet-body {
     display: flex;
     flex-direction: column;
+    flex: 1 !important;
 }
 
 .box-title {
@@ -26,4 +27,86 @@
 
 .rollable {
     cursor: pointer;
+}
+
+.sheet {  
+    .actions-list,
+    .inventory-list {
+        margin: 0;
+        padding: 0;
+
+        .item-image {
+            width: 2rem;
+            height: 2rem;
+        }
+
+        .item-header {
+            height: 2rem;
+            align-items: center;
+
+            &:not(:first-of-type) {
+                margin-top: 1rem;
+            }
+
+            .name {
+                font-weight: bold;
+                font-size: 13pt;
+            }
+        }
+        
+        .item {
+            display: flex;
+            flex-direction: row;
+            padding-right: 2rem;
+            margin-top: .2rem;
+
+            &:hover {
+                background: rgba(0, 0, 0, 0.15);
+            }
+        
+            .item-name {
+                flex: 1;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+        
+                .name {
+                    display: flex;
+                    flex-direction: column;
+                    margin-left: .75rem;
+        
+                    .title {
+                        font-weight: bold;
+                    }
+        
+                    .subtitle {
+                        font-size: 8pt;
+                        opacity: .75;
+                    }   
+                }
+            }
+        
+            .skill-test, .damage, .consume, .charges {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-right: 2rem;
+                width: 5rem;
+        
+                .val {
+                    font-weight: bold;
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: center;
+                    margin-top: .1rem;
+                }
+        
+                .sub {
+                    font-size: 8pt;
+                    opacity: .75;
+                }
+            }
+        }
+    }
 }

@@ -1,5 +1,13 @@
-import { AttributeGroup, Skill } from '@system/types/cosmere';
+import {
+    AttributeGroup,
+    Skill,
+    ItemType,
+    ActionType,
+} from '@system/types/cosmere';
 import { CosmereActor } from '@system/documents/actor';
+import { CosmereItem } from '@system/documents/item';
+
+import { ActionItemDataModel, ActionItemData } from '@system/data/item';
 
 export class BaseSheet extends ActorSheet {
     get template() {
@@ -17,6 +25,8 @@ export class BaseSheet extends ActorSheet {
             attributeGroups: (
                 Object.keys(CONFIG.COSMERE.attributeGroups) as AttributeGroup[]
             ).map(this.getDataForAttributeGroup.bind(this)),
+
+            items: this.getItemData(),
         };
     }
 
@@ -30,6 +40,8 @@ export class BaseSheet extends ActorSheet {
                 'click',
                 this.onRollSkillTest.bind(this),
             );
+
+            html.find('.item.rollable').on('click', this.onUseItem.bind(this));
         }
     }
 
@@ -42,6 +54,21 @@ export class BaseSheet extends ActorSheet {
             .closest('[data-id]')
             .data('id') as Skill;
         void this.actor.rollSkill(skillId);
+    }
+
+    private onUseItem(event: Event) {
+        event.preventDefault();
+
+        const itemId = $(event.currentTarget!)
+            .closest('[data-item-id]')
+            .data('item-id') as string;
+
+        // Find the item
+        const item = this.actor.items.get(itemId);
+        if (!item) return;
+
+        // Use the item
+        void this.actor.useItem(item);
     }
 
     /* ---------------------- */
@@ -113,5 +140,81 @@ export class BaseSheet extends ActorSheet {
             config: CONFIG.COSMERE.resources[groupConfig.resource],
             ...this.actor.system.resources[groupConfig.resource],
         };
+    }
+
+    private getItemData() {
+        return {
+            actions: this.getActionsData(),
+            inventory: this.getInventoryData(),
+        };
+    }
+
+    private getActionsData() {
+        // Get all activatable items
+        const activatableItems = this.actor.items
+            .filter((item) => item.hasActivation())
+            .filter((item) => !item.isEquippable() || item.system.equipped);
+
+        // Get all items that are not actions (but are activatable, e.g. weapons)
+        const nonActionItems = activatableItems.filter(
+            (item) => !(item.system instanceof ActionItemDataModel),
+        );
+
+        // Get action items
+        const actionItems = activatableItems.filter(
+            (item) => item.system instanceof ActionItemDataModel,
+        ) as CosmereItem<ActionItemData>[];
+
+        // Get action types
+        const actionTypes = Object.keys(
+            CONFIG.COSMERE.action.types,
+        ) as ActionType[];
+
+        return [
+            ...this.categorizeItemsByType(nonActionItems),
+            ...actionTypes
+                .map((type) => ({
+                    id: type,
+                    label: CONFIG.COSMERE.action.types[type].labelPlural,
+                    items: actionItems.filter(
+                        (i) => (i.system.type as ActionType) === type,
+                    ),
+                }))
+                .filter((section) => section.items.length > 0),
+        ];
+    }
+
+    private getInventoryData() {
+        // Assume all physical items are part of inventory
+        const physicalItems = this.actor.items.filter((item) =>
+            item.isPhysical(),
+        );
+
+        return this.categorizeItemsByType(physicalItems);
+    }
+
+    private categorizeItemsByType(items: CosmereItem[]) {
+        // Get item types
+        const types = Object.keys(CONFIG.COSMERE.items.types) as ItemType[];
+
+        // Categorize items by types
+        const categories = types.reduce(
+            (result, type) => {
+                // Get all physical items of type
+                result[type] = items.filter((item) => item.type === type);
+
+                return result;
+            },
+            {} as Record<ItemType, CosmereItem[]>,
+        );
+
+        // Set up sections
+        return (Object.keys(categories) as ItemType[])
+            .filter((type) => categories[type].length > 0)
+            .map((type) => ({
+                id: type,
+                label: CONFIG.COSMERE.items.types[type].labelPlural,
+                items: categories[type],
+            }));
     }
 }

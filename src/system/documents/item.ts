@@ -3,11 +3,21 @@ import {
     Skill,
     Attribute,
     ItemConsumeType,
+    ActivationType,
 } from '@system/types/cosmere';
 import { CosmereActor } from './actor';
 
+import { WeaponItemDataModel } from '@system/data/item/weapon';
+import { ArmorItemDataModel } from '@system/data/item/armor';
+
 import { ActivatableItemData } from '@system/data/item/mixins/activatable';
+import { AttackingItemData } from '@system/data/item/mixins/attacking';
 import { DamagingItemData } from '@system/data/item/mixins/damaging';
+import { PhysicalItemData } from '@system/data/item/mixins/physical';
+import { TypedItemData } from '@system/data/item/mixins/typed';
+import { TraitsItemData } from '@system/data/item/mixins/traits';
+import { EquippableItemData } from '@system/data/item/mixins/equippable';
+
 import { Derived } from '@system/data/fields';
 
 import { d20Roll, D20Roll, D20RollData } from '@system/dice';
@@ -40,6 +50,18 @@ export class CosmereItem<
     // This way we avoid casting everytime we want to check its type
     declare type: ItemType;
 
+    /* --- ItemType type guards --- */
+
+    public isWeapon(): this is CosmereItem<WeaponItemDataModel> {
+        return this.type === ItemType.Weapon;
+    }
+
+    public isArmor(): this is CosmereItem<ArmorItemDataModel> {
+        return this.type === ItemType.Armor;
+    }
+
+    /* --- Mixin type guards --- */
+
     /**
      * Can this item be activated?
      */
@@ -48,11 +70,49 @@ export class CosmereItem<
     }
 
     /**
+     * Does this item have an attack?
+     */
+    public hasAttack(): this is CosmereItem<AttackingItemData> {
+        return 'attack' in this.system;
+    }
+
+    /**
      * Does this item deal damage?
      */
     public hasDamage(): this is CosmereItem<DamagingItemData> {
         return 'damage' in this.system;
     }
+
+    /**
+     * Is this item physical?
+     */
+    public isPhysical(): this is CosmereItem<PhysicalItemData> {
+        return 'weight' in this.system && 'price' in this.system;
+    }
+
+    /**
+     * Does this item have a sub-type?
+     */
+    public isTyped(): this is CosmereItem<TypedItemData> {
+        return 'type' in this.system;
+    }
+
+    /**
+     * Does this item have traits?
+     * Not to be confused adversary traits. (Which are their own item type.)
+     */
+    public hasTraits(): this is CosmereItem<TraitsItemData> {
+        return 'traits' in this.system;
+    }
+
+    /**
+     * Can this item be equipped?
+     */
+    public isEquippable(): this is CosmereItem<EquippableItemData> {
+        return 'equipped' in this.system;
+    }
+
+    /* --- Roll & Usage utilities --- */
 
     /**
      * Roll utility for activable items.
@@ -259,17 +319,49 @@ export class CosmereItem<
             });
         }
 
-        // Perform roll
-        const result = await this.roll(options);
+        // Check if a roll is required
+        const rollRequired =
+            this.system.activation.type === ActivationType.SkillTest;
 
-        // Ensure roll wasn't cancelled
-        if (result !== null) {
+        if (rollRequired) {
+            // Perform roll
+            const result = await this.roll(options);
+
+            // Ensure roll wasn't cancelled
+            if (result !== null) {
+                // Perform post roll actions
+                postRoll.forEach((action) => action());
+            }
+
+            // Return the result
+            return result;
+        } else {
+            // Get the speaker
+            const speaker =
+                options.speaker ??
+                (ChatMessage.getSpeaker({ actor }) as ChatSpeakerData);
+
+            // NOTE: Use boolean or operator (`||`) here instead of nullish coalescing (`??`),
+            // as flavor can also be an empty string, which we'd like to replace with the default flavor too
+            const flavor =
+                // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+                this.system.activation.flavor ||
+                game
+                    .i18n!.localize('COSMERE.Item.DefaultFlavor')
+                    .replace('[actor]', actor.name)
+                    .replace('[item]', this.name);
+
+            // Send chat message
+            void ChatMessage.create({
+                content: flavor,
+                speaker,
+            });
+
             // Perform post roll actions
             postRoll.forEach((action) => action());
-        }
 
-        // Return the result
-        return result;
+            return null;
+        }
     }
 
     private async showConsumeDialog(

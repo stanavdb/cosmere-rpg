@@ -1,0 +1,84 @@
+<ol class="actions-list">
+    {{#each sections as |section|}}
+
+    <li class="item-header flexrow">
+        <span class="name">{{localize section.label}}</span>
+    </li>
+
+    {{#each section.items as |item|}}
+    {{#with (itemContext item) as |ctx|}}
+
+    <li class="item rollable" data-item-id="{{item.id}}">
+        <div class="item-name">
+            <img class="item-image item-action" data-action="use" role="button" src="{{item.img}}">
+            <div class="name">
+                <span class="title">{{item.name}}</span>
+                <span class="subtitle">{{ctx.subtitle}}</span>
+            </div>
+        </div>
+
+        {{!-- Skill Test --}}
+        {{#if ctx.hasSkillTest}}
+        <div class="skill-test">
+            <span class="mod val">+{{skillMod item.parent ctx.skillTest.skill ctx.skillTest.attribute}}</span>
+
+            <span class="skill sub">
+                {{localize ctx.skillTest.skillLabel}}
+                {{#if (not ctx.skillTest.usesDefaultAttribute)}}
+
+                <span class="skill-attribute">({{localize ctx.skillTest.attributeLabelShort }})</span>
+
+                {{/if}}
+            </span>
+        </div>
+        {{/if}}
+
+        {{!-- Damage --}}
+        {{#if ctx.hasDamage}}
+        <div class="damage">
+            <span class="formula val">{{formulaReplaceData ctx.damage.formula ctx.damage.formulaData}}</span>
+            {{#if ctx.damage.type}}
+            <span class="type sub">{{localize ctx.damage.typeLabel}}</span>
+            {{/if}}
+        </div>
+        {{/if}}
+
+        {{!-- Consume --}}
+        {{#if ctx.hasConsume}}
+        {{#if ctx.consume.consumesResource}}
+        <div class="consume">
+            <span class="amount val">{{ ctx.consume.value }} {{localize ctx.consume.resourceLabel }}</span>
+            <span class="cost sub">{{localize "GENERIC.Cost"}}</span>
+        </div>
+        {{/if}}
+        {{/if}}
+
+        {{!-- Resources --}}
+        {{#if ctx.hasResources}}
+        {{#if ctx.resources.hasCharges}}
+
+        <div class="charges">
+            {{#with ctx.resources.charges as |charges|}}
+            <div class="val">
+                {{#times charges.value}}<i class="charge fa-regular fa-circle-dot"></i>{{/times}}
+                {{#times (sub charges.max charges.value)}}<i class="charge fa-regular fa-circle"></i>{{/times}}
+            </div>
+            <span class="sub">
+                {{#if charges.hasRecharge}}
+                {{localize charges.rechargeLabel}}
+                {{else}}
+                {{localize "COSMERE.Item.Activation.Resources.Charge.Singular"}}
+                {{/if}}
+            </span>
+            {{/with}}
+        </div>
+
+        {{/if}}
+        {{/if}}
+    </li>
+
+    {{/with}}
+    {{/each}}
+
+    {{/each}}
+</ol>
