@@ -29,7 +29,9 @@
             "talent": {},
             "trait": {},
 
-            "action": {}
+            "action": {},
+
+            "injury": {}
         }
     },
     "languages": [
