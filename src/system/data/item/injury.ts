@@ -36,11 +36,15 @@ export class InjuryItemDataModel extends DataModelMixin(
                 initial: new foundry.data.fields.NumberField({
                     required: true,
                     nullable: true,
+                    integer: true,
+                    min: 0,
                     initial: 1,
                 }),
                 remaining: new foundry.data.fields.NumberField({
                     required: true,
                     nullable: true,
+                    integer: true,
+                    min: 0,
                     initial: 1,
                 }),
             }),
