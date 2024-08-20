@@ -427,6 +427,11 @@ export class CommonActorDataModel<
             this.attributes.spd.value,
         );
 
+        // Injury count
+        this.injuries.value = this.parent.items.filter(
+            (item) => item.type === ItemType.Injury,
+        ).length;
+
         // Lifting & Carrying
         this.encumbrance.lift.value = strengthToLiftingCapacity(
             this.attributes.str.value,
