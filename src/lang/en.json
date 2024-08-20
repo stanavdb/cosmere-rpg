@@ -226,6 +226,18 @@
                     }
                 }
             },
+            "Injuries": {
+                "Name": {
+                    "placeholder": "[Injury Name]"
+                },
+                "Duration": {
+                    "FleshWound": "Flesh Wound",
+                    "ShallowInjury": "Shallow Injury",
+                    "ViciousInjury": "Vicious Injury",
+                    "PermanentInjury": "Permanent Injury",
+                    "Death": "Death"
+                }
+            },
             "DefaultFlavor": "[actor] uses their [item]"
         },
         "DamageTypes": {

@@ -51,6 +51,7 @@ export interface CommonActorData {
         Skill,
         { attribute: Attribute; rank: number; mod: Derived<number> }
     >;
+    injuries: Derived<number>;
     movement: {
         rate: Derived<number>;
     };
@@ -116,6 +117,15 @@ export class CommonActorDataModel<
                     }),
                 ),
             }),
+            injuries: new DerivedValueField(
+                new foundry.data.fields.NumberField({
+                    required: true,
+                    nullable: false,
+                    integer: true,
+                    min: 0,
+                    initial: 0,
+                }),
+            ),
             encumbrance: new foundry.data.fields.SchemaField({
                 lift: new DerivedValueField(
                     new foundry.data.fields.NumberField({
@@ -416,6 +426,11 @@ export class CommonActorDataModel<
         this.movement.rate.value = speedToMovementRate(
             this.attributes.spd.value,
         );
+
+        // Injury count
+        this.injuries.value = this.parent.items.filter(
+            (item) => item.type === ItemType.Injury,
+        ).length;
 
         // Lifting & Carrying
         this.encumbrance.lift.value = strengthToLiftingCapacity(

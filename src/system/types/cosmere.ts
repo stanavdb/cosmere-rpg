@@ -35,6 +35,14 @@ export enum Condition {
     Unconcious = 'unconcious',
 }
 
+export enum InjuryDuration {
+    FleshWound = 'flesh_wound',
+    ShallowInjury = 'shallow_injury',
+    ViciousInjury = 'vicious_injury',
+    PermanentInjury = 'permanent_injury',
+    Death = 'death',
+}
+
 export enum AttributeGroup {
     Physical = 'phy',
     Cognitive = 'cog',
@@ -207,4 +215,6 @@ export enum ItemType {
     Trait = 'trait',
 
     Action = 'action',
+
+    Injury = 'injury',
 }

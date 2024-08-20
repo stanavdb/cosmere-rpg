@@ -12,6 +12,8 @@ import { TraitItemDataModel } from './trait';
 
 import { ActionItemDataModel } from './action';
 
+import { InjuryItemDataModel } from './injury';
+
 export const config: Record<
     ItemType,
     typeof foundry.abstract.TypeDataModel<
@@ -29,6 +31,8 @@ export const config: Record<
     [ItemType.Trait]: TraitItemDataModel,
 
     [ItemType.Action]: ActionItemDataModel,
+
+    [ItemType.Injury]: InjuryItemDataModel,
 };
 
 export * from './weapon';
@@ -38,3 +42,4 @@ export * from './ancestry';
 export * from './path';
 export * from './talent';
 export * from './action';
+export * from './injury';
