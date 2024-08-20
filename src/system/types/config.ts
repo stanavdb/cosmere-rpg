@@ -63,6 +63,7 @@ export interface SkillConfig {
 }
 
 export interface ResourceConfig {
+    key: string;
     label: string;
     deflect?: boolean;
 }

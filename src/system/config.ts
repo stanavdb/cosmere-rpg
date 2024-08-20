@@ -191,13 +191,16 @@ const COSMERE: CosmereRPGConfig = {
 
     resources: {
         [Resource.Health]: {
+            key: Resource.Health,
             label: 'COSMERE.Actor.Resource.Health',
             deflect: true,
         },
         [Resource.Focus]: {
+            key: Resource.Health,
             label: 'COSMERE.Actor.Resource.Focus',
         },
         [Resource.Investiture]: {
+            key: Resource.Health,
             label: 'COSMERE.Actor.Resource.Investiture',
         },
     },

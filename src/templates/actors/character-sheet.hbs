@@ -8,7 +8,7 @@
                     ROLEPLAYING GAME<br />
                 </section>
                 <section>
-                    <input name="system.character.player" value="" placeholder="Player Name(WIP)" />
+                    <input name="system.character.player" value="" placeholder="Player Name(WIP)" disabled/>
                 </section>
             </section>
             <section class="header-details flexcol grid-span2">
@@ -18,15 +18,15 @@
                             <input class="document-name value" name="name" value="{{actor.name}}" />
                         </span>
                         <span>
-                           <input class="value" name="system.level" value="{{level}}" placeholder="Level(WIP)" /> 
+                           <input class="value" name="system.level" value="{{level}}" placeholder="Level(WIP)" disabled/> 
                         </span>
                     </section>
                     <section class="flexrow">
                         <span class="ancestry">
-                            <input class="value"  name="system.character.ancestry" value="{{ localize ancestryLabel }}" placeholder="Ancestry (WIP)" />
+                            <input class="value"  name="system.character.ancestry" value="{{ localize ancestryLabel }}" placeholder="Ancestry (WIP)" disabled/>
                         </span>
                         <span class="paths">
-                            <input class="value" name="system.character.paths" value="{{ localize pathsLabel }}" placeholder="Ancestry (WIP)" />
+                            <input class="value" name="system.character.paths" value="{{ localize pathsLabel }}" placeholder="Ancestry (WIP)" disabled/>
                         </span>
                     </section>
                     
@@ -53,8 +53,11 @@
                             </span>
                             <span class="value">
                                 <input 
+                                    type="number"
                                     class="value" 
-                                    size="2" 
+                                    min="0"
+                                    max="5"
+                                    step="1"
                                     name="system.attributes.{{attribute.config.key}}.value" 
                                     value="{{attribute.value}}" 
                                 />
@@ -78,8 +81,11 @@
                             </span>
                             <span class="value">
                                 <input 
+                                    type="number"
                                     class="value" 
-                                    size="2" 
+                                    min="0"
+                                    max="5"
+                                    step="1"
                                     name="system.attributes.{{attribute.config.key}}.value" 
                                     value="{{attribute.value}}" 
                                 />
@@ -97,16 +103,21 @@
         <div class="skills flexcol" data-group="primary" data-tab="skills">
             <section class="attribute-groups flexrow">
                 {{#each attributeGroups as |attrGroup|}}
-                    {{!-- Resource --}}
+                    
                     <section class="attribute-groups flexcol">
                    
-                        {{!-- Skills --}}
+                        
                         <section class="skills flexcol">
+                            {{!-- Resource --}}
                             {{#with attrGroup.resource as |resource|}}
                                 <div class="resource flexrow" data-id="{{resource.id}}">
                                     <div class="flexcol">
-                                        <span class="label">{{ localize resource.config.label}}</span>
-                                        <span class="value">{{resource.value}} / {{resource.max.value}}</span>
+                                        <span class="label">
+                                            {{ localize resource.config.label}}
+                                        </span>
+                                        <span class="value">
+                                            {{resource.value}} / {{resource.max.value}}
+                                        </span>
                                     </div>
                                     {{#if resource.deflect includeZero=true}}
                                         <div class="deflect flexcol">
@@ -116,6 +127,7 @@
                                     {{/if}}
                                 </div>
                             {{/with}} 
+                            {{!-- Skills --}}
                             <ul class="skill-list">
                                 {{#each attrGroup.skills as |skill|}}
                                     {{#if skill.active}}
