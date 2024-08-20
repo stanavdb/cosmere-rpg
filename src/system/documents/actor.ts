@@ -99,9 +99,9 @@ export class CosmereActor<
         const skillpath = `system.skills.${skillId}.rank`;
         const skill = this.system.skills[skillId];
         if (incrementBool) {
-            this.update({ [skillpath]: Math.clamp(skill.rank + 1, 0, 5) });
+            void this.update({ [skillpath]: Math.clamp(skill.rank + 1, 0, 5) });
         } else {
-            this.update({ [skillpath]: Math.clamp(skill.rank - 1, 0, 5) });
+            void this.update({ [skillpath]: Math.clamp(skill.rank - 1, 0, 5) });
         }
     }
 
