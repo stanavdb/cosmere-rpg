@@ -225,7 +225,7 @@ export class CosmereItem<
                 if (consumeType === ItemConsumeType.Charge) {
                     // Handle charge consumption
                     // Consume the charges
-                    this.update({
+                    void this.update({
                         system: {
                             resources: {
                                 charge: {
@@ -236,7 +236,7 @@ export class CosmereItem<
                     });
                 } else if (consumeType === ItemConsumeType.Resource) {
                     // Handle actor resource consumption
-                    actor.update({
+                    void actor.update({
                         system: {
                             resources: {
                                 [this.system.activation.consume!
