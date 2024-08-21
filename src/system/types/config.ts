@@ -68,7 +68,17 @@ export interface ResourceConfig {
 
 export interface CurrencyConfig {
     label: string;
-    denominations: CurrencyDenomination[];
+    denominations: {
+        primary: CurrencyDenominationConfig[];
+        secondary?: CurrencyDenominationConfig[];
+    };
+}
+
+export interface CurrencyDenominationConfig {
+    id: CurrencyDenomination;
+    label: string;
+    conversionRate: number; // Value relative to base denomination
+    base?: boolean; // Present if this denomination is considered the base
 }
 
 export interface WeaponTypeConfig {

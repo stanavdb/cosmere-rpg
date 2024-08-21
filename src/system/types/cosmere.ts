@@ -97,11 +97,19 @@ export enum Currency {
     Spheres = 'spheres',
 }
 
+// Denominations of a currency
 export enum CurrencyDenomination {
-    // Sphere denominations
-    Chips = 'chips',
-    Marks = 'marks',
-    Broams = 'broams',
+    // Sphere size denominations
+    SphereChips = 'chips',
+    SphereMarks = 'marks',
+    SphereBroams = 'broams',
+
+    // Sphere gemstone denominations
+    SphereDiamond = 'diamond',
+    SphereTierTwoGems = 'garnet-heliodor-topaz',
+    SphereTierThreeGems = 'ruby-smokestone-zircon',
+    SphereTierFourGems = 'amethyst-sapphire',
+    SphereEmerald = 'emerald',
 }
 
 /**
