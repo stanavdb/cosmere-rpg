@@ -9,8 +9,6 @@ import {
     AttributeGroup,
     Resource,
     Skill,
-    Currency,
-    CurrencyDenomination,
     WeaponType,
     WeaponId,
     ExpertiseType,
@@ -311,59 +309,7 @@ const COSMERE: CosmereRPGConfig = {
         },
     },
 
-    currencies: {
-        [Currency.Spheres]: {
-            label: 'COSMERE.Currencies.Spheres.Name',
-            denominations: {
-                primary: [
-                    {
-                        id: CurrencyDenomination.SphereDiamond,
-                        label: 'COSMERE.Currencies.Spheres.Denominations.Diamond',
-                        conversionRate: 1,
-                        base: true,
-                    },
-                    {
-                        id: CurrencyDenomination.SphereTierTwoGems,
-                        label: 'COSMERE.Currencies.Spheres.Denominations.TierTwoGems',
-                        conversionRate: 5,
-                    },
-                    {
-                        id: CurrencyDenomination.SphereTierThreeGems,
-                        label: 'COSMERE.Currencies.Spheres.Denominations.TierThreeGems',
-                        conversionRate: 10,
-                    },
-                    {
-                        id: CurrencyDenomination.SphereTierFourGems,
-                        label: 'COSMERE.Currencies.Spheres.Denominations.TierFourGems',
-                        conversionRate: 25,
-                    },
-                    {
-                        id: CurrencyDenomination.SphereEmerald,
-                        label: 'COSMERE.Currencies.Spheres.Denominations.Emerald',
-                        conversionRate: 50,
-                    },
-                ],
-                secondary: [
-                    {
-                        id: CurrencyDenomination.SphereChips,
-                        label: 'COSMERE.Currencies.Spheres.Denominations.Chips',
-                        conversionRate: 0.2,
-                    },
-                    {
-                        id: CurrencyDenomination.SphereMarks,
-                        label: 'COSMERE.Currencies.Spheres.Denominations.Marks',
-                        conversionRate: 1,
-                        base: true,
-                    },
-                    {
-                        id: CurrencyDenomination.SphereBroams,
-                        label: 'COSMERE.Currencies.Spheres.Denominations.Broams',
-                        conversionRate: 4,
-                    },
-                ],
-            },
-        },
-    },
+    currencies: {},
 
     weaponTypes: {
         [WeaponType.Light]: {

@@ -247,21 +247,7 @@
             "Spirit": "Spirit",
             "Vital": "Vital"
         },
-        "Currencies": {
-            "Spheres": {
-                "Name": "Spheres",
-                "Denominations": {
-                    "Diamond": "Diamond",
-                    "TierTwoGems": "Garnet/Heliodor/Topaz",
-                    "TierThreeGems": "Ruby/Smokestone/Zircon",
-                    "TierFourGems": "Amethyst/Sapphire",
-                    "Emerald": "Emerald",
-                    "Chips": "Chips",
-                    "Marks": "Marks",
-                    "Broams": "Broams"
-                }
-            }
-        }
+        "Currencies": {}
     },
     "DICE": {
         "RollMode": "Roll Mode",
