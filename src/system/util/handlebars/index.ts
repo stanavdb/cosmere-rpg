@@ -42,7 +42,9 @@ Handlebars.registerHelper(
         return actor.system.expertises
             .map(
                 (expertise) =>
-                    `${expertise.label} (${CONFIG.COSMERE.expertiseTypes[expertise.type].label})`,
+                    `${expertise.label} (${game.i18n!.localize(
+                        CONFIG.COSMERE.expertiseTypes[expertise.type].label,
+                    )})`,
             )
             .join(', ');
     },
@@ -83,6 +85,7 @@ Handlebars.registerHelper('itemContext', (item: CosmereItem) => {
     if (item.hasTraits()) {
         subtitle.push(
             ...Array.from(item.system.traits)
+                .filter((trait) => trait.active)
                 .map((trait) => trait.id)
                 .map((traitId) =>
                     isWeapon

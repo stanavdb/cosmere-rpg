@@ -26,9 +26,9 @@ export interface WeaponItemData
         ActivatableItemData,
         AttackingItemData,
         DamagingItemData,
+        ExpertiseItemData,
         TraitsItemData,
-        PhysicalItemData,
-        ExpertiseItemData {}
+        PhysicalItemData {}
 
 export class WeaponItemDataModel extends DataModelMixin<
     WeaponItemData,
@@ -40,9 +40,9 @@ export class WeaponItemDataModel extends DataModelMixin<
     ActivatableItemMixin(),
     AttackingItemMixin(),
     DamagingItemMixin(),
+    ExpertiseItemMixin(),
     TraitsItemMixin(),
     PhysicalItemMixin(),
-    ExpertiseItemMixin(),
 ) {
     static defineSchema() {
         return foundry.utils.mergeObject(super.defineSchema(), {});

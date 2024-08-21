@@ -16,9 +16,9 @@ export interface ArmorItemData
     extends TypedItemData,
         DescriptionItemData,
         EquippableItemData,
+        ExpertiseItemData,
         TraitsItemData,
-        PhysicalItemData,
-        ExpertiseItemData {
+        PhysicalItemData {
     deflect?: number;
 }
 
@@ -29,9 +29,9 @@ export class ArmorItemDataModel extends DataModelMixin<
     TypedItemMixin(),
     DescriptionItemMixin(),
     EquippableItemMixin(),
+    ExpertiseItemMixin(),
     TraitsItemMixin(),
     PhysicalItemMixin(),
-    ExpertiseItemMixin(),
 ) {
     static defineSchema() {
         return foundry.utils.mergeObject(super.defineSchema(), {

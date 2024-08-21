@@ -2,6 +2,7 @@ import { CosmereItem } from '@system/documents';
 
 export interface EquippableItemData {
     equipped: boolean;
+    alwaysEquipped?: boolean;
 }
 
 export function EquippableItemMixin<P extends CosmereItem>() {
@@ -16,6 +17,9 @@ export function EquippableItemMixin<P extends CosmereItem>() {
                         nullable: false,
                         initial: false,
                         label: 'Equipped',
+                    }),
+                    alwaysEquipped: new foundry.data.fields.BooleanField({
+                        nullable: true,
                     }),
                 });
             }

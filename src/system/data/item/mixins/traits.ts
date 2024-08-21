@@ -55,6 +55,14 @@ export function TraitsItemMixin<P extends CosmereItem>() {
     return (base: typeof foundry.abstract.TypeDataModel<TraitsItemData, P>) => {
         return class extends base {
             static defineSchema() {
+                const superSchema = super.defineSchema();
+
+                if (!('expertise' in superSchema)) {
+                    throw new Error(
+                        'TraitsItemMixin must be used in combination with ExpertiseItemMixin and must follow it',
+                    );
+                }
+
                 return foundry.utils.mergeObject(super.defineSchema(), {
                     traits: new foundry.data.fields.SetField(
                         new foundry.data.fields.SchemaField({

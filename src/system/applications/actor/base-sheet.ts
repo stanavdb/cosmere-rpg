@@ -202,7 +202,12 @@ export class BaseSheet extends ActorSheet {
         // Get all activatable items
         const activatableItems = this.actor.items
             .filter((item) => item.hasActivation())
-            .filter((item) => !item.isEquippable() || item.system.equipped);
+            .filter(
+                (item) =>
+                    !item.isEquippable() ||
+                    item.system.equipped ||
+                    item.system.alwaysEquipped,
+            );
 
         // Get all items that are not actions (but are activatable, e.g. weapons)
         const nonActionItems = activatableItems.filter(

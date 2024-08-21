@@ -155,14 +155,16 @@
                 </nav>
 
                 <section class="tab-body">
-                    {{!-- Actions tab --}}
-                    <div class="tab actions {{#if (eq tab "actions")}}active{{/if}}" data-tab="actions">
-                        {{> actions sections=items.actions }}
-                    </div>
+                    <div class="scroll-container">
+                        {{!-- Actions tab --}}
+                        <div class="tab actions {{#if (eq tab "actions")}}active{{/if}}" data-tab="actions">
+                            {{> actions sections=items.actions }}
+                        </div>
 
-                    {{!-- Inventory tab --}}
-                    <div class="tab inventory {{#if (eq tab "inventory")}}active{{/if}}" data-tab="inventory">
-                        {{> inventory sections=items.inventory }}
+                        {{!-- Inventory tab --}}
+                        <div class="tab inventory {{#if (eq tab "inventory")}}active{{/if}}" data-tab="inventory">
+                            {{> inventory sections=items.inventory }}
+                        </div>
                     </div>
                 </section>
             </section>
