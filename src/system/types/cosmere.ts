@@ -93,24 +93,10 @@ export enum DerivedStatistic {
     RecoveryDie = 'rcd',
 }
 
-export enum Currency {
-    Spheres = 'spheres',
-}
+export enum Currency {}
 
 // Denominations of a currency
-export enum CurrencyDenomination {
-    // Sphere size denominations
-    SphereChips = 'chips',
-    SphereMarks = 'marks',
-    SphereBroams = 'broams',
-
-    // Sphere gemstone denominations
-    SphereDiamond = 'diamond',
-    SphereTierTwoGems = 'garnet-heliodor-topaz',
-    SphereTierThreeGems = 'ruby-smokestone-zircon',
-    SphereTierFourGems = 'amethyst-sapphire',
-    SphereEmerald = 'emerald',
-}
+export enum CurrencyDenomination {}
 
 /**
  * The categories of weapon available
