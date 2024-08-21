@@ -529,6 +529,49 @@ export class CommonActorDataModel<
             (item) => item.type === ItemType.Injury,
         ).length;
 
+        // Derive currency conversion values
+        (Object.keys(this.currency) as Currency[]).forEach((currency) => {
+            // Get currency config
+            const currencyConfig = CONFIG.COSMERE.currencies[currency];
+
+            // Get currency data
+            const currencyData = this.currency[currency];
+
+            let total = 0;
+
+            // Determine denomination derived values
+            currencyData.denominations.forEach((denom) => {
+                // Get denomination configs
+                const denominations = currencyConfig.denominations;
+                const primaryConfig = denominations.primary.find(
+                    (d) => d.id === denom.id,
+                );
+
+                if (!primaryConfig) return;
+
+                // Set conversion rate
+                denom.conversionRate.value = primaryConfig.conversionRate;
+
+                if (denom.secondaryId && !!denominations.secondary) {
+                    const secondaryConfig = denominations.secondary.find(
+                        (d) => d.id === denom.secondaryId,
+                    );
+                    denom.conversionRate.value *=
+                        secondaryConfig?.conversionRate ?? 1;
+                }
+
+                // Get converted value
+                denom.convertedValue.value =
+                    denom.amount * denom.conversionRate.value;
+
+                // Adjust derived total for this currency accordingly
+                total += denom.convertedValue.value;
+            });
+
+            // Update derived total
+            currencyData.total.value = total;
+        });
+
         // Lifting & Carrying
         this.encumbrance.lift.value = strengthToLiftingCapacity(
             this.attributes.str.value,
