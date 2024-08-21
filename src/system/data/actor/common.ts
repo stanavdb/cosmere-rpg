@@ -395,12 +395,12 @@ export class CommonActorDataModel<
             id: new foundry.data.fields.StringField({
                 required: true,
                 nullable: false,
-                choices: denominations.primary,
+                choices: denominations.primary.map((d) => d.id),
             }),
             secondaryId: new foundry.data.fields.StringField({
                 required: false,
                 nullable: false,
-                choices: denominations.secondary ?? [],
+                choices: denominations.secondary?.map((d) => d.id) ?? [],
             }),
             amount: new foundry.data.fields.NumberField({
                 required: true,
