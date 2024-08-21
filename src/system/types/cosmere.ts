@@ -180,9 +180,14 @@ export enum ActivationType {
 }
 
 export enum ItemConsumeType {
-    Resource = 'resource',
-    Charge = 'charge',
+    ActorResource = 'actor_resource', // E.g. health, focus, investiture
+    ItemResource = 'item_resource', // E.g. uses, charges
     Item = 'item',
+}
+
+export enum ItemResource {
+    Use = 'use',
+    Charge = 'charge',
 }
 
 export enum ItemRechargeType {

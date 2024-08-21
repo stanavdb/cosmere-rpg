@@ -4,6 +4,8 @@ import {
     Skill,
     Attribute,
     ItemConsumeType,
+    Resource,
+    ItemResource,
 } from '@src/system/types/cosmere';
 
 import { CharacterActor, CosmereActor } from '@system/documents/actor';
@@ -69,52 +71,186 @@ Handlebars.registerHelper(
 );
 
 Handlebars.registerHelper('itemContext', (item: CosmereItem) => {
-    const context = {} as ItemContext;
-    const subtitle = [] as string[];
+    try {
+        const context = {} as ItemContext;
+        const subtitle = [] as string[];
 
-    const isWeapon = item.isWeapon();
+        const isWeapon = item.isWeapon();
 
-    if (isWeapon) {
-        subtitle.push(
-            game.i18n!.localize(
-                CONFIG.COSMERE.attack.types[item.system.attack.type].label,
-            ),
-        );
-    }
+        if (isWeapon) {
+            subtitle.push(
+                game.i18n!.localize(
+                    CONFIG.COSMERE.attack.types[item.system.attack.type].label,
+                ),
+            );
+        }
 
-    if (item.hasTraits()) {
-        subtitle.push(
-            ...Array.from(item.system.traits)
-                .filter((trait) => trait.active)
-                .map((trait) => trait.id)
-                .map((traitId) =>
-                    isWeapon
-                        ? CONFIG.COSMERE.traits.weaponTraits[
-                              traitId as WeaponTraitId
-                          ].label
-                        : CONFIG.COSMERE.traits.armorTraits[
-                              traitId as ArmorTraitId
-                          ].label,
+        if (item.hasTraits()) {
+            subtitle.push(
+                ...Array.from(item.system.traits)
+                    .filter((trait) => trait.active)
+                    .map((trait) => trait.id)
+                    .map((traitId) =>
+                        isWeapon
+                            ? CONFIG.COSMERE.traits.weaponTraits[
+                                  traitId as WeaponTraitId
+                              ].label
+                            : CONFIG.COSMERE.traits.armorTraits[
+                                  traitId as ArmorTraitId
+                              ].label,
+                    )
+                    .map((label) => game.i18n!.localize(label)),
+            );
+        }
+
+        if (item.hasActivation()) {
+            // Check if a skill test is configured
+            if (item.system.activation.skill) {
+                const skill = item.system.activation.skill;
+                const attribute = item.system.activation.attribute;
+
+                context.hasSkillTest = true;
+                context.skillTest = {
+                    skill,
+                    skillLabel: CONFIG.COSMERE.skills[skill].label,
+                    usesDefaultAttribute:
+                        !attribute ||
+                        attribute === CONFIG.COSMERE.skills[skill].attribute,
+
+                    ...(attribute
+                        ? {
+                              attribute,
+                              attributeLabel:
+                                  CONFIG.COSMERE.attributes[attribute].label,
+                              attributeLabelShort:
+                                  CONFIG.COSMERE.attributes[attribute]
+                                      .labelShort,
+                          }
+                        : {}),
+                };
+            }
+
+            // Check if the activation consumes some resource
+            if (item.system.activation.consume) {
+                // Get the actor resource consumed
+                const resource = item.system.activation.consume.resource;
+                const consumesActorResource =
+                    item.system.activation.consume.type ===
+                    ItemConsumeType.ActorResource;
+                const consumesItemResource =
+                    item.system.activation.consume.type ===
+                    ItemConsumeType.ItemResource;
+
+                context.hasConsume = true;
+                context.consume = {
+                    type: item.system.activation.consume.type,
+                    value: item.system.activation.consume.value,
+                    consumesActorResource,
+                    consumesItemResource,
+                    consumesItem:
+                        item.system.activation.consume.type ===
+                        ItemConsumeType.Item,
+
+                    ...(resource
+                        ? {
+                              resource,
+                              resourceLabel: consumesActorResource
+                                  ? CONFIG.COSMERE.resources[
+                                        resource as Resource
+                                    ].label
+                                  : CONFIG.COSMERE.items.resources.types[
+                                        resource as ItemResource
+                                    ].label,
+                          }
+                        : {}),
+                };
+            }
+
+            // Check if an activation cost is set
+            if (item.system.activation.cost?.type) {
+                subtitle.push(
+                    `${item.system.activation.cost.value ?? ''} ${game.i18n!.localize(
+                        CONFIG.COSMERE.action.costs[
+                            item.system.activation.cost.type
+                        ].label,
+                    )}`.trim(),
+                );
+            }
+
+            // Check if item has resources
+            if (item.system.resources) {
+                context.hasResources = true;
+
+                // Assign resources
+                context.resources = (
+                    Object.keys(item.system.resources) as ItemResource[]
                 )
-                .map((label) => game.i18n!.localize(label)),
-        );
-    }
+                    .map((resourceType) => {
+                        // Get resource
+                        const resource = item.system.resources![resourceType];
+                        if (!resource) return null;
 
-    if (item.hasActivation()) {
-        // Check if a skill test is configured
-        if (item.system.activation.skill) {
-            const skill = item.system.activation.skill;
-            const attribute = item.system.activation.attribute;
+                        // Get resource config
+                        const resourceConfig =
+                            CONFIG.COSMERE.items.resources.types[resourceType];
 
-            context.hasSkillTest = true;
-            context.skillTest = {
-                skill,
-                skillLabel: CONFIG.COSMERE.skills[skill].label,
-                usesDefaultAttribute:
-                    !attribute ||
-                    attribute === CONFIG.COSMERE.skills[skill].attribute,
+                        const hasMax = resource.max != null;
+                        const hasRecharge = resource.recharge != null;
 
-                ...(attribute
+                        return {
+                            id: resourceType,
+                            label:
+                                resource.value > 1
+                                    ? resourceConfig.labelPlural
+                                    : resourceConfig.label,
+                            value: resource.value,
+                            hasMax,
+                            max: hasMax ? resource.max : resource.value,
+
+                            hasRecharge,
+                            ...(hasRecharge
+                                ? {
+                                      recharge: resource.recharge,
+                                      rechargeLabel:
+                                          CONFIG.COSMERE.items.resources
+                                              .recharge[resource.recharge!]
+                                              .label,
+                                  }
+                                : {}),
+                        };
+                    })
+                    .filter((v) => !!v);
+            }
+        }
+
+        if (item.hasDamage() && item.system.damage.formula) {
+            const skill = item.system.damage.skill;
+            const attribute = item.system.damage.attribute;
+
+            const hasSkill = !!skill;
+            const hasAttribute = !!attribute;
+
+            context.hasDamage = true;
+            context.damage = {
+                formula: item.system.damage.formula,
+                formulaData: {
+                    ...item.actor?.getRollData(),
+                },
+                hasSkill,
+                hasAttribute,
+
+                ...(hasSkill
+                    ? {
+                          skill,
+                          skillLabel: CONFIG.COSMERE.skills[skill].label,
+                          usesDefaultAttribute:
+                              !hasAttribute ||
+                              attribute ===
+                                  CONFIG.COSMERE.skills[skill].attribute,
+                      }
+                    : {}),
+
+                ...(hasAttribute
                     ? {
                           attribute,
                           attributeLabel:
@@ -123,135 +259,27 @@ Handlebars.registerHelper('itemContext', (item: CosmereItem) => {
                               CONFIG.COSMERE.attributes[attribute].labelShort,
                       }
                     : {}),
-            };
-        }
 
-        // Check if the activation consumes some resource
-        if (item.system.activation.consume) {
-            // Get the actor resource consumed
-            const resource = item.system.activation.consume.resource;
-
-            context.hasConsume = true;
-            context.consume = {
-                type: item.system.activation.consume.type,
-                value: item.system.activation.consume.value,
-                consumesResource:
-                    item.system.activation.consume.type ===
-                    ItemConsumeType.Resource,
-                consumesCharge:
-                    item.system.activation.consume.type ===
-                    ItemConsumeType.Charge,
-                consumesItem:
-                    item.system.activation.consume.type ===
-                    ItemConsumeType.Item,
-
-                ...(resource
+                ...(item.system.damage.type
                     ? {
-                          resource,
-                          resourceLabel:
-                              CONFIG.COSMERE.resources[resource].label,
+                          type: item.system.damage.type,
+                          typeLabel:
+                              CONFIG.COSMERE.damageTypes[
+                                  item.system.damage.type
+                              ].label,
                       }
                     : {}),
             };
         }
 
-        // Check if an activation cost is set
-        if (item.system.activation.cost?.type) {
-            subtitle.push(
-                `${item.system.activation.cost.value ?? ''} ${game.i18n!.localize(
-                    CONFIG.COSMERE.action.costs[
-                        item.system.activation.cost.type
-                    ].label,
-                )}`.trim(),
-            );
-        }
-
-        // Check if item has resources
-        if (item.system.resources) {
-            context.hasResources = true;
-            context.resources = {};
-
-            // Check if item has charges
-            if (item.system.resources.charge) {
-                const hasMax = item.system.resources.charge.max != null;
-                const hasRecharge =
-                    item.system.resources.charge.recharge != null;
-
-                context.resources.hasCharges = true;
-                context.resources.charges = {
-                    value: item.system.resources.charge.value,
-                    hasMax,
-                    max: hasMax
-                        ? item.system.resources.charge.max
-                        : item.system.resources.charge.value,
-                    hasRecharge,
-
-                    ...(hasRecharge
-                        ? {
-                              recharge: item.system.resources.charge.recharge,
-                              rechargeLabel:
-                                  CONFIG.COSMERE.items.activation.charges
-                                      .recharge[
-                                      item.system.resources.charge.recharge!
-                                  ].label,
-                          }
-                        : {}),
-                };
-            }
-        }
-    }
-
-    if (item.hasDamage() && item.system.damage.formula) {
-        const skill = item.system.damage.skill;
-        const attribute = item.system.damage.attribute;
-
-        const hasSkill = !!skill;
-        const hasAttribute = !!attribute;
-
-        context.hasDamage = true;
-        context.damage = {
-            formula: item.system.damage.formula,
-            formulaData: {
-                ...item.actor?.getRollData(),
-            },
-            hasSkill,
-            hasAttribute,
-
-            ...(hasSkill
-                ? {
-                      skill,
-                      skillLabel: CONFIG.COSMERE.skills[skill].label,
-                      usesDefaultAttribute:
-                          !hasAttribute ||
-                          attribute === CONFIG.COSMERE.skills[skill].attribute,
-                  }
-                : {}),
-
-            ...(hasAttribute
-                ? {
-                      attribute,
-                      attributeLabel:
-                          CONFIG.COSMERE.attributes[attribute].label,
-                      attributeLabelShort:
-                          CONFIG.COSMERE.attributes[attribute].labelShort,
-                  }
-                : {}),
-
-            ...(item.system.damage.type
-                ? {
-                      type: item.system.damage.type,
-                      typeLabel:
-                          CONFIG.COSMERE.damageTypes[item.system.damage.type]
-                              .label,
-                  }
-                : {}),
+        return {
+            ...context,
+            subtitle: subtitle.join(', '),
         };
+    } catch (err) {
+        console.error(err);
+        throw err;
     }
-
-    return {
-        ...context,
-        subtitle: subtitle.join(', '),
-    };
 });
 
 export async function preloadHandlebarsTemplates() {

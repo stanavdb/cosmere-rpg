@@ -4,6 +4,8 @@ import {
     Attribute,
     ItemConsumeType,
     ActivationType,
+    Resource,
+    ItemResource,
 } from '@system/types/cosmere';
 import { CosmereActor } from './actor';
 
@@ -231,10 +233,14 @@ export class CosmereItem<
 
         if (consumptionAvailable) {
             if (
-                this.system.activation.consume!.type === ItemConsumeType.Charge
+                this.system.activation.consume!.type ===
+                ItemConsumeType.ItemResource
             ) {
-                // Ensure charges are configured
-                if (!this.system.resources?.charge) {
+                const resource = this.system.activation.consume!
+                    .resource as ItemResource;
+
+                // Ensure item resource is configured
+                if (!this.system.resources?.[resource]) {
                     ui.notifications.warn(
                         game.i18n!.localize(
                             'GENERIC.Warning.ItemConsumeResourceNotConfigured',
@@ -261,11 +267,14 @@ export class CosmereItem<
 
             // The the current amount
             const currentAmount =
-                consumeType === ItemConsumeType.Charge
-                    ? this.system.resources!.charge!.value
-                    : consumeType === ItemConsumeType.Resource
+                consumeType === ItemConsumeType.ItemResource
+                    ? this.system.resources![
+                          this.system.activation.consume!
+                              .resource as ItemResource
+                      ]!.value
+                    : consumeType === ItemConsumeType.ActorResource
                       ? actor.system.resources[
-                            this.system.activation.consume!.resource!
+                            this.system.activation.consume!.resource as Resource
                         ].value
                       : consumeType === ItemConsumeType.Item
                         ? 0 // TODO: Figure out how to handle item consumption
@@ -282,19 +291,20 @@ export class CosmereItem<
 
             // Add post roll action to consume the resource
             postRoll.push(() => {
-                if (consumeType === ItemConsumeType.Charge) {
+                if (consumeType === ItemConsumeType.ItemResource) {
                     // Handle charge consumption
                     // Consume the charges
                     void this.update({
                         system: {
                             resources: {
-                                charge: {
+                                [this.system.activation.consume!
+                                    .resource as string]: {
                                     value: newAmount,
                                 },
                             },
                         },
                     });
-                } else if (consumeType === ItemConsumeType.Resource) {
+                } else if (consumeType === ItemConsumeType.ActorResource) {
                     // Handle actor resource consumption
                     void actor.update({
                         system: {
@@ -379,14 +389,17 @@ export class CosmereItem<
 
         // Determine consumed resource label
         const consumedResourceLabel =
-            consumeType === ItemConsumeType.Charge
+            consumeType === ItemConsumeType.ItemResource
                 ? game.i18n!.localize(
-                      `COSMERE.Item.Activation.Resources.Charge.${amount > 1 ? 'Plural' : 'Singular'}`,
+                      CONFIG.COSMERE.items.resources.types[
+                          this.system.activation.consume
+                              .resource as ItemResource
+                      ][amount > 1 ? 'labelPlural' : 'label'],
                   )
-                : consumeType === ItemConsumeType.Resource
+                : consumeType === ItemConsumeType.ActorResource
                   ? game.i18n!.localize(
                         CONFIG.COSMERE.resources[
-                            this.system.activation.consume.resource!
+                            this.system.activation.consume.resource as Resource
                         ].label,
                     )
                   : consumeType === ItemConsumeType.Item

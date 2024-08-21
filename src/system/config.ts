@@ -24,6 +24,7 @@ import {
     ItemType,
     AttackType,
     ItemRechargeType,
+    ItemResource,
 } from './types/cosmere';
 
 const COSMERE: CosmereRPGConfig = {
@@ -350,21 +351,31 @@ const COSMERE: CosmereRPGConfig = {
                 },
             },
             consumeTypes: {
-                [ItemConsumeType.Resource]: {
-                    label: 'COSMERE.Item.Activation.ConsumeType.Resource',
+                [ItemConsumeType.ActorResource]: {
+                    label: 'COSMERE.Item.Activation.ConsumeType.ActorResource.Label',
                 },
-                [ItemConsumeType.Charge]: {
-                    label: 'COSMERE.Item.Activation.ConsumeType.Charge',
+                [ItemConsumeType.ItemResource]: {
+                    label: 'COSMERE.Item.Activation.ConsumeType.ItemResource.Label',
                 },
                 [ItemConsumeType.Item]: {
-                    label: 'COSMERE.Item.Activation.ConsumeType.Item',
+                    label: 'COSMERE.Item.Activation.ConsumeType.Item.Label',
                 },
             },
-            charges: {
-                recharge: {
-                    [ItemRechargeType.PerScene]: {
-                        label: 'COSMERE.Item.Activation.Resources.Charge.Recharge.PerScene',
-                    },
+        },
+        resources: {
+            types: {
+                [ItemResource.Use]: {
+                    label: 'COSMERE.Item.Resources.Use.Singular',
+                    labelPlural: 'COSMERE.Item.Resources.Use.Plural',
+                },
+                [ItemResource.Charge]: {
+                    label: 'COSMERE.Item.Resources.Charge.Singular',
+                    labelPlural: 'COSMERE.Item.Resources.Charge.Plural',
+                },
+            },
+            recharge: {
+                [ItemRechargeType.PerScene]: {
+                    label: 'COSMERE.Item.Resources.Recharge.PerScene',
                 },
             },
         },

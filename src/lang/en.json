@@ -265,17 +265,14 @@
                     "Utility": "Utility"
                 },
                 "ConsumeType": {
-                    "Resource": "Resource",
-                    "Charge": "Charge",
-                    "Item": "Item"
-                },
-                "Resources": {
-                    "Charge": {
-                        "Singular": "Charge",
-                        "Plural": "Charges",
-                        "Recharge": {
-                            "PerScene": "Per scene"
-                        }
+                    "ActorResource": {
+                        "Label": "Actor Resource"
+                    },
+                    "ItemResource": {
+                        "Label": "Item Resource"
+                    },
+                    "Item": {
+                        "Label": "Item"
                     }
                 }
             },
@@ -289,6 +286,19 @@
                     "ViciousInjury": "Vicious Injury",
                     "PermanentInjury": "Permanent Injury",
                     "Death": "Death"
+                }
+            },
+            "Resources": {
+                "Charge": {
+                    "Singular": "Charge",
+                    "Plural": "Charges"
+                },
+                "Use": {
+                    "Singular": "Use",
+                    "Plural": "Uses"
+                },
+                "Recharge": {
+                    "PerScene": "Per scene"
                 }
             },
             "DefaultFlavor": "[actor] uses [item]"

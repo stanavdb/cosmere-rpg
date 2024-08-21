@@ -23,6 +23,7 @@ import {
     DamageType,
     ItemType,
     ItemRechargeType,
+    ItemResource,
 } from './cosmere';
 
 export interface SizeConfig {
@@ -106,11 +107,16 @@ export interface ActivationTypeConfig {
     label: string;
 }
 
+export interface ItemResourceConfig {
+    label: string;
+    labelPlural: string;
+}
+
 export interface ItemConsumeTypeConfig {
     label: string;
 }
 
-export interface ItemRechargeTypeConfig {
+export interface ItemRechargeConfig {
     label: string;
 }
 
@@ -155,9 +161,10 @@ export interface CosmereRPGConfig {
         activation: {
             types: Record<ActivationType, ActivationTypeConfig>;
             consumeTypes: Record<ItemConsumeType, ItemConsumeTypeConfig>;
-            charges: {
-                recharge: Record<ItemRechargeType, ItemRechargeTypeConfig>;
-            };
+        };
+        resources: {
+            types: Record<ItemResource, ItemResourceConfig>;
+            recharge: Record<ItemRechargeType, ItemRechargeConfig>;
         };
     };
 

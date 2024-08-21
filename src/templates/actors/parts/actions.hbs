@@ -6,7 +6,12 @@
     </li>
 
     {{#each section.items as |item|}}
+
+    {{log item.name}}
+
     {{#with (itemContext item) as |ctx|}}
+
+    {{log ctx}}
 
     <li class="item rollable" data-item-id="{{item.id}}">
         <div class="item-name" data-action="use">
@@ -45,7 +50,7 @@
 
         {{!-- Consume --}}
         {{#if ctx.hasConsume}}
-        {{#if ctx.consume.consumesResource}}
+        {{#if ctx.consume.consumesActorResource}}
         <div class="consume">
             <span class="amount val">{{ ctx.consume.value }} {{localize ctx.consume.resourceLabel }}</span>
             <span class="cost sub">{{localize "GENERIC.Cost"}}</span>
@@ -55,25 +60,21 @@
 
         {{!-- Resources --}}
         {{#if ctx.hasResources}}
-        {{#if ctx.resources.hasCharges}}
-
-        <div class="charges">
-            {{#with ctx.resources.charges as |charges|}}
+        {{#each ctx.resources as |resource|}}
+        <div class="resource" data-resource="{{resource.id}}">
             <div class="val">
-                {{#times charges.value}}<i class="charge fa-regular fa-circle-dot"></i>{{/times}}
-                {{#times (sub charges.max charges.value)}}<i class="charge fa-regular fa-circle"></i>{{/times}}
+                {{#times resource.value}}<i class="charge fa-regular fa-circle-dot"></i>{{/times}}
+                {{#times (sub resource.max resource.value)}}<i class="charge fa-regular fa-circle"></i>{{/times}}
             </div>
             <span class="sub">
-                {{#if charges.hasRecharge}}
-                {{localize charges.rechargeLabel}}
+                {{#if resource.hasRecharge}}
+                {{localize resource.rechargeLabel}}
                 {{else}}
-                {{localize "COSMERE.Item.Activation.Resources.Charge.Singular"}}
+                {{localize resource.label}}
                 {{/if}}
             </span>
-            {{/with}}
         </div>
-
-        {{/if}}
+        {{/each}}
         {{/if}}
 
         {{!-- Editing --}}
