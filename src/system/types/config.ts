@@ -6,8 +6,6 @@ import {
     AttributeGroup,
     Attribute,
     Skill,
-    Currency,
-    CurrencyDenomination,
     Resource,
     WeaponType,
     WeaponId,
@@ -75,7 +73,7 @@ export interface CurrencyConfig {
 }
 
 export interface CurrencyDenominationConfig {
-    id: CurrencyDenomination;
+    id: string;
     label: string;
     conversionRate: number; // Value relative to base denomination
     base?: boolean; // Present if this denomination is considered the base
@@ -143,7 +141,7 @@ export interface CosmereRPGConfig {
     attributes: Record<Attribute, AttributeConfig>;
     resources: Record<Resource, ResourceConfig>;
     skills: Record<Skill, SkillConfig>;
-    currencies: Record<Currency, CurrencyConfig>;
+    currencies: Record<string, CurrencyConfig>;
 
     items: {
         activation: {

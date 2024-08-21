@@ -364,7 +364,7 @@ export class CommonActorDataModel<
         const currencies = CONFIG.COSMERE.currencies;
 
         return new foundry.data.fields.SchemaField(
-            (Object.keys(currencies) as Currency[]).reduce(
+            Object.keys(currencies).reduce(
                 (schemas, key) => {
                     schemas[key] = new foundry.data.fields.SchemaField({
                         denominations: new foundry.data.fields.ArrayField(
@@ -388,7 +388,7 @@ export class CommonActorDataModel<
         );
     }
 
-    private static getCurrencyDenominationSchema(currency: Currency) {
+    private static getCurrencyDenominationSchema(currency: string) {
         const denominations = CONFIG.COSMERE.currencies[currency].denominations;
 
         return new foundry.data.fields.SchemaField({
@@ -530,7 +530,7 @@ export class CommonActorDataModel<
         ).length;
 
         // Derive currency conversion values
-        (Object.keys(this.currency) as Currency[]).forEach((currency) => {
+        Object.keys(this.currency).forEach((currency) => {
             // Get currency config
             const currencyConfig = CONFIG.COSMERE.currencies[currency];
 
