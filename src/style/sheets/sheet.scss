@@ -111,7 +111,8 @@
             .item-controls {
                 display: flex;
                 align-items: center;
-                justify-content: center;
+                justify-content: flex-end;
+                width: 2.5rem;
 
                 > a {
                     margin: .2rem;
