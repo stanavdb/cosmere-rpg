@@ -9,7 +9,7 @@
     {{#with (itemContext item) as |ctx|}}
 
     <li class="item rollable" data-item-id="{{item.id}}">
-        <div class="item-name">
+        <div class="item-name" data-action="use">
             <img class="item-image item-action" data-action="use" role="button" src="{{item.img}}">
             <div class="name">
                 <span class="title">{{item.name}}</span>
@@ -75,6 +75,17 @@
 
         {{/if}}
         {{/if}}
+
+        {{!-- Editing --}}
+        {{!-- Assume editable for now --}}
+        <div class="item-controls">
+            <a class="edit-btn" role="button" data-action="edit"><i class="fa-solid fa-pen-to-square"></i></a>
+
+            {{!-- Only show the delete button for items that are explicitly an action --}}
+            {{#if (eq item.type "action")}}
+            <a class="delete-btn" role="button" data-action="delete"><i class="fa-solid fa-trash"></i></a>
+            {{/if}}
+        </div>
     </li>
 
     {{/with}}

@@ -57,7 +57,7 @@
         .item {
             display: flex;
             flex-direction: row;
-            padding-right: 2rem;
+            padding-right: 1rem;
             margin-top: .2rem;
 
             &:hover {
@@ -105,6 +105,16 @@
                 .sub {
                     font-size: 8pt;
                     opacity: .75;
+                }
+            }
+
+            .item-controls {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                > a {
+                    margin: .2rem;
                 }
             }
         }

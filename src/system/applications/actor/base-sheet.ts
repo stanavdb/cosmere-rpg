@@ -41,7 +41,12 @@ export class BaseSheet extends ActorSheet {
                 this.onRollSkillTest.bind(this),
             );
 
-            html.find('.item.rollable').on('click', this.onUseItem.bind(this));
+            // Item listeners
+            // html.find('.item.rollable').on('click', this.onItemAction.bind(this));
+            html.find('.item [data-action]').on(
+                'click',
+                this.onItemAction.bind(this),
+            );
         }
     }
 
@@ -56,9 +61,18 @@ export class BaseSheet extends ActorSheet {
         void this.actor.rollSkill(skillId);
     }
 
-    private onUseItem(event: Event) {
+    private onItemAction(event: Event) {
         event.preventDefault();
+        event.stopPropagation();
 
+        // Get the action
+        const action = $(event.currentTarget!)
+            .closest('[data-action]')
+            .data('action') as string;
+
+        console.log('action', action);
+
+        // Get the item id
         const itemId = $(event.currentTarget!)
             .closest('[data-item-id]')
             .data('item-id') as string;
@@ -67,8 +81,17 @@ export class BaseSheet extends ActorSheet {
         const item = this.actor.items.get(itemId);
         if (!item) return;
 
-        // Use the item
-        void this.actor.useItem(item);
+        switch (action) {
+            case 'use':
+                void this.actor.useItem(item);
+                break;
+            case 'view':
+            case 'edit':
+                item.sheet?.render(true);
+                break;
+            case 'delete':
+                void this.actor.deleteEmbeddedDocuments('Item', [item.id]);
+        }
     }
 
     /* ---------------------- */
