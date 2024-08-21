@@ -30,6 +30,21 @@
 }
 
 .sheet {  
+    .tabs {
+        nav {
+            align-items: center;
+
+            a {
+                font-weight: bold;
+                text-align: center;
+
+                &.active {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+
     .actions-list,
     .inventory-list {
         margin: 0;

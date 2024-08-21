@@ -9,7 +9,11 @@ import { CosmereItem } from '@system/documents/item';
 
 import { ActionItemDataModel, ActionItemData } from '@system/data/item';
 
+type TabId = 'actions' | 'inventory';
+
 export class BaseSheet extends ActorSheet {
+    private currentTab: TabId = 'actions';
+
     get template() {
         return `systems/cosmere-rpg/templates/actors/${this.actor.type}-sheet.hbs`;
     }
@@ -27,6 +31,8 @@ export class BaseSheet extends ActorSheet {
             ).map(this.getDataForAttributeGroup.bind(this)),
 
             items: this.getItemData(),
+
+            tab: this.currentTab,
         };
     }
 
@@ -42,15 +48,35 @@ export class BaseSheet extends ActorSheet {
             );
 
             // Item listeners
-            // html.find('.item.rollable').on('click', this.onItemAction.bind(this));
             html.find('.item [data-action]').on(
                 'click',
                 this.onItemAction.bind(this),
             );
         }
+
+        html.find('nav a.tab-item[data-tab]').on(
+            'click',
+            this.onSelectTab.bind(this),
+        );
     }
 
     /* --- Internal functions --- */
+
+    private onSelectTab(event: Event) {
+        event.preventDefault();
+
+        // Get the tab id
+        const tabId = $(event.currentTarget!).data('tab') as TabId;
+
+        // Ensure tab was changed
+        if (tabId === this.currentTab) return;
+
+        // Change which tab is active
+        this.currentTab = tabId;
+
+        // Re-render
+        this.render(true);
+    }
 
     private onRollSkillTest(event: Event) {
         event.preventDefault();

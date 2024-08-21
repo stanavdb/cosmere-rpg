@@ -150,18 +150,18 @@
             <section class="tabs">
                 {{!-- Navigation --}}
                 <nav class="sheet-navigation flexrow">
-                    <a class="tab-item active" data-tab="actions">{{ localize "COSMERE.Actor.Sheet.Actions.label" }}</a>
-                    <a class="tab-item" data-tab="inventory">{{ localize "COSMERE.Actor.Sheet.Inventory.label" }}</a>
+                    <a class="tab-item {{#if (eq tab "actions")}}active{{/if}}" data-tab="actions">{{ localize "COSMERE.Actor.Sheet.Actions.label" }}</a>
+                    <a class="tab-item {{#if (eq tab "inventory")}}active{{/if}}" data-tab="inventory">{{ localize "COSMERE.Actor.Sheet.Inventory.label" }}</a>
                 </nav>
 
                 <section class="tab-body">
                     {{!-- Actions tab --}}
-                    <div class="tab actions active" data-tab="actions">
+                    <div class="tab actions {{#if (eq tab "actions")}}active{{/if}}" data-tab="actions">
                         {{> actions sections=items.actions }}
                     </div>
 
                     {{!-- Inventory tab --}}
-                    <div class="tab inventory" data-tab="inventory">
+                    <div class="tab inventory {{#if (eq tab "inventory")}}active{{/if}}" data-tab="inventory">
                         {{> inventory sections=items.inventory }}
                     </div>
                 </section>
