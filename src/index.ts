@@ -8,6 +8,11 @@ import * as applications from './system/applications';
 import * as dataModels from './system/data';
 import * as documents from './system/documents';
 import * as dice from './system/dice';
+import {
+    CosmereCombat,
+    CosmereCombatTracker,
+    CosmereCombatant,
+} from './system/combat';
 
 declare global {
     interface LenientGlobalVariableTypes {
@@ -19,7 +24,7 @@ declare global {
     }
 }
 
-Hooks.once('init', () => {
+Hooks.once('init', async () => {
     CONFIG.COSMERE = COSMERE;
 
     CONFIG.Actor.dataModels = dataModels.actor.config;
@@ -27,6 +32,12 @@ Hooks.once('init', () => {
 
     CONFIG.Item.dataModels = dataModels.item.config;
     CONFIG.Item.documentClass = documents.CosmereItem;
+
+    CONFIG.Combat.documentClass = CosmereCombat;
+    CONFIG.Combatant.documentClass = CosmereCombatant;
+    CONFIG.ui.combat = CosmereCombatTracker;
+
+    await loadTemplates(['systems/cosmere-rpg/templates/combat/combatant.hbs']);
 
     Actors.unregisterSheet('core', ActorSheet);
     Actors.registerSheet('cosmere-rpg', applications.actor.CharacterSheet, {

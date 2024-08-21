@@ -36,6 +36,10 @@ export default {
                     src: 'src/templates/roll/*.hbs',
                     dest: 'build/templates/roll/',
                 },
+                {
+                    src: 'src/templates/combat/*.hbs',
+                    dest: 'build/templates/combat/',
+                },
             ],
         }),
     ],
