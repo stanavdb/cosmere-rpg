@@ -93,11 +93,6 @@ export enum DerivedStatistic {
     RecoveryDie = 'rcd',
 }
 
-export const Currency: Record<string, string> = {};
-
-// Denominations of a currency
-export const CurrencyDenomination: Record<string, string> = {};
-
 /**
  * The categories of weapon available
  */
