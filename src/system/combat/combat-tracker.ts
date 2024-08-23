@@ -15,6 +15,7 @@ export default class CosmereCombatTracker extends CombatTracker {
             turns: CosmereTurn[];
             [x: string]: unknown;
         };
+        console.log(data);
         data.turns = data.turns.map((turn) => {
             const combatant: CosmereCombatant =
                 this.viewed!.getEmbeddedDocument(
@@ -22,7 +23,7 @@ export default class CosmereCombatTracker extends CombatTracker {
                     turn.id,
                     {},
                 ) as CosmereCombatant;
-            return {
+            const newTurn: CosmereTurn = {
                 ...turn,
                 turnSpeed: combatant.getFlag(
                     'cosmere-rpg',
@@ -34,6 +35,9 @@ export default class CosmereCombatTracker extends CombatTracker {
                     'activated',
                 ) as boolean,
             };
+            //strips active player formatting
+            newTurn.css = '';
+            return newTurn;
         });
         data.fastPlayers = data.turns.filter((turn) => {
             return turn.type == 'character' && turn.turnSpeed == 'fast';

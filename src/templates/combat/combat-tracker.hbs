@@ -85,25 +85,14 @@
         {{#if round}}
         <a class="combat-control" aria-label="{{localize 'COMBAT.RoundPrev'}}" role="button"
             data-tooltip="COMBAT.RoundPrev" data-control="previousRound"><i class="fas fa-step-backward"></i></a>
-        <a class="combat-control" aria-label="{{localize 'COMBAT.TurnPrev'}}" role="button"
-            data-tooltip="COMBAT.TurnPrev" data-control="previousTurn"><i class="fas fa-arrow-left"></i></a>
         <a class="combat-control center" aria-label="{{localize 'COMBAT.End'}}" role="button"
             data-control="endCombat">{{localize 'COMBAT.End'}}</a>
-        <a class="combat-control" aria-label="{{localize 'COMBAT.TurnNext'}}" role="button"
-            data-tooltip="COMBAT.TurnNext" data-control="nextTurn"><i class="fas fa-arrow-right"></i></a>
         <a class="combat-control" aria-label="{{localize 'COMBAT.RoundNext'}}" role="button"
             data-tooltip="COMBAT.RoundNext" data-control="nextRound"><i class="fas fa-step-forward"></i></a>
         {{else}}
         <a class="combat-control center" aria-label="{{localize 'COMBAT.Begin'}}" role="button"
             data-control="startCombat">{{localize 'COMBAT.Begin'}}</a>
         {{/if}}
-        {{else if control}}
-        <a class="combat-control" aria-label="{{localize 'COMBAT.TurnPrev'}}" role="button"
-            data-tooltip="COMBAT.TurnPrev" data-control="previousTurn"><i class="fas fa-arrow-left"></i></a>
-        <a class="combat-control center" aria-label="{{localize 'COMBAT.TurnEnd'}}" role="button"
-            data-control="nextTurn">{{localize 'COMBAT.TurnEnd'}}</a>
-        <a class="combat-control" aria-label="{{localize 'COMBAT.TurnNext'}}" role="button"
-            data-tooltip="COMBAT.TurnNext" data-control="nextTurn"><i class="fas fa-arrow-right"></i></a>
         {{/if}}
         {{/if}}
     </nav>
