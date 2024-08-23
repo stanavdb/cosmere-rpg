@@ -1,0 +1,19 @@
+<ol class="inventory-list">
+    {{#each sections as |section|}}
+
+    <li class="items-header flexrow">
+        <h3 class="item-name">{{localize section.label}}</h3>
+    </li>
+
+    {{#each section.items as |item|}}
+
+    <li class="item flexrow rollable" data-item-id="{{item.id}}">
+        <div class="item-name flexrow">
+            <img class="item-image item-action" data-action="use" role="button" src="{{item.image}}">
+        </div>
+    </li>
+
+    {{/each}}
+
+    {{/each}}
+</ol>

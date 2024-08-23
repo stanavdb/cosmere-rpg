@@ -174,19 +174,51 @@ export enum DeflectSource {
 }
 
 export enum ActivationType {
+    Action = 'action',
+    Utility = 'utility',
     SkillTest = 'skill_test',
 }
 
 export enum ItemConsumeType {
-    Resource = 'resource',
-    Charge = 'charge',
+    ActorResource = 'actor_resource', // E.g. health, focus, investiture
+    ItemResource = 'item_resource', // E.g. uses, charges
     Item = 'item',
+}
+
+export enum ItemResource {
+    Use = 'use',
+    Charge = 'charge',
+}
+
+export enum ItemRechargeType {
+    PerScene = 'per_scene',
+}
+
+export enum EquipType {
+    Hold = 'hold', // Item that you equip by holding it (either in one or two hands)
+    Wear = 'wear', // Item that you equip by wearing it
+}
+
+export enum HoldType {
+    MainHand = 'main_hand',
+    OffHand = 'off_hand',
+    TwoHanded = 'two_handed',
+}
+
+export enum ActionType {
+    Basic = 'basic',
 }
 
 export enum ActionCostType {
     Action = 'act',
     Reaction = 'rea',
     FreeAction = 'fre',
+    Special = 'spe',
+}
+
+export enum AttackType {
+    Melee = 'melee',
+    Ranged = 'ranged',
 }
 
 export enum DamageType {
@@ -195,6 +227,7 @@ export enum DamageType {
     Keen = 'keen',
     Spirit = 'spirit',
     Vital = 'vital',
+    Healing = 'heal',
 }
 
 /* --- System --- */

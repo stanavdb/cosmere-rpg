@@ -273,6 +273,8 @@ namespace foundry {
              */
             get uuid(): string;
 
+            get id(): string;
+
             /* --- Model permissions --- */
 
             /**

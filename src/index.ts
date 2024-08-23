@@ -2,7 +2,7 @@ import COSMERE from './system/config';
 
 import './style.scss';
 
-import './system/util/handlebars';
+import { preloadHandlebarsTemplates } from './system/util/handlebars';
 
 import * as applications from './system/applications';
 import * as dataModels from './system/data';
@@ -19,7 +19,7 @@ declare global {
     }
 }
 
-Hooks.once('init', () => {
+Hooks.once('init', async () => {
     CONFIG.COSMERE = COSMERE;
 
     CONFIG.Actor.dataModels = dataModels.actor.config;
@@ -48,4 +48,7 @@ Hooks.once('init', () => {
     // @league-of-foundry-developers/foundry-vtt-types/src/foundry/client-esm/dice/terms/term.d.mts
     // @ts-expect-error see note
     CONFIG.Dice.rolls.push(dice.D20Roll);
+
+    // Load templates
+    await preloadHandlebarsTemplates();
 });
