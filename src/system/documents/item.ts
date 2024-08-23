@@ -23,11 +23,13 @@ import { DescriptionItemData } from '@system/data/item/mixins/description';
 
 import { Derived } from '@system/data/fields';
 
-import { d20Roll, D20Roll, D20RollData } from '@system/dice';
+import { d20Roll, damageRoll, D20Roll, D20RollData } from '@system/dice';
 
 // Constants
 const CONSUME_CONFIGURATION_DIALOG_TEMPLATE =
     'systems/cosmere-rpg/templates/item/dialog/item-consume.hbs';
+const ACTIVITY_CARD_TEMPLATE =
+    'systems/cosmere-rpg/templates/chat/activity-card.hbs';
 
 interface ShowConsumeDialogOptions {
     /**
@@ -166,13 +168,14 @@ export class CosmereItem<
 
         // NOTE: Use boolean or operator (`||`) here instead of nullish coalescing (`??`),
         // as flavor can also be an empty string, which we'd like to replace with the default flavor too
-        const flavor =
-            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-            this.system.activation.flavor ||
-            game
-                .i18n!.localize('COSMERE.Item.DefaultFlavor')
-                .replace('[actor]', actor.name)
-                .replace('[item]', this.name);
+        // const flavor =
+        //     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+        //     this.system.activation.flavor ||
+        //     game
+        //         .i18n!.localize('COSMERE.Item.DefaultFlavor')
+        //         .replace('[actor]', actor.name)
+        //         .replace('[item]', this.name);
+        // Flavor currently unused
 
         // Set up actor data
         const data: D20RollData = {
@@ -188,23 +191,26 @@ export class CosmereItem<
         const rollData = foundry.utils.mergeObject(
             {
                 data,
+                chatMessage: false,
                 title: `${this.name} (${game.i18n!.localize(
                     CONFIG.COSMERE.skills[skillId].label,
                 )})`,
-                flavor,
+                // flavor,
                 defaultAttribute: skill.attribute,
-                messageData: {
-                    speaker:
-                        options.speaker ??
-                        (ChatMessage.getSpeaker({ actor }) as ChatSpeakerData),
-                },
+                // messageData: {
+                //     speaker:
+                //         options.speaker ??
+                //         (ChatMessage.getSpeaker({ actor }) as ChatSpeakerData),
+                // },
             },
             options,
         );
         rollData.parts = ['@mod'].concat(options.parts ?? []);
 
         // Perform the roll
-        return await d20Roll(rollData);
+        return await d20Roll({
+            ...rollData,
+        });
     }
 
     /**
@@ -341,24 +347,65 @@ export class CosmereItem<
         const rollRequired =
             this.system.activation.type === ActivationType.SkillTest;
 
+        // Get the speaker
+        const speaker =
+            options.speaker ??
+            (ChatMessage.getSpeaker({ actor }) as ChatSpeakerData);
+
         if (rollRequired) {
             // Perform roll
-            const result = await this.roll(options);
+            const roll = await this.roll(options);
+
+            const damageRolls = [] as Roll[];
 
             // Ensure roll wasn't cancelled
-            if (result !== null) {
+            if (roll !== null) {
+                if (this.hasDamage() && this.system.damage.formula) {
+                    const skill =
+                        this.system.damage.skill ??
+                        this.system.activation.skill!;
+                    const attribute =
+                        this.system.damage.attribute ??
+                        this.system.activation.attribute ??
+                        CONFIG.COSMERE.skills[skill].attribute;
+
+                    damageRolls.push(
+                        await damageRoll({
+                            formula: this.system.damage.formula,
+                            damageType: this.system.damage.type,
+                            data: {
+                                mod:
+                                    this.actor!.system.skills[skill].rank +
+                                    this.actor!.system.attributes[attribute]
+                                        .value,
+                            },
+                        }),
+                    );
+                }
+
+                // Create chat message
+                const message = await ChatMessage.create({
+                    user: game.user!.id,
+                    speaker,
+                    content: await renderTemplate(ACTIVITY_CARD_TEMPLATE, {
+                        item: this,
+                        skill: this.system.activation.skill,
+                        rolls: [roll],
+                        damageRolls,
+                    }),
+                    rolls: [roll, ...damageRolls],
+                });
+
+                // Add listeners
+                this.attachDamageRollListeners(message as ChatMessage);
+
                 // Perform post roll actions
                 postRoll.forEach((action) => action());
             }
 
             // Return the result
-            return result;
+            return roll;
         } else {
-            // Get the speaker
-            const speaker =
-                options.speaker ??
-                (ChatMessage.getSpeaker({ actor }) as ChatSpeakerData);
-
             // NOTE: Use boolean or operator (`||`) here instead of nullish coalescing (`??`),
             // as flavor can also be an empty string, which we'd like to replace with the default flavor too
             const flavor =
@@ -369,10 +416,14 @@ export class CosmereItem<
                     .replace('[actor]', actor.name)
                     .replace('[item]', this.name);
 
-            // Send chat message
-            void ChatMessage.create({
-                content: flavor,
+            // Create chat message
+            await ChatMessage.create({
+                user: game.user!.id,
                 speaker,
+                content: await renderTemplate(ACTIVITY_CARD_TEMPLATE, {
+                    item: this,
+                    flavor,
+                }),
             });
 
             // Perform post roll actions
@@ -447,6 +498,15 @@ export class CosmereItem<
                 close: () => resolve(null),
             }).render(true);
         });
+    }
+
+    private attachDamageRollListeners(message: ChatMessage) {
+        console.log(message);
+
+        const buttons = $(
+            `.chat-message[data-message-id="${message.id}"] a.damage-button`,
+        );
+        console.log('BUTTONS', buttons);
     }
 }
 

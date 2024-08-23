@@ -1,8 +1,10 @@
-import { Attribute } from '@system/types/cosmere';
+import { Attribute, DamageType } from '@system/types/cosmere';
 import { D20Roll, D20RollOptions, D20RollData } from './d20-roll';
+import { DamageRoll, DamageRollOptions, DamageRollData } from './damage-roll';
 import { RollMode } from './types';
 
 export * from './d20-roll';
+export * from './damage-roll';
 export * from './plot-die';
 
 export interface D20RollConfigration extends D20RollOptions {
@@ -49,6 +51,23 @@ export interface D20RollConfigration extends D20RollOptions {
     defaultRollMode?: RollMode;
 }
 
+export interface DamageRollConfiguration extends DamageRollOptions {
+    /**
+     * The damage formula to use for this roll
+     */
+    formula: string;
+
+    /**
+     * The damage type to apply to the damage
+     */
+    damageType?: DamageType;
+
+    /**
+     * Data that will be used when parsing this roll
+     */
+    data: DamageRollData;
+}
+
 export async function d20Roll(
     config: D20RollConfigration,
 ): Promise<D20Roll | null> {
@@ -67,7 +86,8 @@ export async function d20Roll(
         title: config.title,
         plotDie: config.plotDie,
         defaultRollMode,
-        defaultAttribute: config.defaultAttribute,
+        defaultAttribute:
+            config.defaultAttribute ?? config.data.skill.attribute,
     });
     if (configured === null) return null;
 
@@ -78,5 +98,23 @@ export async function d20Roll(
         await roll.toMessage();
     }
 
+    return roll;
+}
+
+export async function damageRoll(
+    config: DamageRollConfiguration,
+): Promise<Roll> {
+    // Construct roll
+    const roll = new DamageRoll(
+        config.formula,
+        config.damageType,
+        config.data,
+        config,
+    );
+
+    // Evaluate the roll
+    await roll.evaluate();
+
+    // Return result
     return roll;
 }

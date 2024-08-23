@@ -143,6 +143,76 @@ export class D20Roll extends Roll<D20RollData> {
     }
 
     /**
+     * How many complications were rolled?
+     */
+    public get complicationsCount() {
+        if (!this._evaluated) {
+            throw new Error('Roll not evaluated');
+        }
+
+        // Get d20s
+        const d20s = this.dice.filter((die) => die.faces === 20);
+
+        // Get plot dice
+        const plotDice = this.dice.filter((die) => die instanceof PlotDie);
+
+        // Get all dice that rolled a complication
+        const d20Complications = d20s.filter(
+            (die) =>
+                die.results[0].result <=
+                (this.options.complication ?? DEFAULT_COMPLICATION_VALUE),
+        );
+        const plotDiceComplications = plotDice.filter(
+            (die) => die.results[0].failure === true,
+        );
+
+        // Return the count
+        return d20Complications.length + plotDiceComplications.length;
+    }
+
+    /**
+     * How many opportunities were rolled?
+     */
+    public get opportunitiesCount() {
+        if (!this._evaluated) {
+            throw new Error('Roll not evaluated');
+        }
+
+        // Get d20s
+        const d20s = this.dice.filter((die) => die.faces === 20);
+
+        // Get plot dice
+        const plotDice = this.dice.filter((die) => die instanceof PlotDie);
+
+        // Get all dice that rolled an opportunity
+        const d20Opportunities = d20s.filter(
+            (die) =>
+                die.results[0].result >=
+                (this.options.opportunity ?? DEFAULT_OPPORUNITY_VALUE),
+        );
+        const plotDiceOpportunities = plotDice.filter(
+            (die) => die.results[0].success === true,
+        );
+
+        // Return the count
+        return d20Opportunities.length + plotDiceOpportunities.length;
+    }
+
+    /**
+     * Whether a complication was rolled (either on the plot die, or on the d20)
+     */
+    public get rolledComplication() {
+        return this.complicationsCount > 0;
+    }
+
+    /**
+     * Whether an opporunity was rolled (either on the plot die, or on the d20)
+     */
+    public get rolledOpportunity() {
+        return this.opportunitiesCount > 0;
+    }
+
+    /**
      * Was an opporunity rolled on the d20?
      * Returns undefined if the roll isn't yet evaluated
      */
@@ -178,6 +248,8 @@ export class D20Roll extends Roll<D20RollData> {
     ): Promise<D20Roll | null> {
         // Deconstruct data
         const { title, defaultRollMode, defaultAttribute, plotDie } = data;
+
+        console.log('configureDialog', defaultAttribute);
 
         // Render the dialog inner HTML
         const content = await renderTemplate(CONFIGURATION_DIALOG_TEMPLATE, {
@@ -232,6 +304,8 @@ export class D20Roll extends Roll<D20RollData> {
         if (
             (form.attribute.value as Attribute) !== this.data.defaultAttribute
         ) {
+            console.log('processDialogSubmit', form.attribute.value);
+
             const skill = this.data.skill;
             const attribute =
                 this.data.attributes[form.attribute.value as Attribute];

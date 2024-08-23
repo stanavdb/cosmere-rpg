@@ -1,0 +1,46 @@
+{{log this}}
+<div class="roll-details">
+    <div class="dice-result">
+        <div class="dice-formula">{{formula}}</div>
+        <div class="dice-details">
+            <div class="dice">
+                <ol class="dice-rolls">
+                    {{#each dice as |die|}}
+                    <li class="die roll {{die.classes}}">
+                        {{die.result}}
+                    </li>
+                    {{/each}}
+                </ol>
+            </div>
+        </div>
+    </div>
+    <div class="dice-total">
+        <div class="total-value {{#if rolledOpportunity}}opportunity{{/if}} {{#if rolledComplication}}complication{{/if}}">
+            <span>{{total}}</span>
+            {{#times opportunitiesCount}}
+            <i class="cosmere-icon opportunity">o</i>
+            {{/times}}
+            {{#times complicationsCount}}
+            <i class="cosmere-icon complication">c</i>
+            {{/times}}
+
+            {{#if isDamage}}
+            <span class="mod">+ {{data.mod}}</span>
+            {{/if}}
+        </div>
+        {{#if isDamage}}
+        {{#with (damageTypeConfig damageType) as |damageType|}}
+        <div class="damage-type">
+            <span class="label">{{localize damageType.label}}</span>
+            {{#if damageType.icon}}{{damageType.icon}}{{/if}}
+        </div>
+        {{/with}}
+        {{/if}}
+    </div>
+    {{#if isDamage}}
+    <div class="buttons-container flexrow">
+        <a class="damage-button apply" data-action="apply" role="button">{{localize "DICE.Damage.Apply"}}</a>
+        <a class="damage-button graze" data-action="graze" role="button">{{localize "DICE.Damage.Graze"}}</a>
+    </div>
+    {{/if}}
+</div>

@@ -10,6 +10,9 @@ import { d20Roll, D20Roll, D20RollData } from '@system/dice';
 export type CharacterActor = CosmereActor<CharacterActorDataModel>;
 export type AdversaryActor = CosmereActor<AdversaryActorDataModel>;
 
+// Constants
+const SKILL_CARD_TEMPLATE = 'systems/cosmere-rpg/templates/chat/skill-card.hbs';
+
 interface RollSkillOptions {
     /**
      * The attribute to be used with this skill roll.
@@ -82,15 +85,16 @@ export class CosmereActor<
             {
                 data,
                 title: `${flavor}: ${this.name}`,
-                flavor,
-                defaultAttribute: skill.attribute,
-                messageData: {
-                    speaker:
-                        options.speaker ??
-                        (ChatMessage.getSpeaker({
-                            actor: this,
-                        }) as ChatSpeakerData),
-                },
+                chatMessage: false,
+                // flavor,
+                // defaultAttribute: skill.attribute,
+                // messageData: {
+                //     speaker:
+                //         options.speaker ??
+                //         (ChatMessage.getSpeaker({
+                //             actor: this,
+                //         }) as ChatSpeakerData),
+                // },
             },
             options,
         );
@@ -98,6 +102,26 @@ export class CosmereActor<
 
         // Perform roll
         const roll = await d20Roll(rollData);
+
+        if (roll) {
+            // Get the speaker
+            const speaker =
+                options.speaker ??
+                (ChatMessage.getSpeaker({ actor: this }) as ChatSpeakerData);
+
+            // Create chat message
+            await ChatMessage.create({
+                user: game.user!.id,
+                speaker,
+                content: await renderTemplate(SKILL_CARD_TEMPLATE, {
+                    name: flavor,
+                    rolls: [roll],
+                }),
+                rolls: [roll],
+            });
+        }
+
+        // Return roll
         return roll;
     }
 

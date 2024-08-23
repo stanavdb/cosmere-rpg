@@ -1,0 +1,49 @@
+{{#with item as |item|}}
+{{#with (itemContext item) as |ctx|}}
+
+<div class="chat-card activity">
+    <section class="header description">
+        <header class="summary">
+            <img class="icon" src="{{ item.img }}" alt="{{ item.name }}">
+            <div class="name stacked">
+                <span class="title">
+                    {{ item.name }}
+                    {{#if ctx.hasActivation}}
+                    {{#if ctx.activation.hasCost}}
+                    <i class="cosmere-icon">
+                        {{#if (eq ctx.activation.cost.type "act")}}
+                        {{ ctx.activation.cost.value }}
+                        {{else}}
+                        {{cosmereDingbat ctx.activation.cost.type}}
+                        {{/if}}
+                    </i>
+                    {{/if}}
+                    {{/if}}
+                </span>
+                {{#if subtitle}}
+                <span class="subtitle">{{ctx.subtitle}}</span>
+                {{/if}}
+            </div>
+        </header>
+    </section>
+</div>
+
+{{/with}}
+{{/with}}
+
+{{#if rolls}}
+<div class="card-rolls">
+    {{#each rolls as |roll|}}
+    {{> roll-details roll}}
+    {{/each}}
+</div>
+{{/if}}
+
+{{#if damageRolls}}
+<div class="card-rolls damage">
+    <span class="title">{{localize "DICE.Damage.Label"}}</span>
+    {{#each damageRolls as |roll|}}
+    {{> roll-details roll}}
+    {{/each}}
+</div>
+{{/if}}

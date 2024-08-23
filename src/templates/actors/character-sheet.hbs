@@ -50,7 +50,12 @@
                     <div class="resource flexrow" data-id="{{resource.id}}">
                         <div class="flexcol">
                             <span class="label">{{ localize resource.config.label}}</span>
-                            <span class="value">{{resource.value}} / {{resource.max.value}}</span>
+                            <div class="value-controls">
+                                <a class="subtract" role="button">-</a>
+                                <span class="value">{{resource.value}} / {{resource.max.value}}
+                                </span>
+                                <a class="add" role="button">+</a>
+                            </div>
                         </div>
                         {{#if resource.deflect includeZero=true}}
                         <div class="deflect flexcol">
