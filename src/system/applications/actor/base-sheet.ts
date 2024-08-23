@@ -230,6 +230,7 @@ export class BaseSheet extends ActorSheet {
                 .map((type) => ({
                     id: type,
                     label: CONFIG.COSMERE.action.types[type].labelPlural,
+                    subtitle: CONFIG.COSMERE.action.types[type].subtitle,
                     items: actionItems.filter(
                         (i) => (i.system.type as ActionType) === type,
                     ),

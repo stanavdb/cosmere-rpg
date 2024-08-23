@@ -19,6 +19,7 @@ import { PhysicalItemData } from '@system/data/item/mixins/physical';
 import { TypedItemData } from '@system/data/item/mixins/typed';
 import { TraitsItemData } from '@system/data/item/mixins/traits';
 import { EquippableItemData } from '@system/data/item/mixins/equippable';
+import { DescriptionItemData } from '@system/data/item/mixins/description';
 
 import { Derived } from '@system/data/fields';
 
@@ -112,6 +113,13 @@ export class CosmereItem<
      */
     public isEquippable(): this is CosmereItem<EquippableItemData> {
         return 'equipped' in this.system;
+    }
+
+    /**
+     * Does this item have a description?
+     */
+    public hasDescription(): this is CosmereItem<DescriptionItemData> {
+        return 'description' in this.system;
     }
 
     /* --- Roll & Usage utilities --- */

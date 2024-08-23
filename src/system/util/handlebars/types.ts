@@ -1,5 +1,31 @@
+export interface ItemContextOptions {
+    showEquippedHand?: boolean;
+}
+
 export interface ItemContext {
     subtitle: string;
+
+    isPhysical: boolean;
+    quantity: number;
+    weight: Partial<{
+        value: number;
+        unit: string;
+    }>;
+    price: Partial<{
+        value: number;
+        unit: string;
+    }>;
+
+    isEquippable: boolean;
+    equipped: boolean;
+    equip: Partial<{
+        type: string;
+        typeLabel: string;
+        typeIcon: string;
+        hold: string;
+        holdLabel: string;
+        holdIcon: string;
+    }>;
 
     hasSkillTest: boolean;
     skillTest: Partial<{
@@ -10,6 +36,16 @@ export interface ItemContext {
         attribute: string;
         attributeLabel: string;
         attributeLabelShort: string;
+    }>;
+
+    hasActivation: boolean;
+    activation: Partial<{
+        hasCost: boolean;
+        cost: Partial<{
+            type: string;
+            typeLabel: string;
+            value: number;
+        }>;
     }>;
 
     hasConsume: boolean;

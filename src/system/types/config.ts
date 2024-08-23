@@ -24,6 +24,8 @@ import {
     ItemType,
     ItemRechargeType,
     ItemResource,
+    EquipType,
+    HoldType,
 } from './cosmere';
 
 export interface SizeConfig {
@@ -123,6 +125,8 @@ export interface ItemRechargeConfig {
 export interface ActionTypeConfig {
     label: string;
     labelPlural: string;
+    subtitle?: string;
+    hasMode?: boolean;
 }
 
 export interface ActionCostConfig {
@@ -145,6 +149,16 @@ export interface ItemTypeConfig {
     labelPlural: string;
 }
 
+export interface EquipTypeConfig {
+    label: string;
+    icon?: string;
+}
+
+export interface HoldTypeConfig {
+    label: string;
+    icon?: string;
+}
+
 export interface CosmereRPGConfig {
     sizes: Record<Size, SizeConfig>;
     creatureTypes: Record<CreatureType, CreatureTypeConfig>;
@@ -165,6 +179,10 @@ export interface CosmereRPGConfig {
         resources: {
             types: Record<ItemResource, ItemResourceConfig>;
             recharge: Record<ItemRechargeType, ItemRechargeConfig>;
+        };
+        equip: {
+            types: Record<EquipType, EquipTypeConfig>;
+            hold: Record<HoldType, HoldTypeConfig>;
         };
     };
 

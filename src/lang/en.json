@@ -60,7 +60,8 @@
             "ActionCosts": {
                 "Action": "Action",
                 "Reaction": "Reaction",
-                "FreeAction": "Free Action"
+                "FreeAction": "Free Action",
+                "Special": "Special"
             },
             "Attribute": {
                 "name": "Attribute",
@@ -156,7 +157,11 @@
                     "label": "Actions"
                 },
                 "Inventory": {
-                    "label": "Inventory"
+                    "label": "Inventory",
+                    "Item": {
+                        "Quantity": "Quantity",
+                        "Weight": "Weight"
+                    }
                 }
             }
         },
@@ -301,6 +306,36 @@
                     "PerScene": "Per scene"
                 }
             },
+            "Equip": {
+                "Types": {
+                    "Wear": {
+                        "Label": "Worn"
+                    },
+                    "Hold": {
+                        "Label": "Held"
+                    }
+                },
+                "Hold": {
+                    "MainHand": {
+                        "Label": "Main Hand"
+                    },
+                    "OffHand": {
+                        "Label": "Off Hand"
+                    },
+                    "TwoHanded": {
+                        "Label": "Two Handed"
+                    }
+                },
+                "Equip": {
+                    "Label": "Equip"
+                },
+                "Unequip": {
+                    "Label": "Unequip"
+                },
+                "Unequipped": {
+                    "Label": "Unequipped"
+                }
+            },
             "DefaultFlavor": "[actor] uses [item]"
         },
         "Attack": {
@@ -329,6 +364,11 @@
             "None": "None",
             "Advantage": "Advantage",
             "Disadvantage": "Disadvantage"
+        },
+        "Damage": {
+            "Label": "Damage",
+            "Apply": "Apply",
+            "Graze": "Graze"
         }
     },
     "DIALOG": {

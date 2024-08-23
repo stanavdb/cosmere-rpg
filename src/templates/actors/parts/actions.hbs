@@ -1,30 +1,41 @@
 <ol class="actions-list">
     {{#each sections as |section|}}
 
-    <li class="item-header flexrow">
+    <li class="item-header flexcol" data-section-id="{{section.id}}">
         <span class="name">{{localize section.label}}</span>
+        {{#if section.subtitle}}
+        <span class="subtitle">{{localize section.subtitle}}</span>
+        {{/if}}
     </li>
 
     {{#each section.items as |item|}}
-
-    {{log item.name}}
-
     {{#with (itemContext item) as |ctx|}}
-
-    {{log ctx}}
 
     <li class="item rollable" data-item-id="{{item.id}}">
         <div class="item-name" data-action="use">
             <img class="item-image item-action" data-action="use" role="button" src="{{item.img}}">
             <div class="name">
-                <span class="title">{{item.name}}</span>
+                <span class="title">
+                    {{item.name}}
+                    {{#if ctx.hasActivation}}
+                    {{#if ctx.activation.hasCost}}
+                    <i class="cosmere-icon">
+                        {{#if (eq ctx.activation.cost.type "act")}}
+                        {{ ctx.activation.cost.value }}
+                        {{else}}
+                        {{cosmereDingbat ctx.activation.cost.type}}
+                        {{/if}}
+                    </i>
+                    {{/if}}
+                    {{/if}}
+                </span>
                 <span class="subtitle">{{ctx.subtitle}}</span>
             </div>
         </div>
 
         {{!-- Skill Test --}}
         {{#if ctx.hasSkillTest}}
-        <div class="skill-test">
+        <div class="skill-test col">
             <span class="mod val">+{{skillMod item.parent ctx.skillTest.skill ctx.skillTest.attribute}}</span>
 
             <span class="skill sub">
@@ -40,7 +51,7 @@
 
         {{!-- Damage --}}
         {{#if ctx.hasDamage}}
-        <div class="damage">
+        <div class="damage col">
             <span class="formula val">{{formulaReplaceData ctx.damage.formula ctx.damage.formulaData}}</span>
             {{#if ctx.damage.type}}
             <span class="type sub">{{localize ctx.damage.typeLabel}}</span>
@@ -51,7 +62,7 @@
         {{!-- Consume --}}
         {{#if ctx.hasConsume}}
         {{#if ctx.consume.consumesActorResource}}
-        <div class="consume">
+        <div class="consume col">
             <span class="amount val">{{ ctx.consume.value }} {{localize ctx.consume.resourceLabel }}</span>
             <span class="cost sub">{{localize "GENERIC.Cost"}}</span>
         </div>
@@ -61,7 +72,7 @@
         {{!-- Resources --}}
         {{#if ctx.hasResources}}
         {{#each ctx.resources as |resource|}}
-        <div class="resource" data-resource="{{resource.id}}">
+        <div class="resource col" data-resource="{{resource.id}}">
             <div class="val">
                 {{#times resource.value}}<i class="charge fa-regular fa-circle-dot"></i>{{/times}}
                 {{#times (sub resource.max resource.value)}}<i class="charge fa-regular fa-circle"></i>{{/times}}

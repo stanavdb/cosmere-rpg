@@ -25,6 +25,8 @@ import {
     AttackType,
     ItemRechargeType,
     ItemResource,
+    EquipType,
+    HoldType,
 } from './types/cosmere';
 
 const COSMERE: CosmereRPGConfig = {
@@ -379,6 +381,32 @@ const COSMERE: CosmereRPGConfig = {
                 },
             },
         },
+        equip: {
+            types: {
+                [EquipType.Wear]: {
+                    label: 'COSMERE.Item.Equip.Types.Wear.Label',
+                    icon: '<i class="fa-solid fa-shirt"></i>',
+                },
+                [EquipType.Hold]: {
+                    label: 'COSMERE.Item.Equip.Types.Hold.Label',
+                    icon: '<i class="fa-solid fa-hand-fist"></i>',
+                },
+            },
+            hold: {
+                [HoldType.MainHand]: {
+                    label: 'COSMERE.Item.Equip.Hold.MainHand.Label',
+                    icon: '<i class="fa-solid fa-hand"></i>',
+                },
+                [HoldType.OffHand]: {
+                    label: 'COSMERE.Item.Equip.Hold.OffHand.Label',
+                    icon: '<i class="fa-regular fa-hand"></i>',
+                },
+                [HoldType.TwoHanded]: {
+                    label: 'COSMERE.Item.Equip.Hold.TwoHanded.Label',
+                    icon: '<i class="fa-solid fa-hands"></i>',
+                },
+            },
+        },
     },
 
     weaponTypes: {
@@ -525,6 +553,9 @@ const COSMERE: CosmereRPGConfig = {
             },
             [ActionCostType.FreeAction]: {
                 label: 'COSMERE.Actor.ActionCosts.FreeAction',
+            },
+            [ActionCostType.Special]: {
+                label: 'COSMERE.Actor.ActionCosts.Special',
             },
         },
     },

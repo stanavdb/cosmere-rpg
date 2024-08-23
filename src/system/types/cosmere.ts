@@ -194,6 +194,17 @@ export enum ItemRechargeType {
     PerScene = 'per_scene',
 }
 
+export enum EquipType {
+    Hold = 'hold', // Item that you equip by holding it (either in one or two hands)
+    Wear = 'wear', // Item that you equip by wearing it
+}
+
+export enum HoldType {
+    MainHand = 'main_hand',
+    OffHand = 'off_hand',
+    TwoHanded = 'two_handed',
+}
+
 export enum ActionType {
     Basic = 'basic',
 }
@@ -202,6 +213,7 @@ export enum ActionCostType {
     Action = 'act',
     Reaction = 'rea',
     FreeAction = 'fre',
+    Special = 'spe',
 }
 
 export enum AttackType {
