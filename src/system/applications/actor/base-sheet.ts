@@ -3,6 +3,7 @@ import {
     Skill,
     ItemType,
     ActionType,
+    HoldType,
 } from '@system/types/cosmere';
 import { CosmereActor } from '@system/documents/actor';
 import { CosmereItem } from '@system/documents/item';
@@ -58,6 +59,9 @@ export class BaseSheet extends ActorSheet {
             'click',
             this.onSelectTab.bind(this),
         );
+
+        // Item view
+        html.find('.item').on('dblclick', this.onItemDoubleClick.bind(this));
     }
 
     /* --- Internal functions --- */
@@ -108,6 +112,55 @@ export class BaseSheet extends ActorSheet {
         if (!item) return;
 
         switch (action) {
+            case 'toggle-equip':
+                if (item.isEquippable()) {
+                    void item.update({
+                        'system.equipped': !item.system.equipped,
+                    });
+                }
+                break;
+            case 'open-hold-dropdown':
+                if (item.isEquippable()) {
+                    // Get dropdown
+                    const dropdown = $(event.currentTarget!)
+                        .closest('.col')
+                        .find('.dropdown');
+
+                    // Toggle
+                    dropdown.toggleClass('active');
+                }
+                break;
+            case 'equip-hold':
+                if (item.isEquippable()) {
+                    // Get the selected hold type
+                    const holdType = $(event.currentTarget!).data(
+                        'type',
+                    ) as HoldType;
+
+                    if (
+                        holdType === item.system.equip.hold &&
+                        item.system.equipped
+                    ) {
+                        void item.update({
+                            system: {
+                                equipped: false,
+                            },
+                        });
+                    } else {
+                        void item.update({
+                            system: {
+                                equipped: true,
+                                'equip.hold': holdType,
+                            },
+                        });
+                    }
+
+                    // Find and close the dropdown
+                    $(event.currentTarget!)
+                        .closest('.dropdown')
+                        .removeClass('active');
+                }
+                break;
             case 'use':
                 void this.actor.useItem(item);
                 break;
@@ -118,6 +171,21 @@ export class BaseSheet extends ActorSheet {
             case 'delete':
                 void this.actor.deleteEmbeddedDocuments('Item', [item.id]);
         }
+    }
+
+    private onItemDoubleClick(event: Event) {
+        event.preventDefault();
+
+        // Get the item id
+        const itemId = $(event.currentTarget!)
+            .closest('[data-item-id]')
+            .data('item-id') as string;
+
+        // Find the item
+        const item = this.actor.items.get(itemId);
+        if (!item) return;
+
+        item.sheet?.render(true);
     }
 
     /* ---------------------- */
