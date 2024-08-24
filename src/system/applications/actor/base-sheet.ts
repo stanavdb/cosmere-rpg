@@ -4,6 +4,7 @@ import {
     ItemType,
     ActionType,
     HoldType,
+    Attribute,
 } from '@system/types/cosmere';
 import { CosmereActor } from '@system/documents/actor';
 import { CosmereItem } from '@system/documents/item';
@@ -95,7 +96,34 @@ export class BaseSheet extends ActorSheet {
 
     private onAttrUpdate(event: Event) {
         event.preventDefault();
-        // TODO: Implement Derived Data Updating
+
+        // Get the attribute id being updated
+        const attrId = $(event.currentTarget!)
+            .closest('.attribute[data-id]')
+            .data('id') as Attribute;
+
+        // Find the input
+        const input = $(event.currentTarget!).find('input');
+
+        // Get the value
+        const valueStr = input.val();
+        const value = Number(valueStr);
+
+        // Ensure value is valid
+        if (!valueStr || isNaN(value)) {
+            $(event.currentTarget!)
+                .find('input')
+                .val(this.actor.system.attributes[attrId].value);
+            return;
+        }
+
+        // Update attribute
+        void this.actor.update({
+            [`system.attributes.${attrId}.value`]: Math.max(
+                0,
+                Math.min(5, value),
+            ),
+        });
     }
 
     private onSelectTab(event: Event) {

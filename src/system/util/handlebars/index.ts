@@ -207,16 +207,23 @@ Handlebars.registerHelper(
                     ...Array.from(item.system.traits)
                         .filter((trait) => trait.active)
                         .map((trait) => trait.id)
-                        .map((traitId) =>
-                            isWeapon
+                        .map((traitId) => {
+                            // Get trait data
+                            const data = item.system.traits.find(
+                                (t) => t.id === traitId,
+                            )!;
+
+                            // Get the config
+                            const config = isWeapon
                                 ? CONFIG.COSMERE.traits.weaponTraits[
                                       traitId as WeaponTraitId
-                                  ].label
+                                  ]
                                 : CONFIG.COSMERE.traits.armorTraits[
                                       traitId as ArmorTraitId
-                                  ].label,
-                        )
-                        .map((label) => game.i18n!.localize(label)),
+                                  ];
+
+                            return `${game.i18n!.localize(config.label)} ${config.hasValue ? `[${data.value}]` : ''}`.trim();
+                        }),
                 );
             }
 
