@@ -37,6 +37,25 @@ export class CosmereActor<
     T extends CommonActorDataModel = CommonActorDataModel,
 > extends Actor<T, CosmereItem> {
     /**
+     * Utility function to get the modifier for a given skill for this actor.
+     * @param skill The skill to get the modifier for
+     * @param attributeOverride An optional attribute override, used instead of the default attribute
+     */
+    public getSkillMod(skill: Skill, attributeOverride?: Attribute): number {
+        // Get attribute
+        const attribute =
+            attributeOverride ?? CONFIG.COSMERE.skills[skill].attribute;
+
+        // Get skill rank
+        const rank = this.system.skills[skill].rank;
+
+        // Get attribute value
+        const attrValue = this.system.attributes[attribute].value;
+
+        return attrValue + rank;
+    }
+
+    /**
      * Roll a skill for this actor
      */
     public async rollSkill(

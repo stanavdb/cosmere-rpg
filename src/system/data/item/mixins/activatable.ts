@@ -3,10 +3,18 @@ import {
     ActionCostType,
     ItemConsumeType,
     Resource,
+    ItemResource,
     Skill,
     Attribute,
+    ItemRechargeType,
 } from '@system/types/cosmere';
 import { CosmereItem } from '@system/documents';
+
+interface ItemResourceData {
+    value: number;
+    max?: number;
+    recharge?: ItemRechargeType;
+}
 
 export interface ActivatableItemData {
     activation: {
@@ -18,7 +26,7 @@ export interface ActivatableItemData {
         consume?: {
             type: ItemConsumeType;
             value: number;
-            resource?: Resource;
+            resource?: Resource | ItemResource;
         };
 
         flavor?: string;
@@ -28,12 +36,7 @@ export interface ActivatableItemData {
         attribute?: Attribute;
     };
 
-    resources?: {
-        charge?: {
-            value: number;
-            max?: number;
-        };
-    };
+    resources?: Record<ItemResource, ItemResourceData | undefined>;
 }
 
 export function ActivatableItemMixin<P extends CosmereItem>() {
@@ -42,6 +45,8 @@ export function ActivatableItemMixin<P extends CosmereItem>() {
     ) => {
         return class mixin extends base {
             static defineSchema() {
+                const itemResources = CONFIG.COSMERE.items.resources.types;
+
                 return foundry.utils.mergeObject(super.defineSchema(), {
                     activation: new foundry.data.fields.SchemaField({
                         type: new foundry.data.fields.StringField({
@@ -58,7 +63,7 @@ export function ActivatableItemMixin<P extends CosmereItem>() {
                                 }),
                                 type: new foundry.data.fields.StringField({
                                     choices: Object.keys(
-                                        CONFIG.COSMERE.actionCosts,
+                                        CONFIG.COSMERE.action.costs,
                                     ),
                                 }),
                             },
@@ -78,7 +83,7 @@ export function ActivatableItemMixin<P extends CosmereItem>() {
                                         CONFIG.COSMERE.items.activation
                                             .consumeTypes,
                                     ),
-                                    initial: ItemConsumeType.Charge,
+                                    initial: ItemConsumeType.ItemResource,
                                 }),
                                 value: new foundry.data.fields.NumberField({
                                     required: true,
@@ -89,9 +94,16 @@ export function ActivatableItemMixin<P extends CosmereItem>() {
                                 }),
                                 resource: new foundry.data.fields.StringField({
                                     blank: false,
-                                    choices: Object.keys(
-                                        CONFIG.COSMERE.resources,
-                                    ),
+                                    choices: [
+                                        ...Object.keys(
+                                            CONFIG.COSMERE.resources,
+                                        ),
+                                        ...Object.keys(
+                                            CONFIG.COSMERE.items.resources
+                                                .types,
+                                        ),
+                                    ],
+                                    initial: ItemResource.Use,
                                 }),
                             },
                             {
@@ -106,33 +118,58 @@ export function ActivatableItemMixin<P extends CosmereItem>() {
                             choices: Object.keys(CONFIG.COSMERE.skills),
                         }),
                         attribute: new foundry.data.fields.StringField({
+                            nullable: true,
                             blank: false,
                             choices: Object.keys(CONFIG.COSMERE.attributes),
                         }),
                     }),
                     resources: new foundry.data.fields.SchemaField(
-                        {
-                            charge: new foundry.data.fields.SchemaField(
-                                {
-                                    value: new foundry.data.fields.NumberField({
-                                        required: true,
-                                        nullable: false,
-                                        min: 0,
-                                        integer: true,
-                                        initial: 0,
-                                    }),
-                                    max: new foundry.data.fields.NumberField({
-                                        min: 0,
-                                        integer: true,
-                                    }),
-                                },
-                                {
-                                    required: false,
-                                    nullable: true,
-                                    initial: null,
-                                },
-                            ),
-                        },
+                        (Object.keys(itemResources) as ItemResource[]).reduce(
+                            (schema, resource) => {
+                                schema[resource] =
+                                    new foundry.data.fields.SchemaField(
+                                        {
+                                            value: new foundry.data.fields.NumberField(
+                                                {
+                                                    required: true,
+                                                    nullable: false,
+                                                    min: 0,
+                                                    integer: true,
+                                                },
+                                            ),
+                                            max: new foundry.data.fields.NumberField(
+                                                {
+                                                    min: 0,
+                                                    integer: true,
+                                                },
+                                            ),
+                                            recharge:
+                                                new foundry.data.fields.StringField(
+                                                    {
+                                                        nullable: true,
+                                                        blank: false,
+                                                        choices: Object.keys(
+                                                            CONFIG.COSMERE.items
+                                                                .resources
+                                                                .recharge,
+                                                        ),
+                                                    },
+                                                ),
+                                        },
+                                        {
+                                            required: false,
+                                            nullable: true,
+                                            initial: null,
+                                        },
+                                    );
+
+                                return schema;
+                            },
+                            {} as Record<
+                                string,
+                                foundry.data.fields.SchemaField
+                            >,
+                        ),
                         {
                             required: false,
                             nullable: true,

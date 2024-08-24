@@ -1,8 +1,9 @@
 import COSMERE from './system/config';
 
 import './style.scss';
+import './system/hooks';
 
-import './system/util/handlebars';
+import { preloadHandlebarsTemplates } from './system/util/handlebars';
 
 import * as applications from './system/applications';
 import * as dataModels from './system/data';
@@ -19,7 +20,7 @@ declare global {
     }
 }
 
-Hooks.once('init', () => {
+Hooks.once('init', async () => {
     CONFIG.COSMERE = COSMERE;
 
     CONFIG.Actor.dataModels = dataModels.actor.config;
@@ -49,30 +50,6 @@ Hooks.once('init', () => {
     // @ts-expect-error see note
     CONFIG.Dice.rolls.push(dice.D20Roll);
 
-    //HandleBars Helper Registration
-    Handlebars.registerHelper(
-        'times',
-        (count: unknown, options: Handlebars.HelperOptions): string =>
-            [...Array(Number(count) || 0).keys()]
-                .map((i) =>
-                    options.fn(i, {
-                        data: options.data as unknown,
-                        blockParams: [i],
-                    }),
-                )
-                .join(''),
-    );
-
-    Handlebars.registerHelper('add', function (thing1, thing2): number {
-        return thing1 + thing2;
-    });
-    Handlebars.registerHelper('sub', function (thing1, thing2): number {
-        return thing1 - thing2;
-    });
-    Handlebars.registerHelper('multi', function (thing1, thing2): number {
-        return thing1 * thing2;
-    });
-    Handlebars.registerHelper('divide', function (thing1, thing2): number {
-        return thing1 / thing2;
-    });
+    // Load templates
+    await preloadHandlebarsTemplates();
 });

@@ -1,7 +1,13 @@
+import { EquipType, HoldType } from '@system/types/cosmere';
 import { CosmereItem } from '@system/documents';
 
 export interface EquippableItemData {
     equipped: boolean;
+    alwaysEquipped?: boolean;
+    equip: {
+        type: EquipType;
+        hold?: HoldType;
+    };
 }
 
 export function EquippableItemMixin<P extends CosmereItem>() {
@@ -16,6 +22,25 @@ export function EquippableItemMixin<P extends CosmereItem>() {
                         nullable: false,
                         initial: false,
                         label: 'Equipped',
+                    }),
+                    alwaysEquipped: new foundry.data.fields.BooleanField({
+                        nullable: true,
+                    }),
+                    equip: new foundry.data.fields.SchemaField({
+                        type: new foundry.data.fields.StringField({
+                            required: true,
+                            nullable: false,
+                            initial: EquipType.Wear,
+                            choices: Object.keys(
+                                CONFIG.COSMERE.items.equip.types,
+                            ),
+                        }),
+                        hold: new foundry.data.fields.StringField({
+                            nullable: true,
+                            choices: Object.keys(
+                                CONFIG.COSMERE.items.equip.hold,
+                            ),
+                        }),
                     }),
                 });
             }

@@ -113,7 +113,7 @@
     .label,
     p {
         text-align: center;
-        font-size: 10pt;
+        font-size: 8pt;
     }
 }
 
@@ -121,5 +121,26 @@
     .value {
         font-size: 1rem;
         font-weight: normal;
+    }
+}
+
+.documents {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+
+    .favorites {
+        width: 33%;
+    }
+
+    .tabs {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: unset;
+
+        .tab-body {
+            flex: 1;
+        }
     }
 }
