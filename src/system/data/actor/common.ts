@@ -3,8 +3,6 @@ import {
     Resource,
     AttributeGroup,
     Skill,
-    Currency,
-    CurrencyDenomination,
     ExpertiseType,
     DeflectSource,
     ItemType,
@@ -30,8 +28,8 @@ interface ExpertiseData {
 }
 
 interface CurrencyDenominationData {
-    id: CurrencyDenomination;
-    secondaryId?: CurrencyDenomination; // Optional secondary id for doubly-denominated currencies, like spheres
+    id: string;
+    secondaryId?: string; // Optional secondary id for doubly-denominated currencies, like spheres
     amount: number;
 
     /*
@@ -72,7 +70,7 @@ export interface CommonActorData {
     >;
     injuries: Derived<number>;
     currency: Record<
-        Currency,
+        string,
         {
             denominations: CurrencyDenominationData[];
             total: Derived<number>;
