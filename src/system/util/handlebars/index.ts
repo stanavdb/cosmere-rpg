@@ -431,7 +431,7 @@ export async function preloadHandlebarsTemplates() {
     const partials = [
         'systems/cosmere-rpg/templates/actors/parts/actions.hbs',
         'systems/cosmere-rpg/templates/actors/parts/inventory.hbs',
-        'systems/cosmere-rpg/templates/chat/parts/roll-details.hbs',
+        // 'systems/cosmere-rpg/templates/chat/parts/roll-details.hbs',
     ];
 
     return await loadTemplates(
