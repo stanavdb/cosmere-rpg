@@ -1,1 +1,32 @@
 @import './style/sheets/module.scss';
+
+/* ----------------------------------------- */
+/*  Globals                                  */
+/* ----------------------------------------- */
+:root {
+    --plotweaver-color-white: white;
+    --plotweaver-color-black: black;
+    --plotweaver-color-off-white: #f0f0e0;
+    --plotweaver-color-dark-1: #111;
+    --plotweaver-color-dark-2: #222;
+    --plotweaver-color-dark-3: #333;
+    --plotweaver-color-dark-4: #444;
+    --plotweaver-color-dark-5: #555;
+    --plotweaver-color-hlt-front: #286f3e;
+    --plotweaver-color-hlt-back: #6b1b2a;
+    --plotweaver-color-fcs-front: #6e45e4;
+    --plotweaver-color-fcs-back: #281c4a;
+    --plotweaver-color-ivs-front: #3e6abb;
+    --plotweaver-color-ivs-back: #182845;
+
+    --stormlight-color-gold: #c9a760;
+    --stormlight-color-blue-grey: #5e6c7e;
+    --stormlight-color-blue-light: #456a95;
+    --stormlight-color-blue-deep: #10213e;
+    --stormlight-color-blue-dark: #010e2d;
+    --stormlight-color-base-5: #132137;
+    --stormlight-color-base-4: #1b2d49;
+    --stormlight-color-base-3: #263c5e;
+    --stormlight-color-base-2: #354f78;
+    --stormlight-color-base-1: #506684;
+}
