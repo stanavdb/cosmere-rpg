@@ -1,4 +1,3 @@
-import { ArmorId } from '@system/types/cosmere';
 import { CosmereItem } from '@src/system/documents';
 
 // Mixins
@@ -14,12 +13,12 @@ import { PhysicalItemMixin, PhysicalItemData } from './mixins/physical';
 import { ExpertiseItemMixin, ExpertiseItemData } from './mixins/expertise';
 
 export interface ArmorItemData
-    extends TypedItemData<ArmorId>,
+    extends TypedItemData,
         DescriptionItemData,
         EquippableItemData,
+        ExpertiseItemData,
         TraitsItemData,
-        PhysicalItemData,
-        ExpertiseItemData {
+        PhysicalItemData {
     deflect?: number;
 }
 
@@ -30,9 +29,9 @@ export class ArmorItemDataModel extends DataModelMixin<
     TypedItemMixin(),
     DescriptionItemMixin(),
     EquippableItemMixin(),
+    ExpertiseItemMixin(),
     TraitsItemMixin(),
     PhysicalItemMixin(),
-    ExpertiseItemMixin(),
 ) {
     static defineSchema() {
         return foundry.utils.mergeObject(super.defineSchema(), {

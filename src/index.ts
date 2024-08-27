@@ -1,8 +1,9 @@
 import COSMERE from './system/config';
 
 import './style.scss';
+import './system/hooks';
 
-import './system/util/handlebars';
+import { preloadHandlebarsTemplates } from './system/util/handlebars';
 
 import * as applications from './system/applications';
 import * as dataModels from './system/data';
@@ -19,7 +20,7 @@ declare global {
     }
 }
 
-Hooks.once('init', () => {
+Hooks.once('init', async () => {
     CONFIG.COSMERE = COSMERE;
 
     CONFIG.Actor.dataModels = dataModels.actor.config;
@@ -31,11 +32,11 @@ Hooks.once('init', () => {
     Actors.unregisterSheet('core', ActorSheet);
     Actors.registerSheet('cosmere-rpg', applications.actor.CharacterSheet, {
         types: ['character'],
-        label: 'Character',
+        label: `${game.i18n?.localize('COSMERE.Actor.Character.Character')}`,
     });
     Actors.registerSheet('cosmere-rpg', applications.actor.AdversarySheet, {
         types: ['adversary'],
-        label: 'Adversary',
+        label: `${game.i18n?.localize('COSMERE.Actor.Adversary.Adversary')}`,
     });
 
     CONFIG.Dice.types.push(dice.PlotDie);
@@ -48,4 +49,7 @@ Hooks.once('init', () => {
     // @league-of-foundry-developers/foundry-vtt-types/src/foundry/client-esm/dice/terms/term.d.mts
     // @ts-expect-error see note
     CONFIG.Dice.rolls.push(dice.D20Roll);
+
+    // Load templates
+    await preloadHandlebarsTemplates();
 });

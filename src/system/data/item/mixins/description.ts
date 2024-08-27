@@ -4,6 +4,7 @@ export interface DescriptionItemData {
     description?: {
         value?: string;
         chat?: string;
+        short?: string;
     };
 }
 
@@ -21,6 +22,7 @@ export function DescriptionItemMixin<P extends CosmereItem>() {
                         chat: new foundry.data.fields.HTMLField({
                             label: 'Chat description',
                         }),
+                        short: new foundry.data.fields.StringField(),
                     }),
                 });
             }

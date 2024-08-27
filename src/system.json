@@ -23,16 +23,24 @@
             "weapon": {},
             "armor": {},
             "equipment": {},
-            "fabrial": {},
 
             "ancestry": {},
             "path": {},
             "talent": {},
             "trait": {},
 
-            "action": {}
+            "action": {},
+
+            "injury": {}
         }
     },
+    "languages": [
+        {
+            "lang": "en",
+            "name": "English",
+            "path": "lang/en.json"
+        }
+    ],
     "socket": true,
     "grid": {
         "distance": 5,

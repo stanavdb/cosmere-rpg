@@ -1,4 +1,4 @@
-export enum Size {
+export const enum Size {
     Small = 'small',
     Medium = 'medium',
     Large = 'large',
@@ -10,16 +10,15 @@ export enum Size {
  * A non-exhaustive list of creature types.
  * Used to provide standard options.
  */
-export enum CreatureType {
+export const enum CreatureType {
     Humanoid = 'humanoid',
     Animal = 'animal',
-    Spren = 'spren',
 }
 
 /**
  * A non-exhaustive list of conditions
  */
-export enum Condition {
+export const enum Condition {
     Afflicted = 'afflicted',
     Determined = 'determined',
     Disoriented = 'disoriented',
@@ -36,13 +35,21 @@ export enum Condition {
     Unconcious = 'unconcious',
 }
 
-export enum AttributeGroup {
+export const enum InjuryDuration {
+    FleshWound = 'flesh_wound',
+    ShallowInjury = 'shallow_injury',
+    ViciousInjury = 'vicious_injury',
+    PermanentInjury = 'permanent_injury',
+    Death = 'death',
+}
+
+export const enum AttributeGroup {
     Physical = 'phy',
     Cognitive = 'cog',
     Spiritual = 'spi',
 }
 
-export enum Attribute {
+export const enum Attribute {
     Strength = 'str',
     Speed = 'spd',
     Intellect = 'int',
@@ -51,13 +58,13 @@ export enum Attribute {
     Presence = 'pre',
 }
 
-export enum Resource {
+export const enum Resource {
     Health = 'hea',
     Focus = 'foc',
     Investiture = 'inv',
 }
 
-export enum Skill {
+export const enum Skill {
     Agility = 'agi',
     Athletics = 'ath',
     HeavyWeapons = 'hwp',
@@ -78,15 +85,9 @@ export enum Skill {
     Perception = 'prc',
     Persuasion = 'prs',
     Survival = 'sur',
-
-    // Surge skills
-    Adhesion = 'adh',
-    Gravitation = 'gra',
-    Illumination = 'ill',
-    Transformation = 'tra',
 }
 
-export enum DerivedStatistic {
+export const enum DerivedStatistic {
     MovementRate = 'mvr',
     LiftingCapactiy = 'lif',
     RecoveryDie = 'rcd',
@@ -95,7 +96,7 @@ export enum DerivedStatistic {
 /**
  * The categories of weapon available
  */
-export enum WeaponType {
+export const enum WeaponType {
     Light = 'light_wpn',
     Heavy = 'heavy_wpn',
     Special = 'special_wpn',
@@ -106,33 +107,10 @@ export enum WeaponType {
  * This is not an exhaustive list of all possible weapons,
  * but is used to populate the `CONFIG.COSMERE.weapons` property.
  */
-export enum WeaponId {
-    // Light weapons
-    Javelin = 'javelin',
-    Knife = 'knife',
-    Mace = 'mace',
-    Rapier = 'rapier',
-    Shortspear = 'shortspear',
-    Sidesword = 'sidesword',
-    Staff = 'staff',
-    Shortbow = 'shortbow',
-    Sling = 'sling',
-
-    // Heavy weapons
-    Axe = 'axe',
-    Greatsword = 'greatsword',
-    Hammer = 'hammer',
-    Longspear = 'longspear',
-    Longsword = 'longsword',
-    Poleaxe = 'poleaxe',
-    Shield = 'shield',
-    Crossbow = 'crossbow',
-    Longbow = 'longbow',
-
+export const enum WeaponId {
     // Special
     Improvised = 'improvised',
     Unarmed = 'unarmed',
-    Shardblade = 'shardblade',
 }
 
 /**
@@ -140,17 +118,9 @@ export enum WeaponId {
  * This is not an exhaustive list of all possible weapons,
  * but is used to populate the `CONFIG.COSMERE.armors` property.
  */
-export enum ArmorId {
-    Uniform = 'uniform',
-    Leather = 'leather',
-    Chain = 'chain',
-    Breastplate = 'breastplate',
-    HalfPlate = 'half_plate',
-    FullPlate = 'plate',
-    Shardplate = 'shardplate',
-}
+export const enum ArmorId {}
 
-export enum ExpertiseType {
+export const enum ExpertiseType {
     Armor = 'armor',
     Cultural = 'cultural',
     Specialist = 'specialist',
@@ -163,7 +133,7 @@ export enum ExpertiseType {
  * This is not an exhaustive list of all possible weapon traits,
  * but is used to populate the `CONFIG.COSMERE.traits.weaponTraitIds` property.
  */
-export enum WeaponTraitId {
+export const enum WeaponTraitId {
     Cumbersome = 'cumbersome',
     Dangerous = 'dangerous',
     Deadly = 'deadly',
@@ -186,49 +156,91 @@ export enum WeaponTraitId {
  * This is not an exhaustive list of all possible armor traits,
  * but is used to populate the `CONFIG.COSMERE.traits.armorTraitIds` property.
  */
-export enum ArmorTraitId {
+export const enum ArmorTraitId {
     Cumbersome = 'cumbersome',
     Dangerous = 'dangerous',
     Presentable = 'presentable',
 }
 
-export enum AdversaryRole {
+export const enum AdversaryRole {
     Minion = 'minion',
     Rival = 'rival',
     Boss = 'boss',
 }
 
-export enum DeflectSource {
+export const enum DeflectSource {
     None = 'none',
     Armor = 'armor',
 }
 
-export enum ActionCostType {
+export const enum ActivationType {
+    Action = 'action',
+    Utility = 'utility',
+    SkillTest = 'skill_test',
+}
+
+export const enum ItemConsumeType {
+    ActorResource = 'actor_resource', // E.g. health, focus, investiture
+    ItemResource = 'item_resource', // E.g. uses, charges
+    Item = 'item',
+}
+
+export const enum ItemResource {
+    Use = 'use',
+    Charge = 'charge',
+}
+
+export const enum ItemRechargeType {
+    PerScene = 'per_scene',
+}
+
+export const enum EquipType {
+    Hold = 'hold', // Item that you equip by holding it (either in one or two hands)
+    Wear = 'wear', // Item that you equip by wearing it
+}
+
+export const enum HoldType {
+    MainHand = 'main_hand',
+    OffHand = 'off_hand',
+    TwoHanded = 'two_handed',
+}
+
+export const enum ActionType {
+    Basic = 'basic',
+}
+
+export const enum ActionCostType {
     Action = 'act',
     Reaction = 'rea',
     FreeAction = 'fre',
+    Special = 'spe',
 }
 
-export enum DamageType {
+export const enum AttackType {
+    Melee = 'melee',
+    Ranged = 'ranged',
+}
+
+export const enum DamageType {
     Energy = 'energy',
     Impact = 'impact',
     Keen = 'keen',
     Spirit = 'spirit',
     Vital = 'vital',
+    Healing = 'heal',
 }
 
 /* --- System --- */
 
-export enum ActorType {
+export const enum ActorType {
     Character = 'character',
     Adversary = 'adversary',
 }
 
-export enum ItemType {
+export const enum ItemType {
     Weapon = 'weapon',
     Armor = 'armor',
     Equipment = 'equipment',
-    Fabrial = 'fabrial',
 
     Ancestry = 'ancestry',
     Path = 'path',
@@ -236,4 +248,6 @@ export enum ItemType {
     Trait = 'trait',
 
     Action = 'action',
+
+    Injury = 'injury',
 }

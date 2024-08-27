@@ -4,120 +4,147 @@ import {
     Size,
     CreatureType,
     Condition,
+    InjuryDuration,
     Attribute,
     AttributeGroup,
     Resource,
     Skill,
     WeaponType,
     WeaponId,
-    ArmorId,
     ExpertiseType,
     WeaponTraitId,
     ArmorTraitId,
     AdversaryRole,
     DeflectSource,
+    ActivationType,
+    ItemConsumeType,
+    ActionType,
     ActionCostType,
     DamageType,
+    ItemType,
+    AttackType,
+    ItemRechargeType,
+    ItemResource,
+    EquipType,
+    HoldType,
 } from './types/cosmere';
 
 const COSMERE: CosmereRPGConfig = {
     sizes: {
         [Size.Small]: {
-            label: 'Small',
+            label: 'COSMERE.Actor.Size.Small',
             size: 2.5,
             unit: 'feet',
         },
         [Size.Medium]: {
-            label: 'Medium',
+            label: 'COSMERE.Actor.Size.Medium',
             size: 5,
             unit: 'feet',
         },
         [Size.Large]: {
-            label: 'Large',
+            label: 'COSMERE.Actor.Size.Large',
             size: 10,
             unit: 'feet',
         },
         [Size.Huge]: {
-            label: 'Huge',
+            label: 'COSMERE.Actor.Size.Huge',
             size: 15,
             unit: 'feet',
         },
         [Size.Garguantuan]: {
-            label: 'Gargantuan',
+            label: 'COSMERE.Actor.Size.Gargantuan',
             size: 20,
             unit: 'feet',
         },
     },
     creatureTypes: {
         [CreatureType.Humanoid]: {
-            label: 'Humanoid',
+            label: 'COSMERE.Actor.Type.Humanoid',
         },
         [CreatureType.Animal]: {
-            label: 'Animal',
-        },
-        [CreatureType.Spren]: {
-            label: 'Spren',
+            label: 'COSMERE.Actor.Type.Animal',
         },
     },
 
     conditions: {
         [Condition.Afflicted]: {
-            label: 'Afflicted',
+            label: 'COSMERE.Actor.Conditions.Afflicted',
         },
         [Condition.Determined]: {
-            label: 'Determined',
+            label: 'COSMERE.Actor.Conditions.Determined',
         },
         [Condition.Disoriented]: {
-            label: 'Disoriented',
+            label: 'COSMERE.Actor.Conditions.Disoriented',
         },
         [Condition.Empowered]: {
-            label: 'Empowered',
+            label: 'COSMERE.Actor.Conditions.Empowered',
         },
         [Condition.Enhanced]: {
-            label: 'Enhanced',
+            label: 'COSMERE.Actor.Conditions.Enhanced',
         },
         [Condition.Exhausted]: {
-            label: 'Exhausted',
+            label: 'COSMERE.Actor.Conditions.Exhausted',
         },
         [Condition.Focused]: {
-            label: 'Focused',
+            label: 'COSMERE.Actor.Conditions.Focused',
         },
         [Condition.Immobilized]: {
-            label: 'Immobilized',
+            label: 'COSMERE.Actor.Conditions.Immobilized',
         },
         [Condition.Prone]: {
-            label: 'Prone',
+            label: 'COSMERE.Actor.Conditions.Prone',
         },
         [Condition.Restrained]: {
-            label: 'Restrained',
+            label: 'COSMERE.Actor.Conditions.Restrained',
         },
         [Condition.Slowed]: {
-            label: 'Slowed',
+            label: 'COSMERE.Actor.Conditions.Slowed',
         },
         [Condition.Stunned]: {
-            label: 'Stunned',
+            label: 'COSMERE.Actor.Conditions.Stunned',
         },
         [Condition.Surprised]: {
-            label: 'Surprised',
+            label: 'COSMERE.Actor.Conditions.Surprised',
         },
         [Condition.Unconcious]: {
-            label: 'Unconcious',
+            label: 'COSMERE.Actor.Conditions.Unconscious',
+        },
+    },
+
+    injuries: {
+        [InjuryDuration.FleshWound]: {
+            label: 'COSMERE.Item.Injuries.Duration.FleshWound',
+            durationFormula: '1',
+        },
+        [InjuryDuration.ShallowInjury]: {
+            label: 'COSMERE.Item.Injuries.Duration.ShallowInjury',
+            durationFormula: '1d6',
+        },
+        [InjuryDuration.ViciousInjury]: {
+            label: 'COSMERE.Item.Injuries.Duration.ViciousInjury',
+            durationFormula: '6d6',
+        },
+        [InjuryDuration.PermanentInjury]: {
+            label: 'COSMERE.Item.Injuries.Duration.PermanentInjury',
+        },
+        [InjuryDuration.Death]: {
+            label: 'COSMERE.Item.Injuries.Duration.Death',
         },
     },
 
     attributeGroups: {
         [AttributeGroup.Physical]: {
-            label: 'Physical',
+            label: 'COSMERE.AttributeGroup.Physical.long',
             attributes: [Attribute.Strength, Attribute.Speed],
             resource: Resource.Health,
         },
         [AttributeGroup.Cognitive]: {
-            label: 'Cognitive',
+            label: 'COSMERE.AttributeGroup.Cognitive.long',
             attributes: [Attribute.Intellect, Attribute.Willpower],
             resource: Resource.Focus,
         },
         [AttributeGroup.Spiritual]: {
-            label: 'Spiritual',
+            label: 'COSMERE.AttributeGroup.Spiritual.long',
             attributes: [Attribute.Awareness, Attribute.Presence],
             resource: Resource.Investiture,
         },
@@ -125,11 +152,13 @@ const COSMERE: CosmereRPGConfig = {
 
     attributes: {
         [Attribute.Strength]: {
-            label: 'Strength',
+            label: 'COSMERE.Actor.Attribute.Strength.long',
+            labelShort: 'COSMERE.Actor.Attribute.Strength.short',
             skills: [Skill.Athletics, Skill.HeavyWeapons],
         },
         [Attribute.Speed]: {
-            label: 'Speed',
+            label: 'COSMERE.Actor.Attribute.Speed.long',
+            labelShort: 'COSMERE.Actor.Attribute.Speed.short',
             skills: [
                 Skill.Agility,
                 Skill.LightWeapons,
@@ -138,7 +167,8 @@ const COSMERE: CosmereRPGConfig = {
             ],
         },
         [Attribute.Intellect]: {
-            label: 'Intellect',
+            label: 'COSMERE.Actor.Attribute.Intellect.long',
+            labelShort: 'COSMERE.Actor.Attribute.Intellect.short',
             skills: [
                 Skill.Crafting,
                 Skill.Deduction,
@@ -147,283 +177,339 @@ const COSMERE: CosmereRPGConfig = {
             ],
         },
         [Attribute.Willpower]: {
-            label: 'Willpower',
-            skills: [
-                Skill.Discipline,
-                Skill.Intimidation,
-                Skill.Transformation,
-            ],
+            label: 'COSMERE.Actor.Attribute.Willpower.long',
+            labelShort: 'COSMERE.Actor.Attribute.Willpower.short',
+            skills: [Skill.Discipline, Skill.Intimidation],
         },
         [Attribute.Awareness]: {
-            label: 'Awareness',
-            skills: [
-                Skill.Insight,
-                Skill.Perception,
-                Skill.Survival,
-
-                Skill.Gravitation,
-            ],
+            label: 'COSMERE.Actor.Attribute.Awareness.long',
+            labelShort: 'COSMERE.Actor.Attribute.Awareness.short',
+            skills: [Skill.Insight, Skill.Perception, Skill.Survival],
         },
         [Attribute.Presence]: {
-            label: 'Presence',
-            skills: [
-                Skill.Deception,
-                Skill.Leadership,
-                Skill.Persuasion,
-
-                Skill.Adhesion,
-                Skill.Illumination,
-            ],
+            label: 'COSMERE.Actor.Attribute.Presence.long',
+            labelShort: 'COSMERE.Actor.Attribute.Presence.short',
+            skills: [Skill.Deception, Skill.Leadership, Skill.Persuasion],
         },
     },
 
     resources: {
         [Resource.Health]: {
-            label: 'Health',
+            label: 'COSMERE.Actor.Resource.Health',
             deflect: true,
         },
         [Resource.Focus]: {
-            label: 'Focus',
+            label: 'COSMERE.Actor.Resource.Focus',
         },
         [Resource.Investiture]: {
-            label: 'Investiture',
+            label: 'COSMERE.Actor.Resource.Investiture',
         },
     },
 
     skills: {
         [Skill.Agility]: {
-            label: 'Agility',
+            label: 'COSMERE.Actor.Skill.Agility',
             attribute: Attribute.Speed,
+            attrLabel: 'COSMERE.Actor.Attribute.Speed.short',
         },
         [Skill.Athletics]: {
-            label: 'Athletics',
+            label: 'COSMERE.Actor.Skill.Athletics',
             attribute: Attribute.Strength,
+            attrLabel: 'COSMERE.Actor.Attribute.Strength.short',
         },
         [Skill.HeavyWeapons]: {
-            label: 'Heavy Weapons',
+            label: 'COSMERE.Actor.Skill.HeavyWeapons',
             attribute: Attribute.Strength,
+            attrLabel: 'COSMERE.Actor.Attribute.Strength.short',
         },
         [Skill.LightWeapons]: {
-            label: 'Light Weapons',
+            label: 'COSMERE.Actor.Skill.LightWeapons',
             attribute: Attribute.Speed,
+            attrLabel: 'COSMERE.Actor.Attribute.Speed.short',
         },
         [Skill.Stealth]: {
-            label: 'Stealth',
+            label: 'COSMERE.Actor.Skill.Stealth',
             attribute: Attribute.Speed,
+            attrLabel: 'COSMERE.Actor.Attribute.Speed.short',
         },
         [Skill.Thievery]: {
-            label: 'Thievery',
+            label: 'COSMERE.Actor.Skill.Thievery',
             attribute: Attribute.Speed,
+            attrLabel: 'COSMERE.Actor.Attribute.Speed.short',
         },
 
         [Skill.Crafting]: {
-            label: 'Crafting',
+            label: 'COSMERE.Actor.Skill.Crafting',
             attribute: Attribute.Intellect,
+            attrLabel: 'COSMERE.Actor.Attribute.Intellect.short',
         },
         [Skill.Deduction]: {
-            label: 'Deduction',
+            label: 'COSMERE.Actor.Skill.Deduction',
             attribute: Attribute.Intellect,
+            attrLabel: 'COSMERE.Actor.Attribute.Intellect.short',
         },
         [Skill.Discipline]: {
-            label: 'Discipline',
+            label: 'COSMERE.Actor.Skill.Discipline',
             attribute: Attribute.Willpower,
+            attrLabel: 'COSMERE.Actor.Attribute.Willpower.short',
         },
         [Skill.Intimidation]: {
-            label: 'Intimidation',
+            label: 'COSMERE.Actor.Skill.Intimidation',
             attribute: Attribute.Willpower,
+            attrLabel: 'COSMERE.Actor.Attribute.Willpower.short',
         },
         [Skill.Lore]: {
-            label: 'Lore',
+            label: 'COSMERE.Actor.Skill.Lore',
             attribute: Attribute.Intellect,
+            attrLabel: 'COSMERE.Actor.Attribute.Intellect.short',
         },
         [Skill.Medicine]: {
-            label: 'Medicine',
+            label: 'COSMERE.Actor.Skill.Medicine',
             attribute: Attribute.Intellect,
+            attrLabel: 'COSMERE.Actor.Attribute.Intellect.short',
         },
 
         [Skill.Deception]: {
-            label: 'Deception',
+            label: 'COSMERE.Actor.Skill.Deception',
             attribute: Attribute.Presence,
+            attrLabel: 'COSMERE.Actor.Attribute.Presence.short',
         },
         [Skill.Insight]: {
-            label: 'Insight',
+            label: 'COSMERE.Actor.Skill.Insight',
             attribute: Attribute.Awareness,
+            attrLabel: 'COSMERE.Actor.Attribute.Awareness.short',
         },
         [Skill.Leadership]: {
-            label: 'Leadership',
+            label: 'COSMERE.Actor.Skill.Leadership',
             attribute: Attribute.Presence,
+            attrLabel: 'COSMERE.Actor.Attribute.Presence.short',
         },
         [Skill.Perception]: {
-            label: 'Perception',
+            label: 'COSMERE.Actor.Skill.Perception',
             attribute: Attribute.Awareness,
+            attrLabel: 'COSMERE.Actor.Attribute.Awareness.short',
         },
         [Skill.Persuasion]: {
-            label: 'Persuasion',
+            label: 'COSMERE.Actor.Skill.Persuasion',
             attribute: Attribute.Presence,
+            attrLabel: 'COSMERE.Actor.Attribute.Presence.short',
         },
         [Skill.Survival]: {
-            label: 'Survival',
+            label: 'COSMERE.Actor.Skill.Survival',
             attribute: Attribute.Awareness,
-        },
-
-        // Surges,
-        [Skill.Adhesion]: {
-            label: 'Adhesion',
-            attribute: Attribute.Presence,
-            hiddenUntilAquired: true,
-        },
-        [Skill.Gravitation]: {
-            label: 'Gravitation',
-            attribute: Attribute.Awareness,
-            hiddenUntilAquired: true,
-        },
-        [Skill.Illumination]: {
-            label: 'Illumination',
-            attribute: Attribute.Presence,
-            hiddenUntilAquired: true,
-        },
-        [Skill.Transformation]: {
-            label: 'Transformation',
-            attribute: Attribute.Willpower,
-            hiddenUntilAquired: true,
+            attrLabel: 'COSMERE.Actor.Attribute.Awareness.short',
         },
     },
 
+    items: {
+        types: {
+            [ItemType.Weapon]: {
+                label: 'COSMERE.Item.Type.Weapon.label',
+                labelPlural: 'COSMERE.Item.Type.Weapon.label_plural',
+            },
+            [ItemType.Armor]: {
+                label: 'COSMERE.Item.Type.Armor.label',
+                labelPlural: 'COSMERE.Item.Type.Armor.label_plural',
+            },
+            [ItemType.Equipment]: {
+                label: 'COSMERE.Item.Type.Equipment.label',
+                labelPlural: 'COSMERE.Item.Type.Equipment.label_plural',
+            },
+            [ItemType.Ancestry]: {
+                label: 'COSMERE.Item.Type.Ancestry.label',
+                labelPlural: 'COSMERE.Item.Type.Ancestry.label_plural',
+            },
+            [ItemType.Path]: {
+                label: 'COSMERE.Item.Type.Path.label',
+                labelPlural: 'COSMERE.Item.Type.Path.label_plural',
+            },
+            [ItemType.Talent]: {
+                label: 'COSMERE.Item.Type.Talent.label',
+                labelPlural: 'COSMERE.Item.Type.Talent.label_plural',
+            },
+            [ItemType.Action]: {
+                label: 'COSMERE.Item.Type.Action.label',
+                labelPlural: 'COSMERE.Item.Type.Action.label_plural',
+            },
+            [ItemType.Trait]: {
+                label: 'COSMERE.Item.Type.Trait.label',
+                labelPlural: 'COSMERE.Item.Type.Trait.label_plural',
+            },
+            [ItemType.Injury]: {
+                label: 'COSMERE.Item.Type.Injury.label',
+                labelPlural: 'COSMERE.Item.Type.Injury.label_plural',
+            },
+        },
+        activation: {
+            types: {
+                [ActivationType.Action]: {
+                    label: 'COSMERE.Item.Activation.Type.Action',
+                },
+                [ActivationType.SkillTest]: {
+                    label: 'COSMERE.Item.Activation.Type.SkillTest',
+                },
+                [ActivationType.Utility]: {
+                    label: 'COSMERE.Item.Activation.Type.Utility',
+                },
+            },
+            consumeTypes: {
+                [ItemConsumeType.ActorResource]: {
+                    label: 'COSMERE.Item.Activation.ConsumeType.ActorResource.Label',
+                },
+                [ItemConsumeType.ItemResource]: {
+                    label: 'COSMERE.Item.Activation.ConsumeType.ItemResource.Label',
+                },
+                [ItemConsumeType.Item]: {
+                    label: 'COSMERE.Item.Activation.ConsumeType.Item.Label',
+                },
+            },
+        },
+        resources: {
+            types: {
+                [ItemResource.Use]: {
+                    label: 'COSMERE.Item.Resources.Use.Singular',
+                    labelPlural: 'COSMERE.Item.Resources.Use.Plural',
+                },
+                [ItemResource.Charge]: {
+                    label: 'COSMERE.Item.Resources.Charge.Singular',
+                    labelPlural: 'COSMERE.Item.Resources.Charge.Plural',
+                },
+            },
+            recharge: {
+                [ItemRechargeType.PerScene]: {
+                    label: 'COSMERE.Item.Resources.Recharge.PerScene',
+                },
+            },
+        },
+        equip: {
+            types: {
+                [EquipType.Wear]: {
+                    label: 'COSMERE.Item.Equip.Types.Wear.Label',
+                    icon: '<i class="fa-solid fa-shirt"></i>',
+                },
+                [EquipType.Hold]: {
+                    label: 'COSMERE.Item.Equip.Types.Hold.Label',
+                    icon: '<i class="fa-solid fa-hand-fist"></i>',
+                },
+            },
+            hold: {
+                [HoldType.MainHand]: {
+                    label: 'COSMERE.Item.Equip.Hold.MainHand.Label',
+                    icon: '<i class="fa-solid fa-hand"></i>',
+                },
+                [HoldType.OffHand]: {
+                    label: 'COSMERE.Item.Equip.Hold.OffHand.Label',
+                    icon: '<i class="fa-regular fa-hand"></i>',
+                },
+                [HoldType.TwoHanded]: {
+                    label: 'COSMERE.Item.Equip.Hold.TwoHanded.Label',
+                    icon: '<i class="fa-solid fa-hands"></i>',
+                },
+            },
+        },
+    },
+
+    currencies: {},
+
     weaponTypes: {
         [WeaponType.Light]: {
-            label: 'Light',
+            label: 'COSMERE.Item.Weapon.Type.Light',
         },
         [WeaponType.Heavy]: {
-            label: 'Heavy',
+            label: 'COSMERE.Item.Weapon.Type.Heavy',
         },
         [WeaponType.Special]: {
-            label: 'Special',
+            label: 'COSMERE.Item.Weapon.Type.Special',
         },
     },
 
     // TODO: These should reference their respective item ids in the compendium
     weapons: {
-        [WeaponId.Javelin]: { reference: '' },
-        [WeaponId.Knife]: { reference: '' },
-        [WeaponId.Mace]: { reference: '' },
-        [WeaponId.Rapier]: { reference: '' },
-        [WeaponId.Shortspear]: { reference: '' },
-        [WeaponId.Sidesword]: { reference: '' },
-        [WeaponId.Staff]: { reference: '' },
-        [WeaponId.Shortbow]: { reference: '' },
-        [WeaponId.Sling]: { reference: '' },
-
-        [WeaponId.Axe]: { reference: '' },
-        [WeaponId.Greatsword]: { reference: '' },
-        [WeaponId.Hammer]: { reference: '' },
-        [WeaponId.Longspear]: { reference: '' },
-        [WeaponId.Longsword]: { reference: '' },
-        [WeaponId.Poleaxe]: { reference: '' },
-        [WeaponId.Shield]: { reference: '' },
-        [WeaponId.Crossbow]: { reference: '' },
-        [WeaponId.Longbow]: { reference: '' },
-
         [WeaponId.Improvised]: { reference: '' },
         [WeaponId.Unarmed]: { reference: '' },
-        [WeaponId.Shardblade]: {
-            reference: '',
-            specialExpertise: true,
-        },
     },
 
-    // TODO: These should reference their respective item ids in the compendium
-    armors: {
-        [ArmorId.Uniform]: { reference: '' },
-        [ArmorId.Leather]: { reference: '' },
-        [ArmorId.Chain]: { reference: '' },
-        [ArmorId.Breastplate]: { reference: '' },
-        [ArmorId.HalfPlate]: { reference: '' },
-        [ArmorId.FullPlate]: { reference: '' },
-        [ArmorId.Shardplate]: {
-            reference: '',
-            specialExpertise: true,
-        },
-    },
+    armors: {},
 
     expertiseTypes: {
         [ExpertiseType.Armor]: {
-            label: 'Armor',
+            label: 'COSMERE.Actor.Character.Expertise.Armor',
         },
         [ExpertiseType.Cultural]: {
-            label: 'Cultural',
+            label: 'COSMERE.Actor.Character.Expertise.Cultural',
         },
         [ExpertiseType.Specialist]: {
-            label: 'Specialist',
+            label: 'COSMERE.Actor.Character.Expertise.Specialist',
         },
         [ExpertiseType.Utility]: {
-            label: 'Utility',
+            label: 'COSMERE.Actor.Character.Expertise.Utility',
         },
         [ExpertiseType.Weapon]: {
-            label: 'Weapon',
+            label: 'COSMERE.Actor.Character.Expertise.Weapon',
         },
     },
 
     traits: {
         weaponTraits: {
             [WeaponTraitId.Cumbersome]: {
-                label: 'Cumbersome',
+                label: 'COSMERE.Item.Weapon.Trait.Cumbersome',
                 hasValue: true,
             },
             [WeaponTraitId.Dangerous]: {
-                label: 'Dangerous',
+                label: 'COSMERE.Item.Weapon.Trait.Dangerous',
             },
             [WeaponTraitId.Deadly]: {
-                label: 'Deadly',
+                label: 'COSMERE.Item.Weapon.Trait.Deadly',
             },
             [WeaponTraitId.Defensive]: {
-                label: 'Defensive',
+                label: 'COSMERE.Item.Weapon.Trait.Defensive',
             },
             [WeaponTraitId.Discreet]: {
-                label: 'Discreet',
+                label: 'COSMERE.Item.Weapon.Trait.Discreet',
             },
             [WeaponTraitId.Indirect]: {
-                label: 'Indirect',
+                label: 'COSMERE.Item.Weapon.Trait.Indirect',
             },
             [WeaponTraitId.Loaded]: {
-                label: 'Loaded',
+                label: 'COSMERE.Item.Weapon.Trait.Loaded',
                 hasValue: true,
             },
             [WeaponTraitId.Momentum]: {
-                label: 'Momentum',
+                label: 'COSMERE.Item.Weapon.Trait.Momentum',
             },
             [WeaponTraitId.Offhand]: {
-                label: 'Offhand',
+                label: 'COSMERE.Item.Weapon.Trait.Offhand',
             },
             [WeaponTraitId.Pierce]: {
-                label: 'Pierce',
+                label: 'COSMERE.Item.Weapon.Trait.Pierce',
             },
             [WeaponTraitId.Quickdraw]: {
-                label: 'Quickdraw',
+                label: 'COSMERE.Item.Weapon.Trait.Quickdraw',
             },
             [WeaponTraitId.Thrown]: {
-                label: 'Thrown',
+                label: 'COSMERE.Item.Weapon.Trait.Thrown',
             },
             [WeaponTraitId.TwoHanded]: {
-                label: 'Two-Handed',
+                label: 'COSMERE.Item.Weapon.Trait.TwoHanded',
             },
             [WeaponTraitId.Unique]: {
-                label: 'Unique',
+                label: 'COSMERE.Item.Weapon.Trait.Unique',
             },
             [WeaponTraitId.Fragile]: {
-                label: 'Fragile',
+                label: 'COSMERE.Item.Weapon.Trait.Fragile',
             },
         },
 
         armorTraits: {
             [ArmorTraitId.Cumbersome]: {
-                label: 'Cumbersome',
+                label: 'COSMERE.Item.Armor.Trait.Cumbersome',
                 hasValue: true,
             },
             [ArmorTraitId.Dangerous]: {
-                label: 'Dangerous',
+                label: 'COSMERE.Item.Armor.Trait.Dangerous',
             },
             [ArmorTraitId.Presentable]: {
-                label: 'Presentable',
+                label: 'COSMERE.Item.Armor.Trait.Presentable',
             },
         },
     },
@@ -431,13 +517,13 @@ const COSMERE: CosmereRPGConfig = {
     adversary: {
         roles: {
             [AdversaryRole.Minion]: {
-                label: 'Minion',
+                label: 'COSMERE.Actor.Adversary.Role.Minion',
             },
             [AdversaryRole.Rival]: {
-                label: 'Rival',
+                label: 'COSMERE.Actor.Adversary.Role.Rival',
             },
             [AdversaryRole.Boss]: {
-                label: 'Boss',
+                label: 'COSMERE.Actor.Adversary.Role.Boss',
             },
         },
     },
@@ -445,43 +531,68 @@ const COSMERE: CosmereRPGConfig = {
     deflect: {
         sources: {
             [DeflectSource.None]: {
-                label: 'None',
+                label: 'GENERIC.None',
             },
             [DeflectSource.Armor]: {
-                label: 'Armor',
+                label: 'COSMERE.Item.Type.Armor',
             },
         },
     },
 
-    actionCosts: {
-        [ActionCostType.Action]: {
-            label: 'Action',
+    action: {
+        types: {
+            [ActionType.Basic]: {
+                label: 'COSMERE.Item.Action.Type.Basic.label',
+                labelPlural: 'COSMERE.Item.Action.Type.Basic.label_plural',
+            },
         },
-        [ActionCostType.Reaction]: {
-            label: 'Reaction',
+        costs: {
+            [ActionCostType.Action]: {
+                label: 'COSMERE.Actor.ActionCosts.Action',
+            },
+            [ActionCostType.Reaction]: {
+                label: 'COSMERE.Actor.ActionCosts.Reaction',
+            },
+            [ActionCostType.FreeAction]: {
+                label: 'COSMERE.Actor.ActionCosts.FreeAction',
+            },
+            [ActionCostType.Special]: {
+                label: 'COSMERE.Actor.ActionCosts.Special',
+            },
         },
-        [ActionCostType.FreeAction]: {
-            label: 'Free action',
+    },
+
+    attack: {
+        types: {
+            [AttackType.Melee]: {
+                label: 'COSMERE.Attack.Type.Melee',
+            },
+            [AttackType.Ranged]: {
+                label: 'COSMERE.Attack.Type.Ranged',
+            },
         },
     },
 
     damageTypes: {
         [DamageType.Energy]: {
-            label: 'Energy',
+            label: 'COSMERE.DamageTypes.Energy',
         },
         [DamageType.Impact]: {
-            label: 'Impact',
+            label: 'COSMERE.DamageTypes.Impact',
         },
         [DamageType.Keen]: {
-            label: 'Keen',
+            label: 'COSMERE.DamageTypes.Keen',
         },
         [DamageType.Spirit]: {
-            label: 'Spirit',
+            label: 'COSMERE.DamageTypes.Spirit',
             ignoreDeflect: true,
         },
         [DamageType.Vital]: {
-            label: 'Vital',
+            label: 'COSMERE.DamageTypes.Vital',
             ignoreDeflect: true,
+        },
+        [DamageType.Healing]: {
+            label: 'COSMERE.DamageTypes.Healing',
         },
     },
 };

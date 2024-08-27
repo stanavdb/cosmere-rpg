@@ -4,7 +4,6 @@ import { CosmereItem } from '@system/documents/item';
 import { WeaponItemDataModel } from './weapon';
 import { ArmorItemDataModel } from './armor';
 import { EquipmentItemDataModel } from './equipment';
-import { FabrialItemDataModel } from './fabrial';
 
 import { AncestryItemDataModel } from './ancestry';
 import { PathItemDataModel } from './path';
@@ -12,6 +11,8 @@ import { TalentItemDataModel } from './talent';
 import { TraitItemDataModel } from './trait';
 
 import { ActionItemDataModel } from './action';
+
+import { InjuryItemDataModel } from './injury';
 
 export const config: Record<
     ItemType,
@@ -23,7 +24,6 @@ export const config: Record<
     [ItemType.Weapon]: WeaponItemDataModel,
     [ItemType.Armor]: ArmorItemDataModel,
     [ItemType.Equipment]: EquipmentItemDataModel,
-    [ItemType.Fabrial]: FabrialItemDataModel,
 
     [ItemType.Ancestry]: AncestryItemDataModel,
     [ItemType.Path]: PathItemDataModel,
@@ -31,13 +31,15 @@ export const config: Record<
     [ItemType.Trait]: TraitItemDataModel,
 
     [ItemType.Action]: ActionItemDataModel,
+
+    [ItemType.Injury]: InjuryItemDataModel,
 };
 
 export * from './weapon';
 export * from './armor';
 export * from './equipment';
-export * from './fabrial';
 export * from './ancestry';
 export * from './path';
 export * from './talent';
 export * from './action';
+export * from './injury';

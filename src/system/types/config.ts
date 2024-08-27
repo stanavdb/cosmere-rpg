@@ -2,6 +2,7 @@ import {
     Size,
     CreatureType,
     Condition,
+    InjuryDuration,
     AttributeGroup,
     Attribute,
     Skill,
@@ -14,8 +15,17 @@ import {
     ArmorTraitId,
     AdversaryRole,
     DeflectSource,
+    ActivationType,
+    ItemConsumeType,
+    ActionType,
     ActionCostType,
+    AttackType,
     DamageType,
+    ItemType,
+    ItemRechargeType,
+    ItemResource,
+    EquipType,
+    HoldType,
 } from './cosmere';
 
 export interface SizeConfig {
@@ -33,6 +43,11 @@ export interface ConditionConfig {
     reference?: string;
 }
 
+export interface InjuryConfig {
+    label: string;
+    durationFormula?: string;
+}
+
 export interface AttributeGroupConfig {
     label: string;
     attributes: [Attribute, Attribute];
@@ -41,18 +56,35 @@ export interface AttributeGroupConfig {
 
 export interface AttributeConfig {
     label: string;
+    labelShort: string;
     skills: Skill[];
 }
 
 export interface SkillConfig {
     label: string;
     attribute: Attribute;
-    hiddenUntilAquired?: boolean;
+    attrLabel: string;
+    hiddenUntilAcquired?: boolean;
 }
 
 export interface ResourceConfig {
     label: string;
     deflect?: boolean;
+}
+
+export interface CurrencyConfig {
+    label: string;
+    denominations: {
+        primary: CurrencyDenominationConfig[];
+        secondary?: CurrencyDenominationConfig[];
+    };
+}
+
+export interface CurrencyDenominationConfig {
+    id: string;
+    label: string;
+    conversionRate: number; // Value relative to base denomination
+    base?: boolean; // Present if this denomination is considered the base
 }
 
 export interface WeaponTypeConfig {
@@ -88,9 +120,37 @@ export interface DeflectSourceConfig {
     label: string;
 }
 
+export interface ActivationTypeConfig {
+    label: string;
+}
+
+export interface ItemResourceConfig {
+    label: string;
+    labelPlural: string;
+}
+
+export interface ItemConsumeTypeConfig {
+    label: string;
+}
+
+export interface ItemRechargeConfig {
+    label: string;
+}
+
+export interface ActionTypeConfig {
+    label: string;
+    labelPlural: string;
+    subtitle?: string;
+    hasMode?: boolean;
+}
+
 export interface ActionCostConfig {
     label: string;
     icon?: string;
+}
+
+export interface AttackTypeConfig {
+    label: string;
 }
 
 export interface DamageTypeConfig {
@@ -99,15 +159,48 @@ export interface DamageTypeConfig {
     ignoreDeflect?: boolean;
 }
 
+export interface ItemTypeConfig {
+    label: string;
+    labelPlural: string;
+}
+
+export interface EquipTypeConfig {
+    label: string;
+    icon?: string;
+}
+
+export interface HoldTypeConfig {
+    label: string;
+    icon?: string;
+}
+
 export interface CosmereRPGConfig {
     sizes: Record<Size, SizeConfig>;
     creatureTypes: Record<CreatureType, CreatureTypeConfig>;
     conditions: Record<Condition, ConditionConfig>;
+    injuries: Record<InjuryDuration, InjuryConfig>;
 
     attributeGroups: Record<AttributeGroup, AttributeGroupConfig>;
     attributes: Record<Attribute, AttributeConfig>;
     resources: Record<Resource, ResourceConfig>;
     skills: Record<Skill, SkillConfig>;
+    currencies: Record<string, CurrencyConfig>;
+
+    items: {
+        types: Record<ItemType, ItemTypeConfig>;
+        activation: {
+            types: Record<ActivationType, ActivationTypeConfig>;
+            consumeTypes: Record<ItemConsumeType, ItemConsumeTypeConfig>;
+        };
+        resources: {
+            types: Record<ItemResource, ItemResourceConfig>;
+            recharge: Record<ItemRechargeType, ItemRechargeConfig>;
+        };
+        equip: {
+            types: Record<EquipType, EquipTypeConfig>;
+            hold: Record<HoldType, HoldTypeConfig>;
+        };
+    };
 
     weaponTypes: Record<WeaponType, WeaponTypeConfig>;
     weapons: Record<WeaponId, WeaponConfig>;
@@ -127,6 +220,14 @@ export interface CosmereRPGConfig {
         sources: Record<DeflectSource, DeflectSourceConfig>;
     };
 
-    actionCosts: Record<ActionCostType, ActionCostConfig>;
+    action: {
+        types: Record<ActionType, ActionTypeConfig>;
+        costs: Record<ActionCostType, ActionCostConfig>;
+    };
+
+    attack: {
+        types: Record<AttackType, AttackTypeConfig>;
+    };
+
     damageTypes: Record<DamageType, DamageTypeConfig>;
 }

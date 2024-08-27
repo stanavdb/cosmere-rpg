@@ -2,7 +2,7 @@ import { Attribute, Skill } from '@system/types/cosmere';
 import { CommonActorData } from '@system/data/actor/common';
 import { AdvantageMode } from '@system/types/roll';
 import { PlotDie } from './plot-die';
-import { RollToMessageOptions, RollMode } from './types';
+import { RollMode } from './types';
 
 // Constants
 const CONFIGURATION_DIALOG_TEMPLATE =
@@ -21,7 +21,8 @@ export type D20RollData = {
     defaultAttribute: Attribute;
 };
 
-export interface D20RollOptions extends Partial<RollTerm.EvaluationOptions> {
+export interface D20RollOptions
+    extends Partial<foundry.dice.terms.RollTerm.EvaluationOptions> {
     rollMode?: RollMode;
 
     /**
@@ -153,7 +154,7 @@ export class D20Roll extends Roll<D20RollData> {
         const opporunity = this.options.opportunity ?? DEFAULT_OPPORUNITY_VALUE;
 
         if (!Number.isNumeric(opporunity)) return false;
-        return (this.dice[0].total as number) >= opporunity;
+        return this.dice[0].total! >= opporunity;
     }
 
     /**
@@ -168,7 +169,7 @@ export class D20Roll extends Roll<D20RollData> {
             this.options.complication ?? DEFAULT_COMPLICATION_VALUE;
 
         if (!Number.isNumeric(complication)) return false;
-        return (this.dice[0].total as number) <= complication;
+        return this.dice[0].total! <= complication;
     }
 
     /* --- Public Functions --- */
@@ -196,7 +197,7 @@ export class D20Roll extends Roll<D20RollData> {
                 content,
                 buttons: {
                     roll: {
-                        label: 'Roll',
+                        label: game.i18n!.localize('GENERIC.Button.Roll'),
                         callback: (html) =>
                             resolve(this.processDialogSubmit($(html))),
                     },
@@ -207,17 +208,30 @@ export class D20Roll extends Roll<D20RollData> {
         });
     }
 
-    public toMessage(
-        messageData: Partial<ChatMessage.MessageData> = {},
-        options: RollToMessageOptions = {},
-    ) {
+    public toMessage<
+        T extends foundry.documents.BaseChatMessage.ConstructorData = Record<
+            string,
+            never
+        >,
+        Create extends boolean = true,
+    >(
+        messageData?: T,
+        options?: Partial<{
+            rollMode: keyof CONFIG.Dice.RollModes | 'roll';
+            create: Create;
+        }>,
+    ): Promise<
+        | (true extends Create
+              ? ChatMessage.ConfiguredInstance | undefined
+              : never)
+        | (false extends Create ? foundry.dice.Roll.MessageData<T> : never)
+    > {
+        options ??= {};
         options.rollMode ??= this.options.rollMode;
         if (options.rollMode === 'roll') options.rollMode = undefined;
         options.rollMode ??= game.settings!.get('core', 'rollMode');
 
-        // NOTE: Typing won't properly resolve due to overloads, have to any
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
-        return super.toMessage(messageData, options) as any;
+        return super.toMessage(messageData, options);
     }
 
     /* --- Internal Functions --- */
@@ -235,7 +249,7 @@ export class D20Roll extends Roll<D20RollData> {
             const skill = this.data.skill;
             const attribute =
                 this.data.attributes[form.attribute.value as Attribute];
-            this.terms[2] = new NumericTerm({
+            this.terms[2] = new foundry.dice.terms.NumericTerm({
                 number: skill.rank + attribute.value,
             });
         }
@@ -269,8 +283,8 @@ export class D20Roll extends Roll<D20RollData> {
                 this.terms.push(
                     new foundry.dice.terms.OperatorTerm({
                         operator: '+',
-                    }) as unknown as RollTerm,
-                    new PlotDie() as unknown as RollTerm,
+                    }) as unknown as foundry.dice.terms.RollTerm,
+                    new PlotDie() as unknown as foundry.dice.terms.RollTerm,
                 );
             }
 

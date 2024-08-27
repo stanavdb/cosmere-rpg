@@ -1,0 +1,107 @@
+<ol class="actions-list">
+    {{#each sections as |section|}}
+
+    <li class="item-header flexcol" data-section-id="{{section.id}}">
+        <span class="name">{{localize section.label}}</span>
+        {{#if section.subtitle}}
+        <span class="subtitle">{{localize section.subtitle}}</span>
+        {{/if}}
+    </li>
+
+    {{#each section.items as |item|}}
+    {{#with (itemContext item) as |ctx|}}
+
+    <li class="item rollable" data-item-id="{{item.id}}">
+        <div class="item-name" data-action="use">
+            <img class="item-image item-action" data-action="use" role="button" src="{{item.img}}">
+            <div class="name">
+                <span class="title">
+                    {{item.name}}
+                    {{#if ctx.hasActivation}}
+                    {{#if ctx.activation.hasCost}}
+                    <i class="cosmere-icon">
+                        {{#if (eq ctx.activation.cost.type "act")}}
+                        {{ ctx.activation.cost.value }}
+                        {{else}}
+                        {{cosmereDingbat ctx.activation.cost.type}}
+                        {{/if}}
+                    </i>
+                    {{/if}}
+                    {{/if}}
+                </span>
+                <span class="subtitle">{{ctx.subtitle}}</span>
+            </div>
+        </div>
+
+        {{!-- Skill Test --}}
+        {{#if ctx.hasSkillTest}}
+        <div class="skill-test col">
+            <span class="mod val">+{{skillMod item.parent ctx.skillTest.skill ctx.skillTest.attribute}}</span>
+
+            <span class="skill sub">
+                {{localize ctx.skillTest.skillLabel}}
+                {{#if (not ctx.skillTest.usesDefaultAttribute)}}
+
+                <span class="skill-attribute">({{localize ctx.skillTest.attributeLabelShort }})</span>
+
+                {{/if}}
+            </span>
+        </div>
+        {{/if}}
+
+        {{!-- Damage --}}
+        {{#if ctx.hasDamage}}
+        <div class="damage col">
+            <span class="formula val">{{formulaReplaceData ctx.damage.formula ctx.damage.formulaData}}</span>
+            {{#if ctx.damage.type}}
+            <span class="type sub">{{localize ctx.damage.typeLabel}}</span>
+            {{/if}}
+        </div>
+        {{/if}}
+
+        {{!-- Consume --}}
+        {{#if ctx.hasConsume}}
+        {{#if ctx.consume.consumesActorResource}}
+        <div class="consume col">
+            <span class="amount val">{{ ctx.consume.value }} {{localize ctx.consume.resourceLabel }}</span>
+            <span class="cost sub">{{localize "GENERIC.Cost"}}</span>
+        </div>
+        {{/if}}
+        {{/if}}
+
+        {{!-- Resources --}}
+        {{#if ctx.hasResources}}
+        {{#each ctx.resources as |resource|}}
+        <div class="resource col" data-resource="{{resource.id}}">
+            <div class="val">
+                {{#times resource.value}}<i class="charge fa-regular fa-circle-dot"></i>{{/times}}
+                {{#times (sub resource.max resource.value)}}<i class="charge fa-regular fa-circle"></i>{{/times}}
+            </div>
+            <span class="sub">
+                {{#if resource.hasRecharge}}
+                {{localize resource.rechargeLabel}}
+                {{else}}
+                {{localize resource.label}}
+                {{/if}}
+            </span>
+        </div>
+        {{/each}}
+        {{/if}}
+
+        {{!-- Editing --}}
+        {{!-- Assume editable for now --}}
+        <div class="item-controls">
+            <a class="edit-btn" role="button" data-action="edit"><i class="fa-solid fa-pen-to-square"></i></a>
+
+            {{!-- Only show the delete button for items that are explicitly an action --}}
+            {{#if (eq item.type "action")}}
+            <a class="delete-btn" role="button" data-action="delete"><i class="fa-solid fa-trash"></i></a>
+            {{/if}}
+        </div>
+    </li>
+
+    {{/with}}
+    {{/each}}
+
+    {{/each}}
+</ol>
