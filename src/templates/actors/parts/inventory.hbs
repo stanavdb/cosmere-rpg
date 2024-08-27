@@ -1,0 +1,103 @@
+<ol class="inventory-list">
+    {{#each sections as |section|}}
+
+    <li class="item-header" data-section-id="{{section.id}}">
+        <div class="item-name flexcol">
+            <span class="name">{{localize section.label}}</span>
+            {{#if section.subtitle}}
+            <span class="subtitle">{{localize section.subtitle}}</span>
+            {{/if}}
+        </div>
+
+        <div class="quantity col">
+            {{localize "COSMERE.Actor.Sheet.Inventory.Item.Quantity"}}
+        </div>
+        <div class="weight col">
+            {{localize "COSMERE.Actor.Sheet.Inventory.Item.Weight"}}
+        </div>
+        <div class="equip col"></div>
+
+        <div class="item-controls"></div>
+    </li>
+
+    {{#each section.items as |item|}}
+    {{#with (itemContext item showEquippedHand=false) as |ctx|}}
+
+    <li class="item rollable" data-item-id="{{item.id}}">
+        <div class="item-name">
+            <img class="item-image item-action" role="button" src="{{item.img}}">
+            <div class="name">
+                <span class="title">{{item.name}}</span>
+                <span class="subtitle">{{ctx.subtitle}}</span>
+            </div>
+        </div>
+
+        {{!-- Physical properties --}}
+        <div class="quantity col">
+            {{#if ctx.isPhysical}}
+            <span class="amount val">{{default ctx.quantity '—'}}</span>
+            {{/if}}
+        </div>
+
+        <div class="weight col">
+            {{#if ctx.isPhysical}}
+            <span class="amount val">{{default ctx.weight.value '—'}} {{ ctx.weight.unit }}</span>
+            {{/if}}
+        </div>
+
+        {{!-- Equippable --}}
+        <div class="equip col">     
+            {{#if ctx.isEquippable}}
+
+            {{!-- Wear equip --}}
+            {{#if (eq ctx.equip.type "wear")}}
+            <a class="value {{#if ctx.equipped}}equipped{{/if}}" 
+                data-action="toggle-equip"
+                role="button" 
+                {{#if ctx.equipped}}
+                title="{{localize "COSMERE.Item.Equip.Unequip.Label"}}"
+                {{else}}
+                title="{{localize "COSMERE.Item.Equip.Equip.Label"}}"
+                {{/if}}
+            >
+                {{{ ctx.equip.typeIcon }}}
+            </a>
+            {{/if}}
+
+            {{!-- Hold equip --}}
+            {{#if (eq ctx.equip.type "hold")}}
+            <a class="value {{#if ctx.equipped}}equipped{{/if}}" 
+                data-action="open-hold-dropdown"
+                role="button"
+                {{#if ctx.equipped}}
+                title="{{localize ctx.equip.holdLabel}}"
+                {{else}}
+                title="{{localize "COSMERE.Item.Equip.Unequipped.Label"}}"
+                {{/if}}
+            >
+                {{{ ctx.equip.holdIcon }}}
+            </a>
+            {{#if ctx.equipped}}
+            {{{itemHoldSelect ctx.equip.hold}}}
+            {{else}}
+            {{{itemHoldSelect}}}
+            {{/if}}
+            {{/if}}
+
+            {{/if}}
+        </div>
+
+
+        {{!-- Editing --}}
+        {{!-- Assume editable for now --}}
+        <div class="item-controls">
+            <a class="edit-btn" role="button" data-action="edit"><i class="fa-solid fa-pen-to-square"></i></a>
+            <a class="delete-btn" role="button" data-action="delete"><i class="fa-solid fa-trash"></i></a>
+        </div>
+    </li>
+
+    {{/with}}
+    {{/each}}
+
+    {{/each}}
+</ol>

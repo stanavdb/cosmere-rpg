@@ -18,16 +18,20 @@ export function DamagingItemMixin<P extends CosmereItem>() {
             static defineSchema() {
                 return foundry.utils.mergeObject(super.defineSchema(), {
                     damage: new foundry.data.fields.SchemaField({
-                        formula: new foundry.data.fields.StringField(),
+                        formula: new foundry.data.fields.StringField({
+                            nullable: true,
+                            blank: false,
+                        }),
                         type: new foundry.data.fields.StringField({
+                            nullable: true,
                             choices: Object.keys(CONFIG.COSMERE.damageTypes),
                         }),
                         skill: new foundry.data.fields.StringField({
-                            initial: Skill.LightWeapons,
+                            nullable: true,
                             choices: Object.keys(CONFIG.COSMERE.skills),
                         }),
                         attribute: new foundry.data.fields.StringField({
-                            initial: Attribute.Speed,
+                            nullable: true,
                             choices: Object.keys(CONFIG.COSMERE.attributes),
                         }),
                     }),

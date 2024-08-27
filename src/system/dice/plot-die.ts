@@ -1,4 +1,5 @@
-export interface PlotDieData {
+export interface PlotDieData
+    extends Partial<foundry.dice.terms.DiceTerm.TermData> {
     /**
      * The number of dice of this term to roll
      * @default 1

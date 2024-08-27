@@ -1,8 +1,9 @@
+import { WeaponTraitId, ArmorTraitId } from '@system/types/cosmere';
 import { CosmereItem } from '@system/documents';
 import { ExpertiseItemData } from './expertise';
 
 interface TraitData {
-    id: string;
+    id: WeaponTraitId | ArmorTraitId;
 
     /**
      * The default (not expertise) value of this trait
@@ -54,6 +55,14 @@ export function TraitsItemMixin<P extends CosmereItem>() {
     return (base: typeof foundry.abstract.TypeDataModel<TraitsItemData, P>) => {
         return class extends base {
             static defineSchema() {
+                const superSchema = super.defineSchema();
+
+                if (!('expertise' in superSchema)) {
+                    throw new Error(
+                        'TraitsItemMixin must be used in combination with ExpertiseItemMixin and must follow it',
+                    );
+                }
+
                 return foundry.utils.mergeObject(super.defineSchema(), {
                     traits: new foundry.data.fields.SetField(
                         new foundry.data.fields.SchemaField({
