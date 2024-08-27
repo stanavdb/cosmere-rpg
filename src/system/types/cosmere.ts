@@ -93,6 +93,10 @@ export const enum DerivedStatistic {
     RecoveryDie = 'rcd',
 }
 
+export const enum PathType {
+    Heroic = 'heroic',
+}
+
 /**
  * The categories of weapon available
  */

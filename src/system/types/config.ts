@@ -26,6 +26,7 @@ import {
     ItemResource,
     EquipType,
     HoldType,
+    PathType,
 } from './cosmere';
 
 export interface SizeConfig {
@@ -74,6 +75,10 @@ export interface ResourceConfig {
     key: string;
     label: string;
     deflect?: boolean;
+}
+
+export interface PathTypeConfig {
+    label: string;
 }
 
 export interface WeaponTypeConfig {
@@ -173,6 +178,10 @@ export interface CosmereRPGConfig {
     attributes: Record<Attribute, AttributeConfig>;
     resources: Record<Resource, ResourceConfig>;
     skills: Record<Skill, SkillConfig>;
+
+    paths: {
+        types: Record<PathType, PathTypeConfig>;
+    };
 
     items: {
         types: Record<ItemType, ItemTypeConfig>;

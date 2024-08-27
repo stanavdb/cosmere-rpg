@@ -1,3 +1,4 @@
-import { BaseSheet } from './base-sheet';
+// Base
+import { BaseActorSheet } from './base';
 
-export class AdversarySheet extends BaseSheet {}
+export class AdversarySheet extends BaseActorSheet {}

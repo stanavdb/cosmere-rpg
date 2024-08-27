@@ -136,10 +136,10 @@
             },
             "Statistics": {
                 "Defense": "Defense",
-                "SensesRange": "Senses Range",
-                "MovementRate": "Movement",
+                "SensesRange": "Sense",
+                "MovementRate": "Move",
                 "LiftingCapactiy": "Lifting Capactiy",
-                "RecoveryDie": "Recovery Die",
+                "RecoveryDie": "Recover",
                 "Deflect": "Deflect",
                 "NoObscuredSense": "Unaffected by Obscured Senses."
             },
@@ -155,6 +155,10 @@
                 "Animal": "Animal"
             },
             "Sheet": {
+                "Header": {
+                    "Editable": "Editable",
+                    "Locked": "Locked"
+                },
                 "Actions": {
                     "label": "Actions"
                 },
@@ -164,7 +168,9 @@
                         "Quantity": "Quantity",
                         "Weight": "Weight"
                     }
-                }
+                },
+                "Level": "Level",
+                "Expertises": "Expertises"
             }
         },
         "AttributeGroup": {
@@ -353,6 +359,13 @@
             "Spirit": "Spirit",
             "Vital": "Vital",
             "Healing": "Healing"
+        },
+        "Paths": {
+            "Types": {
+                "Heroic": {
+                    "Label": "Heroic"
+                }
+            }
         }
     },
     "DICE": {
@@ -395,6 +408,12 @@
             "NoActor": "No selected or assigned actor found for this roll",
             "NotEnoughResource": "Cannot consume, not enough of resource",
             "ItemConsumeResourceNotConfigured": "The resource selected to be consumed as it is not configured on the item"
+        }
+    },
+    "TYPES": {
+        "Actor": {
+            "character": "Character",
+            "adversary": "Adversary"
         }
     }
 }

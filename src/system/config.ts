@@ -27,6 +27,7 @@ import {
     ItemResource,
     EquipType,
     HoldType,
+    PathType,
 } from './types/cosmere';
 
 const COSMERE: CosmereRPGConfig = {
@@ -328,6 +329,14 @@ const COSMERE: CosmereRPGConfig = {
             label: 'COSMERE.Actor.Skill.Survival',
             attribute: Attribute.Awareness,
             attrLabel: 'COSMERE.Actor.Attribute.Awareness.short',
+        },
+    },
+
+    paths: {
+        types: {
+            [PathType.Heroic]: {
+                label: 'COSMERE.Paths.Types.Heroic.Label',
+            },
         },
     },
 

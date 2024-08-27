@@ -28,6 +28,10 @@ Handlebars.registerHelper('default', (v: unknown, defaultVal: unknown) => {
     return v ? v : defaultVal;
 });
 
+Handlebars.registerHelper('perc', (value: number, max: number) => {
+    return `${Math.floor((value / max) * 100)}%`;
+});
+
 Handlebars.registerHelper(
     'times',
     (count: unknown, options: Handlebars.HelperOptions): string =>
@@ -74,7 +78,8 @@ Handlebars.registerHelper(
     },
 );
 
-Handlebars.registerHelper('derived', (derived: Derived<string | number>) => {
+Handlebars.registerHelper('derived', (derived?: Derived<string | number>) => {
+    if (!derived) return;
     return Derived.getValue(derived);
 });
 
@@ -107,17 +112,17 @@ Handlebars.registerHelper('itemHoldSelect', (selected?: HoldType) => {
                 const isSelected = hold === selected;
 
                 return `
-            <li class="option">
-                <a role="button" 
-                    data-type="${hold}"
-                    data-action="equip-hold" 
-                    class="option-select ${isSelected ? 'selected' : ''}" 
-                    title="${game.i18n!.localize(config.label)}"
-                >
-                    ${config.icon}
-                </a>
-            </li>    
-        `;
+                    <li class="option">
+                        <a role="button" 
+                            data-type="${hold}"
+                            data-action="item-equip-hold" 
+                            class="option-select ${isSelected ? 'selected' : ''}" 
+                            data-tooltip="${game.i18n!.localize(config.label)}"
+                        >
+                            ${config.icon}
+                        </a>
+                    </li>    
+                `;
             })
             .join('\n')}
         </ul>
@@ -435,19 +440,18 @@ Handlebars.registerHelper('damageTypeConfig', (type: DamageType) => {
 });
 
 export async function preloadHandlebarsTemplates() {
-    const partials = [
-        'systems/cosmere-rpg/templates/actors/parts/actions.hbs',
-        'systems/cosmere-rpg/templates/actors/parts/inventory.hbs',
-        'systems/cosmere-rpg/templates/chat/parts/roll-details.hbs',
-    ];
-
-    return await loadTemplates(
-        partials.reduce(
-            (partials, path) => {
-                partials[path.split('/').pop()!.replace('.hbs', '')] = path;
-                return partials;
-            },
-            {} as Record<string, string>,
-        ),
-    );
+    // const partials = [
+    //     // 'systems/cosmere-rpg/templates/actors/parts/actions.hbs',
+    //     // 'systems/cosmere-rpg/templates/actors/parts/inventory.hbs',
+    //     // 'systems/cosmere-rpg/templates/chat/parts/roll-details.hbs',
+    // ];
+    // return await loadTemplates(
+    //     partials.reduce(
+    //         (partials, path) => {
+    //             partials[path.split('/').pop()!.replace('.hbs', '')] = path;
+    //             return partials;
+    //         },
+    //         {} as Record<string, string>,
+    //     ),
+    // );
 }

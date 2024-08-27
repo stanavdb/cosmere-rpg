@@ -1,0 +1,12 @@
+<div class="title">
+    <i class="fa-solid fa-book"></i>
+    <span>{{localize "COSMERE.Actor.Sheet.Expertises"}}</span>
+</div>
+<div class="expertises">
+    {{#each expertises as |expertise|}}
+    <div class="expertise" data-id="{{expertise.id}}">
+        <span class="name">{{expertise.label}}</span>
+        <span class="type">({{localize expertise.typeLabel}})</span>
+    </div>
+    {{/each}}
+</div>

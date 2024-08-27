@@ -11,6 +11,7 @@ import { CosmereActor } from './actor';
 
 import { WeaponItemDataModel } from '@system/data/item/weapon';
 import { ArmorItemDataModel } from '@system/data/item/armor';
+import { PathItemDataModel } from '@system/data/item/path';
 
 import { ActivatableItemData } from '@system/data/item/mixins/activatable';
 import { AttackingItemData } from '@system/data/item/mixins/attacking';
@@ -61,6 +62,10 @@ export class CosmereItem<
 
     public isArmor(): this is CosmereItem<ArmorItemDataModel> {
         return this.type === ItemType.Armor;
+    }
+
+    public isPath(): this is CosmereItem<PathItemDataModel> {
+        return this.type === ItemType.Path;
     }
 
     /* --- Mixin type guards --- */

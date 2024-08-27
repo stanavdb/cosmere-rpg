@@ -30,14 +30,25 @@ Hooks.once('init', async () => {
     CONFIG.Item.documentClass = documents.CosmereItem;
 
     Actors.unregisterSheet('core', ActorSheet);
-    Actors.registerSheet('cosmere-rpg', applications.actor.CharacterSheet, {
-        types: ['character'],
-        label: `${game.i18n?.localize('COSMERE.Actor.Character.Character')}`,
-    });
-    Actors.registerSheet('cosmere-rpg', applications.actor.AdversarySheet, {
-        types: ['adversary'],
-        label: `${game.i18n?.localize('COSMERE.Actor.Adversary.Adversary')}`,
-    });
+    // NOTE: Must cast to `any` as registerSheet type doesn't accept ApplicationV2 (even though it's valid to pass it)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
+    Actors.registerSheet(
+        'cosmere-rpg',
+        applications.actor.CharacterSheet as any,
+        {
+            types: ['character'],
+            label: `${game.i18n?.localize('COSMERE.Actor.Character.Character')}`,
+        },
+    );
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
+    Actors.registerSheet(
+        'cosmere-rpg',
+        applications.actor.AdversarySheet as any,
+        {
+            types: ['adversary'],
+            label: `${game.i18n?.localize('COSMERE.Actor.Adversary.Adversary')}`,
+        },
+    );
 
     CONFIG.Dice.types.push(dice.PlotDie);
     CONFIG.Dice.terms.p = dice.PlotDie;
@@ -52,4 +63,9 @@ Hooks.once('init', async () => {
 
     // Load templates
     await preloadHandlebarsTemplates();
+
+    // TEMP: This resembles a system module
+    (CONFIG.COSMERE.paths.types as Record<string, unknown>).radiant = {
+        label: 'Radiant',
+    };
 });

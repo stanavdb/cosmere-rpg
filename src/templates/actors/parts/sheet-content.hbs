@@ -1,0 +1,24 @@
+<section class="sheet-content flexrow">
+    <section class="col-left">
+        <app-character-details></app-character-details>
+        <app-character-resources></app-character-resources>
+        <app-character-favorites></app-character-favorites>
+    </section>
+    <section class="col-main tabbed">
+        <div class="tab details">
+            <app-character-attributes></app-character-attributes>
+            <div class="split-content flexrow">
+                <section class="skills">
+                    {{#each attributeGroups as |group|}}
+                    <app-character-skills-group param-group-id="{{group}}" param-group-id__type="string"></app-character-skills-group>
+                    {{/each}}
+                    <app-character-expertises></app-character-expertises>
+                </section>
+                <section class="paths">
+                    <app-character-ancestry></app-character-ancestry>
+                    <app-character-paths-list></app-character-paths-list>
+                </section>
+            </div>
+        </div>
+    </section>
+</section>

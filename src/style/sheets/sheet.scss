@@ -42,7 +42,7 @@ a.skill-pips {
 }
 
 .sheet {  
-    .tabs {
+    .tabbed-content {
         nav {
             align-items: center;
 
@@ -178,10 +178,10 @@ a.skill-pips {
 
                 .value {
                     font-size: 14pt;
-                    color: rgba(0, 0, 0, 0.3);
+                    opacity: .5;
 
                     &.equipped {
-                        color: #232323;
+                        opacity: 1;
                     }
                 }
             }

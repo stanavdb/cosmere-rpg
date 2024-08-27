@@ -1,15 +1,38 @@
 import { CommonActorDataModel, CommonActorData } from './common';
 
 // Fields
-import { DerivedValueField, Derived } from '../fields';
+import { DerivedValueField, Derived, MappingField } from '../fields';
 
 export interface CharacterActorData extends CommonActorData {
+    level: {
+        paths: Record<string, number>;
+        total: Derived<number>;
+    };
     recovery: { die: Derived<string> };
 }
 
 export class CharacterActorDataModel extends CommonActorDataModel<CharacterActorData> {
     public static defineSchema() {
         return foundry.utils.mergeObject(super.defineSchema(), {
+            level: new foundry.data.fields.SchemaField({
+                paths: new MappingField(
+                    new foundry.data.fields.NumberField({
+                        integer: true,
+                        min: 0,
+                    }),
+                    {
+                        required: true,
+                        nullable: false,
+                    },
+                ),
+                total: new DerivedValueField(
+                    new foundry.data.fields.NumberField({
+                        min: 0,
+                        integer: true,
+                    }),
+                ),
+            }),
+
             recovery: new foundry.data.fields.SchemaField({
                 die: new DerivedValueField(
                     new foundry.data.fields.StringField({
@@ -26,6 +49,11 @@ export class CharacterActorDataModel extends CommonActorDataModel<CharacterActor
 
     public prepareDerivedData() {
         super.prepareDerivedData();
+
+        this.level.total.value = Object.values(this.level.paths).reduce(
+            (sum, lvl) => sum + lvl,
+            0,
+        );
 
         this.recovery.die.value = willpowerToRecoveryDie(
             this.attributes.wil.value,

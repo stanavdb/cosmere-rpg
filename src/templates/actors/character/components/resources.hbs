@@ -1,0 +1,13 @@
+{{#each resources as |resource|}}
+<div class="resource {{resource.id}}">
+    <span class="label">{{localize resource.label}}</span>
+    <div class="bar">
+        <div class="value">
+            <span class="current">{{resource.value}}</span>
+            <span class="delim">/</span>
+            <span class="max">{{resource.max}}</span>
+        </div>
+        <div class="inner-bar" style="width: {{perc resource.value resource.max}};"></div>
+    </div>
+</div>
+{{/each}}

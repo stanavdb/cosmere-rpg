@@ -114,13 +114,23 @@ export class CosmereActor<
     /**
      *  Utility function to increment/decrement a skill value
      */
-    public modifySkillRank(skillId: Skill, incrementBool = true) {
+    public modifySkillRank(
+        skillId: Skill,
+        incrementBool = true,
+        render = true,
+    ) {
         const skillpath = `system.skills.${skillId}.rank`;
         const skill = this.system.skills[skillId];
         if (incrementBool) {
-            void this.update({ [skillpath]: Math.clamp(skill.rank + 1, 0, 5) });
+            void this.update(
+                { [skillpath]: Math.clamp(skill.rank + 1, 0, 5) },
+                { render },
+            );
         } else {
-            void this.update({ [skillpath]: Math.clamp(skill.rank - 1, 0, 5) });
+            void this.update(
+                { [skillpath]: Math.clamp(skill.rank - 1, 0, 5) },
+                { render },
+            );
         }
     }
 
