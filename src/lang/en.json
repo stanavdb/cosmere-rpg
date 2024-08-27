@@ -351,7 +351,8 @@
             "Spirit": "Spirit",
             "Vital": "Vital",
             "Healing": "Healing"
-        }
+        },
+        "Currencies": {}
     },
     "DICE": {
         "RollMode": "Roll Mode",

@@ -409,6 +409,8 @@ const COSMERE: CosmereRPGConfig = {
         },
     },
 
+    currencies: {},
+
     weaponTypes: {
         [WeaponType.Light]: {
             label: 'COSMERE.Item.Weapon.Type.Light',
