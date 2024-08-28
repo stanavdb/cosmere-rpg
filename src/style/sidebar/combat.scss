@@ -1,0 +1,37 @@
+.cosmere-combatant-buttons {
+    display: flex;
+    text-align: center;
+    gap: 6px;
+}
+
+.cosmere-turn-speed-control,
+.cosmere-activate-control,
+.cosmere-activate-control-activated {
+    display: block;
+    width: 40px;
+    height: var(--sidebar-item-height);
+    background-size: 32px;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: 0 0.5em;
+}
+
+.cosmere-turn-speed-control {
+    background-image: url(/icons/svg/clockwork.svg);
+}
+
+.cosmere-activate-control,
+.cosmere-activate-control-activated {
+    background-image: url(/icons/svg/combat.svg);
+}
+
+.cosmere-activate-control-activated {
+    filter: brightness(40%);
+}
+
+.combat-phase {
+    padding: 0.5rem 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
