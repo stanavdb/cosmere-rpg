@@ -8,7 +8,7 @@ type ComponentHandlebarsRenderOptions =
         componentRefs: string[];
     };
 
-export class HandlebarsComponent<
+export class HandlebarsApplicationComponent<
     BaseClass extends ApplicationV2Constructor<
         AnyObject,
         foundry.applications.api.ApplicationV2.Configuration,
@@ -71,8 +71,14 @@ export class HandlebarsComponent<
         public readonly selector: string,
         public readonly partId: string,
         public readonly ref: string,
-        public readonly application: InstanceType<BaseClass>,
+        public readonly application: InstanceType<
+            ReturnType<typeof ComponentHandlebarsApplicationMixin<BaseClass>>
+        >,
     ) {}
+
+    protected get element(): HTMLElement {
+        return this.application.components[this.ref].element;
+    }
 
     /* --- Rendering --- */
 
@@ -80,13 +86,7 @@ export class HandlebarsComponent<
      * Render this component
      */
     protected async render() {
-        /**
-         * NOTE: The types of the ApplicationV2.render function seem to be wrong.
-         * The options parameter should be of type DeepPartial<RenderOptions>,
-         * but instead are of type DeepPartial<Configuration>.
-         */
         await this.application.render({
-            // @ts-expect-error See note
             parts: [],
             componentRefs: [this.ref],
         });
@@ -114,6 +114,16 @@ export class HandlebarsComponent<
     ): Promise<AnyObject> {
         return Promise.resolve(context);
     }
+
+    /* --- Lifecycle --- */
+
+    /**
+     * Actions performed after Component listeners are attached.
+     * Use this to attach your own event listeners.
+     * @param params
+     */
+    // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
+    public _onAttachListeners(params: Params) {}
 }
 
 interface ComponentState {
@@ -149,15 +159,28 @@ export function ComponentHandlebarsApplicationMixin<
          * Configure a registry of components which are supported for this application for partial rendering and re-use
          * @default `{}`
          */
-        static COMPONENTS: Record<string, typeof HandlebarsComponent> = {};
+        static COMPONENTS: Record<
+            string,
+            typeof HandlebarsApplicationComponent
+        > = {};
 
         private _components: Record<
             string,
             {
-                instance: HandlebarsComponent;
+                instance: HandlebarsApplicationComponent;
                 element: HTMLElement;
             }
         > = {};
+
+        public get components(): Record<
+            string,
+            {
+                instance: HandlebarsApplicationComponent;
+                element: HTMLElement;
+            }
+        > {
+            return this._components;
+        }
 
         protected override _configureRenderOptions(
             options: DeepPartial<RenderOptions>,
@@ -229,6 +252,9 @@ export function ComponentHandlebarsApplicationMixin<
                                                 ),
                                                 element: componentElement,
                                             };
+                                        } else {
+                                            this._components[ref].element =
+                                                componentElement;
                                         }
 
                                         // Assign data attribute
@@ -388,6 +414,12 @@ export function ComponentHandlebarsApplicationMixin<
 
                 // Attach listeners
                 this.attachComponentListeners(instance, selector, priorElement);
+
+                // Get params
+                const params = this.getComponentParams(priorElement);
+
+                // Invoke lifecycle
+                instance._onAttachListeners(params);
             });
         }
 
@@ -518,7 +550,7 @@ export function ComponentHandlebarsApplicationMixin<
         }
 
         private attachComponentListeners(
-            instance: HandlebarsComponent,
+            instance: HandlebarsApplicationComponent,
             componentSelector: string,
             htmlElement: HTMLElement,
         ) {
@@ -549,7 +581,7 @@ export function ComponentHandlebarsApplicationMixin<
         }
 
         private onComponentAction(
-            instance: HandlebarsComponent,
+            instance: HandlebarsApplicationComponent,
             handler: ComponentActionHandler,
             event: MouseEvent,
         ) {

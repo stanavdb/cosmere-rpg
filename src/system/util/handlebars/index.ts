@@ -16,6 +16,7 @@ import {
 import { CharacterActor, CosmereActor } from '@system/documents/actor';
 import { CosmereItem } from '@system/documents/item';
 import { Derived } from '@system/data/fields';
+import { AnyObject } from '@system/types/utils';
 
 import { ItemContext, ItemContextOptions } from './types';
 
@@ -23,6 +24,32 @@ Handlebars.registerHelper('add', (a: number, b: number) => a + b);
 Handlebars.registerHelper('sub', (a: number, b: number) => a - b);
 Handlebars.registerHelper('multi', (a: number, b: number) => a * b);
 Handlebars.registerHelper('divide', (a: number, b: number) => a / b);
+
+Handlebars.registerHelper(
+    'component',
+    (element: string, options?: { hash?: AnyObject }) => {
+        // Params to array
+        const params = Object.entries(options?.hash ?? {}).map(
+            ([key, value]) => ({
+                name: key,
+                value: value as string | number | boolean | object,
+                type: typeof value,
+            }),
+        );
+
+        // Params to string
+        const paramsStr = params
+            .map((param) => [
+                `param-${param.name}="${param.value.toString()}"`,
+                `param-${param.name}__type="${param.type}"`,
+            ])
+            .flat()
+            .join(' ');
+
+        // Return component with params
+        return `<${element} ${paramsStr}></${element}>`;
+    },
+);
 
 Handlebars.registerHelper('default', (v: unknown, defaultVal: unknown) => {
     return v ? v : defaultVal;

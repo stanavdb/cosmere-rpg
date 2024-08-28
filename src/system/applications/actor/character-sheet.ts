@@ -7,7 +7,7 @@ import { ApplicationMixins } from '../mixins';
 // Components
 import {
     CharacterDetailsComponent,
-    CharacterResourcesComponent,
+    CharacterResourceComponent,
     CharacterAttributesComponent,
     CharacterSkillsGroupComponent,
     CharacterExpertisesComponent,
@@ -36,7 +36,7 @@ export class CharacterSheet extends ApplicationMixins(BaseActorSheet) {
 
     static COMPONENTS = foundry.utils.mergeObject(super.COMPONENTS, {
         'app-character-details': CharacterDetailsComponent,
-        'app-character-resources': CharacterResourcesComponent,
+        'app-character-resource': CharacterResourceComponent,
         'app-character-attributes': CharacterAttributesComponent,
         'app-character-skills-group': CharacterSkillsGroupComponent,
         'app-character-expertises': CharacterExpertisesComponent,
@@ -110,6 +110,7 @@ export class CharacterSheet extends ApplicationMixins(BaseActorSheet) {
             ancestryLabel: ancestryItem?.name ?? 'DEFAULT_ANCESTRY_LABEL',
 
             attributeGroups: Object.keys(CONFIG.COSMERE.attributeGroups),
+            resources: Object.keys(this.actor.system.resources),
         };
     }
 }

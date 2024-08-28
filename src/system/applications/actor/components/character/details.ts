@@ -1,10 +1,10 @@
 import { ConstructorOf } from '@system/types/utils';
 
 // Component imports
-import { HandlebarsComponent } from '../../../mixins/component-handlebars-application-mixin';
+import { HandlebarsApplicationComponent } from '../../../mixins/component-handlebars-application-mixin';
 import { BaseActorSheet } from '../../base';
 
-export class CharacterDetailsComponent extends HandlebarsComponent<
+export class CharacterDetailsComponent extends HandlebarsApplicationComponent<
     ConstructorOf<BaseActorSheet>
 > {
     static TEMPLATE =

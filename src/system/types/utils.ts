@@ -18,3 +18,15 @@ export type Mixin<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     MixinClasses extends (new (...args: any[]) => any)[],
 > = BaseClass & (MixinClasses extends (infer R)[] ? R : never);
+
+export enum MouseButton {
+    /**
+     * Usually the left mouse button.
+     */
+    Primary = 0,
+
+    /**
+     * Usually the right mouse button.
+     */
+    Secondary = 2,
+}

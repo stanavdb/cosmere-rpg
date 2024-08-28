@@ -114,7 +114,7 @@ export class CosmereActor<
     /**
      *  Utility function to increment/decrement a skill value
      */
-    public modifySkillRank(
+    public async modifySkillRank(
         skillId: Skill,
         incrementBool = true,
         render = true,
@@ -122,12 +122,12 @@ export class CosmereActor<
         const skillpath = `system.skills.${skillId}.rank`;
         const skill = this.system.skills[skillId];
         if (incrementBool) {
-            void this.update(
+            await this.update(
                 { [skillpath]: Math.clamp(skill.rank + 1, 0, 5) },
                 { render },
             );
         } else {
-            void this.update(
+            await this.update(
                 { [skillpath]: Math.clamp(skill.rank - 1, 0, 5) },
                 { render },
             );

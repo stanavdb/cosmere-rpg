@@ -2,10 +2,10 @@ import { AttributeGroup, Attribute } from '@system/types/cosmere';
 import { ConstructorOf } from '@system/types/utils';
 
 // Component imports
-import { HandlebarsComponent } from '../../../mixins/component-handlebars-application-mixin';
+import { HandlebarsApplicationComponent } from '../../../mixins/component-handlebars-application-mixin';
 import { BaseActorSheet, BaseActorSheetRenderContext } from '../../base';
 
-export class CharacterAttributesComponent extends HandlebarsComponent<
+export class CharacterAttributesComponent extends HandlebarsApplicationComponent<
     ConstructorOf<BaseActorSheet>
 > {
     static TEMPLATE =

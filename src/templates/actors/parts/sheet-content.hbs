@@ -1,7 +1,9 @@
 <section class="sheet-content flexrow">
     <section class="col-left">
         <app-character-details></app-character-details>
-        <app-character-resources></app-character-resources>
+        {{#each resources as |resourceId|}}
+        {{{component 'app-character-resource' resource=resourceId}}}
+        {{/each}}
         <app-character-favorites></app-character-favorites>
     </section>
     <section class="col-main tabbed">

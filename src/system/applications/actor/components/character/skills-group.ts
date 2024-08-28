@@ -1,8 +1,8 @@
-import { AttributeGroup } from '@system/types/cosmere';
-import { ConstructorOf } from '@system/types/utils';
+import { AttributeGroup, Skill } from '@system/types/cosmere';
+import { ConstructorOf, MouseButton } from '@system/types/utils';
 
 // Component imports
-import { HandlebarsComponent } from '../../../mixins/component-handlebars-application-mixin';
+import { HandlebarsApplicationComponent } from '../../../mixins/component-handlebars-application-mixin';
 import { BaseActorSheet, BaseActorSheetRenderContext } from '../../base';
 
 // NOTE: Must use type here instead of interface as an interface doesn't match AnyObject type
@@ -11,25 +11,63 @@ type Params = {
     'group-id': AttributeGroup;
 };
 
-export class CharacterSkillsGroupComponent extends HandlebarsComponent<
+export class CharacterSkillsGroupComponent extends HandlebarsApplicationComponent<
     ConstructorOf<BaseActorSheet>,
     Params
 > {
     static TEMPLATE =
         'systems/cosmere-rpg/templates/actors/character/components/skills-group.hbs';
 
-    // NOTE: Unbound methods is the standard for defining actions
-    // within ApplicationV2
+    /**
+     * NOTE: Unbound methods is the standard for defining actions
+     * within ApplicationV2
+     */
     /* eslint-disable @typescript-eslint/unbound-method */
     static readonly ACTIONS = {
         'roll-skill': this.onRollSkill,
+        'adjust-skill-rank': {
+            handler: this.onAdjustSkillRank,
+            buttons: [MouseButton.Primary, MouseButton.Secondary],
+        },
     };
     /* eslint-enable @typescript-eslint/unbound-method */
 
     /* --- Actions --- */
 
-    public static onRollSkill(this: CharacterSkillsGroupComponent) {
-        console.log('ROLL SKILL');
+    public static onRollSkill(
+        this: CharacterSkillsGroupComponent,
+        event: Event,
+    ) {
+        event.preventDefault();
+
+        const skillId = $(event.currentTarget!)
+            .closest('[data-id]')
+            .data('id') as Skill;
+        void this.application.actor.rollSkill(skillId);
+    }
+
+    public static async onAdjustSkillRank(
+        this: CharacterSkillsGroupComponent,
+        event: Event,
+    ) {
+        event.preventDefault();
+
+        const incrementBool: boolean = event.type === 'click' ? true : false;
+
+        // Get skill id
+        const skillId = $(event.currentTarget!)
+            .closest('[data-id]')
+            .data('id') as Skill;
+
+        // Modify skill rank
+        await this.application.actor.modifySkillRank(
+            skillId,
+            incrementBool,
+            false,
+        );
+
+        // Only re-render this component
+        void this.render();
     }
 
     /* --- Context --- */
