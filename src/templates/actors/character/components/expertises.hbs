@@ -4,12 +4,14 @@
         <span>{{localize "COSMERE.Actor.Sheet.Expertises"}}</span>
     </div>
     <div class="controls">
+        {{#if isEditMode}}
         <a role="button"
             data-action="edit-expertises"
             data-tooltip="Edit expertises"
         >
             <i class="fa-solid fa-pen-to-square"></i>
         </a>
+        {{/if}}
     </div>
 </div>
 <div class="expertises">

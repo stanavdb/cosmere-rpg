@@ -1,5 +1,17 @@
 <div class="resource {{resource.id}}">
-    <span class="label">{{localize resource.label}}</span>
+    <div class="header">
+        <span class="label">{{localize resource.label}}</span>
+        <div class="controls">
+            {{#if isEditMode}}
+            <a role="button"
+                data-action="configure-resource"
+                data-tooltip="Configure {{localize resource.label}}"
+            >
+                <i class="fa-solid fa-gear"></i>
+            </a>
+            {{/if}}
+        </div>
+    </div>
     <div class="bar" data-action="edit-value">
         <div class="value">
             <span class="current">{{resource.value}}</span>

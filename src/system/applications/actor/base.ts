@@ -4,6 +4,8 @@ import { DeepPartial } from '@system/types/utils';
 
 const { ActorSheetV2 } = foundry.applications.sheets;
 
+export type ActorSheetMode = 'view' | 'edit';
+
 // NOTE: Have to use type instead of interface to comply with AnyObject type
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 export type BaseActorSheetRenderContext = {
@@ -15,6 +17,9 @@ export class BaseActorSheet<
 > extends ActorSheetV2<T> {
     /* eslint-disable @typescript-eslint/unbound-method */
     static DEFAULT_OPTIONS = foundry.utils.mergeObject(super.DEFAULT_OPTIONS, {
+        actions: {
+            'toggle-mode': this.onToggleMode,
+        },
         form: {
             handler: this.onFormEvent,
             submitOnChange: true,
@@ -22,9 +27,22 @@ export class BaseActorSheet<
     });
     /* eslint-enable @typescript-eslint/unbound-method */
 
+    protected mode: ActorSheetMode = 'view';
+
     get actor(): CosmereActor {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return super.document;
+    }
+
+    /* --- Actions --- */
+
+    public static onToggleMode(this: BaseActorSheet, event: Event) {
+        event.preventDefault();
+
+        this.mode = this.mode === 'view' ? 'edit' : 'view';
+
+        // Re-render
+        void this.render(true);
     }
 
     /* --- Form --- */
@@ -73,7 +91,10 @@ export class BaseActorSheet<
         return {
             ...(await super._prepareContext(options)),
             actor: this.actor,
-            editable: true, // TEMP
+
+            editable: this.isEditable,
+            mode: this.mode,
+            isEditMode: this.mode === 'edit',
         };
     }
 }

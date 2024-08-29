@@ -14,9 +14,13 @@
         </div>
 
         <div class="skill-pips ranks">
+            {{#if @root.isEditMode}}
             <a data-action="adjust-skill-rank"
                 data-tooltip="Left Click to increase {{localize skill.config.label}}'s Rank<br>Right Click to decrease {{localize skill.config.label}}'s Rank"
             >
+            {{else}}
+            <div>
+            {{/if}}
                 <ul class="pip-list">
                     {{#times skill.rank}}
                     <li class="pip active">
@@ -29,7 +33,11 @@
                     </li>
                     {{/times}}
                 </ul>
+            {{#if @root.isEditMode}}
             </a>
+            {{else}}
+            </div>
+            {{/if}}
         </div>
     </li>
     {{/if}}

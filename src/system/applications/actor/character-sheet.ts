@@ -26,13 +26,18 @@ interface ApplicationTab {
 }
 
 export class CharacterSheet extends ApplicationMixins(BaseActorSheet) {
+    /* eslint-disable @typescript-eslint/unbound-method */
     static DEFAULT_OPTIONS = foundry.utils.mergeObject(super.DEFAULT_OPTIONS, {
         classes: ['cosmere-rpg', 'sheet', 'actor', 'character'],
         position: {
             width: 850,
             height: 1000,
         },
+        actions: {
+            'toggle-mode': this.onToggleMode,
+        },
     });
+    /* eslint-enable @typescript-eslint/unbound-method */
 
     static COMPONENTS = foundry.utils.mergeObject(super.COMPONENTS, {
         'app-character-details': CharacterDetailsComponent,
@@ -74,6 +79,54 @@ export class CharacterSheet extends ApplicationMixins(BaseActorSheet) {
     get actor(): CharacterActor {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return super.document;
+    }
+
+    /* --- Actions --- */
+
+    public static onToggleMode(this: CharacterSheet, event: Event) {
+        if (!(event.target instanceof HTMLInputElement)) return;
+
+        super.onToggleMode(event);
+
+        // Get toggle
+        const toggle = $(this.element).find('#mode-toggle');
+
+        // Update checked status
+        toggle.find('input').prop('checked', this.mode === 'edit');
+
+        // Update tooltip
+        toggle.attr(
+            'data-tooltip',
+            game.i18n!.localize(
+                `COSMERE.Actor.Sheet.${this.mode === 'edit' ? 'View' : 'Edit'}`,
+            ),
+        );
+    }
+
+    /* --- Life cycle --- */
+
+    protected async _renderFrame(
+        options: Partial<foundry.applications.api.ApplicationV2.RenderOptions>,
+    ): Promise<HTMLElement> {
+        const frame = await super._renderFrame(options);
+
+        // Insert mode toggle
+        if (this.isEditable) {
+            $(this.window.title!).before(`
+                <label id="mode-toggle" 
+                    class="toggle-switch"
+                    data-action="toggle-mode"
+                    data-tooltip="${game.i18n!.localize('COSMERE.Actor.Sheet.Edit')}"
+                >
+                    <input type="checkbox" name="sheet-mode">
+                    <div class="slider rounded">
+                        <i class="fa-solid fa-pen"></i>
+                    </div>
+                </label>
+            `);
+        }
+
+        return frame;
     }
 
     /* --- Context --- */

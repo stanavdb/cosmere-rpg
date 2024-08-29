@@ -15,7 +15,9 @@
                 </span>
                 <span class="value">
                     <input type="number" class="value" min="0" max="5" step="1"
-                        name="system.attributes.{{attribute.config.key}}.value" value="{{attribute.value}}" />
+                        name="system.attributes.{{attribute.config.key}}.value" value="{{attribute.value}}" 
+                        {{#if (not @root.isEditMode)}}readonly{{/if}}
+                    />
                 </span>
             </div>
             {{/with}}
@@ -35,7 +37,9 @@
                 </span>
                 <span class="value">
                     <input type="number" class="value" min="0" max="5" step="1"
-                        name="system.attributes.{{attribute.config.key}}.value" value="{{attribute.value}}" />
+                        name="system.attributes.{{attribute.config.key}}.value" value="{{attribute.value}}" 
+                        {{#if (not @root.isEditMode)}}readonly{{/if}}    
+                    />
                 </span>
             </div>
             {{/with}}
