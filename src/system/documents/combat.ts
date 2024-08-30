@@ -1,4 +1,4 @@
-export default class CosmereCombat extends Combat {
+export class CosmereCombat extends Combat {
     //sets all defeated combatants activation status to true (already activated), and all others to false(hasn't activated yet)
     resetActivations() {
         for (const combatant of this.turns) {

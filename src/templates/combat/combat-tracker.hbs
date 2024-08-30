@@ -56,7 +56,7 @@
         {{#if fastPlayers}}
         <li class="combat-phase"><h4>{{localize 'COSMERE.Combat.FastPlayers'}}</h4></li>
         {{#each fastPlayers}}
-        {{> combatant}}
+        {{> combatant this}}
         {{/each}}
         {{/if}}
         {{#if fastNPC}}

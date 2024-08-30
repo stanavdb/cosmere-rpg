@@ -1,15 +1,19 @@
-import CosmereCombatant from './combatant';
+import { ActorType, TurnSpeed } from '@src/system/types/cosmere';
+import { CosmereCombatant } from '@src/system/documents/combatant';
 
 /**
- * Overrides default tracker template to implement slow/fast buckets and activation button.
+ * Overrides default tracker template to implement slow/fast buckets and combatant activation button.
  */
-export default class CosmereCombatTracker extends CombatTracker {
+export class CosmereCombatTracker extends CombatTracker {
+    // Note: lint rules wants this to be exposed as a readonly field, but base class implements a getter.
     // eslint-disable-next-line @typescript-eslint/class-literal-property-style
     override get template() {
         return 'systems/cosmere-rpg/templates/combat/combat-tracker.hbs';
     }
 
-    //modifies data being sent to the combat tracker template to add turn speed, type and activation status and splitting turns between the initiative phases.
+    /**
+     *  modifies data being sent to the combat tracker template to add turn speed, type and activation status and splitting turns between the initiative phases.
+     */
     override async getData(
         options?: Partial<ApplicationOptions> | undefined,
     ): Promise<object> {
@@ -20,6 +24,7 @@ export default class CosmereCombatTracker extends CombatTracker {
             fastNPC: CosmereTurn[];
             slowNPC: CosmereTurn[];
         };
+        //add combatant type, speed, and activation status to existing turn data.
         data.turns = data.turns.map((turn) => {
             const combatant: CosmereCombatant =
                 this.viewed!.getEmbeddedDocument(
@@ -32,7 +37,7 @@ export default class CosmereCombatTracker extends CombatTracker {
                 turnSpeed: combatant.getFlag(
                     'cosmere-rpg',
                     'turnSpeed',
-                ) as string,
+                ) as TurnSpeed,
                 type: combatant.actor.type,
                 activated: combatant.getFlag(
                     'cosmere-rpg',
@@ -43,35 +48,54 @@ export default class CosmereCombatTracker extends CombatTracker {
             newTurn.css = '';
             return newTurn;
         });
+
+        //split turn data into individual turn "buckets" to separate them in the combat tracker ui
         data.fastPlayers = data.turns.filter((turn) => {
-            return turn.type == 'character' && turn.turnSpeed == 'fast';
+            return (
+                turn.type === ActorType.Character &&
+                turn.turnSpeed === TurnSpeed.Fast
+            );
         });
         data.slowPlayers = data.turns.filter((turn) => {
-            return turn.type == 'character' && turn.turnSpeed == 'slow';
+            return (
+                turn.type === ActorType.Character &&
+                turn.turnSpeed === TurnSpeed.Slow
+            );
         });
         data.fastNPC = data.turns.filter((turn) => {
-            return turn.type == 'adversary' && turn.turnSpeed == 'fast';
+            return (
+                turn.type === ActorType.Adversary &&
+                turn.turnSpeed === TurnSpeed.Fast
+            );
         });
         data.slowNPC = data.turns.filter((turn) => {
-            return turn.type == 'adversary' && turn.turnSpeed == 'slow';
+            return (
+                turn.type === ActorType.Adversary &&
+                turn.turnSpeed === TurnSpeed.Slow
+            );
         });
 
         return data;
     }
 
+    /**
+     * add listeners to toggleTurnSpeed and activation buttons
+     */
     override activateListeners(html: JQuery<HTMLElement>): void {
         super.activateListeners(html);
-        html.find('.cosmere-turn-speed-control').on(
+        html.find(`[data-control='toggleSpeed']`).on(
             'click',
             this._onClickToggleTurnSpeed.bind(this),
         );
-        html.find('.cosmere-activate-control').on(
+        html.find(`[data-control='activateCombatant']`).on(
             'click',
             this._onActivateCombatant.bind(this),
         );
     }
 
-    //toggles combatant turn speed on clicking the "fast/slow" text on the combat tracker window
+    /**
+     * toggles combatant turn speed on clicking the "fast/slow" button on the combat tracker window
+     * */
     protected _onClickToggleTurnSpeed(event: Event) {
         event.preventDefault();
         event.stopPropagation();
@@ -85,7 +109,9 @@ export default class CosmereCombatTracker extends CombatTracker {
         void combatant.toggleTurnSpeed();
     }
 
-    //activates the combatant when clicking the activation icon
+    /**
+     *  activates the combatant when clicking the activation button
+     */
     protected _onActivateCombatant(event: Event) {
         event.preventDefault();
         event.stopPropagation();
@@ -99,7 +125,9 @@ export default class CosmereCombatTracker extends CombatTracker {
         void combatant.setFlag('cosmere-rpg', 'activated', true);
     }
 
-    //toggles combatant turn speed on clicking the "fast/slow" option in the turn tracker context menu
+    /**
+     * toggles combatant turn speed on clicking the "fast/slow" option in the turn tracker context menu
+     */
     protected _onContextToggleTurnSpeed(li: JQuery<HTMLElement>) {
         const combatant: CosmereCombatant = this.viewed!.getEmbeddedDocument(
             'Combatant',
@@ -109,7 +137,9 @@ export default class CosmereCombatTracker extends CombatTracker {
         combatant.toggleTurnSpeed();
     }
 
-    //resets combatants activation status to hasn't activated
+    /**
+     * resets combatants activation status to hasn't activated
+     */
     protected _onContextResetActivation(li: JQuery<HTMLElement>) {
         const combatant: CosmereCombatant = this.viewed!.getEmbeddedDocument(
             'Combatant',
@@ -119,6 +149,9 @@ export default class CosmereCombatTracker extends CombatTracker {
         void combatant.setFlag('cosmere-rpg', 'activated', false);
     }
 
+    /**
+     * Overwrites combatants context menu options, adding toggle turn speed and reset activation options. Removes initiative rolling options from base implementation.
+     */
     _getEntryContextOptions(): ContextMenuEntry[] {
         const menu: ContextMenuEntry[] = [
             {
@@ -132,6 +165,7 @@ export default class CosmereCombatTracker extends CombatTracker {
                 callback: this._onContextResetActivation.bind(this),
             },
         ];
+        //pushes existing context menu options, filtering out the initiative reroll and initiative clear options
         menu.push(
             ...super
                 ._getEntryContextOptions()
@@ -150,7 +184,7 @@ interface CosmereTurn {
     css: string;
     pending: number;
     finished: number;
-    type?: string;
-    turnSpeed?: string;
+    type?: ActorType;
+    turnSpeed?: TurnSpeed;
     activated?: boolean;
 }
