@@ -1,19 +1,24 @@
 import CosmereCombatant from './combatant';
 
+/**
+ * Overrides default tracker template to implement slow/fast buckets and activation button.
+ */
 export default class CosmereCombatTracker extends CombatTracker {
-    //overrides default tracker template to implement slow/fast buckets and activation button.
-    //eslint-disable-next-line -- eslint rules want readonly field
-    get template() {
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    override get template() {
         return 'systems/cosmere-rpg/templates/combat/combat-tracker.hbs';
     }
 
     //modifies data being sent to the combat tracker template to add turn speed, type and activation status and splitting turns between the initiative phases.
-    async getData(
+    override async getData(
         options?: Partial<ApplicationOptions> | undefined,
     ): Promise<object> {
         const data = (await super.getData(options)) as {
             turns: CosmereTurn[];
-            [x: string]: unknown;
+            fastPlayers: CosmereTurn[];
+            slowPlayers: CosmereTurn[];
+            fastNPC: CosmereTurn[];
+            slowNPC: CosmereTurn[];
         };
         data.turns = data.turns.map((turn) => {
             const combatant: CosmereCombatant =
