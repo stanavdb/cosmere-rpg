@@ -36,7 +36,7 @@ export class BaseActorSheet<
 
     /* --- Actions --- */
 
-    public static onToggleMode(this: BaseActorSheet) {
+    public static onToggleMode(this: BaseActorSheet, _: Event) {
         this.mode = this.mode === 'view' ? 'edit' : 'view';
 
         // Re-render
