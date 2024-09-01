@@ -26,7 +26,7 @@ export default tseslint.config(
             "@typescript-eslint/no-unused-vars": [
                 "error",
                 {
-                    "argsIgnorePattern": "_\\d{0,3}",
+                    "argsIgnorePattern": "^_\\d{0,3}$",
                 }
             ]
         },
