@@ -5,3 +5,5 @@ export * from './skills-group';
 export * from './expertises';
 export * from './ancestry';
 export * from './paths';
+export * from './actions-list';
+export * from './search-bar';

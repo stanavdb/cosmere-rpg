@@ -159,8 +159,16 @@
                     "Editable": "Editable",
                     "Locked": "Locked"
                 },
+                "Item": {
+                    "Edit": "Edit",
+                    "Details": "View details",
+                    "Remove": "Remove"
+                },
                 "Actions": {
-                    "label": "Actions"
+                    "label": "Actions",
+                    "Activation": "Use",
+                    "Consume": "Cost",
+                    "Use": "Use action"
                 },
                 "Inventory": {
                     "label": "Inventory",
@@ -172,7 +180,19 @@
                 "Level": "Level",
                 "Expertises": "Expertises",
                 "Edit": "Edit",
-                "View": "View"
+                "View": "View",
+                "Tabs": {
+                    "Details": "Details",
+                    "Actions": "Actions",
+                    "Equipment": "Equipment",
+                    "Goals": "Goals",
+                    "Effects": "Effects & Conditions"
+                },
+                "Search": {
+                    "Item": {
+                        "Placeholder": "Search Actions"
+                    }
+                }
             }
         },
         "AttributeGroup": {

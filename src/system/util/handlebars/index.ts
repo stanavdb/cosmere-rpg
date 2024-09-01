@@ -1,3 +1,5 @@
+import './application';
+
 import {
     ArmorTraitId,
     WeaponTraitId,
@@ -16,7 +18,6 @@ import {
 import { CharacterActor, CosmereActor } from '@system/documents/actor';
 import { CosmereItem } from '@system/documents/item';
 import { Derived } from '@system/data/fields';
-import { AnyObject } from '@system/types/utils';
 
 import { ItemContext, ItemContextOptions } from './types';
 
@@ -24,32 +25,6 @@ Handlebars.registerHelper('add', (a: number, b: number) => a + b);
 Handlebars.registerHelper('sub', (a: number, b: number) => a - b);
 Handlebars.registerHelper('multi', (a: number, b: number) => a * b);
 Handlebars.registerHelper('divide', (a: number, b: number) => a / b);
-
-Handlebars.registerHelper(
-    'component',
-    (element: string, options?: { hash?: AnyObject }) => {
-        // Params to array
-        const params = Object.entries(options?.hash ?? {}).map(
-            ([key, value]) => ({
-                name: key,
-                value: value as string | number | boolean | object,
-                type: typeof value,
-            }),
-        );
-
-        // Params to string
-        const paramsStr = params
-            .map((param) => [
-                `param-${param.name}="${param.value.toString()}"`,
-                `param-${param.name}__type="${param.type}"`,
-            ])
-            .flat()
-            .join(' ');
-
-        // Return component with params
-        return `<${element} ${paramsStr}></${element}>`;
-    },
-);
 
 Handlebars.registerHelper('default', (v: unknown, defaultVal: unknown) => {
     return v ? v : defaultVal;
@@ -337,6 +312,29 @@ Handlebars.registerHelper(
                               }
                             : {}),
                     };
+
+                    if (consumesItemResource && item.system.resources) {
+                        // Get the resource
+                        const resource =
+                            item.system.resources[
+                                context.consume.resource as ItemResource
+                            ];
+
+                        const resourceHasRecharge = !!resource?.recharge;
+                        const resourceRecharge = resource?.recharge;
+                        const resourceRechargeLabel = resourceHasRecharge
+                            ? CONFIG.COSMERE.items.resources.recharge[
+                                  resource.recharge!
+                              ].label
+                            : undefined;
+
+                        context.consume = {
+                            ...context.consume,
+                            resourceHasRecharge,
+                            resourceRecharge,
+                            resourceRechargeLabel,
+                        };
+                    }
                 }
 
                 // Check if item has resources
@@ -467,18 +465,21 @@ Handlebars.registerHelper('damageTypeConfig', (type: DamageType) => {
 });
 
 export async function preloadHandlebarsTemplates() {
-    // const partials = [
-    //     // 'systems/cosmere-rpg/templates/actors/parts/actions.hbs',
-    //     // 'systems/cosmere-rpg/templates/actors/parts/inventory.hbs',
-    //     // 'systems/cosmere-rpg/templates/chat/parts/roll-details.hbs',
-    // ];
-    // return await loadTemplates(
-    //     partials.reduce(
-    //         (partials, path) => {
-    //             partials[path.split('/').pop()!.replace('.hbs', '')] = path;
-    //             return partials;
-    //         },
-    //         {} as Record<string, string>,
-    //     ),
-    // );
+    const partials = [
+        'systems/cosmere-rpg/templates/general/tabs.hbs',
+        'systems/cosmere-rpg/templates/actors/character/partials/char-details-tab.hbs',
+        'systems/cosmere-rpg/templates/actors/character/partials/char-actions-tab.hbs',
+        // 'systems/cosmere-rpg/templates/actors/parts/actions.hbs',
+        // 'systems/cosmere-rpg/templates/actors/parts/inventory.hbs',
+        // 'systems/cosmere-rpg/templates/chat/parts/roll-details.hbs',
+    ];
+    return await loadTemplates(
+        partials.reduce(
+            (partials, path) => {
+                partials[path.split('/').pop()!.replace('.hbs', '')] = path;
+                return partials;
+            },
+            {} as Record<string, string>,
+        ),
+    );
 }

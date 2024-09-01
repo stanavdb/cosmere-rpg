@@ -3,7 +3,7 @@ import { ApplicationV2Constructor } from './types';
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
-type ComponentHandlebarsRenderOptions =
+export type ComponentHandlebarsRenderOptions =
     foundry.applications.api.HandlebarsApplicationMixin.HandlebarsRenderOptions & {
         componentRefs: string[];
     };
@@ -599,3 +599,9 @@ export function ComponentHandlebarsApplicationMixin<
         }
     };
 }
+
+export type ComponentHandlebarsApplication<
+    // NOTE: See above note
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    BaseClass extends ApplicationV2Constructor<AnyObject, any, any>,
+> = ReturnType<typeof ComponentHandlebarsApplicationMixin<BaseClass>>;

@@ -2,7 +2,11 @@ import { ItemType } from '@src/system/types/cosmere';
 import { CharacterActor } from '@system/documents/actor';
 
 // Mixins
-import { ApplicationMixins } from '../mixins';
+import {
+    ComponentHandlebarsApplicationMixin,
+    ComponentHandlebarsRenderOptions,
+} from '../mixins';
+import { TabsApplicationMixin } from './mixins/tabs';
 
 // Components
 import {
@@ -13,19 +17,27 @@ import {
     CharacterExpertisesComponent,
     CharacterAncestryComponent,
     CharacterPathsComponent,
+    CharacterActionsListComponent,
+    CharacterSearchBarComponent,
+    SearchBarInputEvent,
+    SortDirection,
 } from './components/character';
 
 // Base
 import { BaseActorSheet } from './base';
+import { AnyObject } from '@src/system/types/utils';
 
-interface ApplicationTab {
-    id: string;
-    group: string;
-    label: string;
-    icon?: string;
+const enum CharacterSheetTab {
+    Details = 'details',
+    Actions = 'actions',
+    Equipment = 'equipment',
+    Goals = 'goals',
+    Effects = 'effects',
 }
 
-export class CharacterSheet extends ApplicationMixins(BaseActorSheet) {
+export class CharacterSheet extends TabsApplicationMixin(
+    ComponentHandlebarsApplicationMixin(BaseActorSheet),
+) {
     /* eslint-disable @typescript-eslint/unbound-method */
     static DEFAULT_OPTIONS = foundry.utils.mergeObject(super.DEFAULT_OPTIONS, {
         classes: ['cosmere-rpg', 'sheet', 'actor', 'character'],
@@ -47,39 +59,55 @@ export class CharacterSheet extends ApplicationMixins(BaseActorSheet) {
         'app-character-expertises': CharacterExpertisesComponent,
         'app-character-ancestry': CharacterAncestryComponent,
         'app-character-paths-list': CharacterPathsComponent,
+        'app-character-actions-list': CharacterActionsListComponent,
+        'app-character-search-bar': CharacterSearchBarComponent,
     });
 
     static PARTS = foundry.utils.mergeObject(super.PARTS, {
+        navigation: {
+            template:
+                'systems/cosmere-rpg/templates/actors/character/parts/navigation.hbs',
+        },
         header: {
-            template: 'systems/cosmere-rpg/templates/actors/parts/header.hbs',
+            template:
+                'systems/cosmere-rpg/templates/actors/character/parts/header.hbs',
         },
         'sheet-content': {
             template:
-                'systems/cosmere-rpg/templates/actors/parts/sheet-content.hbs',
+                'systems/cosmere-rpg/templates/actors/character/parts/sheet-content.hbs',
         },
     });
 
-    public tabGroups = {
-        primary: 'actions',
-    };
-
-    protected tabs: ApplicationTab[] = [
-        {
-            id: 'actions',
-            group: 'primary',
-            label: 'COSMERE.Actor.Sheet.Actions.label',
+    static TABS = foundry.utils.mergeObject(super.TABS, {
+        [CharacterSheetTab.Details]: {
+            label: 'COSMERE.Actor.Sheet.Tabs.Details',
+            icon: '<i class="fa-solid fa-feather-pointed"></i>',
         },
-        {
-            id: 'inventory',
-            group: 'primary',
-            label: 'COSMERE.Actor.Sheet.Inventory.label',
+        [CharacterSheetTab.Actions]: {
+            label: 'COSMERE.Actor.Sheet.Tabs.Actions',
+            icon: '<i class="cosmere-icon">3</i>',
         },
-    ];
+        [CharacterSheetTab.Equipment]: {
+            label: 'COSMERE.Actor.Sheet.Tabs.Equipment',
+            icon: '<i class="fa-solid fa-suitcase"></i>',
+        },
+        [CharacterSheetTab.Goals]: {
+            label: 'COSMERE.Actor.Sheet.Tabs.Goals',
+            icon: '<i class="fa-solid fa-list"></i>',
+        },
+        [CharacterSheetTab.Effects]: {
+            label: 'COSMERE.Actor.Sheet.Tabs.Effects',
+            icon: '<i class="fa-solid fa-bolt"></i>',
+        },
+    });
 
     get actor(): CharacterActor {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return super.document;
     }
+
+    private actionsSearchText = '';
+    private actionsSearchSort: SortDirection = SortDirection.Descending;
 
     /* --- Actions --- */
 
@@ -105,6 +133,20 @@ export class CharacterSheet extends ApplicationMixins(BaseActorSheet) {
 
     /* --- Life cycle --- */
 
+    protected _onRender(
+        context: AnyObject,
+        options: ComponentHandlebarsRenderOptions,
+    ) {
+        if (options.parts.includes('sheet-content')) {
+            this.element
+                .querySelector('#actions-search')!
+                .addEventListener(
+                    'search',
+                    this.onActionsSearchChange.bind(this) as EventListener,
+                );
+        }
+    }
+
     protected async _renderFrame(
         options: Partial<foundry.applications.api.ApplicationV2.RenderOptions>,
     ): Promise<HTMLElement> {
@@ -118,7 +160,7 @@ export class CharacterSheet extends ApplicationMixins(BaseActorSheet) {
                     data-action="toggle-mode"
                     data-tooltip="${game.i18n!.localize('COSMERE.Actor.Sheet.Edit')}"
                 >
-                    <input type="checkbox" name="sheet-mode">
+                    <input type="checkbox" ${this.mode === 'edit' ? 'checked' : ''}>
                     <div class="slider rounded">
                         <i class="fa-solid fa-pen"></i>
                     </div>
@@ -127,6 +169,18 @@ export class CharacterSheet extends ApplicationMixins(BaseActorSheet) {
         }
 
         return frame;
+    }
+
+    /* --- Event handlers --- */
+
+    private onActionsSearchChange(event: SearchBarInputEvent) {
+        this.actionsSearchText = event.detail.text;
+        this.actionsSearchSort = event.detail.sort;
+
+        void this.render({
+            parts: [],
+            componentRefs: ['sheet-content.app-character-actions-list.0'],
+        });
     }
 
     /* --- Context --- */
@@ -150,9 +204,6 @@ export class CharacterSheet extends ApplicationMixins(BaseActorSheet) {
         return {
             ...(await super._prepareContext(options)),
 
-            tabs: this.tabs,
-            tabGroups: this.tabGroups,
-
             pathTypes: pathTypes.map((type) => ({
                 type,
                 typeLabel: CONFIG.COSMERE.paths.types[type].label,
@@ -164,6 +215,12 @@ export class CharacterSheet extends ApplicationMixins(BaseActorSheet) {
 
             attributeGroups: Object.keys(CONFIG.COSMERE.attributeGroups),
             resources: Object.keys(this.actor.system.resources),
+
+            // Search
+            actionsSearch: {
+                text: this.actionsSearchText,
+                sort: this.actionsSearchSort,
+            },
         };
     }
 }

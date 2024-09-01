@@ -1,0 +1,26 @@
+<div class="search-bar">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="text" 
+        id="actions-search"
+        placeholder="{{placeholder}}"
+        value="{{text}}"
+    >
+    <div class="controls flexrow">
+        <a role="button" data-action="clear-actions-search">
+            <i class="fa-solid fa-xmark" style="font-size: 1rem"></i>
+        </a>
+        <a role="button">
+            <i class="fa-solid fa-filter"></i>
+        </a>
+        <a class="active" role="button" data-action="toggle-actions-search-sort-direction">
+            {{#if (eq sort 'desc')}}
+            <i class="fa-solid fa-arrow-down-short-wide"></i>
+            {{else}}
+            <i class="fa-solid fa-arrow-up-wide-short"></i>
+            {{/if}}
+        </a>
+        <a class="active" role="button">
+            <i class="fa-solid fa-layer-group"></i>
+        </a>
+    </div>
+</div>

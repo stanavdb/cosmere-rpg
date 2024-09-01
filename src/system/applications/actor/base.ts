@@ -36,9 +36,7 @@ export class BaseActorSheet<
 
     /* --- Actions --- */
 
-    public static onToggleMode(this: BaseActorSheet, event: Event) {
-        event.preventDefault();
-
+    public static onToggleMode(this: BaseActorSheet) {
         this.mode = this.mode === 'view' ? 'edit' : 'view';
 
         // Re-render
@@ -53,6 +51,9 @@ export class BaseActorSheet<
         form: HTMLFormElement,
         formData: FormDataExtended,
     ) {
+        if (!(event.target instanceof HTMLInputElement)) return;
+        if (!event.target.name) return;
+
         Object.keys(this.actor.system.resources).forEach((resourceId) => {
             let resourceValue = formData.object[
                 `system.resources.${resourceId}.value`

@@ -4,6 +4,8 @@ export {
     EmptyObject,
 } from '@league-of-foundry-developers/foundry-vtt-types/src/types/utils.mjs';
 
+export type SharedKeys<T, U> = keyof T & keyof U;
+
 // NOTE: Using `any` in the below types as the resulting types don't rely on the `any`s
 // However they cannot be replaced with other types (e.g. `unknown`) without breaking dependent typings
 
@@ -16,8 +18,8 @@ export type Mixin<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     BaseClass extends abstract new (...args: any[]) => any,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    MixinClasses extends (new (...args: any[]) => any)[],
-> = BaseClass & (MixinClasses extends (infer R)[] ? R : never);
+    MixinClass extends new (...args: any[]) => any,
+> = BaseClass & MixinClass;
 
 export enum MouseButton {
     /**

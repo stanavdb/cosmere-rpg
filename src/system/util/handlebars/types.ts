@@ -5,6 +5,9 @@ export interface ItemContextOptions {
 export interface ItemContext {
     subtitle: string;
 
+    hasDescription: boolean;
+    descriptionHTML?: string;
+
     isPhysical: boolean;
     quantity: number;
     weight: Partial<{
@@ -58,6 +61,9 @@ export interface ItemContext {
 
         resource: string;
         resourceLabel: string;
+        resourceHasRecharge: boolean;
+        resourceRecharge: string;
+        resourceRechargeLabel: string;
     }>;
 
     hasResources: boolean;
