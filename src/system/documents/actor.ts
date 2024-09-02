@@ -1,4 +1,4 @@
-import { Skill, Attribute } from '@system/types/cosmere';
+import { Skill, Attribute, ActorType } from '@system/types/cosmere';
 import { CosmereItem } from '@system/documents/item';
 import { CommonActorDataModel } from '@system/data/actor/common';
 import { CharacterActorDataModel } from '@system/data/actor/character';
@@ -36,6 +36,10 @@ interface RollSkillOptions {
 export class CosmereActor<
     T extends CommonActorDataModel = CommonActorDataModel,
 > extends Actor<T, CosmereItem> {
+    // Redeclare `actor.type` to specifically be of `ActorType`.
+    // This way we avoid casting everytime we want to check/use its type
+    declare type: ActorType;
+
     /**
      * Utility function to get the modifier for a given skill for this actor.
      * @param skill The skill to get the modifier for
@@ -109,6 +113,29 @@ export class CosmereActor<
         options?: Omit<CosmereItem.RollItemOptions, 'actor'>,
     ): Promise<D20Roll | null> {
         return item.roll({ ...options, actor: this });
+    }
+
+    /**
+     *  Utility function to increment/decrement a skill value
+     */
+    public async modifySkillRank(
+        skillId: Skill,
+        incrementBool = true,
+        render = true,
+    ) {
+        const skillpath = `system.skills.${skillId}.rank`;
+        const skill = this.system.skills[skillId];
+        if (incrementBool) {
+            await this.update(
+                { [skillpath]: Math.clamp(skill.rank + 1, 0, 5) },
+                { render },
+            );
+        } else {
+            await this.update(
+                { [skillpath]: Math.clamp(skill.rank - 1, 0, 5) },
+                { render },
+            );
+        }
     }
 
     /**

@@ -1,0 +1,24 @@
+<div class="resource {{resource.id}}">
+    <div class="header">
+        <span class="label">{{localize resource.label}}</span>
+        <div class="controls">
+            {{#if isEditMode}}
+            <a role="button"
+                data-action="configure-resource"
+                data-tooltip="Configure {{localize resource.label}}"
+            >
+                <i class="fa-solid fa-gear"></i>
+            </a>
+            {{/if}}
+        </div>
+    </div>
+    <div class="bar" data-action="edit-value">
+        <div class="value">
+            <span class="current">{{resource.value}}</span>
+            <span class="delim">/</span>
+            <span class="max">{{resource.max}}</span>
+        </div>
+        <div class="inner-bar" style="width: {{perc resource.value resource.max}};"></div>
+        <input type="text" name="system.resources.{{resource.id}}.value" value="{{resource.value}}">
+    </div>
+</div>

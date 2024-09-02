@@ -1,4 +1,4 @@
-import { ConstructorOf } from '@system/util/types';
+import { ConstructorOf } from '@system/types/utils';
 
 // NOTE: Specifically use a namespace here to merge with interface declaration
 export namespace Derived {

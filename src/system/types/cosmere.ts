@@ -93,6 +93,10 @@ export const enum DerivedStatistic {
     RecoveryDie = 'rcd',
 }
 
+export const enum PathType {
+    Heroic = 'heroic',
+}
+
 /**
  * The categories of weapon available
  */
@@ -200,9 +204,13 @@ export const enum EquipType {
 }
 
 export const enum HoldType {
-    MainHand = 'main_hand',
-    OffHand = 'off_hand',
+    OneHanded = 'one_handed',
     TwoHanded = 'two_handed',
+}
+
+export const enum EquipHand {
+    Main = 'main_hand',
+    Off = 'off_hand',
 }
 
 export const enum ActionType {
@@ -250,4 +258,9 @@ export const enum ItemType {
     Action = 'action',
 
     Injury = 'injury',
+}
+
+export const enum TurnSpeed {
+    Fast = 'fast',
+    Slow = 'slow',
 }

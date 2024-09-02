@@ -14,7 +14,7 @@
                     "placeholder": "[Path]"
                 },
                 "Specialties": {
-                    "placeholder": "[Specialty]"            
+                    "placeholder": "[Specialty]"
                 },
                 "Expertise": {
                     "name": "Expertise",
@@ -113,6 +113,8 @@
                 "Investiture": "Investiture"
             },
             "Skill": {
+                "label": "Skill",
+                "label_p": "Skills",
                 "Agility": "Agility",
                 "Athletics": "Athletics",
                 "HeavyWeapons": "Heavy Weapons",
@@ -134,10 +136,10 @@
             },
             "Statistics": {
                 "Defense": "Defense",
-                "SensesRange": "Senses Range",
-                "MovementRate": "Movement",
+                "SensesRange": "Sense",
+                "MovementRate": "Move",
                 "LiftingCapactiy": "Lifting Capactiy",
-                "RecoveryDie": "Recovery Die",
+                "RecoveryDie": "Recover",
                 "Deflect": "Deflect",
                 "NoObscuredSense": "Unaffected by Obscured Senses."
             },
@@ -153,14 +155,52 @@
                 "Animal": "Animal"
             },
             "Sheet": {
+                "Header": {
+                    "Editable": "Editable",
+                    "Locked": "Locked"
+                },
+                "Item": {
+                    "Edit": "Edit",
+                    "Details": "View details",
+                    "Remove": "Remove"
+                },
                 "Actions": {
-                    "label": "Actions"
+                    "label": "Actions",
+                    "Activation": "Use",
+                    "Consume": "Cost",
+                    "Use": "Use action",
+                    "Strike": "Strike"
+                },
+                "Equipment": {
+                    "Quantity": "Quantity",
+                    "Weight": "Weight",
+                    "IncreaseQuantity": "Increase quantity",
+                    "DecreaseQuantity": "Decrease quantity"
                 },
                 "Inventory": {
                     "label": "Inventory",
                     "Item": {
                         "Quantity": "Quantity",
                         "Weight": "Weight"
+                    }
+                },
+                "Level": "Level",
+                "Expertises": "Expertises",
+                "Edit": "Edit",
+                "View": "View",
+                "Tabs": {
+                    "Details": "Details",
+                    "Actions": "Actions",
+                    "Equipment": "Equipment",
+                    "Goals": "Goals",
+                    "Effects": "Effects & Conditions"
+                },
+                "Search": {
+                    "Item": {
+                        "Placeholder": "Search Actions"
+                    },
+                    "Equipment": {
+                        "Placeholder": "Search Items"
                     }
                 }
             }
@@ -253,7 +293,8 @@
                     "Cumbersome": "Cumbersome",
                     "Dangerous": "Dangerous",
                     "Presentable": "Presentable"
-                }
+                },
+                "Deflect": "Deflect"
             },
             "Action": {
                 "Type": {
@@ -316,14 +357,19 @@
                     }
                 },
                 "Hold": {
-                    "MainHand": {
-                        "Label": "Main Hand"
-                    },
-                    "OffHand": {
-                        "Label": "Off Hand"
+                    "OneHanded": {
+                        "Label": "One Handed"
                     },
                     "TwoHanded": {
                         "Label": "Two Handed"
+                    }
+                },
+                "Hand": {
+                    "Main": {
+                        "Label": "Main Hand"
+                    },
+                    "Off": {
+                        "Label": "Off Hand"
                     }
                 },
                 "Equip": {
@@ -352,7 +398,23 @@
             "Vital": "Vital",
             "Healing": "Healing"
         },
-        "Currencies": {}
+        "Paths": {
+            "Types": {
+                "Heroic": {
+                    "Label": "Heroic"
+                }
+            }
+        },
+        "Currencies": {},
+        "Combat": {
+            "FastPlayers": "Fast Characters",
+            "SlowPlayers": "Slow Characters",
+            "FastAdversaries": "Fast Adversaries",
+            "SlowAdversaries": "Slow Adversaries",
+            "ToggleTurn": "Toggle Turn Speed",
+            "ResetActivation": "Reset Activation",
+            "Activate": "Mark as having acted"
+        }
     },
     "DICE": {
         "RollMode": "Roll Mode",
@@ -394,6 +456,12 @@
             "NoActor": "No selected or assigned actor found for this roll",
             "NotEnoughResource": "Cannot consume, not enough of resource",
             "ItemConsumeResourceNotConfigured": "The resource selected to be consumed as it is not configured on the item"
+        }
+    },
+    "TYPES": {
+        "Actor": {
+            "character": "Character",
+            "adversary": "Adversary"
         }
     }
 }

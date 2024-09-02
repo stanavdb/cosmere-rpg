@@ -29,15 +29,30 @@ Hooks.once('init', async () => {
     CONFIG.Item.dataModels = dataModels.item.config;
     CONFIG.Item.documentClass = documents.CosmereItem;
 
+    CONFIG.Combat.documentClass = documents.CosmereCombat;
+    CONFIG.Combatant.documentClass = documents.CosmereCombatant;
+    CONFIG.ui.combat = applications.combat.CosmereCombatTracker;
+
     Actors.unregisterSheet('core', ActorSheet);
-    Actors.registerSheet('cosmere-rpg', applications.actor.CharacterSheet, {
-        types: ['character'],
-        label: `${game.i18n?.localize('COSMERE.Actor.Character.Character')}`,
-    });
-    Actors.registerSheet('cosmere-rpg', applications.actor.AdversarySheet, {
-        types: ['adversary'],
-        label: `${game.i18n?.localize('COSMERE.Actor.Adversary.Adversary')}`,
-    });
+    // NOTE: Must cast to `any` as registerSheet type doesn't accept ApplicationV2 (even though it's valid to pass it)
+    Actors.registerSheet(
+        'cosmere-rpg',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
+        applications.actor.CharacterSheet as any,
+        {
+            types: ['character'],
+            label: `${game.i18n?.localize('COSMERE.Actor.Character.Character')}`,
+        },
+    );
+    Actors.registerSheet(
+        'cosmere-rpg',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
+        applications.actor.AdversarySheet as any,
+        {
+            types: ['adversary'],
+            label: `${game.i18n?.localize('COSMERE.Actor.Adversary.Adversary')}`,
+        },
+    );
 
     Items.registerSheet('cosmere-rpg', applications.item.AncestrySheet, {
         types: ['ancestry'],
@@ -57,4 +72,9 @@ Hooks.once('init', async () => {
 
     // Load templates
     await preloadHandlebarsTemplates();
+
+    // TEMP: This resembles a system module
+    (CONFIG.COSMERE.paths.types as Record<string, unknown>).radiant = {
+        label: 'Radiant',
+    };
 });

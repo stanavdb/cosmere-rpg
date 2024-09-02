@@ -26,6 +26,8 @@ import {
     ItemResource,
     EquipType,
     HoldType,
+    EquipHand,
+    PathType,
 } from './cosmere';
 
 export interface SizeConfig {
@@ -49,18 +51,21 @@ export interface InjuryConfig {
 }
 
 export interface AttributeGroupConfig {
+    key: string;
     label: string;
     attributes: [Attribute, Attribute];
     resource: Resource;
 }
 
 export interface AttributeConfig {
+    key: string;
     label: string;
     labelShort: string;
     skills: Skill[];
 }
 
 export interface SkillConfig {
+    key: string;
     label: string;
     attribute: Attribute;
     attrLabel: string;
@@ -68,8 +73,13 @@ export interface SkillConfig {
 }
 
 export interface ResourceConfig {
+    key: string;
     label: string;
     deflect?: boolean;
+}
+
+export interface PathTypeConfig {
+    label: string;
 }
 
 export interface CurrencyConfig {
@@ -166,12 +176,14 @@ export interface ItemTypeConfig {
 
 export interface EquipTypeConfig {
     label: string;
-    icon?: string;
 }
 
 export interface HoldTypeConfig {
     label: string;
-    icon?: string;
+}
+
+export interface EquipHandConfig {
+    label: string;
 }
 
 export interface CosmereRPGConfig {
@@ -186,6 +198,10 @@ export interface CosmereRPGConfig {
     skills: Record<Skill, SkillConfig>;
     currencies: Record<string, CurrencyConfig>;
 
+    paths: {
+        types: Record<PathType, PathTypeConfig>;
+    };
+
     items: {
         types: Record<ItemType, ItemTypeConfig>;
         activation: {
@@ -199,6 +215,7 @@ export interface CosmereRPGConfig {
         equip: {
             types: Record<EquipType, EquipTypeConfig>;
             hold: Record<HoldType, HoldTypeConfig>;
+            hand: Record<EquipHand, EquipHandConfig>;
         };
     };
 

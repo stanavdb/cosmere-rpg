@@ -1,0 +1,63 @@
+<div class="portrait-info">
+    <div class="portrait">
+        <img class="profile" src="{{actor.img}}" data-tooltip="{{actor.name}}" data-edit="img">
+    </div>
+
+    <a class="short-rest rest" role="button" data-action="short-rest" data-tooltip="Short rest">
+        <i class="fa-solid fa-utensils"></i>
+    </a>
+
+    <a class="long-rest rest" role="button" data-action="long-rest" data-tooltip="Long rest">
+        <i class="fa-solid fa-campground"></i>
+    </a>
+
+    <div class="deflect" data-tooltip="Deflect">
+        {{#with actor.system.resources.hea.deflect as |deflect|}}
+
+        <span class="value">{{derived deflect}}</span>
+
+        {{/with}}
+    </div>
+</div>
+
+<div class="derived-statistics flexrow">
+    {{!-- Movement --}}
+    <div class="derived-stat movement">
+        <div class="container">
+            <span class="value">{{derived actor.system.movement.rate}}</span>
+            <spa class="unit">ft</spa>
+        </div>
+        <span class="label">
+            {{localize "COSMERE.Actor.Statistics.MovementRate"}}
+        </span>
+    </div>
+
+    {{!-- Recovery --}}
+    <div class="derived-stat recovery">
+        <div class="container">
+            <span class="value">{{derived actor.system.recovery.die}}</span>
+        </div>
+        <span class="label">
+            {{localize "COSMERE.Actor.Statistics.RecoveryDie"}}
+        </span>
+    </div>
+
+    {{!-- Senses --}}
+    <div class="derived-stat senses">
+        <div class="container">
+                {{#if (derived actor.system.senses.obscuredAffected)}}
+                <span class="value">
+                {{derived actor.system.senses.range}}
+                </span>
+                <spa class="unit">ft</spa>
+                {{else}}
+                <span class="value">—</span>
+                {{/if}}
+
+
+        </div>
+        <span class="label">
+            {{localize "COSMERE.Actor.Statistics.SensesRange"}}
+        </span>
+    </div>
+</div>

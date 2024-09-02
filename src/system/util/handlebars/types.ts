@@ -5,11 +5,17 @@ export interface ItemContextOptions {
 export interface ItemContext {
     subtitle: string;
 
+    hasDescription: boolean;
+    descriptionHTML?: string;
+
     isPhysical: boolean;
+    hasQuantity: boolean;
+    hasWeight: boolean;
     quantity: number;
     weight: Partial<{
         value: number;
         unit: string;
+        total: number;
     }>;
     price: Partial<{
         value: number;
@@ -25,6 +31,9 @@ export interface ItemContext {
         hold: string;
         holdLabel: string;
         holdIcon: string;
+        hand: string;
+        handLabel: string;
+        handIcon: string;
     }>;
 
     hasSkillTest: boolean;
@@ -58,6 +67,9 @@ export interface ItemContext {
 
         resource: string;
         resourceLabel: string;
+        resourceHasRecharge: boolean;
+        resourceRecharge: string;
+        resourceRechargeLabel: string;
     }>;
 
     hasResources: boolean;
