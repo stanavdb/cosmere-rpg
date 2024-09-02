@@ -15,7 +15,7 @@
     {{#with (lookup @root.itemState item.id) as |state|}}
     {{#with (itemContext item) as |ctx|}}
 
-    <li class="item {{#if state.expanded}}expanded{{/if}}" data-item-id="{{item.id}}">
+    <li class="item {{#if state.expanded}}expanded{{/if}} usable" data-item-id="{{item.id}}">
         {{!-- Image --}}
         <div class="col img" 
             data-action="use-item"

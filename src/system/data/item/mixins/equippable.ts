@@ -1,4 +1,4 @@
-import { EquipType, HoldType } from '@system/types/cosmere';
+import { EquipType, HoldType, EquipHand } from '@system/types/cosmere';
 import { CosmereItem } from '@system/documents';
 
 export interface EquippableItemData {
@@ -7,6 +7,7 @@ export interface EquippableItemData {
     equip: {
         type: EquipType;
         hold?: HoldType;
+        hand?: EquipHand;
     };
 }
 
@@ -39,6 +40,12 @@ export function EquippableItemMixin<P extends CosmereItem>() {
                             nullable: true,
                             choices: Object.keys(
                                 CONFIG.COSMERE.items.equip.hold,
+                            ),
+                        }),
+                        hand: new foundry.data.fields.StringField({
+                            nullable: true,
+                            choices: Object.keys(
+                                CONFIG.COSMERE.items.equip.hand,
                             ),
                         }),
                     }),

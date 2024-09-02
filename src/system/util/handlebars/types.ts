@@ -9,10 +9,13 @@ export interface ItemContext {
     descriptionHTML?: string;
 
     isPhysical: boolean;
+    hasQuantity: boolean;
+    hasWeight: boolean;
     quantity: number;
     weight: Partial<{
         value: number;
         unit: string;
+        total: number;
     }>;
     price: Partial<{
         value: number;
@@ -28,6 +31,9 @@ export interface ItemContext {
         hold: string;
         holdLabel: string;
         holdIcon: string;
+        hand: string;
+        handLabel: string;
+        handIcon: string;
     }>;
 
     hasSkillTest: boolean;

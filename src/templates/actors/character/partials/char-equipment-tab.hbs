@@ -1,0 +1,9 @@
+{{#with (lookup tabsMap "equipment") as |tab|}}
+
+<div class="tab tab-content {{tab.cssClass}}" data-tab="equipment" data-group="primary">
+    {{{component 'app-character-search-bar' id='equipment-search' placeholder=(localize 'COSMERE.Actor.Sheet.Search.Equipment.Placeholder')}}}
+
+    <app-character-equipment-list></app-character-equipment-list>
+</div>
+
+{{/with}}

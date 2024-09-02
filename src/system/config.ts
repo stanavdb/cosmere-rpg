@@ -28,6 +28,7 @@ import {
     EquipType,
     HoldType,
     PathType,
+    EquipHand,
 } from './types/cosmere';
 
 const COSMERE: CosmereRPGConfig = {
@@ -424,25 +425,25 @@ const COSMERE: CosmereRPGConfig = {
             types: {
                 [EquipType.Wear]: {
                     label: 'COSMERE.Item.Equip.Types.Wear.Label',
-                    icon: '<i class="fa-solid fa-shirt"></i>',
                 },
                 [EquipType.Hold]: {
                     label: 'COSMERE.Item.Equip.Types.Hold.Label',
-                    icon: '<i class="fa-solid fa-hand-fist"></i>',
                 },
             },
             hold: {
-                [HoldType.MainHand]: {
-                    label: 'COSMERE.Item.Equip.Hold.MainHand.Label',
-                    icon: '<i class="fa-solid fa-hand"></i>',
-                },
-                [HoldType.OffHand]: {
-                    label: 'COSMERE.Item.Equip.Hold.OffHand.Label',
-                    icon: '<i class="fa-regular fa-hand"></i>',
+                [HoldType.OneHanded]: {
+                    label: 'COSMERE.Item.Equip.Hold.OneHanded.Label',
                 },
                 [HoldType.TwoHanded]: {
                     label: 'COSMERE.Item.Equip.Hold.TwoHanded.Label',
-                    icon: '<i class="fa-solid fa-hands"></i>',
+                },
+            },
+            hand: {
+                [EquipHand.Main]: {
+                    label: 'COSMERE.Item.Equip.Hand.Main.Label',
+                },
+                [EquipHand.Off]: {
+                    label: 'COSMERE.Item.Equip.Hand.Off.Label',
                 },
             },
         },

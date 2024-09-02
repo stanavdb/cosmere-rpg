@@ -26,6 +26,7 @@ import {
     ItemResource,
     EquipType,
     HoldType,
+    EquipHand,
     PathType,
 } from './cosmere';
 
@@ -160,12 +161,14 @@ export interface ItemTypeConfig {
 
 export interface EquipTypeConfig {
     label: string;
-    icon?: string;
 }
 
 export interface HoldTypeConfig {
     label: string;
-    icon?: string;
+}
+
+export interface EquipHandConfig {
+    label: string;
 }
 
 export interface CosmereRPGConfig {
@@ -196,6 +199,7 @@ export interface CosmereRPGConfig {
         equip: {
             types: Record<EquipType, EquipTypeConfig>;
             hold: Record<HoldType, HoldTypeConfig>;
+            hand: Record<EquipHand, EquipHandConfig>;
         };
     };
 

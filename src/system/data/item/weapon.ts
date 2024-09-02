@@ -28,7 +28,7 @@ export interface WeaponItemData
         DamagingItemData,
         ExpertiseItemData,
         TraitsItemData,
-        PhysicalItemData {}
+        Partial<PhysicalItemData> {}
 
 export class WeaponItemDataModel extends DataModelMixin<
     WeaponItemData,

@@ -99,61 +99,61 @@ Handlebars.registerHelper(
     },
 );
 
-Handlebars.registerHelper('itemHoldSelect', (selected?: HoldType) => {
-    const holdTypes = Object.keys(
-        CONFIG.COSMERE.items.equip.hold,
-    ) as HoldType[];
+// Handlebars.registerHelper('itemHoldSelect', (selected?: HoldType) => {
+//     const holdTypes = Object.keys(
+//         CONFIG.COSMERE.items.equip.hold,
+//     ) as HoldType[];
 
-    return `
-        <ul class="dropdown">
-        ${holdTypes
-            .map((hold) => {
-                // Get the config
-                const config = CONFIG.COSMERE.items.equip.hold[hold];
+//     return `
+//         <ul class="dropdown">
+//         ${holdTypes
+//             .map((hold) => {
+//                 // Get the config
+//                 const config = CONFIG.COSMERE.items.equip.hold[hold];
 
-                const isSelected = hold === selected;
+//                 const isSelected = hold === selected;
 
-                return `
-                    <li class="option">
-                        <a role="button" 
-                            data-type="${hold}"
-                            data-action="item-equip-hold" 
-                            class="option-select ${isSelected ? 'selected' : ''}" 
-                            data-tooltip="${game.i18n!.localize(config.label)}"
-                        >
-                            ${config.icon}
-                        </a>
-                    </li>    
-                `;
-            })
-            .join('\n')}
-        </ul>
-    `;
-});
+//                 return `
+//                     <li class="option">
+//                         <a role="button"
+//                             data-type="${hold}"
+//                             data-action="item-equip-hold"
+//                             class="option-select ${isSelected ? 'selected' : ''}"
+//                             data-tooltip="${game.i18n!.localize(config.label)}"
+//                         >
+//                             ${config.icon}
+//                         </a>
+//                     </li>
+//                 `;
+//             })
+//             .join('\n')}
+//         </ul>
+//     `;
+// });
 
 Handlebars.registerHelper(
     'itemContext',
     (item: CosmereItem, options?: { hash?: ItemContextOptions }) => {
         try {
             const context = {} as Partial<ItemContext>;
-            const subtitle = [] as string[];
+            const subtitle = [] as { text: string; classes?: string[] }[];
 
             const isWeapon = item.isWeapon();
 
             if (isWeapon) {
                 const attack = item.system.attack;
 
-                subtitle.push(
-                    game.i18n!.localize(
+                subtitle.push({
+                    text: game.i18n!.localize(
                         CONFIG.COSMERE.attack.types[attack.type].label,
                     ),
-                );
+                });
 
                 if (attack.range?.value) {
                     if (attack.type === AttackType.Melee) {
-                        subtitle[0] += ` + ${attack.range.value}`;
+                        subtitle[0].text += ` + ${attack.range.value}`;
                     } else {
-                        subtitle[0] += ` (${attack.range.value}${attack.range.units}${
+                        subtitle[0].text += ` (${attack.range.value}${attack.range.units}${
                             attack.range.long
                                 ? `/${attack.range.long}${attack.range.units}`
                                 : ''
@@ -162,12 +162,25 @@ Handlebars.registerHelper(
                 }
             }
 
+            if (item.isArmor() && item.system.deflect) {
+                subtitle.push({
+                    text: `${game.i18n!.localize(
+                        'COSMERE.Item.Armor.Deflect',
+                    )} [${item.system.deflect}]`,
+                });
+            }
+
             if (item.isPhysical()) {
                 context.isPhysical = true;
+                context.hasQuantity = item.system.quantity !== null;
+                context.hasWeight = item.system.weight.value !== null;
                 context.quantity = item.system.quantity;
                 context.weight = {
                     value: item.system.weight.value,
                     unit: item.system.weight.unit,
+                    total:
+                        (item.system.quantity ?? 0) *
+                        (item.system.weight.value ?? 0),
                 };
                 context.price = {
                     value: item.system.price.value,
@@ -181,30 +194,36 @@ Handlebars.registerHelper(
 
                 const type = item.system.equip.type;
                 const hold = item.system.equip.hold;
+                const hand = item.system.equip.hand;
 
                 context.equip = {
                     type,
                     typeLabel: CONFIG.COSMERE.items.equip.types[type].label,
-                    typeIcon: CONFIG.COSMERE.items.equip.types[type].icon,
 
                     hold,
                     ...(hold
                         ? {
                               holdLabel:
                                   CONFIG.COSMERE.items.equip.hold[hold].label,
-                              holdIcon:
-                                  CONFIG.COSMERE.items.equip.hold[hold].icon,
+                          }
+                        : {}),
+
+                    hand,
+                    ...(hand
+                        ? {
+                              handLabel:
+                                  CONFIG.COSMERE.items.equip.hand[hand].label,
                           }
                         : {}),
                 };
 
                 if (options?.hash?.showEquippedHand !== false) {
                     if (hold && hold !== HoldType.TwoHanded) {
-                        subtitle.push(
-                            game.i18n!.localize(
+                        subtitle.push({
+                            text: game.i18n!.localize(
                                 CONFIG.COSMERE.items.equip.hold[hold].label,
                             ),
-                        );
+                        });
                     }
                 }
             }
@@ -213,23 +232,31 @@ Handlebars.registerHelper(
                 subtitle.push(
                     ...Array.from(item.system.traits)
                         .filter((trait) => trait.active)
-                        .map((trait) => trait.id)
-                        .map((traitId) => {
+                        .map((trait) => {
                             // Get trait data
                             const data = item.system.traits.find(
-                                (t) => t.id === traitId,
+                                (t) => t.id === trait.id,
                             )!;
 
                             // Get the config
                             const config = isWeapon
                                 ? CONFIG.COSMERE.traits.weaponTraits[
-                                      traitId as WeaponTraitId
+                                      trait.id as WeaponTraitId
                                   ]
                                 : CONFIG.COSMERE.traits.armorTraits[
-                                      traitId as ArmorTraitId
+                                      trait.id as ArmorTraitId
                                   ];
 
-                            return `${game.i18n!.localize(config.label)} ${config.hasValue ? `[${data.value}]` : ''}`.trim();
+                            const modifiedByExpertise =
+                                trait.active !== trait.defaultActive ||
+                                trait.value !== trait.defaultValue;
+
+                            return {
+                                text: `${game.i18n!.localize(config.label)} ${config.hasValue ? `[${data.value}]` : ''}`.trim(),
+                                classes: modifiedByExpertise
+                                    ? ['highlight']
+                                    : [],
+                            };
                         }),
                 );
             }
@@ -441,17 +468,20 @@ Handlebars.registerHelper(
                     item.system.description?.short &&
                     item.type === ItemType.Action
                 ) {
-                    subtitle.splice(
-                        0,
-                        subtitle.length,
-                        item.system.description.short,
-                    );
+                    subtitle.splice(0, subtitle.length, {
+                        text: item.system.description.short,
+                    });
                 }
             }
 
             return {
                 ...context,
-                subtitle: subtitle.join(', '),
+                subtitle: subtitle
+                    .map(
+                        ({ text, classes }) =>
+                            `<span class=${(classes ?? []).join(' ')}>${text}</span>`,
+                    )
+                    .join('<span>, </span>'),
             };
         } catch (err) {
             console.error(err);
@@ -469,6 +499,7 @@ export async function preloadHandlebarsTemplates() {
         'systems/cosmere-rpg/templates/general/tabs.hbs',
         'systems/cosmere-rpg/templates/actors/character/partials/char-details-tab.hbs',
         'systems/cosmere-rpg/templates/actors/character/partials/char-actions-tab.hbs',
+        'systems/cosmere-rpg/templates/actors/character/partials/char-equipment-tab.hbs',
         // 'systems/cosmere-rpg/templates/actors/parts/actions.hbs',
         // 'systems/cosmere-rpg/templates/actors/parts/inventory.hbs',
         // 'systems/cosmere-rpg/templates/chat/parts/roll-details.hbs',

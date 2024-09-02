@@ -152,8 +152,12 @@
 
     /* --- Tabs --- */
 
-    .tab[data-tab="actions"] {
+    .tab[data-tab] {
         flex-direction: column;
+    }
+
+    .tab[data-tab="details"] {
+        flex-direction: row;
     }
 
     /* --- Components --- */
@@ -625,7 +629,7 @@
         }
     }
 
-    app-character-actions-list {
+    app-character-actions-list, app-character-equipment-list {
         flex: 1;
         width: 100%;
 
@@ -641,7 +645,7 @@
 
             .item {
                 background: #302831;
-                height: 2rem;
+                height: 2.3rem;
                 display: flex;
                 flex-direction: row;
                 align-items: center;
@@ -680,8 +684,8 @@
                     justify-content: center;
 
                     > img {
-                        width: 1.65rem;
-                        height: 1.65rem;
+                        width: 1.85rem;
+                        height: 1.85rem;
                     }
 
                     .roll-icon {
@@ -690,7 +694,9 @@
                         z-index: 1;
                         border: none;
                     }
+                }
 
+                &.usable .img {
                     &:hover {
                         .roll-icon {
                             display: block;
@@ -707,11 +713,25 @@
                     cursor: pointer;
                     height: 100%;
                     display: flex;
-                    align-items: center;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    justify-content: center;
+
+                    .subtitle {
+                        font-size: 7.5pt;
+                        
+                        span:not(.highlight) {
+                            opacity: .4;
+                        }
+                    }
                 }
 
-                .activation, .consume {
+                .activation, .consume, .weight, .quantity {
                     text-align: center;
+
+                    .val.none {
+                        opacity: .3;
+                    }
                 }
 
                 .activation {
@@ -720,6 +740,78 @@
 
                 .consume {
                     width: 6.5rem;
+                }
+
+                .quantity {
+                    width: 5rem;
+                    display: flex;
+                    justify-content: center;
+
+                    > a {
+                        width: 2rem;
+
+                        &:hover i {
+                            opacity: 1;
+                        }
+                    }
+
+                    i {
+                        opacity: .3;
+                    }
+                }
+
+                .weight {
+                    width: 4rem;
+
+                    i {
+                        opacity: .3;
+                    }
+                }
+
+                .equip {
+                    width: 4rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100%;
+
+                    img {
+                        border: none;
+                    }
+
+                    a {
+                        position: relative;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        height: 100%;
+
+                        img {
+                            &.hold-2h {
+                                width: 2rem;
+                                transform: rotate(25deg);
+                            }
+
+                            &.inactive {
+                                opacity: .3;
+                            }
+                        }
+
+                        &.compound {
+                            width: 2rem;
+
+                            > img {
+                                position: absolute;
+                                width: 1.7rem;
+                            }
+                        } 
+                    }
+
+                    &:not(.equipped) {
+                        .icon {
+                            opacity: .3;
+                        }
+                    }
                 }
 
                 .controls {

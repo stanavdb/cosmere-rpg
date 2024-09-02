@@ -168,7 +168,14 @@
                     "label": "Actions",
                     "Activation": "Use",
                     "Consume": "Cost",
-                    "Use": "Use action"
+                    "Use": "Use action",
+                    "Strike": "Strike"
+                },
+                "Equipment": {
+                    "Quantity": "Quantity",
+                    "Weight": "Weight",
+                    "IncreaseQuantity": "Increase quantity",
+                    "DecreaseQuantity": "Decrease quantity"
                 },
                 "Inventory": {
                     "label": "Inventory",
@@ -191,6 +198,9 @@
                 "Search": {
                     "Item": {
                         "Placeholder": "Search Actions"
+                    },
+                    "Equipment": {
+                        "Placeholder": "Search Items"
                     }
                 }
             }
@@ -283,7 +293,8 @@
                     "Cumbersome": "Cumbersome",
                     "Dangerous": "Dangerous",
                     "Presentable": "Presentable"
-                }
+                },
+                "Deflect": "Deflect"
             },
             "Action": {
                 "Type": {
@@ -346,14 +357,19 @@
                     }
                 },
                 "Hold": {
-                    "MainHand": {
-                        "Label": "Main Hand"
-                    },
-                    "OffHand": {
-                        "Label": "Off Hand"
+                    "OneHanded": {
+                        "Label": "One Handed"
                     },
                     "TwoHanded": {
                         "Label": "Two Handed"
+                    }
+                },
+                "Hand": {
+                    "Main": {
+                        "Label": "Main Hand"
+                    },
+                    "Off": {
+                        "Label": "Off Hand"
                     }
                 },
                 "Equip": {

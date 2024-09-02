@@ -21,6 +21,7 @@ import {
     CharacterSearchBarComponent,
     SearchBarInputEvent,
     SortDirection,
+    CharacterEquipmentListComponent,
 } from './components/character';
 
 // Base
@@ -61,6 +62,7 @@ export class CharacterSheet extends TabsApplicationMixin(
         'app-character-paths-list': CharacterPathsComponent,
         'app-character-actions-list': CharacterActionsListComponent,
         'app-character-search-bar': CharacterSearchBarComponent,
+        'app-character-equipment-list': CharacterEquipmentListComponent,
     });
 
     static PARTS = foundry.utils.mergeObject(super.PARTS, {
@@ -109,6 +111,9 @@ export class CharacterSheet extends TabsApplicationMixin(
     private actionsSearchText = '';
     private actionsSearchSort: SortDirection = SortDirection.Descending;
 
+    private equipmentSearchText = '';
+    private equipmentSearchSort: SortDirection = SortDirection.Descending;
+
     /* --- Actions --- */
 
     public static onToggleMode(this: CharacterSheet, event: Event) {
@@ -143,6 +148,13 @@ export class CharacterSheet extends TabsApplicationMixin(
                 .addEventListener(
                     'search',
                     this.onActionsSearchChange.bind(this) as EventListener,
+                );
+
+            this.element
+                .querySelector('#equipment-search')
+                ?.addEventListener(
+                    'search',
+                    this.onEquipmentSearchChange.bind(this) as EventListener,
                 );
         }
     }
@@ -183,6 +195,16 @@ export class CharacterSheet extends TabsApplicationMixin(
         });
     }
 
+    private onEquipmentSearchChange(event: SearchBarInputEvent) {
+        this.equipmentSearchText = event.detail.text;
+        this.equipmentSearchSort = event.detail.sort;
+
+        void this.render({
+            parts: [],
+            componentRefs: ['sheet-content.app-character-equipment-list.0'],
+        });
+    }
+
     /* --- Context --- */
 
     public async _prepareContext(
@@ -220,6 +242,10 @@ export class CharacterSheet extends TabsApplicationMixin(
             actionsSearch: {
                 text: this.actionsSearchText,
                 sort: this.actionsSearchSort,
+            },
+            equipmentSearch: {
+                text: this.equipmentSearchText,
+                sort: this.equipmentSearchSort,
             },
         };
     }

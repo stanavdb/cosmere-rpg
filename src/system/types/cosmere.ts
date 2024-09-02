@@ -204,9 +204,13 @@ export const enum EquipType {
 }
 
 export const enum HoldType {
-    MainHand = 'main_hand',
-    OffHand = 'off_hand',
+    OneHanded = 'one_handed',
     TwoHanded = 'two_handed',
+}
+
+export const enum EquipHand {
+    Main = 'main_hand',
+    Off = 'off_hand',
 }
 
 export const enum ActionType {

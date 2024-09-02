@@ -7,3 +7,4 @@ export * from './ancestry';
 export * from './paths';
 export * from './actions-list';
 export * from './search-bar';
+export * from './equipment-list';
