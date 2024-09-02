@@ -82,6 +82,21 @@ export interface PathTypeConfig {
     label: string;
 }
 
+export interface CurrencyConfig {
+    label: string;
+    denominations: {
+        primary: CurrencyDenominationConfig[];
+        secondary?: CurrencyDenominationConfig[];
+    };
+}
+
+export interface CurrencyDenominationConfig {
+    id: string;
+    label: string;
+    conversionRate: number; // Value relative to base denomination
+    base?: boolean; // Present if this denomination is considered the base
+}
+
 export interface WeaponTypeConfig {
     label: string;
 }
@@ -181,6 +196,7 @@ export interface CosmereRPGConfig {
     attributes: Record<Attribute, AttributeConfig>;
     resources: Record<Resource, ResourceConfig>;
     skills: Record<Skill, SkillConfig>;
+    currencies: Record<string, CurrencyConfig>;
 
     paths: {
         types: Record<PathType, PathTypeConfig>;

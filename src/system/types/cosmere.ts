@@ -259,3 +259,8 @@ export const enum ItemType {
 
     Injury = 'injury',
 }
+
+export const enum TurnSpeed {
+    Fast = 'fast',
+    Slow = 'slow',
+}

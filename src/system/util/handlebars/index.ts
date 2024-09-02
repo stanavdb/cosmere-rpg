@@ -500,9 +500,7 @@ export async function preloadHandlebarsTemplates() {
         'systems/cosmere-rpg/templates/actors/character/partials/char-details-tab.hbs',
         'systems/cosmere-rpg/templates/actors/character/partials/char-actions-tab.hbs',
         'systems/cosmere-rpg/templates/actors/character/partials/char-equipment-tab.hbs',
-        // 'systems/cosmere-rpg/templates/actors/parts/actions.hbs',
-        // 'systems/cosmere-rpg/templates/actors/parts/inventory.hbs',
-        // 'systems/cosmere-rpg/templates/chat/parts/roll-details.hbs',
+        'systems/cosmere-rpg/templates/combat/combatant.hbs',
     ];
     return await loadTemplates(
         partials.reduce(

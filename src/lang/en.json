@@ -14,7 +14,7 @@
                     "placeholder": "[Path]"
                 },
                 "Specialties": {
-                    "placeholder": "[Specialty]"            
+                    "placeholder": "[Specialty]"
                 },
                 "Expertise": {
                     "name": "Expertise",
@@ -404,6 +404,16 @@
                     "Label": "Heroic"
                 }
             }
+        },
+        "Currencies": {},
+        "Combat": {
+            "FastPlayers": "Fast Characters",
+            "SlowPlayers": "Slow Characters",
+            "FastAdversaries": "Fast Adversaries",
+            "SlowAdversaries": "Slow Adversaries",
+            "ToggleTurn": "Toggle Turn Speed",
+            "ResetActivation": "Reset Activation",
+            "Activate": "Mark as having acted"
         }
     },
     "DICE": {

@@ -29,6 +29,10 @@ Hooks.once('init', async () => {
     CONFIG.Item.dataModels = dataModels.item.config;
     CONFIG.Item.documentClass = documents.CosmereItem;
 
+    CONFIG.Combat.documentClass = documents.CosmereCombat;
+    CONFIG.Combatant.documentClass = documents.CosmereCombatant;
+    CONFIG.ui.combat = applications.combat.CosmereCombatTracker;
+
     Actors.unregisterSheet('core', ActorSheet);
     // NOTE: Must cast to `any` as registerSheet type doesn't accept ApplicationV2 (even though it's valid to pass it)
     Actors.registerSheet(

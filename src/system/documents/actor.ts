@@ -1,4 +1,4 @@
-import { Skill, Attribute } from '@system/types/cosmere';
+import { Skill, Attribute, ActorType } from '@system/types/cosmere';
 import { CosmereItem } from '@system/documents/item';
 import { CommonActorDataModel } from '@system/data/actor/common';
 import { CharacterActorDataModel } from '@system/data/actor/character';
@@ -36,6 +36,10 @@ interface RollSkillOptions {
 export class CosmereActor<
     T extends CommonActorDataModel = CommonActorDataModel,
 > extends Actor<T, CosmereItem> {
+    // Redeclare `actor.type` to specifically be of `ActorType`.
+    // This way we avoid casting everytime we want to check/use its type
+    declare type: ActorType;
+
     /**
      * Utility function to get the modifier for a given skill for this actor.
      * @param skill The skill to get the modifier for
