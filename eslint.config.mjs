@@ -23,10 +23,11 @@ export default tseslint.config(
         rules: {
             '@typescript-eslint/no-namespace': 'off',
             '@typescript-eslint/no-base-to-string': 'off',
-            "@typescript-eslint/no-unused-vars": [
-                "error",
+            '@typescript-eslint/no-misused-promises': 'off',
+            '@typescript-eslint/no-unused-vars': [
+                'error',
                 {
-                    "argsIgnorePattern": "^_\\d{0,3}$",
+                    'argsIgnorePattern': '^_\\d{0,3}$',
                 }
             ]
         },

@@ -22,6 +22,8 @@ import {
     SearchBarInputEvent,
     SortDirection,
     CharacterEquipmentListComponent,
+    CharacterGoalsListComponent,
+    CharacterConnectionsListComponent,
 } from './components/character';
 
 // Base
@@ -49,6 +51,10 @@ export class CharacterSheet extends TabsApplicationMixin(
         actions: {
             'toggle-mode': this.onToggleMode,
         },
+        form: {
+            handler: this.onFormEvent,
+            submitOnChange: true,
+        } as unknown,
     });
     /* eslint-enable @typescript-eslint/unbound-method */
 
@@ -63,6 +69,8 @@ export class CharacterSheet extends TabsApplicationMixin(
         'app-character-actions-list': CharacterActionsListComponent,
         'app-character-search-bar': CharacterSearchBarComponent,
         'app-character-equipment-list': CharacterEquipmentListComponent,
+        'app-character-goals-list': CharacterGoalsListComponent,
+        'app-character-connections-list': CharacterConnectionsListComponent,
     });
 
     static PARTS = foundry.utils.mergeObject(super.PARTS, {
@@ -134,6 +142,17 @@ export class CharacterSheet extends TabsApplicationMixin(
                 `COSMERE.Actor.Sheet.${this.mode === 'edit' ? 'View' : 'Edit'}`,
             ),
         );
+    }
+
+    /* --- Form --- */
+
+    public static onFormEvent(
+        this: BaseActorSheet,
+        event: Event,
+        form: HTMLFormElement,
+        formData: FormDataExtended,
+    ) {
+        super.onFormEvent(event, form, formData);
     }
 
     /* --- Life cycle --- */

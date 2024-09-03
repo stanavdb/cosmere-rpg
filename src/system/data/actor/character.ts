@@ -70,6 +70,8 @@ export class CharacterActorDataModel extends CommonActorDataModel<CharacterActor
                         required: true,
                         integer: true,
                         initial: 0,
+                        min: 0,
+                        max: 3,
                     }),
                 }),
                 {

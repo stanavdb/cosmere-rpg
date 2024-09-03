@@ -51,7 +51,11 @@ export class BaseActorSheet<
         form: HTMLFormElement,
         formData: FormDataExtended,
     ) {
-        if (!(event.target instanceof HTMLInputElement)) return;
+        if (
+            !(event.target instanceof HTMLInputElement) &&
+            !(event.target instanceof HTMLTextAreaElement)
+        )
+            return;
         if (!event.target.name) return;
 
         Object.keys(this.actor.system.resources).forEach((resourceId) => {
@@ -79,6 +83,8 @@ export class BaseActorSheet<
 
             formData.object[`system.resources.${resourceId}.value`] = numValue;
         });
+
+        console.log(formData.object);
 
         // Update document
         void this.actor.update(formData.object, { diff: false });

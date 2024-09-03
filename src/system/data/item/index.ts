@@ -13,6 +13,7 @@ import { TraitItemDataModel } from './trait';
 import { ActionItemDataModel } from './action';
 
 import { InjuryItemDataModel } from './injury';
+import { ConnectionItemDataModel } from './connection';
 
 export const config: Record<
     ItemType,
@@ -33,6 +34,7 @@ export const config: Record<
     [ItemType.Action]: ActionItemDataModel,
 
     [ItemType.Injury]: InjuryItemDataModel,
+    [ItemType.Connection]: ConnectionItemDataModel,
 };
 
 export * from './weapon';
@@ -43,3 +45,4 @@ export * from './path';
 export * from './talent';
 export * from './action';
 export * from './injury';
+export * from './connection';

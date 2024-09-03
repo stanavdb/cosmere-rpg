@@ -40,6 +40,14 @@ export class CosmereActor<
     // This way we avoid casting everytime we want to check/use its type
     declare type: ActorType;
 
+    public isCharacter(): this is CharacterActor {
+        return this.type === ActorType.Character;
+    }
+
+    public isAdversary(): this is AdversaryActor {
+        return this.type === ActorType.Adversary;
+    }
+
     /**
      * Utility function to get the modifier for a given skill for this actor.
      * @param skill The skill to get the modifier for

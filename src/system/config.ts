@@ -379,6 +379,10 @@ const COSMERE: CosmereRPGConfig = {
                 label: 'COSMERE.Item.Type.Injury.label',
                 labelPlural: 'COSMERE.Item.Type.Injury.label_plural',
             },
+            [ItemType.Connection]: {
+                label: 'COSMERE.Item.Type.Connection.label',
+                labelPlural: 'COSMERE.Item.Type.Connection.label_plural',
+            },
         },
         activation: {
             types: {

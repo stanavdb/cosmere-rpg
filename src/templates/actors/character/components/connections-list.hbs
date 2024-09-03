@@ -1,0 +1,89 @@
+<ul class="connections-list">
+    <li class="connection header">
+        <span class="title">{{localize "COSMERE.Actor.Sheet.Details.Connections.Label"}}</span>
+    </li>
+
+    {{#each connections as |connection|}}
+    {{#if connection.expanded}}
+        <li hidden></li>
+    {{/if}}
+
+    <li class="connection" data-id="{{connection.id}}">
+        <i class="fa-solid fa-diamond"></i>
+
+        <span class="title toggle-details" data-action="toggle-expand-connection">{{connection.name}}</span>
+        <input type="text" class="title inactive" value="{{connection.name}}">
+
+        <div class="controls">
+            <a
+                data-action="toggle-expand-connection"
+                {{#if connection.expanded}}
+                data-tooltip="{{localize "GENERIC.HideDetails"}}"
+                {{else}}
+                data-tooltip="{{localize "GENERIC.ViewDetails"}}"
+                {{/if}}
+            >
+                {{#if connection.expanded}}
+                <i class="fa-solid fa-chevron-down"></i>
+                {{else}}
+                <i class="fa-solid fa-chevron-left"></i>
+                {{/if}}
+            </a>
+
+            {{#if @root.editable}}
+            <a
+                data-action="toggle-connection-controls"
+                data-tooltip="{{localize "APPLICATION.TOOLS.ToggleControls"}}"
+            >
+                <i class="fa-solid fa-ellipsis-vertical"></i>
+            </a>
+            {{/if}}
+        </div>
+    </li>
+
+    <li class="connection details {{#if connection.expanded}}expanded{{else}}collapsed{{/if}}" data-id="{{connection.id}}">
+        {{{connection.descriptionHTML}}}
+    </li>
+
+    {{#if connection.expanded}}
+        <li hidden></li>
+    {{/if}}
+    
+    {{/each}}
+
+    {{#if editable}}
+    <li class="connection new">
+        <a data-action="add-connection">
+            <i class="fa-solid fa-plus"></i>
+            <span>
+                {{localize "COSMERE.Actor.Sheet.Details.Connections.New"}}
+            </span>
+        </a>
+    </li>
+    {{/if}}
+</ul>
+
+{{#if editable}}
+<menu class="controls-dropdown {{#if controlsDropdown.expanded}}expanded{{/if}}"
+    {{#if controlsDropdown.expanded}}
+    style="top:{{controlsDropdown.position.top}}px;right:{{controlsDropdown.position.right}}px"
+    {{/if}}
+>
+    <li class="header-control">
+        <button class="control"
+            data-action="edit-connection"
+        >
+            <i class="fa-solid fa-pen-to-square"></i>
+            <span>{{localize "GENERIC.Button.Edit"}}</span>
+        </button>
+    </li>
+    <li class="header-control">
+        <button class="control"
+            data-action="remove-connection"
+        >
+            <i class="fa-solid fa-trash"></i>
+            <span>{{localize "GENERIC.Button.Remove"}}</span>
+        </button>
+    </li>
+</menu>
+{{/if}}

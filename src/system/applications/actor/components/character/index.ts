@@ -8,3 +8,5 @@ export * from './paths';
 export * from './actions-list';
 export * from './search-bar';
 export * from './equipment-list';
+export * from './goals-list';
+export * from './connections-list';

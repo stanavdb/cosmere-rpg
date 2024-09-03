@@ -202,6 +202,23 @@
                     "Equipment": {
                         "Placeholder": "Search Items"
                     }
+                },
+                "Details": {
+                    "Purpose": "Purpose",
+                    "Obstacle": "Obstacle",
+                    "Goals": {
+                        "Label": "Goals",
+                        "New": "Add New Goal",
+                        "NewText": "New Goal",
+                        "AdjustProgressTooltipInc": "Left click to increase progress.",
+                        "AdjustProgressTooltipDec": "Right click to descrease progress.",
+                        "HideComplete": "Hide Completed"
+                    },
+                    "Connections": {
+                        "Label": "Connections",
+                        "New": "Add New Connection",
+                        "NewText": "New Connection"
+                    }
                 }
             }
         },
@@ -256,6 +273,10 @@
                 "Injury": {
                     "label": "Injury",
                     "label_plural": "Injuries"
+                },
+                "Connection": {
+                    "label": "Connection",
+                    "label_plural": "Connections"
                 }
             },
             "Weapon": {
@@ -447,9 +468,13 @@
         "SkillTest": "Skill Test",
         "Cost": "Cost",
         "DistanceUnit": "ft.",
+        "ViewDetails": "View Details",
+        "HideDetails": "Hide Details",
         "Button": {
             "Roll": "Roll",
-            "Continue": "Continue"
+            "Continue": "Continue",
+            "Remove": "Remove",
+            "Edit": "Edit"
         },
         "Warning": {
             "NotImplemented": "Sorry! [action] is not implemented yet",

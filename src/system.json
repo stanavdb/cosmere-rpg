@@ -31,7 +31,8 @@
 
             "action": {},
 
-            "injury": {}
+            "injury": {},
+            "connection": {}
         }
     },
     "languages": [
