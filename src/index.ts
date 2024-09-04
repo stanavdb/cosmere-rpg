@@ -59,11 +59,6 @@ Hooks.once('init', async () => {
         label: `${game.i18n?.localize('COSMERE.Item.Type.Ancestry.label')}`,
     });
 
-    Items.registerSheet('cosmere-rpg', applications.item.AncestrySheet, {
-        types: ['ancestry'],
-        label: `${game.i18n?.localize('COSMERE.Item.Type.Ancestry.label')}`,
-    });
-
     CONFIG.Dice.types.push(dice.PlotDie);
     CONFIG.Dice.terms.p = dice.PlotDie;
     CONFIG.Dice.termTypes[dice.PlotDie.name] = dice.PlotDie;

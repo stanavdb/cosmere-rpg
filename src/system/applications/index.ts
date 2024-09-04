@@ -1,3 +1,3 @@
 export * as actor from './actor';
-export * as combat from './combat';
 export * as item from './item';
+export * as combat from './combat';
