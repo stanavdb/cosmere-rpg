@@ -252,7 +252,9 @@ export class CharacterSheet extends TabsApplicationMixin(
             })),
 
             // TODO: Default localization
-            ancestryLabel: ancestryItem?.name ?? 'DEFAULT_ANCESTRY_LABEL',
+            ancestryLabel:
+                ancestryItem?.name ??
+                game.i18n?.localize('COSMERE.Item.Type.Ancestry.label'),
 
             attributeGroups: Object.keys(CONFIG.COSMERE.attributeGroups),
             resources: Object.keys(this.actor.system.resources),

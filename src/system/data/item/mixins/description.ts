@@ -8,7 +8,13 @@ export interface DescriptionItemData {
     };
 }
 
-export function DescriptionItemMixin<P extends CosmereItem>() {
+export interface InitialDescriptionItemValues {
+    value: string;
+}
+
+export function DescriptionItemMixin<P extends CosmereItem>(
+    params?: InitialDescriptionItemValues,
+) {
     return (
         base: typeof foundry.abstract.TypeDataModel<DescriptionItemData, P>,
     ) => {
@@ -18,6 +24,7 @@ export function DescriptionItemMixin<P extends CosmereItem>() {
                     description: new foundry.data.fields.SchemaField({
                         value: new foundry.data.fields.HTMLField({
                             label: 'Description',
+                            initial: params?.value ? params.value : undefined,
                         }),
                         chat: new foundry.data.fields.HTMLField({
                             label: 'Chat description',

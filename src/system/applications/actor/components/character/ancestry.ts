@@ -26,7 +26,9 @@ export class CharacterAncestryComponent extends HandlebarsApplicationComponent<
             ...context,
 
             ancestry: {
-                label: ancestryItem?.name ?? 'DEFAULT_ANCESTRY_LABEL',
+                label:
+                    ancestryItem?.name ??
+                    game.i18n?.localize('COSMERE.Item.Type.Ancestry.label'),
             },
         });
     }
