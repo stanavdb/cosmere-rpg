@@ -10,7 +10,9 @@ export interface AncestryItemData extends TypedItemData, DescriptionItemData {}
 
 export class AncestryItemDataModel extends DataModelMixin(
     TypedItemMixin(),
-    DescriptionItemMixin(),
+    DescriptionItemMixin({
+        value: 'COSMERE.Item.Type.Ancestry.desc_placeholder',
+    }),
 ) {
     static defineSchema() {
         return foundry.utils.mergeObject(super.defineSchema(), {

@@ -1,9 +1,12 @@
 <form class="sheet" autocomplete="off">
     <header class="sheet-header">
         <img class="profile" src="{{item.img}}" data-tooltip="{{img.name}}" data-edit="img" />
-        <h1 class="document-name">{{item.name}}</h1>
+        <h1 class="document-name">
+            <input class="value" type="text" name="name" value={{item.name}} />
+        </h1>
     </header>
     <div>
-        {{desc.value}}
+        {{ log desc }}
+        {{editor (localize desc.value) target="desc.value" button=true owner=owner editable=true engine="prosemirror"}}
     </div>
 </form>
