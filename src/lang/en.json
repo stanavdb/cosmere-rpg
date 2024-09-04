@@ -235,7 +235,8 @@
                 },
                 "Ancestry": {
                     "label": "Ancestry",
-                    "label_plural": "Ancestries"
+                    "label_plural": "Ancestries",
+                    "desc_placeholder": "Brief description of the culture to go here. Also include any special rules text for players to read."
                 },
                 "Path": {
                     "label": "Path",

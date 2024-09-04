@@ -358,6 +358,7 @@ const COSMERE: CosmereRPGConfig = {
             [ItemType.Ancestry]: {
                 label: 'COSMERE.Item.Type.Ancestry.label',
                 labelPlural: 'COSMERE.Item.Type.Ancestry.label_plural',
+                desc_placeholder: 'COSEMERE.Item.Type.Ancestry.desc_placeholer',
             },
             [ItemType.Path]: {
                 label: 'COSMERE.Item.Type.Path.label',
