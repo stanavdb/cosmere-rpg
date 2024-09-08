@@ -1,4 +1,4 @@
-import { Skill, Attribute, ActorType } from '@system/types/cosmere';
+import { Skill, Attribute, ActorType, Condition } from '@system/types/cosmere';
 import { CosmereItem } from '@system/documents/item';
 import { CommonActorDataModel } from '@system/data/actor/common';
 import { CharacterActorDataModel } from '@system/data/actor/character';
@@ -40,12 +40,42 @@ export class CosmereActor<
     // This way we avoid casting everytime we want to check/use its type
     declare type: ActorType;
 
+    /* --- Accessors --- */
+
+    public get conditions(): Set<Condition> {
+        return this.statuses as Set<Condition>;
+    }
+
+    public get applicableEffects(): ActiveEffect[] {
+        const effects = new Array<ActiveEffect>();
+        for (const effect of this.allApplicableEffects()) {
+            effects.push(effect);
+        }
+        return effects;
+    }
+
+    /* --- Type Guards --- */
+
     public isCharacter(): this is CharacterActor {
         return this.type === ActorType.Character;
     }
 
     public isAdversary(): this is AdversaryActor {
         return this.type === ActorType.Adversary;
+    }
+
+    /* --- Functions --- */
+
+    public *allApplicableEffects() {
+        for (const effect of super.allApplicableEffects()) {
+            if (
+                !(effect.parent instanceof CosmereItem) ||
+                !effect.parent.isEquippable() ||
+                effect.parent.system.equipped
+            ) {
+                yield effect;
+            }
+        }
     }
 
     /**

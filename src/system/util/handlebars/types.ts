@@ -22,6 +22,8 @@ export interface ItemContext {
         unit: string;
     }>;
 
+    isWeapon: boolean;
+
     isEquippable: boolean;
     equipped: boolean;
     equip: Partial<{

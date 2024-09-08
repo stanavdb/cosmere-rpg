@@ -84,8 +84,6 @@ export class BaseActorSheet<
             formData.object[`system.resources.${resourceId}.value`] = numValue;
         });
 
-        console.log(formData.object);
-
         // Update document
         void this.actor.update(formData.object, { diff: false });
     }

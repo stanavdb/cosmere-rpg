@@ -1,5 +1,5 @@
 {{#each sections as |section|}}
-<ul class="actions-list" data-section-id="{{section.id}}">
+<ul class="equipment-list" data-section-id="{{section.id}}">
     <li class="item header">
         <span class="name">{{localize section.label}}</span>
         <span class="col quantity">
@@ -9,7 +9,10 @@
             {{localize "COSMERE.Actor.Sheet.Equipment.Weight"}}
         </span>
         <div class="col equip"></div>
-        <div class="col controls {{#if @root.isEditMode}}edit{{/if}}"></div>
+        <div class="col controls flexrow {{#if @root.isEditMode}}edit{{/if}}">
+            <div></div>
+            <div></div>
+        </div>
     </li>
 
     {{#each section.items as |item|}}

@@ -23,7 +23,9 @@ export class HandlebarsApplicationComponent<
         AnyObject = BaseClass extends ApplicationV2Constructor<infer R>
         ? R
         : never,
-> {
+> extends foundry.utils.EventEmitterMixin(Object) {
+    static emittedEvents = ['render'];
+
     /**
      * The template entry-point for the Component
      */
@@ -74,9 +76,11 @@ export class HandlebarsApplicationComponent<
         public readonly application: InstanceType<
             ReturnType<typeof ComponentHandlebarsApplicationMixin<BaseClass>>
         >,
-    ) {}
+    ) {
+        super();
+    }
 
-    protected get element(): HTMLElement {
+    public get element(): HTMLElement {
         return this.application.components[this.ref].element;
     }
 
@@ -116,6 +120,12 @@ export class HandlebarsApplicationComponent<
     }
 
     /* --- Lifecycle --- */
+
+    /**
+     * Actions performed after Component initialization.
+     */
+    // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
+    public _onInitialize(params: Params) {}
 
     /**
      * Actions performed after Component listeners are attached.
@@ -252,6 +262,15 @@ export function ComponentHandlebarsApplicationMixin<
                                                 ),
                                                 element: componentElement,
                                             };
+
+                                            // Invoke lifecycle event
+                                            const params =
+                                                this.getComponentParams(
+                                                    componentElement,
+                                                );
+                                            this._components[
+                                                ref
+                                            ].instance._onInitialize(params);
                                         } else {
                                             this._components[ref].element =
                                                 componentElement;
@@ -427,6 +446,23 @@ export function ComponentHandlebarsApplicationMixin<
             options: DeepPartial<RenderOptions>,
         ): Promise<RenderContext> {
             return await super._prepareContext(options);
+        }
+
+        protected override _onRender(
+            context: RenderContext,
+            options: RenderOptions,
+        ): void {
+            // Get components
+            const renderedComponents = options.componentRefs.map(
+                (ref) => this.components[ref],
+            );
+
+            // Trigger render event
+            renderedComponents.forEach((component) =>
+                component.instance.dispatchEvent(
+                    new Event('render', { bubbles: true, cancelable: true }),
+                ),
+            );
         }
 
         /**

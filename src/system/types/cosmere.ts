@@ -25,6 +25,7 @@ export const enum Condition {
     Empowered = 'empowered',
     Enhanced = 'enhanced',
     Exhausted = 'exhausted',
+    Encumbered = 'encumbered',
     Focused = 'focused',
     Immobilized = 'immobilized',
     Prone = 'prone',
@@ -35,7 +36,7 @@ export const enum Condition {
     Unconcious = 'unconcious',
 }
 
-export const enum InjuryDuration {
+export const enum InjuryType {
     FleshWound = 'flesh_wound',
     ShallowInjury = 'shallow_injury',
     ViciousInjury = 'vicious_injury',

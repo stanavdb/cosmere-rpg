@@ -9,6 +9,7 @@ import * as applications from './system/applications';
 import * as dataModels from './system/data';
 import * as documents from './system/documents';
 import * as dice from './system/dice';
+import { Condition } from './system/types/cosmere';
 
 declare global {
     interface LenientGlobalVariableTypes {
@@ -32,6 +33,8 @@ Hooks.once('init', async () => {
     CONFIG.Combat.documentClass = documents.CosmereCombat;
     CONFIG.Combatant.documentClass = documents.CosmereCombatant;
     CONFIG.ui.combat = applications.combat.CosmereCombatTracker;
+
+    CONFIG.ActiveEffect.legacyTransferral = false;
 
     Actors.unregisterSheet('core', ActorSheet);
     // NOTE: Must cast to `any` as registerSheet type doesn't accept ApplicationV2 (even though it's valid to pass it)
@@ -68,8 +71,37 @@ Hooks.once('init', async () => {
     // Load templates
     await preloadHandlebarsTemplates();
 
+    // Register status effects
+    registerStatusEffects();
+
+    /* ------------------- */
+
     // TEMP: This resembles a system module
     (CONFIG.COSMERE.paths.types as Record<string, unknown>).radiant = {
         label: 'Radiant',
     };
 });
+
+/**
+ * Helper function to register the configured
+ * conditions as status effects.
+ */
+function registerStatusEffects() {
+    // Map conditions to status effects
+    const statusEffects = (
+        Object.keys(CONFIG.COSMERE.conditions) as Condition[]
+    ).map((condition) => {
+        // Get the config
+        const config = CONFIG.COSMERE.conditions[condition];
+
+        return {
+            id: condition,
+            name: config.label,
+            img: config.icon,
+            _id: `cond${condition}`.padEnd(16, '0'),
+        };
+    });
+
+    // Register status effects
+    CONFIG.statusEffects = statusEffects;
+}

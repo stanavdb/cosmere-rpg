@@ -4,7 +4,7 @@ import {
     Size,
     CreatureType,
     Condition,
-    InjuryDuration,
+    InjuryType,
     Attribute,
     AttributeGroup,
     Resource,
@@ -70,66 +70,84 @@ const COSMERE: CosmereRPGConfig = {
 
     conditions: {
         [Condition.Afflicted]: {
-            label: 'COSMERE.Actor.Conditions.Afflicted',
+            label: 'COSMERE.Conditions.Afflicted',
+            icon: 'systems/cosmere-rpg/assets/icons/svg/conditions/afflicted.svg',
         },
         [Condition.Determined]: {
-            label: 'COSMERE.Actor.Conditions.Determined',
+            label: 'COSMERE.Conditions.Determined',
+            icon: 'systems/cosmere-rpg/assets/icons/svg/conditions/determined.svg',
         },
         [Condition.Disoriented]: {
-            label: 'COSMERE.Actor.Conditions.Disoriented',
+            label: 'COSMERE.Conditions.Disoriented',
+            icon: 'systems/cosmere-rpg/assets/icons/svg/conditions/disoriented.svg',
         },
         [Condition.Empowered]: {
-            label: 'COSMERE.Actor.Conditions.Empowered',
+            label: 'COSMERE.Conditions.Empowered',
+            icon: 'systems/cosmere-rpg/assets/icons/svg/conditions/empowered.svg',
+        },
+        [Condition.Encumbered]: {
+            label: 'COSMERE.Conditions.Encumbered',
+            icon: 'systems/cosmere-rpg/assets/icons/svg/conditions/encumbered.svg',
         },
         [Condition.Enhanced]: {
-            label: 'COSMERE.Actor.Conditions.Enhanced',
+            label: 'COSMERE.Conditions.Enhanced',
+            icon: 'systems/cosmere-rpg/assets/icons/svg/conditions/enhanced.svg',
         },
         [Condition.Exhausted]: {
-            label: 'COSMERE.Actor.Conditions.Exhausted',
+            label: 'COSMERE.Conditions.Exhausted',
+            icon: 'systems/cosmere-rpg/assets/icons/svg/conditions/exhausted.svg',
         },
         [Condition.Focused]: {
-            label: 'COSMERE.Actor.Conditions.Focused',
+            label: 'COSMERE.Conditions.Focused',
+            icon: 'systems/cosmere-rpg/assets/icons/svg/conditions/focused.svg',
         },
         [Condition.Immobilized]: {
-            label: 'COSMERE.Actor.Conditions.Immobilized',
+            label: 'COSMERE.Conditions.Immobilized',
+            icon: 'systems/cosmere-rpg/assets/icons/svg/conditions/immobilized.svg',
         },
         [Condition.Prone]: {
-            label: 'COSMERE.Actor.Conditions.Prone',
+            label: 'COSMERE.Conditions.Prone',
+            icon: 'systems/cosmere-rpg/assets/icons/svg/conditions/prone.svg',
         },
         [Condition.Restrained]: {
-            label: 'COSMERE.Actor.Conditions.Restrained',
+            label: 'COSMERE.Conditions.Restrained',
+            icon: 'systems/cosmere-rpg/assets/icons/svg/conditions/restrained.svg',
         },
         [Condition.Slowed]: {
-            label: 'COSMERE.Actor.Conditions.Slowed',
+            label: 'COSMERE.Conditions.Slowed',
+            icon: 'systems/cosmere-rpg/assets/icons/svg/conditions/slowed.svg',
         },
         [Condition.Stunned]: {
-            label: 'COSMERE.Actor.Conditions.Stunned',
+            label: 'COSMERE.Conditions.Stunned',
+            icon: 'systems/cosmere-rpg/assets/icons/svg/conditions/stunned.svg',
         },
         [Condition.Surprised]: {
-            label: 'COSMERE.Actor.Conditions.Surprised',
+            label: 'COSMERE.Conditions.Surprised',
+            icon: 'systems/cosmere-rpg/assets/icons/svg/conditions/surprised.svg',
         },
         [Condition.Unconcious]: {
-            label: 'COSMERE.Actor.Conditions.Unconscious',
+            label: 'COSMERE.Conditions.Unconscious',
+            icon: 'systems/cosmere-rpg/assets/icons/svg/conditions/unconscious.svg',
         },
     },
 
     injuries: {
-        [InjuryDuration.FleshWound]: {
+        [InjuryType.FleshWound]: {
             label: 'COSMERE.Item.Injuries.Duration.FleshWound',
             durationFormula: '1',
         },
-        [InjuryDuration.ShallowInjury]: {
+        [InjuryType.ShallowInjury]: {
             label: 'COSMERE.Item.Injuries.Duration.ShallowInjury',
             durationFormula: '1d6',
         },
-        [InjuryDuration.ViciousInjury]: {
+        [InjuryType.ViciousInjury]: {
             label: 'COSMERE.Item.Injuries.Duration.ViciousInjury',
             durationFormula: '6d6',
         },
-        [InjuryDuration.PermanentInjury]: {
+        [InjuryType.PermanentInjury]: {
             label: 'COSMERE.Item.Injuries.Duration.PermanentInjury',
         },
-        [InjuryDuration.Death]: {
+        [InjuryType.Death]: {
             label: 'COSMERE.Item.Injuries.Duration.Death',
         },
     },

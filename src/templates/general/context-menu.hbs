@@ -1,0 +1,13 @@
+<menu class="controls-dropdown">
+    {{#each items as |item index|}}
+    <li class="header-control">
+        <button class="control"
+            data-item="{{index}}"
+            data-action="test"
+        >
+            <i class="{{item.icon}}"></i>
+            <span>{{localize item.name}}</span>
+        </button>
+    </li>
+    {{/each}}
+</menu>

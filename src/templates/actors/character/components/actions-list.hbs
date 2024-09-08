@@ -8,7 +8,10 @@
         <span class="col consume">
             {{localize "COSMERE.Actor.Sheet.Actions.Consume"}}
         </span>
-        <div class="col controls {{#if @root.isEditMode}}edit{{/if}}"></div>
+        <div class="col controls flexrow {{#if @root.isEditMode}}edit{{/if}}">
+            <div></div>
+            <div></div>
+        </div>
     </li>
 
     {{#each section.items as |item|}}
@@ -27,7 +30,9 @@
 
         {{!-- Name --}}
         <div class="col name" data-action="toggle-action-details">
-            <span class="title">{{item.name}}</span>
+            <span class="title">
+                {{#if ctx.isWeapon}}{{localize "COSMERE.Item.Weapon.Strike"}}: {{/if}}{{item.name}}
+            </span>
         </div>
 
         {{!-- Activation --}}

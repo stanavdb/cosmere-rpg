@@ -25,6 +25,7 @@ Handlebars.registerHelper('add', (a: number, b: number) => a + b);
 Handlebars.registerHelper('sub', (a: number, b: number) => a - b);
 Handlebars.registerHelper('multi', (a: number, b: number) => a * b);
 Handlebars.registerHelper('divide', (a: number, b: number) => a / b);
+Handlebars.registerHelper('mod', (a: number, b: number) => a % b);
 
 Handlebars.registerHelper('default', (v: unknown, defaultVal: unknown) => {
     return v ? v : defaultVal;
@@ -99,38 +100,6 @@ Handlebars.registerHelper(
     },
 );
 
-// Handlebars.registerHelper('itemHoldSelect', (selected?: HoldType) => {
-//     const holdTypes = Object.keys(
-//         CONFIG.COSMERE.items.equip.hold,
-//     ) as HoldType[];
-
-//     return `
-//         <ul class="dropdown">
-//         ${holdTypes
-//             .map((hold) => {
-//                 // Get the config
-//                 const config = CONFIG.COSMERE.items.equip.hold[hold];
-
-//                 const isSelected = hold === selected;
-
-//                 return `
-//                     <li class="option">
-//                         <a role="button"
-//                             data-type="${hold}"
-//                             data-action="item-equip-hold"
-//                             class="option-select ${isSelected ? 'selected' : ''}"
-//                             data-tooltip="${game.i18n!.localize(config.label)}"
-//                         >
-//                             ${config.icon}
-//                         </a>
-//                     </li>
-//                 `;
-//             })
-//             .join('\n')}
-//         </ul>
-//     `;
-// });
-
 Handlebars.registerHelper(
     'itemContext',
     (item: CosmereItem, options?: { hash?: ItemContextOptions }) => {
@@ -141,6 +110,8 @@ Handlebars.registerHelper(
             const isWeapon = item.isWeapon();
 
             if (isWeapon) {
+                context.isWeapon = true;
+
                 const attack = item.system.attack;
 
                 subtitle.push({
@@ -501,6 +472,7 @@ export async function preloadHandlebarsTemplates() {
         'systems/cosmere-rpg/templates/actors/character/partials/char-actions-tab.hbs',
         'systems/cosmere-rpg/templates/actors/character/partials/char-equipment-tab.hbs',
         'systems/cosmere-rpg/templates/actors/character/partials/char-goals-tab.hbs',
+        'systems/cosmere-rpg/templates/actors/character/partials/char-effects-tab.hbs',
         'systems/cosmere-rpg/templates/combat/combatant.hbs',
     ];
     return await loadTemplates(

@@ -602,8 +602,6 @@ namespace foundry {
             Schema extends DataSchema = DataSchema,
             Parent extends Document | null = Document | null,
         > extends _InternalDataModel<Schema> {
-            public readonly parent: Parent;
-
             /**
              * Configure the data model instance before validation and initialization workflows are performed.
              */
@@ -623,7 +621,7 @@ namespace foundry {
             /**
              * An immutable reverse-reference to a parent DataModel to which this model belongs.
              */
-            parent: DataModel | null;
+            readonly parent: Parent;
 
             /**
              * Define the data schema for documents of this type.

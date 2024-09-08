@@ -24,6 +24,9 @@ import {
     CharacterEquipmentListComponent,
     CharacterGoalsListComponent,
     CharacterConnectionsListComponent,
+    CharacterConditionsComponent,
+    CharacterInjuriesListComponent,
+    CharacterEffectsListComponent,
 } from './components/character';
 
 // Base
@@ -71,6 +74,9 @@ export class CharacterSheet extends TabsApplicationMixin(
         'app-character-equipment-list': CharacterEquipmentListComponent,
         'app-character-goals-list': CharacterGoalsListComponent,
         'app-character-connections-list': CharacterConnectionsListComponent,
+        'app-character-conditions': CharacterConditionsComponent,
+        'app-character-injuries-list': CharacterInjuriesListComponent,
+        'app-character-effects-list': CharacterEffectsListComponent,
     });
 
     static PARTS = foundry.utils.mergeObject(super.PARTS, {
@@ -122,6 +128,9 @@ export class CharacterSheet extends TabsApplicationMixin(
     private equipmentSearchText = '';
     private equipmentSearchSort: SortDirection = SortDirection.Descending;
 
+    private effectsSearchText = '';
+    private effectsSearchSort: SortDirection = SortDirection.Descending;
+
     /* --- Actions --- */
 
     public static onToggleMode(this: CharacterSheet, event: Event) {
@@ -161,6 +170,8 @@ export class CharacterSheet extends TabsApplicationMixin(
         context: AnyObject,
         options: ComponentHandlebarsRenderOptions,
     ) {
+        super._onRender(context, options);
+
         if (options.parts.includes('sheet-content')) {
             this.element
                 .querySelector('#actions-search')!
@@ -174,6 +185,13 @@ export class CharacterSheet extends TabsApplicationMixin(
                 ?.addEventListener(
                     'search',
                     this.onEquipmentSearchChange.bind(this) as EventListener,
+                );
+
+            this.element
+                .querySelector('#effects-search')
+                ?.addEventListener(
+                    'search',
+                    this.onEffectsSearchChange.bind(this) as EventListener,
                 );
         }
     }
@@ -224,6 +242,20 @@ export class CharacterSheet extends TabsApplicationMixin(
         });
     }
 
+    private onEffectsSearchChange(event: SearchBarInputEvent) {
+        this.effectsSearchText = event.detail.text;
+        this.effectsSearchSort = event.detail.sort;
+
+        void this.render({
+            parts: [],
+            componentRefs: [
+                'sheet-content.app-character-effects-list.0',
+                'sheet-content.app-character-effects-list.1',
+                'sheet-content.app-character-effects-list.2',
+            ],
+        });
+    }
+
     /* --- Context --- */
 
     public async _prepareContext(
@@ -265,6 +297,10 @@ export class CharacterSheet extends TabsApplicationMixin(
             equipmentSearch: {
                 text: this.equipmentSearchText,
                 sort: this.equipmentSearchSort,
+            },
+            effectsSearch: {
+                text: this.effectsSearchText,
+                sort: this.effectsSearchSort,
             },
         };
     }

@@ -1,0 +1,22 @@
+<div class="header">
+    <span>{{localize "COSMERE.Actor.Sheet.Conditions"}}</span>
+</div>
+<div class="conditions-set">
+    {{#each conditions as |condition|}}
+    <div class="condition {{#if condition.active}}active{{/if}}" data-id="{{condition.id}}">
+        <a data-action="toggle-condition-active">
+            <img class="icon" src="{{condition.icon}}">
+            <span class="name">{{localize condition.name}}</span>
+            {{#if condition.active}}
+            <i class="fa-solid fa-toggle-on"></i>
+            {{else}}
+            <i class="fa-solid fa-toggle-off"></i>
+            {{/if}}
+        </a>
+    </div>
+    {{/each}}
+
+    {{#times (mod (sub 3 (mod conditions.length 3)) 3)}}
+    <div class="condition blank"></div>
+    {{/times}}
+</div>

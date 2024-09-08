@@ -2,7 +2,7 @@ import {
     Size,
     CreatureType,
     Condition,
-    InjuryDuration,
+    InjuryType,
     AttributeGroup,
     Attribute,
     Skill,
@@ -42,6 +42,7 @@ export interface CreatureTypeConfig {
 
 export interface ConditionConfig {
     label: string;
+    icon: string;
     reference?: string;
 }
 
@@ -190,7 +191,7 @@ export interface CosmereRPGConfig {
     sizes: Record<Size, SizeConfig>;
     creatureTypes: Record<CreatureType, CreatureTypeConfig>;
     conditions: Record<Condition, ConditionConfig>;
-    injuries: Record<InjuryDuration, InjuryConfig>;
+    injuries: Record<InjuryType, InjuryConfig>;
 
     attributeGroups: Record<AttributeGroup, AttributeGroupConfig>;
     attributes: Record<Attribute, AttributeConfig>;

@@ -91,22 +91,6 @@
                     "short": "PRE"
                 }
             },
-            "Conditions": {
-                "Afflicted": "Afflicted",
-                "Determined": "Determined",
-                "Disoriented": "Disoriented",
-                "Empowered": "Empowered",
-                "Enhanced": "Enhanced",
-                "Exhausted": "Exhausted",
-                "Focused": "Focused",
-                "Immobilized": "Immobilized",
-                "Prone": "Prone",
-                "Restrained": "Restrained",
-                "Slowed": "Slowed",
-                "Stunned": "Stunned",
-                "Surprised": "Surprised",
-                "Unconscious": "Unconscious"
-            },
             "Resource": {
                 "Health": "Health",
                 "Focus": "Focus",
@@ -184,6 +168,24 @@
                         "Weight": "Weight"
                     }
                 },
+                "Conditions": "Conditions",
+                "Injuries": {
+                    "Label": "Injuries",
+                    "Duration": "Duration",
+                    "Days": "days",
+                    "Permanent": "Permanent",
+                    "DecreaseDuration": "Decrease Injury Duration",
+                    "IncreaseDuration": "Increase Injury Duration"
+                },
+                "Effects": {
+                    "Label": "Effects",
+                    "Inactive": "Inactive Effects",
+                    "Passive": "Passive Effects",
+                    "Temporary": "Temporary Effects",
+                    "Source": "Source",
+                    "Enable": "Enable Effect",
+                    "Disable": "Disable Effect"
+                },
                 "Level": "Level",
                 "Expertises": "Expertises",
                 "Edit": "Edit",
@@ -201,6 +203,9 @@
                     },
                     "Equipment": {
                         "Placeholder": "Search Items"
+                    },
+                    "Effects": {
+                        "Placeholder": "Search Effects"
                     }
                 },
                 "Details": {
@@ -304,7 +309,8 @@
                     "TwoHanded": "Two-Handed",
                     "Unique": "Unique",
                     "Fragile": "Fragile"
-                }
+                },
+                "Strike": "Strike"
             },
             "Armor": {
                 "Name": {
@@ -435,6 +441,23 @@
             "ToggleTurn": "Toggle Turn Speed",
             "ResetActivation": "Reset Activation",
             "Activate": "Mark as having acted"
+        },
+        "Conditions": {
+            "Afflicted": "Afflicted",
+            "Determined": "Determined",
+            "Disoriented": "Disoriented",
+            "Empowered": "Empowered",
+            "Enhanced": "Enhanced",
+            "Encumbered": "Encumbered",
+            "Exhausted": "Exhausted",
+            "Focused": "Focused",
+            "Immobilized": "Immobilized",
+            "Prone": "Prone",
+            "Restrained": "Restrained",
+            "Slowed": "Slowed",
+            "Stunned": "Stunned",
+            "Surprised": "Surprised",
+            "Unconscious": "Unconscious"
         }
     },
     "DICE": {

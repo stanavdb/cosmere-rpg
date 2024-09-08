@@ -14,6 +14,7 @@ import {
     ArmorItemDataModel,
     PathItemDataModel,
     ConnectionItemDataModel,
+    InjuryItemDataModel,
 } from '@system/data/item';
 
 import { ActivatableItemData } from '@system/data/item/mixins/activatable';
@@ -73,6 +74,10 @@ export class CosmereItem<
 
     public isConnection(): this is CosmereItem<ConnectionItemDataModel> {
         return this.type === ItemType.Connection;
+    }
+
+    public isInjury(): this is CosmereItem<InjuryItemDataModel> {
+        return this.type === ItemType.Injury;
     }
 
     /* --- Mixin type guards --- */
