@@ -113,7 +113,7 @@ export class HandlebarsApplicationComponent<
         context: RenderContext,
 
         // NOTE: Available to be used by child classes
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
         options: DeepPartial<ComponentHandlebarsRenderOptions>,
     ): Promise<AnyObject> {
         return Promise.resolve(context);
@@ -124,7 +124,7 @@ export class HandlebarsApplicationComponent<
     /**
      * Actions performed after Component initialization.
      */
-    // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
+
     public _onInitialize(params: Params) {}
 
     /**
@@ -132,7 +132,7 @@ export class HandlebarsApplicationComponent<
      * Use this to attach your own event listeners.
      * @param params
      */
-    // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
+
     public _onAttachListeners(params: Params) {}
 }
 
@@ -325,7 +325,7 @@ export function ComponentHandlebarsApplicationMixin<
              * However the types on HandlebarsApplication don't allow it without
              * casting to any.
              */
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+
             return {
                 parts: renderedParts,
                 components: renderedComponents,

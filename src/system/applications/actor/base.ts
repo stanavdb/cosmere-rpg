@@ -30,7 +30,6 @@ export class BaseActorSheet<
     protected mode: ActorSheetMode = 'view';
 
     get actor(): CosmereActor {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return super.document;
     }
 

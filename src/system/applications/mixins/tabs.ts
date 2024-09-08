@@ -25,11 +25,11 @@ export interface ApplicationTab {
 /**
  * Mixin that adds standardized tabs to an ApplicationV2
  */
-// NOTE: Use of any as the mixin doesn't care about the types
-// and we don't want to interfere with the final type
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function TabsApplicationMixin<
     T extends ConstructorOf<
+        // NOTE: Use of any as the mixin doesn't care about the types
+        // and we don't want to interfere with the final type
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         foundry.applications.api.ApplicationV2<any, any, any>
     >,
 >(base: T) {

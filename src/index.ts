@@ -40,7 +40,7 @@ Hooks.once('init', async () => {
     // NOTE: Must cast to `any` as registerSheet type doesn't accept ApplicationV2 (even though it's valid to pass it)
     Actors.registerSheet(
         'cosmere-rpg',
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         applications.actor.CharacterSheet as any,
         {
             types: ['character'],
@@ -49,7 +49,7 @@ Hooks.once('init', async () => {
     );
     Actors.registerSheet(
         'cosmere-rpg',
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         applications.actor.AdversarySheet as any,
         {
             types: ['adversary'],
