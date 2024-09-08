@@ -10,9 +10,11 @@ import { SortDirection } from './search-bar';
 
 type EffectListType = 'inactive' | 'passive' | 'temporary';
 
-interface Params {
+// NOTE: Must use type here instead of interface as an interface doesn't match AnyObject type
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+type Params = {
     type: EffectListType;
-}
+};
 
 interface RenderContext extends BaseActorSheetRenderContext {
     effectsSearch: {

@@ -34,7 +34,7 @@ export class InjuryItemDataModel extends DataModelMixin<
     TypedItemMixin({
         // Default to flesh wound data as the least impactful injury type
         initial: InjuryType.FleshWound,
-        choices: Object.keys(CONFIG.COSMERE.injuries),
+        choices: () => Object.keys(CONFIG.COSMERE.injuries),
     }),
     DescriptionItemMixin(),
 ) {
