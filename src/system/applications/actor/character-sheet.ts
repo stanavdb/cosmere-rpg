@@ -1,12 +1,16 @@
-import { ItemType } from '@src/system/types/cosmere';
-import { CharacterActor } from '@system/documents/actor';
+import { ItemType } from '@system/types/cosmere';
+import { CharacterActor, CosmereActor, CosmereItem } from '@system/documents';
+import { AnyObject } from '@system/types/utils';
 
 // Mixins
 import {
+    TabsApplicationMixin,
+    DragDropApplicationMixin,
     ComponentHandlebarsApplicationMixin,
     ComponentHandlebarsRenderOptions,
-} from '../mixins';
-import { TabsApplicationMixin } from './mixins/tabs';
+} from '@system/applications/mixins';
+
+import AppUtils from '../utils';
 
 // Components
 import {
@@ -27,11 +31,11 @@ import {
     CharacterConditionsComponent,
     CharacterInjuriesListComponent,
     CharacterEffectsListComponent,
+    CharacterFavoritesComponent,
 } from './components/character';
 
 // Base
 import { BaseActorSheet } from './base';
-import { AnyObject } from '@src/system/types/utils';
 
 const enum CharacterSheetTab {
     Details = 'details',
@@ -42,7 +46,9 @@ const enum CharacterSheetTab {
 }
 
 export class CharacterSheet extends TabsApplicationMixin(
-    ComponentHandlebarsApplicationMixin(BaseActorSheet),
+    DragDropApplicationMixin(
+        ComponentHandlebarsApplicationMixin(BaseActorSheet),
+    ),
 ) {
     /* eslint-disable @typescript-eslint/unbound-method */
     static DEFAULT_OPTIONS = foundry.utils.mergeObject(super.DEFAULT_OPTIONS, {
@@ -58,6 +64,12 @@ export class CharacterSheet extends TabsApplicationMixin(
             handler: this.onFormEvent,
             submitOnChange: true,
         } as unknown,
+        dragDrop: [
+            {
+                dragSelector: '[data-drag]',
+                dropSelector: '*',
+            },
+        ],
     });
     /* eslint-enable @typescript-eslint/unbound-method */
 
@@ -77,6 +89,7 @@ export class CharacterSheet extends TabsApplicationMixin(
         'app-character-conditions': CharacterConditionsComponent,
         'app-character-injuries-list': CharacterInjuriesListComponent,
         'app-character-effects-list': CharacterEffectsListComponent,
+        'app-character-favorites': CharacterFavoritesComponent,
     });
 
     static PARTS = foundry.utils.mergeObject(super.PARTS, {
@@ -118,7 +131,6 @@ export class CharacterSheet extends TabsApplicationMixin(
     });
 
     get actor(): CharacterActor {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return super.document;
     }
 
@@ -254,6 +266,147 @@ export class CharacterSheet extends TabsApplicationMixin(
                 'sheet-content.app-character-effects-list.2',
             ],
         });
+    }
+
+    /* --- Drag drop --- */
+
+    protected override _canDragStart(): boolean {
+        return this.isEditable;
+    }
+
+    protected override _canDragDrop(): boolean {
+        return this.isEditable;
+    }
+
+    protected override _onDragStart(event: DragEvent) {
+        // Get dragged item
+        const item = AppUtils.getItemFromEvent(event, this.actor);
+        if (!item) return;
+
+        const dragData = {
+            type: 'Item',
+            uuid: item.uuid,
+        };
+
+        // Set data transfer
+        event.dataTransfer!.setData('text/plain', JSON.stringify(dragData));
+        event.dataTransfer!.setData('document/item', ''); // Mark the type
+    }
+
+    // TODO: Move favorites drag and drop logic over to component
+    protected override _onDragOver(event: DragEvent) {
+        if (!event.dataTransfer?.types.includes('document/item')) return;
+
+        // Clean up
+        $(this.element)
+            .find('app-character-favorites .drop-area')
+            .removeClass('dropping');
+        $(this.element)
+            .find('app-character-favorites .drop-indicator')
+            .remove();
+
+        if ($(event.target!).closest('app-character-favorites').length) {
+            if ($(event.target!).closest('.drop-area').length) {
+                $(event.target!).closest('.drop-area').addClass('dropping');
+            } else if ($(event.target!).closest('.favorite.item').length) {
+                const el = $(event.target!)
+                    .closest('.favorite.item')
+                    .get(0) as HTMLElement;
+
+                // Get bounding rect
+                const bounds = el.getBoundingClientRect();
+
+                if (event.clientY < bounds.top + bounds.height / 2) {
+                    $(el).before(`<li class="drop-indicator"></li>`);
+                } else {
+                    $(el).after(`<li class="drop-indicator"></li>`);
+                }
+            }
+        }
+    }
+
+    // TODO: Move favorites drag and drop logic over to component
+    protected override async _onDrop(event: DragEvent) {
+        const data = TextEditor.getDragEventData(event) as unknown as {
+            type: string;
+            uuid: string;
+        };
+
+        // Ensure document type can be embedded on actor
+        if (!(data.type in CosmereActor.metadata.embedded)) return;
+
+        // Get the document
+        const document = fromUuidSync(data.uuid);
+        if (!document) return;
+
+        if (document.parent === this.actor) {
+            // Document already on this actor
+            if (data.type !== 'Item') return;
+
+            const item = document as CosmereItem;
+
+            if ($(event.target!).closest('app-character-favorites').length) {
+                if (
+                    $(event.target!).closest('.drop-area').length &&
+                    !item.isFavorite
+                ) {
+                    // Mark item as favorited
+                    void item.markFavorite(
+                        this.actor.favorites.length, // Insert at the end
+                    );
+                } else if ($(event.target!).closest('.favorite.item').length) {
+                    const el = $(event.target!)
+                        .closest('.favorite.item')
+                        .get(0) as HTMLElement;
+
+                    // Get the index
+                    let index = $(event.target!)
+                        .closest('app-character-favorites')
+                        .find('.favorite.item')
+                        .toArray()
+                        .indexOf(el);
+
+                    // Get bounding rect
+                    const bounds = el.getBoundingClientRect();
+
+                    // If item is dropped below the current element, move index over by 1
+                    if (event.clientY > bounds.top + bounds.height / 2) {
+                        index++;
+                    }
+
+                    await Promise.all([
+                        // Increase index of all subsequent favorites
+                        ...this.actor.favorites
+                            .slice(index)
+                            .map((item, i) =>
+                                item.markFavorite(index + i + 1, false),
+                            ),
+
+                        // Mark as favorite
+                        item.markFavorite(index, false),
+                    ]);
+
+                    // Normalize
+                    this.actor.favorites.forEach(
+                        (item, i) => void item.markFavorite(i, false),
+                    );
+
+                    // Render
+                    void this.render(true);
+                }
+            }
+
+            // Clean up
+            $(this.element)
+                .find('app-character-favorites .drop-area')
+                .removeClass('dropping');
+            $(this.element)
+                .find('app-character-favorites .drop-indicator')
+                .remove();
+        } else {
+            // Document not yet on this actor, create it
+            void this.actor.createEmbeddedDocuments(data.type, [document]);
+        }
     }
 
     /* --- Context --- */

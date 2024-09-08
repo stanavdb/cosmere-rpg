@@ -190,6 +190,8 @@
                 "Expertises": "Expertises",
                 "Edit": "Edit",
                 "View": "View",
+                "Favorites": "Favorites",
+                "DropFavorite": "Drop Favorite",
                 "Tabs": {
                     "Details": "Details",
                     "Actions": "Actions",

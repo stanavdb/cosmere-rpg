@@ -671,11 +671,11 @@
         flex: 1;
     }
 
-    app-character-actions-list, app-character-equipment-list, app-character-injuries-list, app-character-effects-list {
+    app-character-actions-list, app-character-equipment-list, app-character-injuries-list, app-character-effects-list, app-character-favorites {
         position: relative;
         width: 100%;
 
-        .actions-list, .equipment-list, .injuries-list, .effects-list {
+        .actions-list, .equipment-list, .injuries-list, .effects-list, .favorites-list {
             list-style: none;
             margin: 0;
             padding: 0;
@@ -1181,6 +1181,92 @@
 
             .name {
                 flex: 1
+            }
+        }
+    }
+
+    app-character-favorites {
+        margin-top: 1rem;
+        display: flex;
+        flex-direction: column;
+
+        .header {
+            font-size: 12pt;
+            color: #f7d856;
+        }
+
+        .drop-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 2rem;
+            border: 2px dashed;
+            opacity: .5;
+            border-radius: 0.3rem;
+            box-shadow: 0 0 1rem 0.1rem black;
+            margin-top: 0.5rem;
+
+            &.dropping {
+                opacity: 1;
+            }
+        }
+
+        .favorites-list {
+            margin: 0;
+
+            .favorite {
+                background: unset;
+                padding: 0;
+                border-bottom: none !important;
+
+                .col.name {
+                    font-size: 10pt;
+                    margin-left: 0;
+                    padding-left: 0.5rem;
+                    min-width: 0;
+
+                    .subtitle {
+                        font-size: 6.5pt;
+                        white-space: nowrap;
+                        width: 100%;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                    }
+                }
+
+                .col.activation {
+                    width: 2rem;
+                    text-align: right;
+
+                    .cosmere-icon {
+                        opacity: 1;
+                    }
+                }
+
+                .col.controls {
+                    width: unset;
+                    margin-left: .5rem;
+                }
+
+                &.usable {
+                    .img:hover, .img:has(+ .name:hover), .img:has(+ .activation:hover) {
+                        .roll-icon {
+                            display: block;
+                            opacity: .6;
+                            animation: rotating 2s linear infinite;
+                            width: 90%;
+                            height: 90%;
+                        }
+                    }
+                }
+            }
+
+            .drop-indicator {
+                height: 1px;
+                background: #af38d4;
+                border-radius: 1px;
+                box-shadow: 0 0 0.3rem 0 #af38d4;
+                opacity: .75;
             }
         }
     }

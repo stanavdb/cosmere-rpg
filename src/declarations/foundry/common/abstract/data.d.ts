@@ -233,10 +233,29 @@ namespace foundry {
             _result: (string | object)[];
         }
 
+        interface DocumentMetadata {
+            name: string;
+            collection: string;
+            indexed: boolean;
+            compendiumIndexFields: string[];
+            label: string;
+            coreTypes: string[];
+            embedded: Record<string, string>;
+            permissions: {
+                create: string;
+                update: string;
+                delete: string;
+            };
+            preserveOnImport: string[];
+            schemaVersion: string;
+        }
+
         abstract class Document<
             Schema extends DataSchema = DataSchema,
             Parent extends Document | null = Document | null,
         > extends DataModel<DataSchema, Parent> {
+            static metadata: DocumentMetadata;
+
             readonly system: Schema;
 
             get flags(): Record<string, any>;

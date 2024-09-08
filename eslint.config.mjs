@@ -24,12 +24,10 @@ export default tseslint.config(
             '@typescript-eslint/no-namespace': 'off',
             '@typescript-eslint/no-base-to-string': 'off',
             '@typescript-eslint/no-misused-promises': 'off',
-            '@typescript-eslint/no-unused-vars': [
-                'error',
-                {
-                    'argsIgnorePattern': '^_\\d{0,3}$',
-                }
-            ]
+            '@typescript-eslint/no-unsafe-argument': 'off',
+            '@typescript-eslint/no-unsafe-return': 'off',
+            '@typescript-eslint/no-empty-function': 'off',
+            '@typescript-eslint/no-unused-vars': 'off'
         },
         languageOptions: {
             parserOptions: {

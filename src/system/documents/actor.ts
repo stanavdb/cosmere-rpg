@@ -1,5 +1,11 @@
-import { Skill, Attribute, ActorType, Condition } from '@system/types/cosmere';
-import { CosmereItem } from '@system/documents/item';
+import {
+    Skill,
+    Attribute,
+    ActorType,
+    Condition,
+    ItemType,
+} from '@system/types/cosmere';
+import { CosmereItem, CosmereItemData } from '@system/documents/item';
 import { CommonActorDataModel } from '@system/data/actor/common';
 import { CharacterActorDataModel } from '@system/data/actor/character';
 import { AdversaryActorDataModel } from '@system/data/actor/adversary';
@@ -54,6 +60,16 @@ export class CosmereActor<
         return effects;
     }
 
+    public get favorites(): CosmereItem[] {
+        return this.items
+            .filter((i) => i.getFlag('cosmere-rpg', 'favorites.isFavorite'))
+            .sort(
+                (a, b) =>
+                    a.getFlag<number>('cosmere-rpg', 'favorites.sort') -
+                    b.getFlag<number>('cosmere-rpg', 'favorites.sort'),
+            );
+    }
+
     /* --- Type Guards --- */
 
     public isCharacter(): this is CharacterActor {
@@ -62,6 +78,60 @@ export class CosmereActor<
 
     public isAdversary(): this is AdversaryActor {
         return this.type === ActorType.Adversary;
+    }
+
+    /* --- Lifecycle --- */
+
+    public override async createEmbeddedDocuments(
+        embeddedName: string,
+        data: object[],
+        opertion?: Partial<foundry.abstract.DatabaseCreateOperation>,
+    ): Promise<foundry.abstract.Document[]> {
+        const postCreateActions = new Array<() => void>();
+
+        if (embeddedName === 'Item') {
+            const itemData = data as CosmereItemData[];
+
+            // Get the first ancestry item
+            const ancestryItem = itemData.find(
+                (d) => d.type === ItemType.Ancestry,
+            );
+
+            // Filter out any ancestry items beyond the first
+            data = itemData.filter(
+                (d) => d.type !== ItemType.Ancestry || d === ancestryItem,
+            );
+
+            // If an ancestry item was present, replace the current (after create)
+            if (ancestryItem) {
+                // Get current ancestry item
+                const currentAncestryItem = this.items.find(
+                    (i) => i.type === ItemType.Ancestry,
+                );
+
+                // Remove existing ancestry after create, if present
+                if (currentAncestryItem) {
+                    postCreateActions.push(() => {
+                        void this.deleteEmbeddedDocuments('Item', [
+                            currentAncestryItem.id,
+                        ]);
+                    });
+                }
+            }
+        }
+
+        // Perform create
+        const result = await super.createEmbeddedDocuments(
+            embeddedName,
+            data,
+            opertion,
+        );
+
+        // Post create actions
+        postCreateActions.forEach((func) => func());
+
+        // Return result
+        return result;
     }
 
     /* --- Functions --- */

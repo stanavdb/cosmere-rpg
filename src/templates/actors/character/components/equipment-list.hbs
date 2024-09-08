@@ -19,7 +19,10 @@
     {{#with (lookup @root.itemState item.id) as |state|}}
     {{#with (itemContext item) as |ctx|}}
 
-    <li class="item {{#if state.expanded}}expanded{{/if}} {{#if ctx.hasActivation}}usable{{/if}}" data-item-id="{{item.id}}">
+    <li class="item {{#if state.expanded}}expanded{{/if}} {{#if ctx.hasActivation}}usable{{/if}}" 
+        data-item-id="{{item.id}}"
+        {{#if @root.editable}}data-drag="true"{{/if}}
+    >
         {{!-- Image --}}
         <div class="col img" 
             {{#if ctx.hasActivation}}

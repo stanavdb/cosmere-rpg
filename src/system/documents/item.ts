@@ -15,6 +15,7 @@ import {
     PathItemDataModel,
     ConnectionItemDataModel,
     InjuryItemDataModel,
+    ActionItemDataModel,
 } from '@system/data/item';
 
 import { ActivatableItemData } from '@system/data/item/mixins/activatable';
@@ -51,6 +52,14 @@ interface ShowConsumeDialogOptions {
     consumeType?: ItemConsumeType;
 }
 
+export interface CosmereItemData<
+    T extends foundry.abstract.DataSchema = foundry.abstract.DataSchema,
+> {
+    name: string;
+    type: ItemType;
+    system?: T;
+}
+
 export class CosmereItem<
     T extends foundry.abstract.DataSchema = foundry.abstract.DataSchema,
 > extends Item<T, CosmereActor> {
@@ -78,6 +87,10 @@ export class CosmereItem<
 
     public isInjury(): this is CosmereItem<InjuryItemDataModel> {
         return this.type === ItemType.Injury;
+    }
+
+    public isAction(): this is CosmereItem<ActionItemDataModel> {
+        return this.type === ItemType.Action;
     }
 
     /* --- Mixin type guards --- */
@@ -137,6 +150,12 @@ export class CosmereItem<
      */
     public hasDescription(): this is CosmereItem<DescriptionItemData> {
         return 'description' in this.system;
+    }
+
+    /* --- Accessors --- */
+
+    public get isFavorite(): boolean {
+        return this.getFlag('cosmere-rpg', 'favorites.isFavorite');
     }
 
     /* --- Roll & Usage utilities --- */
@@ -464,6 +483,31 @@ export class CosmereItem<
                 close: () => resolve(null),
             }).render(true);
         });
+    }
+
+    /* --- Functions --- */
+
+    public async markFavorite(index: number, render = true) {
+        await this.update(
+            {
+                flags: {
+                    'cosmere-rpg': {
+                        favorites: {
+                            isFavorite: true,
+                            sort: index,
+                        },
+                    },
+                },
+            },
+            { render },
+        );
+    }
+
+    public async clearFavorite() {
+        await Promise.all([
+            this.unsetFlag('cosmere-rpg', 'favorites.isFavorite'),
+            this.unsetFlag('cosmere-rpg', 'favorites.sort'),
+        ]);
     }
 }
 

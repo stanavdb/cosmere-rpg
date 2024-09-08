@@ -13,3 +13,4 @@ export * from './connections-list';
 export * from './conditions';
 export * from './injuries-list';
 export * from './effects-list';
+export * from './favorites';

@@ -8,7 +8,6 @@ import {
     ItemConsumeType,
     Resource,
     ItemResource,
-    ItemType,
     ActionCostType,
     DamageType,
     HoldType,
@@ -434,15 +433,12 @@ Handlebars.registerHelper(
                 };
             }
 
-            if (item.hasDescription()) {
-                if (
-                    item.system.description?.short &&
-                    item.type === ItemType.Action
-                ) {
-                    subtitle.splice(0, subtitle.length, {
-                        text: item.system.description.short,
-                    });
-                }
+            if (item.isAction()) {
+                subtitle.push({
+                    text: game.i18n!.localize(
+                        CONFIG.COSMERE.action.types[item.system.type].label,
+                    ),
+                });
             }
 
             return {
