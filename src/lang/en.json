@@ -492,12 +492,21 @@
             "Remove": "Remove",
             "Add": "Add Custom Expertise",
             "AddPlaceholder": "Custom Expertise"
+        },
+        "EditResource": {
+            "Title": "Configure Max [resource]",
+            "ResourceMode": "Resource Mode",
+            "Mode": {
+                "Derived": "Derived",
+                "Override": "Custom"
+            }
         }
     },
     "GENERIC": {
         "Unknown": "Unknown",
         "None": "None",
         "Formula": "Formula",
+        "Value": "Value",
         "SkillTest": "Skill Test",
         "Cost": "Cost",
         "DistanceUnit": "ft.",
@@ -507,7 +516,9 @@
             "Roll": "Roll",
             "Continue": "Continue",
             "Remove": "Remove",
-            "Edit": "Edit"
+            "Edit": "Edit",
+            "Save": "Save",
+            "Cancel": "Cancel"
         },
         "Warning": {
             "NotImplemented": "Sorry! [action] is not implemented yet",

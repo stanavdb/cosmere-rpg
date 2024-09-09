@@ -49,6 +49,7 @@ export class DerivedValueField<
                 override: new ((Object.getPrototypeOf(element) as object)
                     .constructor as ConstructorOf<ElementField>)({
                     ...element.options,
+                    initial: null,
                     required: false,
                     nullable: true,
                 }),

@@ -1,0 +1,17 @@
+<form>
+    <div class="form-group">
+        <label>{{localize "GENERIC.Value"}}</label>
+        {{#if (eq mode 'derived')}}
+        <input type="text" name="value" value="{{formula}}" readonly>
+        {{else}}
+        <input type="number" min="0" step="1" name="value" value="{{derived value}}">
+        {{/if}} 
+    </div>
+    
+    <div class="form-group">
+        <label>{{localize "DIALOG.EditResource.ResourceMode"}}</label>
+        <select name="resourceMode">
+            {{selectOptions modes selected=mode localize=true}}
+        </select>
+    </div>
+</form>

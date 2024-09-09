@@ -101,7 +101,7 @@ export class BaseActorSheet<
 
             editable: this.isEditable,
             mode: this.mode,
-            isEditMode: this.mode === 'edit',
+            isEditMode: this.mode === 'edit' && this.isEditable,
         };
     }
 }

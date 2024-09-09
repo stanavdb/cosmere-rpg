@@ -77,6 +77,11 @@ export interface ResourceConfig {
     key: string;
     label: string;
     deflect?: boolean;
+
+    /**
+     * The formula used to derive the max value
+     */
+    formula?: string;
 }
 
 export interface PathTypeConfig {

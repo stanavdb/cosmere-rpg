@@ -3,6 +3,9 @@ import { ConstructorOf } from '@system/types/utils';
 
 import { Derived } from '@system/data/fields';
 
+// Dialog
+import { ConfigureResourceDialog } from '../../dialogs/configure-resource';
+
 // Component imports
 import { HandlebarsApplicationComponent } from '../../../mixins/component-handlebars-application-mixin';
 import { BaseActorSheet, BaseActorSheetRenderContext } from '../../base';
@@ -27,6 +30,7 @@ export class CharacterResourceComponent extends HandlebarsApplicationComponent<
     /* eslint-disable @typescript-eslint/unbound-method */
     static readonly ACTIONS = {
         'edit-value': this.onEditValue,
+        'configure-resource': this.onConfigureResource,
     };
     /* eslint-enable @typescript-eslint/unbound-method */
 
@@ -54,6 +58,19 @@ export class CharacterResourceComponent extends HandlebarsApplicationComponent<
         setTimeout(() => {
             inputElement.trigger('select');
         });
+    }
+
+    private static async onConfigureResource(
+        this: CharacterResourceComponent,
+        event: Event,
+    ) {
+        // Get the resource id
+        const resourceId = $(event.target ?? event.currentTarget!)
+            .closest('[data-id]')
+            .data('id') as Resource;
+
+        // Show dialog
+        await ConfigureResourceDialog.show(resourceId, this.application.actor);
     }
 
     /* --- Context --- */
