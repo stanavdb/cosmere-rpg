@@ -23,7 +23,21 @@ export function getItemFromEvent(
     return actor.items.find((i) => i.id === itemId);
 }
 
+export function getItemFromElement(
+    element: HTMLElement,
+    actor: CosmereActor,
+): CosmereItem | undefined {
+    // Get the id
+    const itemId = $(element)
+        .closest('.item[data-item-id]')
+        .data('item-id') as string;
+
+    // Find the item
+    return actor.items.find((i) => i.id === itemId);
+}
+
 export default {
     getItemIdFromEvent,
     getItemFromEvent,
+    getItemFromElement,
 };

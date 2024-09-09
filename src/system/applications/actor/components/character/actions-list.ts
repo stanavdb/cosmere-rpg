@@ -3,6 +3,8 @@ import { CosmereItem } from '@system/documents/item';
 import { ActionItemDataModel, ActionItemData } from '@system/data/item';
 import { ConstructorOf } from '@system/types/utils';
 
+import { AppContextMenu } from '@system/applications/utils/context-menu';
+
 // Utils
 import AppUtils from '@system/applications/utils';
 
@@ -241,5 +243,50 @@ export class CharacterActionsListComponent extends HandlebarsApplicationComponen
             }),
             Promise.resolve({} as Record<string, AdditionalItemData>),
         );
+    }
+
+    /* --- Lifecycle --- */
+
+    public _onInitialize(): void {
+        if (this.application.isEditable) {
+            // Create context menu
+            AppContextMenu.create(
+                this,
+                'right',
+                [
+                    {
+                        name: 'GENERIC.Button.Edit',
+                        icon: 'fa-solid fa-pen-to-square',
+                        callback: (element) => {
+                            const item = AppUtils.getItemFromElement(
+                                element,
+                                this.application.actor,
+                            );
+                            if (!item) return;
+
+                            void item.sheet?.render(true);
+                        },
+                    },
+                    {
+                        name: 'GENERIC.Button.Remove',
+                        icon: 'fa-solid fa-trash',
+                        callback: (element) => {
+                            const item = AppUtils.getItemFromElement(
+                                element,
+                                this.application.actor,
+                            );
+                            if (!item) return;
+
+                            // Remove the item
+                            void this.application.actor.deleteEmbeddedDocuments(
+                                'Item',
+                                [item.id],
+                            );
+                        },
+                    },
+                ],
+                'a[data-action="toggle-actions-controls"]',
+            );
+        }
     }
 }
