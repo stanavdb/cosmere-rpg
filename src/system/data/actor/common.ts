@@ -25,6 +25,7 @@ interface ExpertiseData {
     type: ExpertiseType;
     id: string;
     label: string;
+    custom?: boolean;
 }
 
 interface CurrencyDenominationData {
@@ -190,6 +191,7 @@ export class CommonActorDataModel<
                         nullable: false,
                         blank: false,
                     }),
+                    custom: new foundry.data.fields.BooleanField(),
                 }),
             ),
             languages: new foundry.data.fields.ArrayField(

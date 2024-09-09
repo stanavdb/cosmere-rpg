@@ -103,11 +103,13 @@ export interface WeaponTypeConfig {
 }
 
 export interface WeaponConfig {
+    label: string;
     reference: string;
     specialExpertise?: boolean;
 }
 
 export interface ArmorConfig {
+    label: string;
     reference: string;
     specialExpertise?: boolean;
 }
@@ -187,6 +189,10 @@ export interface EquipHandConfig {
     label: string;
 }
 
+export interface CultureConfig {
+    label: string;
+}
+
 export interface CosmereRPGConfig {
     sizes: Record<Size, SizeConfig>;
     creatureTypes: Record<CreatureType, CreatureTypeConfig>;
@@ -248,4 +254,6 @@ export interface CosmereRPGConfig {
     };
 
     damageTypes: Record<DamageType, DamageTypeConfig>;
+
+    cultures: Record<string, CultureConfig>;
 }

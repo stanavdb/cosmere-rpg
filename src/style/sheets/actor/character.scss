@@ -496,7 +496,7 @@
                 align-items: center;
                 justify-content: center;
 
-                border: 1px solid;
+                border: 1px solid #463a47;
                 border-bottom-left-radius: 50%;
                 border-bottom-right-radius: 50%;
 
@@ -514,10 +514,12 @@
 
     app-character-skills-group {
         display: flex;
-        border: 1px solid;
         padding: 0.4rem 0.2rem;
         margin-bottom: .5rem;
         border-radius: 0.3rem;   
+
+        border: 1px solid #463a47;
+        background: #0b0a13;
 
         .skill-list {
             flex: 1;
@@ -613,9 +615,11 @@
 
     app-character-ancestry {
         display: flex;
-        border: 1px solid;
         border-radius: 0.3rem;
         margin-bottom: 1rem;
+
+        border: 1px solid #463a47;
+        background: #0b0a13;
 
         .ancestry {
             display: flex;
@@ -636,13 +640,15 @@
 
     app-character-paths-list {
         .path {
-            border: 1px solid;
             border-radius: 0.3rem;
             margin-bottom: 1rem;
             display: flex;
             flex-direction: row;
             align-items: center;
             padding: 0.2rem 1rem;
+
+            border: 1px solid #463a47;
+            background: #0b0a13;
 
             .name {
                 display: flex;

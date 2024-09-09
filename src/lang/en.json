@@ -188,6 +188,7 @@
                 },
                 "Level": "Level",
                 "Expertises": "Expertises",
+                "EditExpertises": "Edit Expertises",
                 "Edit": "Edit",
                 "View": "View",
                 "Favorites": "Favorites",
@@ -312,7 +313,9 @@
                     "Unique": "Unique",
                     "Fragile": "Fragile"
                 },
-                "Strike": "Strike"
+                "Strike": "Strike",
+                "Improvised": "Improvised Weapon",
+                "Unarmed": "Unarmed Strike"
             },
             "Armor": {
                 "Name": {
@@ -484,6 +487,11 @@
         "ItemConsume": {
             "Title": "Consume resource",
             "ShouldConsume": "Consume resource?"
+        },
+        "EditExpertise": {
+            "Remove": "Remove",
+            "Add": "Add Custom Expertise",
+            "AddPlaceholder": "Custom Expertise"
         }
     },
     "GENERIC": {
@@ -505,7 +513,8 @@
             "NotImplemented": "Sorry! [action] is not implemented yet",
             "NoActor": "No selected or assigned actor found for this roll",
             "NotEnoughResource": "Cannot consume, not enough of resource",
-            "ItemConsumeResourceNotConfigured": "The resource selected to be consumed as it is not configured on the item"
+            "ItemConsumeResourceNotConfigured": "The resource selected to be consumed is not configured on this item",
+            "NoDuplicateExpertises": "Cannot create duplicate expertise"
         }
     },
     "TYPES": {

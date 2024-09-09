@@ -16,15 +16,18 @@ export class BaseActorSheet<
     T extends BaseActorSheetRenderContext = BaseActorSheetRenderContext,
 > extends ActorSheetV2<T> {
     /* eslint-disable @typescript-eslint/unbound-method */
-    static DEFAULT_OPTIONS = foundry.utils.mergeObject(super.DEFAULT_OPTIONS, {
-        actions: {
-            'toggle-mode': this.onToggleMode,
+    static DEFAULT_OPTIONS = foundry.utils.mergeObject(
+        foundry.utils.mergeObject({}, super.DEFAULT_OPTIONS),
+        {
+            actions: {
+                'toggle-mode': this.onToggleMode,
+            },
+            form: {
+                handler: this.onFormEvent,
+                submitOnChange: true,
+            } as unknown,
         },
-        form: {
-            handler: this.onFormEvent,
-            submitOnChange: true,
-        } as unknown,
-    });
+    );
     /* eslint-enable @typescript-eslint/unbound-method */
 
     protected mode: ActorSheetMode = 'view';

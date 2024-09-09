@@ -1,4 +1,8 @@
+import { ExpertiseType } from '@system/types/cosmere';
 import { ConstructorOf } from '@system/types/utils';
+
+// Dialog
+import { EditExpertisesDialog } from '../../dialogs/edit-expertises';
 
 // Component imports
 import { HandlebarsApplicationComponent } from '../../../mixins/component-handlebars-application-mixin';
@@ -22,8 +26,8 @@ export class CharacterExpertisesComponent extends HandlebarsApplicationComponent
 
     /* --- Actions --- */
 
-    public static onEditExpertises(this: CharacterExpertisesComponent) {
-        console.log('onEditExpertises');
+    public static async onEditExpertises(this: CharacterExpertisesComponent) {
+        await EditExpertisesDialog.show(this.application.actor);
     }
 
     /* --- Context --- */

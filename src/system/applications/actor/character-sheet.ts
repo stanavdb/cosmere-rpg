@@ -51,26 +51,29 @@ export class CharacterSheet extends TabsApplicationMixin(
     ),
 ) {
     /* eslint-disable @typescript-eslint/unbound-method */
-    static DEFAULT_OPTIONS = foundry.utils.mergeObject(super.DEFAULT_OPTIONS, {
-        classes: ['cosmere-rpg', 'sheet', 'actor', 'character'],
-        position: {
-            width: 850,
-            height: 1000,
-        },
-        actions: {
-            'toggle-mode': this.onToggleMode,
-        },
-        form: {
-            handler: this.onFormEvent,
-            submitOnChange: true,
-        } as unknown,
-        dragDrop: [
-            {
-                dragSelector: '[data-drag]',
-                dropSelector: '*',
+    static DEFAULT_OPTIONS = foundry.utils.mergeObject(
+        foundry.utils.mergeObject({}, super.DEFAULT_OPTIONS),
+        {
+            classes: ['cosmere-rpg', 'sheet', 'actor', 'character'],
+            position: {
+                width: 850,
+                height: 1000,
             },
-        ],
-    });
+            actions: {
+                'toggle-mode': this.onToggleMode,
+            },
+            form: {
+                handler: this.onFormEvent,
+                submitOnChange: true,
+            } as unknown,
+            dragDrop: [
+                {
+                    dragSelector: '[data-drag]',
+                    dropSelector: '*',
+                },
+            ],
+        },
+    );
     /* eslint-enable @typescript-eslint/unbound-method */
 
     static COMPONENTS = foundry.utils.mergeObject(super.COMPONENTS, {

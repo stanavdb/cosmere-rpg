@@ -487,8 +487,14 @@ const COSMERE: CosmereRPGConfig = {
 
     // TODO: These should reference their respective item ids in the compendium
     weapons: {
-        [WeaponId.Improvised]: { reference: '' },
-        [WeaponId.Unarmed]: { reference: '' },
+        [WeaponId.Improvised]: {
+            label: 'COSMERE.Item.Weapon.Improvised',
+            reference: '',
+        },
+        [WeaponId.Unarmed]: {
+            label: 'COSMERE.Item.Weapon.Unarmed',
+            reference: '',
+        },
     },
 
     armors: {},
@@ -657,6 +663,8 @@ const COSMERE: CosmereRPGConfig = {
             label: 'COSMERE.DamageTypes.Healing',
         },
     },
+
+    cultures: {},
 };
 
 export default COSMERE;

@@ -4,6 +4,7 @@ import {
     ActorType,
     Condition,
     ItemType,
+    ExpertiseType,
 } from '@system/types/cosmere';
 import { CosmereItem, CosmereItemData } from '@system/documents/item';
 import { CommonActorDataModel } from '@system/data/actor/common';
@@ -224,7 +225,7 @@ export class CosmereActor<
     }
 
     /**
-     *  Utility function to increment/decrement a skill value
+     * Utility function to increment/decrement a skill value
      */
     public async modifySkillRank(
         skillId: Skill,
@@ -260,5 +261,16 @@ export class CosmereActor<
         return {
             ...super.getRollData(),
         };
+    }
+
+    /**
+     * Utility function to determine if an actor has a given expertise
+     */
+    public hasExpertise(type: ExpertiseType, id: string): boolean {
+        return (
+            this.system.expertises?.some(
+                (expertise) => expertise.type === type && expertise.id === id,
+            ) ?? false
+        );
     }
 }

@@ -1,0 +1,20 @@
+dialog.application ul {
+    list-style: none;
+
+    li {
+        padding: 0.2rem 0;
+
+        &.form-group {
+            > a {
+                flex: unset;
+                margin-left: .5rem;
+            }
+        }
+    }
+}
+
+dialog.application .edit-expertises {
+    .form-group.add-custom {
+        height: 2rem;
+    }
+}

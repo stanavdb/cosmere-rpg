@@ -10,6 +10,7 @@ import * as dataModels from './system/data';
 import * as documents from './system/documents';
 import * as dice from './system/dice';
 import { Condition } from './system/types/cosmere';
+import CosmereAPI from './system/api';
 
 declare global {
     interface LenientGlobalVariableTypes {
@@ -19,9 +20,17 @@ declare global {
     interface CONFIG {
         COSMERE: typeof COSMERE;
     }
+
+    // NOTE: Must use var to affect globalThis
+    // eslint-disable-next-line no-var
+    var cosmereRPG: {
+        api: typeof CosmereAPI;
+    };
 }
 
 Hooks.once('init', async () => {
+    globalThis.cosmereRPG = Object.assign(game.system!, { api: CosmereAPI });
+
     CONFIG.COSMERE = COSMERE;
 
     CONFIG.Actor.dataModels = dataModels.actor.config;
