@@ -9,3 +9,8 @@
     </div>
 </div>
 {{/each}}
+{{#if (eq paths.length 0)}}
+<div class="path placeholder">
+    <span>{{localize "COSMERE.Actor.Sheet.PathPlaceholder"}}</span>
+</div>
+{{/if}}

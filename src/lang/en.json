@@ -193,6 +193,8 @@
                 "View": "View",
                 "Favorites": "Favorites",
                 "DropFavorite": "Drop Favorite",
+                "AncestryPlaceholder": "Add Ancestry",
+                "PathPlaceholder": "Add Path",
                 "Tabs": {
                     "Details": "Details",
                     "Actions": "Actions",

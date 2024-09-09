@@ -25,9 +25,13 @@ export class CharacterAncestryComponent extends HandlebarsApplicationComponent<
         return Promise.resolve({
             ...context,
 
-            ancestry: {
-                label: ancestryItem?.name ?? 'DEFAULT_ANCESTRY_LABEL',
-            },
+            ...(ancestryItem
+                ? {
+                      ancestry: {
+                          label: ancestryItem?.name,
+                      },
+                  }
+                : {}),
         });
     }
 }
