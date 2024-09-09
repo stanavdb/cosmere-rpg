@@ -41,9 +41,7 @@ export class CharacterActionsListComponent extends HandlebarsApplicationComponen
     /* eslint-disable @typescript-eslint/unbound-method */
     static readonly ACTIONS = {
         'toggle-action-details': this.onToggleActionDetails,
-        'view-item': this.onViewItem,
         'use-item': this.onUseItem,
-        'remove-item': this.onRemoveItem,
     };
     /* eslint-enable @typescript-eslint/unbound-method */
 
@@ -74,18 +72,6 @@ export class CharacterActionsListComponent extends HandlebarsApplicationComponen
             .toggleClass('expanded', this.itemState[itemId].expanded);
     }
 
-    public static onViewItem(
-        this: CharacterActionsListComponent,
-        event: Event,
-    ) {
-        // Get item
-        const item = AppUtils.getItemFromEvent(event, this.application.actor);
-        if (!item) return;
-
-        // Render sheet
-        item.sheet?.render(true);
-    }
-
     public static onUseItem(this: CharacterActionsListComponent, event: Event) {
         // Get item
         const item = AppUtils.getItemFromEvent(event, this.application.actor);
@@ -93,18 +79,6 @@ export class CharacterActionsListComponent extends HandlebarsApplicationComponen
 
         // Use the item
         void this.application.actor.useItem(item);
-    }
-
-    public static onRemoveItem(
-        this: CharacterActionsListComponent,
-        event: Event,
-    ) {
-        // Get item
-        const item = AppUtils.getItemFromEvent(event, this.application.actor);
-        if (!item) return;
-
-        // Remove the item
-        void this.application.actor.deleteEmbeddedDocuments('Item', [item.id]);
     }
 
     /* --- Context --- */

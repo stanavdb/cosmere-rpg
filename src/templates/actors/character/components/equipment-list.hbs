@@ -9,9 +9,11 @@
             {{localize "COSMERE.Actor.Sheet.Equipment.Weight"}}
         </span>
         <div class="col equip"></div>
-        <div class="col controls flexrow {{#if @root.isEditMode}}edit{{/if}}">
+        <div class="col controls flexrow">
             <div></div>
+            {{#if @root.editable}}
             <div></div>
+            {{/if}}
         </div>
     </li>
 
@@ -128,7 +130,7 @@
         </div>
 
         {{!-- Controls --}}
-        <div class="col controls flexrow {{#if @root.isEditMode}}edit{{/if}}">
+        <div class="col controls flexrow">
             <a role="button"
                 data-action="toggle-action-details"
                 data-tooltip="{{localize "COSMERE.Actor.Sheet.Item.Details"}}"
@@ -136,23 +138,14 @@
                 <i class="icon-expanded fa-solid fa-chevron-down"></i>
                 <i class="icon fa-solid fa-chevron-left"></i>
             </a>
-            {{#if @root.isEditMode}}
+            {{#if @root.editable}}
             <a role="button"
-                data-action="view-item"
-                data-tooltip="{{localize "COSMERE.Actor.Sheet.Item.Edit"}}"
+                data-action="toggle-actions-controls"
+                data-tooltip="{{localize "APPLICATION.TOOLS.ToggleControls"}}"
             >
-                <i class="fa-solid fa-pen-to-square"></i>
-            </a>
-            <a role="button"
-                data-action="remove-item"
-                data-tooltip="{{localize "COSMERE.Actor.Sheet.Item.Remove"}}"
-            >
-                <i class="fa-solid fa-trash"></i>
-            </a>
-            {{/if}}
-            <a role="button">
                 <i class="fa-solid fa-ellipsis-vertical"></i>
             </a>
+            {{/if}}
         </div>
     </li>
 

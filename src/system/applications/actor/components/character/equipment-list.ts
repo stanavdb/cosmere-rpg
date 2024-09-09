@@ -2,6 +2,8 @@ import { EquipHand, ItemType } from '@system/types/cosmere';
 import { CosmereItem } from '@system/documents/item';
 import { ConstructorOf } from '@system/types/utils';
 
+import { AppContextMenu } from '@system/applications/utils/context-menu';
+
 // Utils
 import AppUtils from '@system/applications/utils';
 
@@ -38,9 +40,7 @@ export class CharacterEquipmentListComponent extends HandlebarsApplicationCompon
     /* eslint-disable @typescript-eslint/unbound-method */
     static readonly ACTIONS = {
         'toggle-action-details': this.onToggleActionDetails,
-        'view-item': this.onViewItem,
         'use-item': this.onUseItem,
-        'remove-item': this.onRemoveItem,
         'toggle-equip': this.onToggleEquip,
         'cycle-equip': this.onCycleEquip,
         'decrease-quantity': this.onDecreaseQuantity,
@@ -75,18 +75,6 @@ export class CharacterEquipmentListComponent extends HandlebarsApplicationCompon
             .toggleClass('expanded', this.itemState[itemId].expanded);
     }
 
-    public static onViewItem(
-        this: CharacterEquipmentListComponent,
-        event: Event,
-    ) {
-        // Get item
-        const item = AppUtils.getItemFromEvent(event, this.application.actor);
-        if (!item) return;
-
-        // Render sheet
-        item.sheet?.render(true);
-    }
-
     public static onUseItem(
         this: CharacterEquipmentListComponent,
         event: Event,
@@ -97,18 +85,6 @@ export class CharacterEquipmentListComponent extends HandlebarsApplicationCompon
 
         // Use the item
         void this.application.actor.useItem(item);
-    }
-
-    public static onRemoveItem(
-        this: CharacterEquipmentListComponent,
-        event: Event,
-    ) {
-        // Get item
-        const item = AppUtils.getItemFromEvent(event, this.application.actor);
-        if (!item) return;
-
-        // Remove the item
-        void this.application.actor.deleteEmbeddedDocuments('Item', [item.id]);
     }
 
     public static onToggleEquip(
@@ -279,5 +255,50 @@ export class CharacterEquipmentListComponent extends HandlebarsApplicationCompon
             }),
             Promise.resolve({} as Record<string, AdditionalItemData>),
         );
+    }
+
+    /* --- Lifecycle --- */
+
+    public _onInitialize(): void {
+        if (this.application.isEditable) {
+            // Create context menu
+            AppContextMenu.create(
+                this,
+                'right',
+                [
+                    {
+                        name: 'GENERIC.Button.Edit',
+                        icon: 'fa-solid fa-pen-to-square',
+                        callback: (element) => {
+                            const item = AppUtils.getItemFromElement(
+                                element,
+                                this.application.actor,
+                            );
+                            if (!item) return;
+
+                            void item.sheet?.render(true);
+                        },
+                    },
+                    {
+                        name: 'GENERIC.Button.Remove',
+                        icon: 'fa-solid fa-trash',
+                        callback: (element) => {
+                            const item = AppUtils.getItemFromElement(
+                                element,
+                                this.application.actor,
+                            );
+                            if (!item) return;
+
+                            // Remove the item
+                            void this.application.actor.deleteEmbeddedDocuments(
+                                'Item',
+                                [item.id],
+                            );
+                        },
+                    },
+                ],
+                'a[data-action="toggle-actions-controls"]',
+            );
+        }
     }
 }

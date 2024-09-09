@@ -857,13 +857,11 @@
                         height: 100%;
 
                         img {
+                            opacity: .3;
+
                             &.hold-2h {
                                 width: 2rem;
                                 transform: rotate(25deg);
-                            }
-
-                            &.inactive {
-                                opacity: .3;
                             }
                         }
 
@@ -871,15 +869,26 @@
                             width: 2rem;
 
                             > img {
+                                opacity: 1;
                                 position: absolute;
                                 width: 1.7rem;
+
+                                &.inactive {
+                                    opacity: .3;
+                                }
                             }
                         } 
                     }
 
                     &.equipped {
-                        .icon {
+                        a:not(.compound) .icon {
                             opacity: 1;
+                        }
+                    }
+
+                    &:not(.equipped) {
+                        a.compound > img {
+                            opacity: .3;
                         }
                     }
                 }
