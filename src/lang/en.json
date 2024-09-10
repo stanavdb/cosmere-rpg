@@ -91,28 +91,14 @@
                     "short": "PRE"
                 }
             },
-            "Conditions": {
-                "Afflicted": "Afflicted",
-                "Determined": "Determined",
-                "Disoriented": "Disoriented",
-                "Empowered": "Empowered",
-                "Enhanced": "Enhanced",
-                "Exhausted": "Exhausted",
-                "Focused": "Focused",
-                "Immobilized": "Immobilized",
-                "Prone": "Prone",
-                "Restrained": "Restrained",
-                "Slowed": "Slowed",
-                "Stunned": "Stunned",
-                "Surprised": "Surprised",
-                "Unconscious": "Unconscious"
-            },
             "Resource": {
                 "Health": "Health",
                 "Focus": "Focus",
                 "Investiture": "Investiture"
             },
             "Skill": {
+                "label": "Skill",
+                "label_p": "Skills",
                 "Agility": "Agility",
                 "Athletics": "Athletics",
                 "HeavyWeapons": "Heavy Weapons",
@@ -134,10 +120,10 @@
             },
             "Statistics": {
                 "Defense": "Defense",
-                "SensesRange": "Senses Range",
-                "MovementRate": "Movement",
+                "SensesRange": "Sense",
+                "MovementRate": "Move",
                 "LiftingCapactiy": "Lifting Capactiy",
-                "RecoveryDie": "Recovery Die",
+                "RecoveryDie": "Recover",
                 "Deflect": "Deflect",
                 "NoObscuredSense": "Unaffected by Obscured Senses."
             },
@@ -153,8 +139,27 @@
                 "Animal": "Animal"
             },
             "Sheet": {
+                "Header": {
+                    "Editable": "Editable",
+                    "Locked": "Locked"
+                },
+                "Item": {
+                    "Edit": "Edit",
+                    "Details": "View details",
+                    "Remove": "Remove"
+                },
                 "Actions": {
-                    "label": "Actions"
+                    "label": "Actions",
+                    "Activation": "Use",
+                    "Consume": "Cost",
+                    "Use": "Use action",
+                    "Strike": "Strike"
+                },
+                "Equipment": {
+                    "Quantity": "Quantity",
+                    "Weight": "Weight",
+                    "IncreaseQuantity": "Increase quantity",
+                    "DecreaseQuantity": "Decrease quantity"
                 },
                 "Inventory": {
                     "label": "Inventory",
@@ -162,6 +167,75 @@
                         "Quantity": "Quantity",
                         "Weight": "Weight"
                     }
+                },
+                "Conditions": "Conditions",
+                "Injuries": {
+                    "Label": "Injuries",
+                    "Duration": "Duration",
+                    "Days": "days",
+                    "Permanent": "Permanent",
+                    "DecreaseDuration": "Decrease Injury Duration",
+                    "IncreaseDuration": "Increase Injury Duration"
+                },
+                "Effects": {
+                    "Label": "Effects",
+                    "Inactive": "Inactive Effects",
+                    "Passive": "Passive Effects",
+                    "Temporary": "Temporary Effects",
+                    "Source": "Source",
+                    "Enable": "Enable Effect",
+                    "Disable": "Disable Effect"
+                },
+                "Level": "Level",
+                "Expertises": "Expertises",
+                "EditExpertises": "Edit Expertises",
+                "Edit": "Edit",
+                "View": "View",
+                "Favorites": "Favorites",
+                "DropFavorite": "Drop Favorite",
+                "AncestryPlaceholder": "Add Ancestry",
+                "PathPlaceholder": "Add Path",
+                "ShortRest": "Short rest",
+                "LongRest": "Long rest",
+                "Tabs": {
+                    "Details": "Details",
+                    "Actions": "Actions",
+                    "Equipment": "Equipment",
+                    "Goals": "Goals",
+                    "Effects": "Effects & Conditions"
+                },
+                "Search": {
+                    "Item": {
+                        "Placeholder": "Search Actions"
+                    },
+                    "Equipment": {
+                        "Placeholder": "Search Items"
+                    },
+                    "Effects": {
+                        "Placeholder": "Search Effects"
+                    },
+                    "Clear": "Clear search",
+                    "ChangeSortDirection": "Change sort direction"
+                },
+                "Details": {
+                    "Purpose": "Purpose",
+                    "Obstacle": "Obstacle",
+                    "Goals": {
+                        "Label": "Goals",
+                        "New": "Add New Goal",
+                        "NewText": "New Goal",
+                        "AdjustProgressTooltipInc": "Left click to increase progress.",
+                        "AdjustProgressTooltipDec": "Right click to descrease progress.",
+                        "HideComplete": "Hide Completed"
+                    },
+                    "Connections": {
+                        "Label": "Connections",
+                        "New": "Add New Connection",
+                        "NewText": "New Connection"
+                    }
+                },
+                "Skills": {
+                    "AdjustTooltip": "Left Click to increase [skill]'s Rank.<br>Right Click to decrease [skill]'s Rank."
                 }
             }
         },
@@ -216,6 +290,10 @@
                 "Injury": {
                     "label": "Injury",
                     "label_plural": "Injuries"
+                },
+                "Connection": {
+                    "label": "Connection",
+                    "label_plural": "Connections"
                 }
             },
             "Weapon": {
@@ -243,7 +321,10 @@
                     "TwoHanded": "Two-Handed",
                     "Unique": "Unique",
                     "Fragile": "Fragile"
-                }
+                },
+                "Strike": "Strike",
+                "Improvised": "Improvised Weapon",
+                "Unarmed": "Unarmed Strike"
             },
             "Armor": {
                 "Name": {
@@ -253,7 +334,8 @@
                     "Cumbersome": "Cumbersome",
                     "Dangerous": "Dangerous",
                     "Presentable": "Presentable"
-                }
+                },
+                "Deflect": "Deflect"
             },
             "Action": {
                 "Type": {
@@ -279,6 +361,9 @@
                     "Item": {
                         "Label": "Item"
                     }
+                },
+                "Consume": {
+                    "Per": "Per"
                 }
             },
             "Injuries": {
@@ -316,14 +401,19 @@
                     }
                 },
                 "Hold": {
-                    "MainHand": {
-                        "Label": "Main Hand"
-                    },
-                    "OffHand": {
-                        "Label": "Off Hand"
+                    "OneHanded": {
+                        "Label": "One Handed"
                     },
                     "TwoHanded": {
                         "Label": "Two Handed"
+                    }
+                },
+                "Hand": {
+                    "Main": {
+                        "Label": "Main Hand"
+                    },
+                    "Off": {
+                        "Label": "Off Hand"
                     }
                 },
                 "Equip": {
@@ -352,6 +442,13 @@
             "Vital": "Vital",
             "Healing": "Healing"
         },
+        "Paths": {
+            "Types": {
+                "Heroic": {
+                    "Label": "Heroic"
+                }
+            }
+        },
         "Currencies": {},
         "Combat": {
             "FastPlayers": "Fast Characters",
@@ -361,6 +458,23 @@
             "ToggleTurn": "Toggle Turn Speed",
             "ResetActivation": "Reset Activation",
             "Activate": "Mark as having acted"
+        },
+        "Conditions": {
+            "Afflicted": "Afflicted",
+            "Determined": "Determined",
+            "Disoriented": "Disoriented",
+            "Empowered": "Empowered",
+            "Enhanced": "Enhanced",
+            "Encumbered": "Encumbered",
+            "Exhausted": "Exhausted",
+            "Focused": "Focused",
+            "Immobilized": "Immobilized",
+            "Prone": "Prone",
+            "Restrained": "Restrained",
+            "Slowed": "Slowed",
+            "Stunned": "Stunned",
+            "Surprised": "Surprised",
+            "Unconscious": "Unconscious"
         }
     },
     "DICE": {
@@ -381,28 +495,67 @@
             "Graze": "Graze"
         }
     },
+    "ROLLS": {
+        "Recovery": "[character] rolls their recovery die.",
+        "RecoveryTend": "Tended to by [tender]."
+    },
     "DIALOG": {
         "ItemConsume": {
             "Title": "Consume resource",
             "ShouldConsume": "Consume resource?"
+        },
+        "EditExpertise": {
+            "Remove": "Remove",
+            "Add": "Add Custom Expertise",
+            "AddPlaceholder": "Custom Expertise"
+        },
+        "EditResource": {
+            "Title": "Configure Max [resource]",
+            "ResourceMode": "Resource Mode",
+            "Mode": {
+                "Derived": "Derived",
+                "Override": "Custom"
+            }
+        },
+        "LongRest": {
+            "ShouldPerform": "Perform long rest?"
+        },
+        "ShortRest": {
+            "Title": "Short rest",
+            "TendedToBy": "Tended to by"
         }
     },
     "GENERIC": {
         "Unknown": "Unknown",
         "None": "None",
         "Formula": "Formula",
+        "Value": "Value",
         "SkillTest": "Skill Test",
         "Cost": "Cost",
+        "Configure": "Configure",
         "DistanceUnit": "ft.",
+        "ViewDetails": "View Details",
+        "HideDetails": "Hide Details",
         "Button": {
             "Roll": "Roll",
-            "Continue": "Continue"
+            "Continue": "Continue",
+            "Remove": "Remove",
+            "Edit": "Edit",
+            "Save": "Save",
+            "Cancel": "Cancel"
         },
         "Warning": {
             "NotImplemented": "Sorry! [action] is not implemented yet",
             "NoActor": "No selected or assigned actor found for this roll",
             "NotEnoughResource": "Cannot consume, not enough of resource",
-            "ItemConsumeResourceNotConfigured": "The resource selected to be consumed as it is not configured on the item"
+            "ItemConsumeResourceNotConfigured": "The resource selected to be consumed is not configured on this item",
+            "NoDuplicateExpertises": "Cannot create duplicate expertise"
+        }
+    },
+    "TYPES": {
+        "Actor": {
+            "character": "Character",
+            "adversary": "Adversary"
         }
     }
 }

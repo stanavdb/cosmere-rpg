@@ -1,0 +1,65 @@
+{{#if (gt effects.length 0)}}
+<ul class="effects-list {{#if editable}}editable{{/if}}">
+    <li class="item effect header">
+        <div class="col name">
+            <span>{{localize effectsTitle}}</span>
+        </div>
+        <div class="col source">
+            <span>{{localize "COSMERE.Actor.Sheet.Effects.Source"}}</span>
+        </div>
+        <div class="col action"></div>
+        <div class="col controls flexrow">
+            {{#if @root.editable}}
+            <div></div>
+            {{/if}}
+        </div>
+    </li>
+
+    {{#each effects as |effect|}}
+
+    <li class="effect {{#if effect.active}}active{{/if}}" 
+        data-id="{{effect.id}}"
+        {{#if (not (eq effect.parent @root.actor))}}
+        data-parent-id="{{effect.parent.id}}"
+        {{/if}}
+    >
+        <div class="col img">
+            <img src="{{effect.img}}">
+        </div>
+        <div class="col name">
+            <span>{{effect.name}}</span>
+        </div>
+        <div class="col source">
+            <span>{{effect.sourceName}}</span>
+        </div>
+        <div class="col action">
+            {{#if effect.active}}
+            <a class="active"
+                data-action="toggle-effect-active"
+                data-tooltip="COSMERE.Actor.Sheet.Effects.Disable"
+            >
+                <i class="fa-solid fa-toggle-on"></i>
+            </a>
+            {{else}}
+            <a data-action="toggle-effect-active"
+                data-tooltip="COSMERE.Actor.Sheet.Effects.Enable"
+            >
+                <i class="fa-solid fa-toggle-off"></i>
+            </a>
+            {{/if}}
+        </div>
+        <div class="col controls flexrow">
+            {{#if @root.editable}}
+            <a data-action="toggle-effect-controls" 
+                data-tooltip="APPLICATION.TOOLS.ToggleControls"
+            >
+                <i class="fa-solid fa-ellipsis-vertical"></i>
+            </a>
+            {{/if}}
+        </div>
+    </li>
+    <li hidden></li>
+
+    {{/each}}
+</ul>
+{{/if}}

@@ -1,4 +1,4 @@
-import { ConstructorOf } from '@system/util/types';
+import { ConstructorOf } from '@system/types/utils';
 
 // NOTE: Specifically use a namespace here to merge with interface declaration
 export namespace Derived {
@@ -49,6 +49,7 @@ export class DerivedValueField<
                 override: new ((Object.getPrototypeOf(element) as object)
                     .constructor as ConstructorOf<ElementField>)({
                     ...element.options,
+                    initial: null,
                     required: false,
                     nullable: true,
                 }),

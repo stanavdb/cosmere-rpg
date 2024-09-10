@@ -1,47 +1,53 @@
+import { InjuryType } from '@system/types/cosmere';
+import { CosmereItem } from '@system/documents';
+
 // Mixins
 import { DataModelMixin } from '../mixins';
+import { TypedItemMixin, TypedItemData } from './mixins/typed';
 import {
     DescriptionItemMixin,
     DescriptionItemData,
 } from './mixins/description';
 
-import { InjuryDuration } from '@system/types/cosmere';
-
-export interface InjuryItemData extends DescriptionItemData {
+export interface InjuryItemData
+    extends TypedItemData<InjuryType>,
+        DescriptionItemData {
     duration: {
-        type: string;
-        /*
-         * Initial: rolled duration, in days
-         * Remaining: time until the injury is healed, also in days
-         *
-         * These fields should be null for PermanentInjury or Death types
+        /**
+         * Rolled duration, in days.
+         * This value is not defined in the case of a permanent injury.
          */
-        initial: number | null;
-        remaining: number | null;
+        initial?: number;
+
+        /**
+         * Time until the injury is healed, in days.
+         * This value is not defined in the case of a permanent injury.
+         */
+        remaining?: number;
     };
 }
 
-export class InjuryItemDataModel extends DataModelMixin(
+export class InjuryItemDataModel extends DataModelMixin<
+    InjuryItemData,
+    CosmereItem
+>(
+    TypedItemMixin({
+        // Default to flesh wound data as the least impactful injury type
+        initial: InjuryType.FleshWound,
+        choices: () => Object.keys(CONFIG.COSMERE.injuries),
+    }),
     DescriptionItemMixin(),
 ) {
     static defineSchema() {
         return foundry.utils.mergeObject(super.defineSchema(), {
-            // Default to flesh wound data as the least impactful injury type
             duration: new foundry.data.fields.SchemaField({
-                type: new foundry.data.fields.StringField({
-                    required: true,
-                    nullable: false,
-                    initial: InjuryDuration.FleshWound,
-                }),
                 initial: new foundry.data.fields.NumberField({
-                    required: true,
                     nullable: true,
                     integer: true,
                     min: 0,
                     initial: 1,
                 }),
                 remaining: new foundry.data.fields.NumberField({
-                    required: true,
                     nullable: true,
                     integer: true,
                     min: 0,

@@ -28,7 +28,8 @@ export default {
             targets: [
                 { src: 'src/system.json', dest: 'build' },
                 { src: 'src/templates/**/*.hbs', dest: 'build/' },
-                { src: 'src/lang/*.json', dest: 'build/' }
+                { src: 'src/lang/*.json', dest: 'build/' },
+                { src: 'src/assets/**/*', dest: 'build/' }
             ],
             flatten: false
         }),

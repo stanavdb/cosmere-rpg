@@ -2,7 +2,7 @@ import {
     Size,
     CreatureType,
     Condition,
-    InjuryDuration,
+    InjuryType,
     AttributeGroup,
     Attribute,
     Skill,
@@ -26,6 +26,8 @@ import {
     ItemResource,
     EquipType,
     HoldType,
+    EquipHand,
+    PathType,
 } from './cosmere';
 
 export interface SizeConfig {
@@ -40,6 +42,7 @@ export interface CreatureTypeConfig {
 
 export interface ConditionConfig {
     label: string;
+    icon: string;
     reference?: string;
 }
 
@@ -49,18 +52,21 @@ export interface InjuryConfig {
 }
 
 export interface AttributeGroupConfig {
+    key: string;
     label: string;
     attributes: [Attribute, Attribute];
     resource: Resource;
 }
 
 export interface AttributeConfig {
+    key: string;
     label: string;
     labelShort: string;
     skills: Skill[];
 }
 
 export interface SkillConfig {
+    key: string;
     label: string;
     attribute: Attribute;
     attrLabel: string;
@@ -68,8 +74,18 @@ export interface SkillConfig {
 }
 
 export interface ResourceConfig {
+    key: string;
     label: string;
     deflect?: boolean;
+
+    /**
+     * The formula used to derive the max value
+     */
+    formula?: string;
+}
+
+export interface PathTypeConfig {
+    label: string;
 }
 
 export interface CurrencyConfig {
@@ -92,11 +108,13 @@ export interface WeaponTypeConfig {
 }
 
 export interface WeaponConfig {
+    label: string;
     reference: string;
     specialExpertise?: boolean;
 }
 
 export interface ArmorConfig {
+    label: string;
     reference: string;
     specialExpertise?: boolean;
 }
@@ -166,25 +184,35 @@ export interface ItemTypeConfig {
 
 export interface EquipTypeConfig {
     label: string;
-    icon?: string;
 }
 
 export interface HoldTypeConfig {
     label: string;
-    icon?: string;
+}
+
+export interface EquipHandConfig {
+    label: string;
+}
+
+export interface CultureConfig {
+    label: string;
 }
 
 export interface CosmereRPGConfig {
     sizes: Record<Size, SizeConfig>;
     creatureTypes: Record<CreatureType, CreatureTypeConfig>;
     conditions: Record<Condition, ConditionConfig>;
-    injuries: Record<InjuryDuration, InjuryConfig>;
+    injuries: Record<InjuryType, InjuryConfig>;
 
     attributeGroups: Record<AttributeGroup, AttributeGroupConfig>;
     attributes: Record<Attribute, AttributeConfig>;
     resources: Record<Resource, ResourceConfig>;
     skills: Record<Skill, SkillConfig>;
     currencies: Record<string, CurrencyConfig>;
+
+    paths: {
+        types: Record<PathType, PathTypeConfig>;
+    };
 
     items: {
         types: Record<ItemType, ItemTypeConfig>;
@@ -199,6 +227,7 @@ export interface CosmereRPGConfig {
         equip: {
             types: Record<EquipType, EquipTypeConfig>;
             hold: Record<HoldType, HoldTypeConfig>;
+            hand: Record<EquipHand, EquipHandConfig>;
         };
     };
 
@@ -230,4 +259,6 @@ export interface CosmereRPGConfig {
     };
 
     damageTypes: Record<DamageType, DamageTypeConfig>;
+
+    cultures: Record<string, CultureConfig>;
 }

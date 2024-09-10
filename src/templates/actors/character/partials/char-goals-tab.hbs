@@ -1,0 +1,32 @@
+{{#with (lookup tabsMap "goals") as |tab|}}
+
+<div class="tab tab-content split flexrow {{tab.cssClass}}" data-tab="goals" data-group="primary">
+    <section>
+        <div class="details-text purpose">
+            <div class="label">
+                <i class="fa-solid fa-seedling"></i>
+                <span>
+                    {{localize "COSMERE.Actor.Sheet.Details.Purpose"}}
+                </span>
+            </div>
+            <textarea name="system.purpose" {{#if (not @root.isEditMode)}}readonly{{/if}}>{{@root.actor.system.purpose}}</textarea>
+        </div>
+
+        <app-character-goals-list></app-character-goals-list>
+    </section>
+    <section>
+        <div class="details-text obstacle">
+            <div class="label">
+                <i class="fa-solid fa-heart-crack"></i>
+                <span>
+                    {{localize "COSMERE.Actor.Sheet.Details.Obstacle"}}
+                </span>
+            </div>
+            <textarea name="system.obstacle" {{#if (not @root.isEditMode)}}readonly{{/if}}>{{@root.actor.system.obstacle}}</textarea>
+        </div>
+
+        <app-character-connections-list></app-character-connections-list>
+    </section>
+</div>
+
+{{/with}}

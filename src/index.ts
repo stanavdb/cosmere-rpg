@@ -9,6 +9,8 @@ import * as applications from './system/applications';
 import * as dataModels from './system/data';
 import * as documents from './system/documents';
 import * as dice from './system/dice';
+import { Condition } from './system/types/cosmere';
+import CosmereAPI from './system/api';
 
 declare global {
     interface LenientGlobalVariableTypes {
@@ -18,9 +20,17 @@ declare global {
     interface CONFIG {
         COSMERE: typeof COSMERE;
     }
+
+    // NOTE: Must use var to affect globalThis
+    // eslint-disable-next-line no-var
+    var cosmereRPG: {
+        api: typeof CosmereAPI;
+    };
 }
 
 Hooks.once('init', async () => {
+    globalThis.cosmereRPG = Object.assign(game.system!, { api: CosmereAPI });
+
     CONFIG.COSMERE = COSMERE;
 
     CONFIG.Actor.dataModels = dataModels.actor.config;
@@ -33,15 +43,28 @@ Hooks.once('init', async () => {
     CONFIG.Combatant.documentClass = documents.CosmereCombatant;
     CONFIG.ui.combat = applications.combat.CosmereCombatTracker;
 
+    CONFIG.ActiveEffect.legacyTransferral = false;
+
     Actors.unregisterSheet('core', ActorSheet);
-    Actors.registerSheet('cosmere-rpg', applications.actor.CharacterSheet, {
-        types: ['character'],
-        label: `${game.i18n?.localize('COSMERE.Actor.Character.Character')}`,
-    });
-    Actors.registerSheet('cosmere-rpg', applications.actor.AdversarySheet, {
-        types: ['adversary'],
-        label: `${game.i18n?.localize('COSMERE.Actor.Adversary.Adversary')}`,
-    });
+    // NOTE: Must cast to `any` as registerSheet type doesn't accept ApplicationV2 (even though it's valid to pass it)
+    Actors.registerSheet(
+        'cosmere-rpg',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        applications.actor.CharacterSheet as any,
+        {
+            types: ['character'],
+            label: `${game.i18n?.localize('COSMERE.Actor.Character.Character')}`,
+        },
+    );
+    Actors.registerSheet(
+        'cosmere-rpg',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        applications.actor.AdversarySheet as any,
+        {
+            types: ['adversary'],
+            label: `${game.i18n?.localize('COSMERE.Actor.Adversary.Adversary')}`,
+        },
+    );
 
     CONFIG.Dice.types.push(dice.PlotDie);
     CONFIG.Dice.terms.p = dice.PlotDie;
@@ -56,4 +79,38 @@ Hooks.once('init', async () => {
 
     // Load templates
     await preloadHandlebarsTemplates();
+
+    // Register status effects
+    registerStatusEffects();
+
+    /* ------------------- */
+
+    // TEMP: This resembles a system module
+    (CONFIG.COSMERE.paths.types as Record<string, unknown>).radiant = {
+        label: 'Radiant',
+    };
 });
+
+/**
+ * Helper function to register the configured
+ * conditions as status effects.
+ */
+function registerStatusEffects() {
+    // Map conditions to status effects
+    const statusEffects = (
+        Object.keys(CONFIG.COSMERE.conditions) as Condition[]
+    ).map((condition) => {
+        // Get the config
+        const config = CONFIG.COSMERE.conditions[condition];
+
+        return {
+            id: condition,
+            name: config.label,
+            img: config.icon,
+            _id: `cond${condition}`.padEnd(16, '0'),
+        };
+    });
+
+    // Register status effects
+    CONFIG.statusEffects = statusEffects;
+}

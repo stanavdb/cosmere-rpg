@@ -25,6 +25,7 @@ export const enum Condition {
     Empowered = 'empowered',
     Enhanced = 'enhanced',
     Exhausted = 'exhausted',
+    Encumbered = 'encumbered',
     Focused = 'focused',
     Immobilized = 'immobilized',
     Prone = 'prone',
@@ -35,7 +36,7 @@ export const enum Condition {
     Unconcious = 'unconcious',
 }
 
-export const enum InjuryDuration {
+export const enum InjuryType {
     FleshWound = 'flesh_wound',
     ShallowInjury = 'shallow_injury',
     ViciousInjury = 'vicious_injury',
@@ -91,6 +92,10 @@ export const enum DerivedStatistic {
     MovementRate = 'mvr',
     LiftingCapactiy = 'lif',
     RecoveryDie = 'rcd',
+}
+
+export const enum PathType {
+    Heroic = 'heroic',
 }
 
 /**
@@ -200,9 +205,13 @@ export const enum EquipType {
 }
 
 export const enum HoldType {
-    MainHand = 'main_hand',
-    OffHand = 'off_hand',
+    OneHanded = 'one_handed',
     TwoHanded = 'two_handed',
+}
+
+export const enum EquipHand {
+    Main = 'main_hand',
+    Off = 'off_hand',
 }
 
 export const enum ActionType {
@@ -250,6 +259,7 @@ export const enum ItemType {
     Action = 'action',
 
     Injury = 'injury',
+    Connection = 'connection',
 }
 
 export const enum TurnSpeed {

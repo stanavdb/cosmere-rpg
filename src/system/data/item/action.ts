@@ -1,4 +1,5 @@
-import { CosmereItem } from '@src/system/documents';
+import { ActionType } from '@system/types/cosmere';
+import { CosmereItem } from '@system/documents';
 
 // Mixins
 import { DataModelMixin } from '../mixins';
@@ -16,7 +17,7 @@ import { DamagingItemMixin, DamagingItemData } from './mixins/damaging';
 export interface ActionItemData
     extends DescriptionItemData,
         ActivatableItemData,
-        TypedItemData,
+        TypedItemData<ActionType>,
         DamagingItemData {}
 
 export class ActionItemDataModel extends DataModelMixin<
