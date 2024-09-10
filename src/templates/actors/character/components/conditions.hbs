@@ -1,7 +1,7 @@
 <div class="header">
     <span>{{localize "COSMERE.Actor.Sheet.Conditions"}}</span>
 </div>
-<div class="conditions-set">
+<div class="conditions-set {{#if editable}}editable{{/if}}">
     {{#each conditions as |condition|}}
     <div class="condition {{#if condition.active}}active{{/if}}" data-id="{{condition.id}}">
         <a data-action="toggle-condition-active">

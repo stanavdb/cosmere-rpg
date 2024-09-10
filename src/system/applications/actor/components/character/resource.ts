@@ -37,6 +37,8 @@ export class CharacterResourceComponent extends HandlebarsApplicationComponent<
     /* --- Actions --- */
 
     public static onEditValue(this: CharacterResourceComponent, event: Event) {
+        if (!this.application.isEditable) return;
+
         const resourceBarElement = $(event.target!).closest(
             '.bar:not(.editing)',
         );

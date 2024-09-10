@@ -343,7 +343,9 @@
                 border-radius: 0.75rem;
                 overflow: hidden;
 
-                cursor: pointer;
+                &.editable {
+                    cursor: pointer;
+                }
 
                 .value {
                     z-index: 1;
@@ -420,8 +422,6 @@
                 }
             }
         }
-
-
     }
 
     app-character-attributes {
@@ -1177,6 +1177,10 @@
         .conditions-set {
             display: grid;
             grid-template-columns: 33.3% 33.3% 33.4%;
+
+            &:not(.editable) {
+                pointer-events: none;
+            }
         }
 
         .condition {
@@ -1217,6 +1221,12 @@
             .name {
                 flex: 1
             }
+        }
+    }
+
+    app-character-effects-list {
+        .effects-list:not(.editable) {
+            pointer-events: none;
         }
     }
 

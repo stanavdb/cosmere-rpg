@@ -12,7 +12,7 @@
             {{/if}}
         </div>
     </div>
-    <div class="bar" data-action="edit-value">
+    <div class="bar {{#if editable}}editable{{/if}}" data-action="edit-value">
         <div class="value">
             <span class="current">{{resource.value}}</span>
             <span class="delim">/</span>

@@ -3,6 +3,7 @@
         <img class="profile" src="{{actor.img}}" data-tooltip="{{actor.name}}" data-edit="img">
     </div>
 
+    {{#if editable}}
     <a class="short-rest rest"
         data-action="short-rest" 
         data-tooltip="{{localize "COSMERE.Actor.Sheet.ShortRest"}}"
@@ -16,6 +17,7 @@
     >
         <i class="fa-solid fa-campground"></i>
     </a>
+    {{/if}}
 
     <div class="deflect" data-tooltip="Deflect">
         {{#with actor.system.resources.hea.deflect as |deflect|}}

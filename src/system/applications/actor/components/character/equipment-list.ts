@@ -91,6 +91,8 @@ export class CharacterEquipmentListComponent extends HandlebarsApplicationCompon
         this: CharacterEquipmentListComponent,
         event: Event,
     ) {
+        if (!this.application.isEditable) return;
+
         // Get item
         const item = AppUtils.getItemFromEvent(event, this.application.actor);
         if (!item) return;
@@ -105,6 +107,8 @@ export class CharacterEquipmentListComponent extends HandlebarsApplicationCompon
         this: CharacterEquipmentListComponent,
         event: Event,
     ) {
+        if (!this.application.isEditable) return;
+
         // Get item
         const item = AppUtils.getItemFromEvent(event, this.application.actor);
         if (!item) return;

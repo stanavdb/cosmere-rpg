@@ -45,19 +45,23 @@
         {{!-- Quantity --}}
         <div class="col quantity">
             {{#if ctx.hasQuantity}}
+            {{#if @root.editable}}
             <a role="button"
                 data-action="decrease-quantity"
                 data-tooltip="{{localize "COSMERE.Actor.Sheet.Equipment.DecreaseQuantity"}}"
             >
                 <i class="fa-solid fa-minus"></i>
             </a>
+            {{/if}}
             <span class="val">{{ctx.quantity}}</span>
+            {{#if @root.editable}}
             <a role="button"
                 data-action="increase-quantity"
                 data-tooltip="{{localize "COSMERE.Actor.Sheet.Equipment.IncreaseQuantity"}}"
             >
                 <i class="fa-solid fa-plus"></i>
             </a>
+            {{/if}}
             {{else}}
             <span class="val none">—</span>
             {{/if}}

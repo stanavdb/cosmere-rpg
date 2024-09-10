@@ -25,19 +25,23 @@
             {{#if injury.isPermanent}}
             <span>{{localize "COSMERE.Actor.Sheet.Injuries.Permanent"}}</span>
             {{else}}
+            {{#if @root.editable}}
             <a
                 data-action="reduce-injury-duration"
                 data-tooltip="{{localize "COSMERE.Actor.Sheet.Injuries.DecreaseDuration"}}"
             >
                 <i class="fa-solid fa-minus"></i>
             </a>
+            {{/if}}
             <span>{{injury.duration.remaining}} {{localize "COSMERE.Actor.Sheet.Injuries.Days"}}</span>
+            {{#if @root.editable}}
             <a
                 data-action="increase-injury-duration"
                 data-tooltip="{{localize "COSMERE.Actor.Sheet.Injuries.IncreaseDuration"}}"
             >
                 <i class="fa-solid fa-plus"></i>
             </a>
+            {{/if}}
             {{/if}}
         </div>
         <div class="col action"></div>

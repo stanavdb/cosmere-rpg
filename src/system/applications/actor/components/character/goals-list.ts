@@ -73,6 +73,8 @@ export class CharacterGoalsListComponent extends HandlebarsApplicationComponent<
         this: CharacterGoalsListComponent,
         event: Event,
     ) {
+        if (!this.application.isEditable) return;
+
         const incrementBool: boolean = event.type === 'click' ? true : false;
 
         // Get goal id

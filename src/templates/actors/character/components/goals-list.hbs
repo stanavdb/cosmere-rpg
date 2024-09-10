@@ -11,7 +11,9 @@
         <input type="text" class="title inactive" value="{{goal.text}}">
 
         <a data-action="adjust-goal-progress"
+            {{#if @root.editable}}
             data-tooltip="{{localize "COSMERE.Actor.Sheet.Details.Goals.AdjustProgressTooltipInc"}}<br>{{localize "COSMERE.Actor.Sheet.Details.Goals.AdjustProgressTooltipDec"}}"
+            {{/if}}
         >
             <ul class="progress-pips">
                 {{#times goal.level}}
