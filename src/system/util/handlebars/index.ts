@@ -30,6 +30,13 @@ Handlebars.registerHelper('default', (v: unknown, defaultVal: unknown) => {
     return v ? v : defaultVal;
 });
 
+Handlebars.registerHelper(
+    'replace',
+    (from: string, searchValue: string, replaceValue: string) => {
+        return from.replaceAll(searchValue, replaceValue);
+    },
+);
+
 Handlebars.registerHelper('perc', (value: number, max: number) => {
     return `${Math.floor((value / max) * 100)}%`;
 });

@@ -18,9 +18,9 @@
             <a
                 data-action="toggle-expand-connection"
                 {{#if connection.expanded}}
-                data-tooltip="{{localize "GENERIC.HideDetails"}}"
+                data-tooltip="GENERIC.HideDetails"
                 {{else}}
-                data-tooltip="{{localize "GENERIC.ViewDetails"}}"
+                data-tooltip="GENERIC.ViewDetails"
                 {{/if}}
             >
                 {{#if connection.expanded}}
@@ -33,7 +33,7 @@
             {{#if @root.editable}}
             <a
                 data-action="toggle-connection-controls"
-                data-tooltip="{{localize "APPLICATION.TOOLS.ToggleControls"}}"
+                data-tooltip="APPLICATION.TOOLS.ToggleControls"
             >
                 <i class="fa-solid fa-ellipsis-vertical"></i>
             </a>

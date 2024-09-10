@@ -29,7 +29,7 @@
         <div class="col img" 
             {{#if ctx.hasActivation}}
             data-action="use-item"
-            data-tooltip="{{localize "COSMERE.Actor.Sheet.Actions.Strike"}}"
+            data-tooltip="COSMERE.Actor.Sheet.Actions.Strike"
             {{/if}}
         >
             <img class="roll-icon" src="/systems/cosmere-rpg/assets/icons/dice/d20white.svg">
@@ -48,7 +48,7 @@
             {{#if @root.editable}}
             <a role="button"
                 data-action="decrease-quantity"
-                data-tooltip="{{localize "COSMERE.Actor.Sheet.Equipment.DecreaseQuantity"}}"
+                data-tooltip="COSMERE.Actor.Sheet.Equipment.DecreaseQuantity"
             >
                 <i class="fa-solid fa-minus"></i>
             </a>
@@ -57,7 +57,7 @@
             {{#if @root.editable}}
             <a role="button"
                 data-action="increase-quantity"
-                data-tooltip="{{localize "COSMERE.Actor.Sheet.Equipment.IncreaseQuantity"}}"
+                data-tooltip="COSMERE.Actor.Sheet.Equipment.IncreaseQuantity"
             >
                 <i class="fa-solid fa-plus"></i>
             </a>
@@ -91,7 +91,7 @@
                 {{#if ctx.equipped}}
                 data-tooltip="{{localize ctx.equip.holdLabel}}"
                 {{else}}
-                data-tooltip="{{localize "COSMERE.Item.Equip.Unequipped.Label"}}"
+                data-tooltip="COSMERE.Item.Equip.Unequipped.Label"
                 {{/if}}
             >
                 <img class="icon hold-2h" src="/systems/cosmere-rpg/assets/icons/ui/equip-2h.svg">
@@ -104,7 +104,7 @@
                 {{#if ctx.equipped}}
                 data-tooltip="{{localize ctx.equip.handLabel}}"
                 {{else}}
-                data-tooltip="{{localize "COSMERE.Item.Equip.Unequipped.Label"}}"
+                data-tooltip="COSMERE.Item.Equip.Unequipped.Label"
                 {{/if}}
             >
                 <img class="icon main-hand {{#if (not (eq ctx.equip.hand 'main_hand'))}}inactive{{/if}}" src="/systems/cosmere-rpg/assets/icons/ui/equip-1h-top.svg">
@@ -121,7 +121,7 @@
                 {{#if ctx.equipped}}
                 data-tooltip="{{localize ctx.equip.typeLabel}}"
                 {{else}}
-                data-tooltip="{{localize "COSMERE.Item.Equip.Unequipped.Label"}}"
+                data-tooltip="COSMERE.Item.Equip.Unequipped.Label"
                 {{/if}}
             >
                 <i class="icon fa-solid fa-shirt"></i>  
@@ -137,7 +137,7 @@
         <div class="col controls flexrow">
             <a role="button"
                 data-action="toggle-action-details"
-                data-tooltip="{{localize "COSMERE.Actor.Sheet.Item.Details"}}"
+                data-tooltip="COSMERE.Actor.Sheet.Item.Details"
             >
                 <i class="icon-expanded fa-solid fa-chevron-down"></i>
                 <i class="icon fa-solid fa-chevron-left"></i>
@@ -145,7 +145,7 @@
             {{#if @root.editable}}
             <a role="button"
                 data-action="toggle-actions-controls"
-                data-tooltip="{{localize "APPLICATION.TOOLS.ToggleControls"}}"
+                data-tooltip="APPLICATION.TOOLS.ToggleControls"
             >
                 <i class="fa-solid fa-ellipsis-vertical"></i>
             </a>

@@ -27,7 +27,7 @@
         {{!-- Image --}}
         <div class="col img" 
             data-action="use-item"
-            data-tooltip="{{localize "COSMERE.Actor.Sheet.Actions.Use"}}"
+            data-tooltip="COSMERE.Actor.Sheet.Actions.Use"
         >
             <img class="roll-icon" src="/systems/cosmere-rpg/assets/icons/dice/d20white.svg">
             <img src="{{item.img}}">
@@ -68,8 +68,7 @@
             <span>
                 {{#if (gt ctx.consume.value 1)}}
                     {{ ctx.consume.value }}
-                    {{!-- TODO: Localize --}}
-                    per 
+                    {{localize "COSMERE.Item.Activation.Consume.Per"}} 
                 {{/if}}
                 {{localize ctx.consume.resourceRechargeLabel }}
             </span>
@@ -87,7 +86,7 @@
         <div class="col controls flexrow">
             <a role="button"
                 data-action="toggle-action-details"
-                data-tooltip="{{localize "COSMERE.Actor.Sheet.Item.Details"}}"
+                data-tooltip="COSMERE.Actor.Sheet.Item.Details"
             >
                 <i class="icon-expanded fa-solid fa-chevron-down"></i>
                 <i class="icon fa-solid fa-chevron-left"></i>
@@ -95,7 +94,7 @@
             {{#if @root.editable}}
             <a role="button"
                 data-action="toggle-actions-controls"
-                data-tooltip="{{localize "APPLICATION.TOOLS.ToggleControls"}}"
+                data-tooltip="APPLICATION.TOOLS.ToggleControls"
             >
                 <i class="fa-solid fa-ellipsis-vertical"></i>
             </a>

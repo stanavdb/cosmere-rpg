@@ -222,7 +222,7 @@ export class CharacterSheet extends TabsApplicationMixin(
                 <label id="mode-toggle" 
                     class="toggle-switch"
                     data-action="toggle-mode"
-                    data-tooltip="${game.i18n!.localize('COSMERE.Actor.Sheet.Edit')}"
+                    data-tooltip="COSMERE.Actor.Sheet.Edit"
                 >
                     <input type="checkbox" ${this.mode === 'edit' ? 'checked' : ''}>
                     <div class="slider rounded">

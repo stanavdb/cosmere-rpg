@@ -16,7 +16,7 @@
         <div class="skill-pips ranks">
             {{#if @root.isEditMode}}
             <a data-action="adjust-skill-rank"
-                data-tooltip="Left Click to increase {{localize skill.config.label}}'s Rank<br>Right Click to decrease {{localize skill.config.label}}'s Rank"
+                data-tooltip="{{replace (localize "COSMERE.Actor.Sheet.Skills.AdjustTooltip") '[skill]' (localize skill.config.label)}}"
             >
             {{else}}
             <div>

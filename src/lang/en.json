@@ -213,7 +213,9 @@
                     },
                     "Effects": {
                         "Placeholder": "Search Effects"
-                    }
+                    },
+                    "Clear": "Clear search",
+                    "ChangeSortDirection": "Change sort direction"
                 },
                 "Details": {
                     "Purpose": "Purpose",
@@ -231,6 +233,9 @@
                         "New": "Add New Connection",
                         "NewText": "New Connection"
                     }
+                },
+                "Skills": {
+                    "AdjustTooltip": "Left Click to increase [skill]'s Rank.<br>Right Click to decrease [skill]'s Rank."
                 }
             }
         },
@@ -356,6 +361,9 @@
                     "Item": {
                         "Label": "Item"
                     }
+                },
+                "Consume": {
+                    "Per": "Per"
                 }
             },
             "Injuries": {
@@ -524,6 +532,7 @@
         "Value": "Value",
         "SkillTest": "Skill Test",
         "Cost": "Cost",
+        "Configure": "Configure",
         "DistanceUnit": "ft.",
         "ViewDetails": "View Details",
         "HideDetails": "Hide Details",

@@ -36,13 +36,13 @@
             {{#if effect.active}}
             <a class="active"
                 data-action="toggle-effect-active"
-                data-tooltip="{{localize "COSMERE.Actor.Sheet.Effects.Disable"}}"
+                data-tooltip="COSMERE.Actor.Sheet.Effects.Disable"
             >
                 <i class="fa-solid fa-toggle-on"></i>
             </a>
             {{else}}
             <a data-action="toggle-effect-active"
-                data-tooltip="{{localize "COSMERE.Actor.Sheet.Effects.Enable"}}"
+                data-tooltip="COSMERE.Actor.Sheet.Effects.Enable"
             >
                 <i class="fa-solid fa-toggle-off"></i>
             </a>
@@ -51,7 +51,7 @@
         <div class="col controls flexrow">
             {{#if @root.editable}}
             <a data-action="toggle-effect-controls" 
-                data-tooltip="{{localize "APPLICATION.TOOLS.ToggleControls"}}"
+                data-tooltip="APPLICATION.TOOLS.ToggleControls"
             >
                 <i class="fa-solid fa-ellipsis-vertical"></i>
             </a>

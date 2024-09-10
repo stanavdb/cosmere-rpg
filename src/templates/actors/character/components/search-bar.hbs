@@ -6,21 +6,20 @@
         value="{{text}}"
     >
     <div class="controls flexrow">
-        <a role="button" data-action="clear-actions-search">
+        <a data-action="clear-actions-search"
+            data-tooltip="COSMERE.Actor.Sheet.Search.Clear"
+        >
             <i class="fa-solid fa-xmark" style="font-size: 1rem"></i>
         </a>
-        {{!-- <a role="button">
-            <i class="fa-solid fa-filter"></i>
-        </a> --}}
-        <a class="active" role="button" data-action="toggle-actions-search-sort-direction">
+        <a class="active" 
+            data-action="toggle-actions-search-sort-direction"
+            data-tooltip="COSMERE.Actor.Sheet.Search.ChangeSortDirection"
+        >
             {{#if (eq sort 'desc')}}
             <i class="fa-solid fa-arrow-down-short-wide"></i>
             {{else}}
             <i class="fa-solid fa-arrow-up-wide-short"></i>
             {{/if}}
         </a>
-        {{!-- <a class="active" role="button">
-            <i class="fa-solid fa-layer-group"></i>
-        </a> --}}
     </div>
 </div>
