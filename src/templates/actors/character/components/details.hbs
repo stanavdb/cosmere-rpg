@@ -3,11 +3,17 @@
         <img class="profile" src="{{actor.img}}" data-tooltip="{{actor.name}}" data-edit="img">
     </div>
 
-    <a class="short-rest rest" role="button" data-action="short-rest" data-tooltip="Short rest">
+    <a class="short-rest rest"
+        data-action="short-rest" 
+        data-tooltip="{{localize "COSMERE.Actor.Sheet.ShortRest"}}"
+    >
         <i class="fa-solid fa-utensils"></i>
     </a>
 
-    <a class="long-rest rest" role="button" data-action="long-rest" data-tooltip="Long rest">
+    <a class="long-rest rest" 
+        data-action="long-rest" 
+        data-tooltip="{{localize "COSMERE.Actor.Sheet.LongRest"}}"
+    >
         <i class="fa-solid fa-campground"></i>
     </a>
 

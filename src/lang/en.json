@@ -195,6 +195,8 @@
                 "DropFavorite": "Drop Favorite",
                 "AncestryPlaceholder": "Add Ancestry",
                 "PathPlaceholder": "Add Path",
+                "ShortRest": "Short rest",
+                "LongRest": "Long rest",
                 "Tabs": {
                     "Details": "Details",
                     "Actions": "Actions",
@@ -485,6 +487,10 @@
             "Graze": "Graze"
         }
     },
+    "ROLLS": {
+        "Recovery": "[character] rolls their recovery die.",
+        "RecoveryTend": "Tended to by [tender]."
+    },
     "DIALOG": {
         "ItemConsume": {
             "Title": "Consume resource",
@@ -502,6 +508,13 @@
                 "Derived": "Derived",
                 "Override": "Custom"
             }
+        },
+        "LongRest": {
+            "ShouldPerform": "Perform long rest?"
+        },
+        "ShortRest": {
+            "Title": "Short rest",
+            "TendedToBy": "Tended to by"
         }
     },
     "GENERIC": {

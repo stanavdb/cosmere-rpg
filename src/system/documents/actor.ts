@@ -14,6 +14,9 @@ import { Derived } from '@system/data/fields';
 
 import { d20Roll, D20Roll, D20RollData } from '@system/dice';
 
+// Dialogs
+import { ShortRestDialog } from '@system/applications/actor/dialogs/short-rest';
+
 export type CharacterActor = CosmereActor<CharacterActorDataModel>;
 export type AdversaryActor = CosmereActor<AdversaryActorDataModel>;
 
@@ -38,6 +41,22 @@ interface RollSkillOptions {
      * @default - ChatMessage.getSpeaker({ actor })`
      */
     speaker?: ChatSpeakerData;
+}
+
+interface LongRestOptions {
+    /**
+     * Whether or not to display the rest dialog.
+     * @default true
+     */
+    dialog?: boolean;
+}
+
+interface ShortRestOptions extends LongRestOptions {
+    /**
+     * The character whose Medicine modifier to add
+     * to the recovery die roll.
+     */
+    tendedBy?: CharacterActor;
 }
 
 export class CosmereActor<
@@ -255,6 +274,111 @@ export class CosmereActor<
         options?: Omit<CosmereItem.UseItemOptions, 'actor'>,
     ): Promise<D20Roll | null> {
         return item.use({ ...options, actor: this });
+    }
+
+    /**
+     * Utility function to handle short resting.
+     * This function takes care of rolling the recovery die.
+     * Automatically applies the appropriate Medicine modifier.
+     */
+    public async shortRest(options: ShortRestOptions = {}) {
+        if (!this.isCharacter()) return;
+
+        // Defaults
+        options.dialog = options.dialog ?? true;
+
+        // Show the dialog if required
+        if (options.dialog) {
+            const result = await ShortRestDialog.show(this, options);
+
+            if (!result.performRest) return;
+            else {
+                options.tendedBy = result.tendedBy;
+            }
+        }
+
+        // Get Medicine mod, if required
+        const mod = options.tendedBy
+            ? Derived.getValue(options.tendedBy.system.skills.med.mod)
+            : undefined;
+
+        // Construct formula
+        const formula = [Derived.getValue(this.system.recovery.die), mod]
+            .filter((v) => !!v)
+            .join(' + ');
+
+        // Evaluate the roll
+        const roll = Roll.create(formula);
+        await roll.evaluate();
+
+        // Set up flavor
+        let flavor = game
+            .i18n!.localize('ROLLS.Recovery')
+            .replace('[character]', this.name);
+        if (options.tendedBy) {
+            flavor += ` ${game
+                .i18n!.localize('ROLLS.RecoveryTend')
+                .replace('[tender]', options.tendedBy.name)}`;
+        }
+
+        // Chat message
+        await roll.toMessage({
+            flavor,
+        });
+    }
+
+    /**
+     * Utility function to handle long resting.
+     * Long resting grants the following benefits:
+     * - Recover all lost health
+     * - Recover all lost focus
+     * - Reduce Exhausted penalty by 1 (TODO)
+     */
+    public async longRest(options: LongRestOptions = {}) {
+        // Defaults
+        options.dialog = options.dialog ?? true;
+
+        // Show the confirm dialog if required
+        if (options.dialog) {
+            const shouldContinue = await new Promise((resolve) => {
+                void new foundry.applications.api.DialogV2({
+                    window: {
+                        title: 'COSMERE.Actor.Sheet.LongRest',
+                    },
+                    content: `<span>${game.i18n!.localize(
+                        'COSMERE.Actor.Sheet.ShouldPerformLongRest',
+                    )}</span>`,
+                    buttons: [
+                        {
+                            label: 'GENERIC.Button.Continue',
+                            action: 'continue',
+                            // NOTE: Callback must be async
+                            // eslint-disable-next-line @typescript-eslint/require-await
+                            callback: async () => resolve(true),
+                        },
+                        {
+                            label: 'GENERIC.Button.Cancel',
+                            action: 'cancel',
+                            // eslint-disable-next-line @typescript-eslint/require-await
+                            callback: async () => resolve(false),
+                        },
+                    ],
+                    modal: true,
+                }).render(true);
+            });
+
+            if (!shouldContinue) return;
+        }
+
+        // Update the actor
+        await this.update({
+            'system.resources.hea.value': Derived.getValue(
+                this.system.resources.hea.max,
+            ),
+            'system.resources.foc.value': Derived.getValue(
+                this.system.resources.foc.max,
+            ),
+        });
     }
 
     public getRollData() {
