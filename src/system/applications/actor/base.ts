@@ -30,18 +30,29 @@ export class BaseActorSheet<
     );
     /* eslint-enable @typescript-eslint/unbound-method */
 
-    protected mode: ActorSheetMode = 'view';
-
     get actor(): CosmereActor {
         return super.document;
     }
 
+    /* --- Accessors --- */
+
+    public get mode(): ActorSheetMode {
+        return this.actor.getFlag('cosmere-rpg', 'sheetMode') ?? 'edit';
+    }
+
     /* --- Actions --- */
 
-    public static onToggleMode(this: BaseActorSheet, _: Event) {
-        this.mode = this.mode === 'view' ? 'edit' : 'view';
+    public static async onToggleMode(this: BaseActorSheet, _: Event) {
+        // this.mode = this.mode === 'view' ? 'edit' : 'view';
 
-        // Re-render
+        await this.actor.update(
+            {
+                'flags.cosmere-rpg.sheetMode':
+                    this.mode === 'view' ? 'edit' : 'view',
+            },
+            { render: false },
+        );
+
         void this.render(true);
     }
 

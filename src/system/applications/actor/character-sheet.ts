@@ -148,10 +148,10 @@ export class CharacterSheet extends TabsApplicationMixin(
 
     /* --- Actions --- */
 
-    public static onToggleMode(this: CharacterSheet, event: Event) {
+    public static async onToggleMode(this: CharacterSheet, event: Event) {
         if (!(event.target instanceof HTMLInputElement)) return;
 
-        super.onToggleMode(event);
+        await super.onToggleMode(event);
 
         // Get toggle
         const toggle = $(this.element).find('#mode-toggle');
