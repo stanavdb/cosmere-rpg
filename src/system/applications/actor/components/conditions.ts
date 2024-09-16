@@ -2,15 +2,15 @@ import { Condition } from '@system/types/cosmere';
 import { ConstructorOf } from '@system/types/utils';
 
 // Component imports
-import { HandlebarsApplicationComponent } from '../../../mixins/component-handlebars-application-mixin';
-import { BaseActorSheetRenderContext } from '../../base';
-import { CharacterSheet } from '../../character-sheet';
+import { HandlebarsApplicationComponent } from '../../mixins/component-handlebars-application-mixin';
+import { BaseActorSheetRenderContext } from '../base';
+import { BaseActorSheet } from '../base';
 
-export class CharacterConditionsComponent extends HandlebarsApplicationComponent<
-    ConstructorOf<CharacterSheet>
+export class ActorConditionsComponent extends HandlebarsApplicationComponent<
+    ConstructorOf<BaseActorSheet>
 > {
     static readonly TEMPLATE =
-        'systems/cosmere-rpg/templates/actors/character/components/conditions.hbs';
+        'systems/cosmere-rpg/templates/actors/components/conditions.hbs';
 
     /**
      * NOTE: Unbound methods is the standard for defining actions
@@ -25,7 +25,7 @@ export class CharacterConditionsComponent extends HandlebarsApplicationComponent
     /* --- Actions --- */
 
     public static async onToggleConditionActive(
-        this: CharacterConditionsComponent,
+        this: ActorConditionsComponent,
         event: Event,
     ) {
         // Get condition

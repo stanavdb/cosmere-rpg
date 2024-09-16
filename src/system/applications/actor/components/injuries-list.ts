@@ -6,14 +6,14 @@ import { InjuryItemDataModel } from '@system/data/item';
 import AppUtils from '@system/applications/utils';
 
 // Component imports
-import { HandlebarsApplicationComponent } from '../../../mixins/component-handlebars-application-mixin';
-import { BaseActorSheet, BaseActorSheetRenderContext } from '../../base';
+import { HandlebarsApplicationComponent } from '../../mixins/component-handlebars-application-mixin';
+import { BaseActorSheet, BaseActorSheetRenderContext } from '../base';
 
-export class CharacterInjuriesListComponent extends HandlebarsApplicationComponent<
+export class ActorInjuriesListComponent extends HandlebarsApplicationComponent<
     ConstructorOf<BaseActorSheet>
 > {
     static TEMPLATE =
-        'systems/cosmere-rpg/templates/actors/character/components/injuries-list.hbs';
+        'systems/cosmere-rpg/templates/actors/components/injuries-list.hbs';
 
     /**
      * NOTE: Unbound methods is the standard for defining actions
@@ -36,7 +36,7 @@ export class CharacterInjuriesListComponent extends HandlebarsApplicationCompone
     /* --- Actions --- */
 
     public static onToggleInjuryControls(
-        this: CharacterInjuriesListComponent,
+        this: ActorInjuriesListComponent,
         event: PointerEvent,
     ) {
         this.controlsDropdownExpanded = !this.controlsDropdownExpanded;
@@ -67,7 +67,7 @@ export class CharacterInjuriesListComponent extends HandlebarsApplicationCompone
     }
 
     public static onDecreaseInjuryDuration(
-        this: CharacterInjuriesListComponent,
+        this: ActorInjuriesListComponent,
         event: Event,
     ) {
         // Get injury item
@@ -85,7 +85,7 @@ export class CharacterInjuriesListComponent extends HandlebarsApplicationCompone
     }
 
     public static onIncreaseInjuryDuration(
-        this: CharacterInjuriesListComponent,
+        this: ActorInjuriesListComponent,
         event: Event,
     ) {
         // Get injury item
@@ -102,7 +102,7 @@ export class CharacterInjuriesListComponent extends HandlebarsApplicationCompone
         });
     }
 
-    public static async onRemoveInjury(this: CharacterInjuriesListComponent) {
+    public static async onRemoveInjury(this: ActorInjuriesListComponent) {
         this.controlsDropdownExpanded = false;
 
         // Ensure context goal id is set
@@ -119,7 +119,7 @@ export class CharacterInjuriesListComponent extends HandlebarsApplicationCompone
         await this.render();
     }
 
-    public static onEditInjury(this: CharacterInjuriesListComponent) {
+    public static onEditInjury(this: ActorInjuriesListComponent) {
         this.controlsDropdownExpanded = false;
 
         // Ensure context goal id is set

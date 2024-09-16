@@ -10,6 +10,13 @@ export interface ApplicationTab {
     label: string;
 
     /**
+     * The index for sorting the tabs
+     *
+     * @default - One plus the index at which the tab id is encountered in `TABS` multiplied by 10 - (1 + i) * 10
+     */
+    sortIndex?: number;
+
+    /**
      * An optional icon to show for this tab
      */
     icon?: string;
@@ -62,18 +69,21 @@ export function TabsApplicationMixin<
             });
 
             // Construct tabs
-            const tabs = Object.entries(mixin.TABS).map(([tabId, tab]) => {
-                const active = this.tabGroups.primary === tabId;
-                const cssClass = active ? 'active' : '';
+            const tabs = Object.entries(mixin.TABS)
+                .map(([tabId, tab], i) => {
+                    const active = this.tabGroups.primary === tabId;
+                    const cssClass = active ? 'active' : '';
 
-                return {
-                    ...tab,
-                    id: tabId,
-                    group: tab.group ?? PRIMARY_TAB_GROUP,
-                    active,
-                    cssClass,
-                };
-            });
+                    return {
+                        ...tab,
+                        id: tabId,
+                        group: tab.group ?? PRIMARY_TAB_GROUP,
+                        active,
+                        cssClass,
+                        sortIndex: tab.sortIndex ?? (1 + i) * 10,
+                    };
+                })
+                .sort((a, b) => a.sortIndex - b.sortIndex);
 
             // Construct tabs map
             const tabsMap = tabs.reduce(

@@ -2,14 +2,14 @@ import { AttributeGroup, Attribute } from '@system/types/cosmere';
 import { ConstructorOf } from '@system/types/utils';
 
 // Component imports
-import { HandlebarsApplicationComponent } from '../../../mixins/component-handlebars-application-mixin';
-import { BaseActorSheet, BaseActorSheetRenderContext } from '../../base';
+import { HandlebarsApplicationComponent } from '../../mixins/component-handlebars-application-mixin';
+import { BaseActorSheet, BaseActorSheetRenderContext } from '../base';
 
-export class CharacterAttributesComponent extends HandlebarsApplicationComponent<
+export class ActorAttributesComponent extends HandlebarsApplicationComponent<
     ConstructorOf<BaseActorSheet>
 > {
     static TEMPLATE =
-        'systems/cosmere-rpg/templates/actors/character/components/attributes.hbs';
+        'systems/cosmere-rpg/templates/actors/components/attributes.hbs';
 
     /* --- Context --- */
 

@@ -1,14 +1,14 @@
 import { ConstructorOf } from '@system/types/utils';
 
 // Component imports
-import { HandlebarsApplicationComponent } from '../../../mixins/component-handlebars-application-mixin';
-import { BaseActorSheet } from '../../base';
+import { HandlebarsApplicationComponent } from '../../mixins/component-handlebars-application-mixin';
+import { BaseActorSheet } from '../base';
 
-export class CharacterDetailsComponent extends HandlebarsApplicationComponent<
+export class ActorDetailsComponent extends HandlebarsApplicationComponent<
     ConstructorOf<BaseActorSheet>
 > {
     static TEMPLATE =
-        'systems/cosmere-rpg/templates/actors/character/components/details.hbs';
+        'systems/cosmere-rpg/templates/actors/components/details.hbs';
 
     /**
      * NOTE: Unbound methods is the standard for defining actions
@@ -23,11 +23,11 @@ export class CharacterDetailsComponent extends HandlebarsApplicationComponent<
 
     /* --- Actions --- */
 
-    private static onShortRest(this: CharacterDetailsComponent) {
+    private static onShortRest(this: ActorDetailsComponent) {
         void this.application.actor.shortRest();
     }
 
-    private static onLongRest(this: CharacterDetailsComponent) {
+    private static onLongRest(this: ActorDetailsComponent) {
         void this.application.actor.longRest();
     }
 }

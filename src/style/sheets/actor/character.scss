@@ -200,7 +200,7 @@
 
     /* --- Components --- */
 
-    app-character-details {
+    app-actor-details {
         display: flex;
         flex-direction: column;
         margin-bottom: 1rem;
@@ -309,7 +309,7 @@
         }
     }
 
-    app-character-resource {
+    app-actor-resource {
         display: flex;
         flex-direction: column;
 
@@ -424,7 +424,7 @@
         }
     }
 
-    app-character-attributes {
+    app-actor-attributes {
         margin-top: 2.5rem;
 
         .attribute-group {
@@ -693,11 +693,11 @@
         }
     }
 
-    app-character-actions-list, app-character-equipment-list {
+    app-actor-actions-list, app-character-equipment-list {
         flex: 1;
     }
 
-    app-character-actions-list, app-character-equipment-list, app-character-injuries-list, app-character-effects-list, app-character-favorites {
+    app-actor-actions-list, app-character-equipment-list, app-actor-injuries-list, app-character-effects-list, app-character-favorites {
         position: relative;
         width: 100%;
 
@@ -954,7 +954,7 @@
         }
     }
 
-    app-character-search-bar {
+    app-actor-search-bar {
         display: flex;
         width: 100%;
 
@@ -1156,7 +1156,7 @@
         }
     }
 
-    app-character-conditions {
+    app-actor-conditions {
         display: flex;
         flex-direction: column;
         width: 100%;

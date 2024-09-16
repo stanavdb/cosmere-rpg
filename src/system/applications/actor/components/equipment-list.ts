@@ -1,6 +1,5 @@
-import { ActionType, ItemType } from '@system/types/cosmere';
+import { EquipHand, ItemType } from '@system/types/cosmere';
 import { CosmereItem } from '@system/documents/item';
-import { ActionItemDataModel, ActionItemData } from '@system/data/item';
 import { ConstructorOf } from '@system/types/utils';
 
 import { AppContextMenu } from '@system/applications/utils/context-menu';
@@ -9,11 +8,11 @@ import { AppContextMenu } from '@system/applications/utils/context-menu';
 import AppUtils from '@system/applications/utils';
 
 // Component imports
-import { HandlebarsApplicationComponent } from '../../../mixins/component-handlebars-application-mixin';
-import { BaseActorSheet, BaseActorSheetRenderContext } from '../../base';
+import { HandlebarsApplicationComponent } from '../../mixins/component-handlebars-application-mixin';
+import { BaseActorSheet, BaseActorSheetRenderContext } from '../base';
 import { SortDirection } from './search-bar';
 
-interface ActionItemState {
+interface EquipmentItemState {
     expanded?: boolean;
 }
 
@@ -22,17 +21,17 @@ interface AdditionalItemData {
 }
 
 interface RenderContext extends BaseActorSheetRenderContext {
-    actionsSearch: {
+    equipmentSearch: {
         text: string;
         sort: SortDirection;
     };
 }
 
-export class CharacterActionsListComponent extends HandlebarsApplicationComponent<
+export class CharacterEquipmentListComponent extends HandlebarsApplicationComponent<
     ConstructorOf<BaseActorSheet>
 > {
     static TEMPLATE =
-        'systems/cosmere-rpg/templates/actors/character/components/actions-list.hbs';
+        'systems/cosmere-rpg/templates/actors/character/components/equipment-list.hbs';
 
     /**
      * NOTE: Unbound methods is the standard for defining actions
@@ -42,18 +41,22 @@ export class CharacterActionsListComponent extends HandlebarsApplicationComponen
     static readonly ACTIONS = {
         'toggle-action-details': this.onToggleActionDetails,
         'use-item': this.onUseItem,
+        'toggle-equip': this.onToggleEquip,
+        'cycle-equip': this.onCycleEquip,
+        'decrease-quantity': this.onDecreaseQuantity,
+        'increase-quantity': this.onIncreaseQuantity,
     };
     /* eslint-enable @typescript-eslint/unbound-method */
 
     /**
      * Map of id to state
      */
-    private itemState: Record<string, ActionItemState> = {};
+    private itemState: Record<string, EquipmentItemState> = {};
 
     /* --- Actions --- */
 
     public static onToggleActionDetails(
-        this: CharacterActionsListComponent,
+        this: CharacterEquipmentListComponent,
         event: Event,
     ) {
         // Get item element
@@ -72,7 +75,10 @@ export class CharacterActionsListComponent extends HandlebarsApplicationComponen
             .toggleClass('expanded', this.itemState[itemId].expanded);
     }
 
-    public static onUseItem(this: CharacterActionsListComponent, event: Event) {
+    public static onUseItem(
+        this: CharacterEquipmentListComponent,
+        event: Event,
+    ) {
         // Get item
         const item = AppUtils.getItemFromEvent(event, this.application.actor);
         if (!item) return;
@@ -81,36 +87,103 @@ export class CharacterActionsListComponent extends HandlebarsApplicationComponen
         void this.application.actor.useItem(item);
     }
 
+    public static onToggleEquip(
+        this: CharacterEquipmentListComponent,
+        event: Event,
+    ) {
+        if (!this.application.isEditable) return;
+
+        // Get item
+        const item = AppUtils.getItemFromEvent(event, this.application.actor);
+        if (!item) return;
+        if (!item.isEquippable()) return;
+
+        void item.update({
+            'system.equipped': !item.system.equipped,
+        });
+    }
+
+    public static onCycleEquip(
+        this: CharacterEquipmentListComponent,
+        event: Event,
+    ) {
+        if (!this.application.isEditable) return;
+
+        // Get item
+        const item = AppUtils.getItemFromEvent(event, this.application.actor);
+        if (!item) return;
+        if (!item.isEquippable()) return;
+
+        // Get hand types
+        const handTypes = Object.keys(
+            CONFIG.COSMERE.items.equip.hand,
+        ) as EquipHand[];
+
+        // Get current index
+        const index = handTypes.indexOf(
+            item.system.equip.hand ?? handTypes[handTypes.length - 1], // Default to last hand type, so we'll cycle to the first
+        );
+
+        const shouldEquip = !item.system.equipped;
+        const shouldUnequip =
+            item.system.equipped && index === handTypes.length - 1;
+
+        const newEquip = shouldEquip || !shouldUnequip;
+        const newIndex = shouldEquip ? 0 : shouldUnequip ? index : index + 1;
+
+        // Update item
+        void item.update({
+            'system.equipped': newEquip,
+            'system.equip.hand': handTypes[newIndex],
+        });
+    }
+
+    public static async onDecreaseQuantity(
+        this: CharacterEquipmentListComponent,
+        event: Event,
+    ) {
+        // Get item
+        const item = AppUtils.getItemFromEvent(event, this.application.actor);
+        if (!item) return;
+        if (!item.isPhysical()) return;
+
+        await item.update(
+            {
+                'system.quantity': Math.max(0, item.system.quantity - 1),
+            },
+            { render: false },
+        );
+        await this.render();
+    }
+
+    public static async onIncreaseQuantity(
+        this: CharacterEquipmentListComponent,
+        event: Event,
+    ) {
+        // Get item
+        const item = AppUtils.getItemFromEvent(event, this.application.actor);
+        if (!item) return;
+        if (!item.isPhysical()) return;
+
+        await item.update(
+            {
+                'system.quantity': item.system.quantity + 1,
+            },
+            { render: false },
+        );
+        await this.render();
+    }
+
     /* --- Context --- */
 
     public async _prepareContext(params: unknown, context: RenderContext) {
-        // Get action types
-        const actionTypes = Object.keys(
-            CONFIG.COSMERE.action.types,
-        ) as ActionType[];
-
-        // Get all activatable items (actions & items with an associated action)
-        const activatableItems = this.application.actor.items
-            .filter((item) => item.hasActivation())
-            .filter(
-                (item) =>
-                    !item.isEquippable() ||
-                    item.system.equipped ||
-                    item.system.alwaysEquipped,
-            );
-
-        // Get all items that are not actions (but are activatable, e.g. weapons)
-        const nonActionItems = activatableItems.filter(
-            (item) => !(item.system instanceof ActionItemDataModel),
+        // Assume all physical items are part of inventory
+        const physicalItems = this.application.actor.items.filter((item) =>
+            item.isPhysical(),
         );
 
-        // Get action items
-        const actionItems = activatableItems.filter(
-            (item) => item.system instanceof ActionItemDataModel,
-        ) as CosmereItem<ActionItemData>[];
-
         // Ensure all items have an expand state record
-        activatableItems.forEach((item) => {
+        physicalItems.forEach((item) => {
             if (!(item.id in this.itemState)) {
                 this.itemState[item.id] = {
                     expanded: false,
@@ -121,42 +194,11 @@ export class CharacterActionsListComponent extends HandlebarsApplicationComponen
         return {
             ...context,
 
-            sections: [
-                ...(await this.categorizeItemsByType(
-                    nonActionItems,
-                    context.actionsSearch.text,
-                    context.actionsSearch.sort,
-                )),
-                ...(
-                    await Promise.all(
-                        actionTypes.map(async (type) => {
-                            const items = actionItems
-                                .filter((i) => i.system.type === type)
-                                .filter((i) =>
-                                    i.name
-                                        .toLowerCase()
-                                        .includes(context.actionsSearch.text),
-                                )
-                                .sort(
-                                    (a, b) =>
-                                        a.name.compare(b.name) *
-                                        (context.actionsSearch.sort ===
-                                        SortDirection.Descending
-                                            ? 1
-                                            : -1),
-                                );
-
-                            return {
-                                id: type,
-                                label: CONFIG.COSMERE.action.types[type]
-                                    .labelPlural,
-                                items,
-                                itemData: await this.prepareItemData(items),
-                            };
-                        }),
-                    )
-                ).filter((section) => section.items.length > 0),
-            ],
+            sections: await this.categorizeItemsByType(
+                physicalItems,
+                context.equipmentSearch.text,
+                context.equipmentSearch.sort,
+            ),
 
             itemState: this.itemState,
         };

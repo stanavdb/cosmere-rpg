@@ -4,8 +4,8 @@ import { CosmereItem } from '@system/documents';
 import { AppContextMenu } from '@system/applications/utils/context-menu';
 
 // Component imports
-import { HandlebarsApplicationComponent } from '../../../mixins/component-handlebars-application-mixin';
-import { BaseActorSheet, BaseActorSheetRenderContext } from '../../base';
+import { HandlebarsApplicationComponent } from '../../mixins/component-handlebars-application-mixin';
+import { BaseActorSheet, BaseActorSheetRenderContext } from '../base';
 import { SortDirection } from './search-bar';
 
 type EffectListType = 'inactive' | 'passive' | 'temporary';

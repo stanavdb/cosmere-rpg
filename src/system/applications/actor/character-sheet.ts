@@ -2,34 +2,20 @@ import { ItemType } from '@system/types/cosmere';
 import { CharacterActor, CosmereActor, CosmereItem } from '@system/documents';
 import { AnyObject } from '@system/types/utils';
 
-// Mixins
-import {
-    TabsApplicationMixin,
-    DragDropApplicationMixin,
-    ComponentHandlebarsApplicationMixin,
-    ComponentHandlebarsRenderOptions,
-} from '@system/applications/mixins';
-
 import AppUtils from '../utils';
 
+import { ComponentHandlebarsRenderOptions } from '@system/applications/mixins';
+
 // Components
+import { SortDirection, SearchBarInputEvent } from './components';
 import {
-    CharacterDetailsComponent,
-    CharacterResourceComponent,
-    CharacterAttributesComponent,
     CharacterSkillsGroupComponent,
     CharacterExpertisesComponent,
     CharacterAncestryComponent,
     CharacterPathsComponent,
-    CharacterActionsListComponent,
-    CharacterSearchBarComponent,
-    SearchBarInputEvent,
-    SortDirection,
     CharacterEquipmentListComponent,
     CharacterGoalsListComponent,
     CharacterConnectionsListComponent,
-    CharacterConditionsComponent,
-    CharacterInjuriesListComponent,
     CharacterEffectsListComponent,
     CharacterFavoritesComponent,
 } from './components/character';
@@ -39,17 +25,10 @@ import { BaseActorSheet } from './base';
 
 const enum CharacterSheetTab {
     Details = 'details',
-    Actions = 'actions',
-    Equipment = 'equipment',
     Goals = 'goals',
-    Effects = 'effects',
 }
 
-export class CharacterSheet extends TabsApplicationMixin(
-    DragDropApplicationMixin(
-        ComponentHandlebarsApplicationMixin(BaseActorSheet),
-    ),
-) {
+export class CharacterSheet extends BaseActorSheet {
     /* eslint-disable @typescript-eslint/unbound-method */
     static DEFAULT_OPTIONS = foundry.utils.mergeObject(
         foundry.utils.mergeObject({}, super.DEFAULT_OPTIONS),
@@ -59,47 +38,27 @@ export class CharacterSheet extends TabsApplicationMixin(
                 width: 850,
                 height: 1000,
             },
-            actions: {
-                'toggle-mode': this.onToggleMode,
-            },
             form: {
                 handler: this.onFormEvent,
                 submitOnChange: true,
             } as unknown,
-            dragDrop: [
-                {
-                    dragSelector: '[data-drag]',
-                    dropSelector: '*',
-                },
-            ],
         },
     );
     /* eslint-enable @typescript-eslint/unbound-method */
 
     static COMPONENTS = foundry.utils.mergeObject(super.COMPONENTS, {
-        'app-character-details': CharacterDetailsComponent,
-        'app-character-resource': CharacterResourceComponent,
-        'app-character-attributes': CharacterAttributesComponent,
         'app-character-skills-group': CharacterSkillsGroupComponent,
         'app-character-expertises': CharacterExpertisesComponent,
         'app-character-ancestry': CharacterAncestryComponent,
         'app-character-paths-list': CharacterPathsComponent,
-        'app-character-actions-list': CharacterActionsListComponent,
-        'app-character-search-bar': CharacterSearchBarComponent,
         'app-character-equipment-list': CharacterEquipmentListComponent,
         'app-character-goals-list': CharacterGoalsListComponent,
         'app-character-connections-list': CharacterConnectionsListComponent,
-        'app-character-conditions': CharacterConditionsComponent,
-        'app-character-injuries-list': CharacterInjuriesListComponent,
         'app-character-effects-list': CharacterEffectsListComponent,
         'app-character-favorites': CharacterFavoritesComponent,
     });
 
     static PARTS = foundry.utils.mergeObject(super.PARTS, {
-        navigation: {
-            template:
-                'systems/cosmere-rpg/templates/actors/character/parts/navigation.hbs',
-        },
         header: {
             template:
                 'systems/cosmere-rpg/templates/actors/character/parts/header.hbs',
@@ -114,22 +73,13 @@ export class CharacterSheet extends TabsApplicationMixin(
         [CharacterSheetTab.Details]: {
             label: 'COSMERE.Actor.Sheet.Tabs.Details',
             icon: '<i class="fa-solid fa-feather-pointed"></i>',
+            sortIndex: 0,
         },
-        [CharacterSheetTab.Actions]: {
-            label: 'COSMERE.Actor.Sheet.Tabs.Actions',
-            icon: '<i class="cosmere-icon">3</i>',
-        },
-        [CharacterSheetTab.Equipment]: {
-            label: 'COSMERE.Actor.Sheet.Tabs.Equipment',
-            icon: '<i class="fa-solid fa-suitcase"></i>',
-        },
+
         [CharacterSheetTab.Goals]: {
             label: 'COSMERE.Actor.Sheet.Tabs.Goals',
             icon: '<i class="fa-solid fa-list"></i>',
-        },
-        [CharacterSheetTab.Effects]: {
-            label: 'COSMERE.Actor.Sheet.Tabs.Effects',
-            icon: '<i class="fa-solid fa-bolt"></i>',
+            sortIndex: 25,
         },
     });
 
@@ -145,28 +95,6 @@ export class CharacterSheet extends TabsApplicationMixin(
 
     private effectsSearchText = '';
     private effectsSearchSort: SortDirection = SortDirection.Descending;
-
-    /* --- Actions --- */
-
-    public static async onToggleMode(this: CharacterSheet, event: Event) {
-        if (!(event.target instanceof HTMLInputElement)) return;
-
-        await super.onToggleMode(event);
-
-        // Get toggle
-        const toggle = $(this.element).find('#mode-toggle');
-
-        // Update checked status
-        toggle.find('input').prop('checked', this.mode === 'edit');
-
-        // Update tooltip
-        toggle.attr(
-            'data-tooltip',
-            game.i18n!.localize(
-                `COSMERE.Actor.Sheet.${this.mode === 'edit' ? 'View' : 'Edit'}`,
-            ),
-        );
-    }
 
     /* --- Form --- */
 
@@ -211,30 +139,6 @@ export class CharacterSheet extends TabsApplicationMixin(
         }
     }
 
-    protected async _renderFrame(
-        options: Partial<foundry.applications.api.ApplicationV2.RenderOptions>,
-    ): Promise<HTMLElement> {
-        const frame = await super._renderFrame(options);
-
-        // Insert mode toggle
-        if (this.isEditable) {
-            $(this.window.title!).before(`
-                <label id="mode-toggle" 
-                    class="toggle-switch"
-                    data-action="toggle-mode"
-                    data-tooltip="COSMERE.Actor.Sheet.Edit"
-                >
-                    <input type="checkbox" ${this.mode === 'edit' ? 'checked' : ''}>
-                    <div class="slider rounded">
-                        <i class="fa-solid fa-pen"></i>
-                    </div>
-                </label>
-            `);
-        }
-
-        return frame;
-    }
-
     /* --- Event handlers --- */
 
     private onActionsSearchChange(event: SearchBarInputEvent) {
@@ -243,7 +147,7 @@ export class CharacterSheet extends TabsApplicationMixin(
 
         void this.render({
             parts: [],
-            componentRefs: ['sheet-content.app-character-actions-list.0'],
+            componentRefs: ['sheet-content.app-actor-actions-list.0'],
         });
     }
 
