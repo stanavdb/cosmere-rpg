@@ -18,6 +18,8 @@ import {
     ActorSearchBarComponent,
     ActorConditionsComponent,
     ActorInjuriesListComponent,
+    ActorEquipmentListComponent,
+    ActorEffectsListComponent,
 } from './components';
 
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -70,6 +72,8 @@ export class BaseActorSheet<
         'app-actor-search-bar': ActorSearchBarComponent,
         'app-actor-conditions': ActorConditionsComponent,
         'app-actor-injuries-list': ActorInjuriesListComponent,
+        'app-actor-equipment-list': ActorEquipmentListComponent,
+        'app-actor-effects-list': ActorEffectsListComponent,
     });
 
     static PARTS = foundry.utils.mergeObject(super.PARTS, {

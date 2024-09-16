@@ -13,10 +13,8 @@ import {
     CharacterExpertisesComponent,
     CharacterAncestryComponent,
     CharacterPathsComponent,
-    CharacterEquipmentListComponent,
     CharacterGoalsListComponent,
     CharacterConnectionsListComponent,
-    CharacterEffectsListComponent,
     CharacterFavoritesComponent,
 } from './components/character';
 
@@ -51,10 +49,8 @@ export class CharacterSheet extends BaseActorSheet {
         'app-character-expertises': CharacterExpertisesComponent,
         'app-character-ancestry': CharacterAncestryComponent,
         'app-character-paths-list': CharacterPathsComponent,
-        'app-character-equipment-list': CharacterEquipmentListComponent,
         'app-character-goals-list': CharacterGoalsListComponent,
         'app-character-connections-list': CharacterConnectionsListComponent,
-        'app-character-effects-list': CharacterEffectsListComponent,
         'app-character-favorites': CharacterFavoritesComponent,
     });
 
@@ -157,7 +153,7 @@ export class CharacterSheet extends BaseActorSheet {
 
         void this.render({
             parts: [],
-            componentRefs: ['sheet-content.app-character-equipment-list.0'],
+            componentRefs: ['sheet-content.app-actor-equipment-list.0'],
         });
     }
 
@@ -168,9 +164,9 @@ export class CharacterSheet extends BaseActorSheet {
         void this.render({
             parts: [],
             componentRefs: [
-                'sheet-content.app-character-effects-list.0',
-                'sheet-content.app-character-effects-list.1',
-                'sheet-content.app-character-effects-list.2',
+                'sheet-content.app-actor-effects-list.0',
+                'sheet-content.app-actor-effects-list.1',
+                'sheet-content.app-actor-effects-list.2',
             ],
         });
     }

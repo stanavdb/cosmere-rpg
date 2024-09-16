@@ -5,3 +5,5 @@ export * from './actions-list';
 export * from './search-bar';
 export * from './conditions';
 export * from './injuries-list';
+export * from './effects-list';
+export * from './equipment-list';

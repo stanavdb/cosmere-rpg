@@ -2,8 +2,6 @@ export * from './skills-group';
 export * from './expertises';
 export * from './ancestry';
 export * from './paths';
-export * from '../equipment-list';
 export * from './goals-list';
 export * from './connections-list';
-export * from '../effects-list';
 export * from './favorites';

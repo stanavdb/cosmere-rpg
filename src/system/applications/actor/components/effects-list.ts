@@ -30,12 +30,12 @@ const TITLE_MAP: Record<EffectListType, string> = {
     temporary: 'COSMERE.Actor.Sheet.Effects.Temporary',
 };
 
-export class CharacterEffectsListComponent extends HandlebarsApplicationComponent<
+export class ActorEffectsListComponent extends HandlebarsApplicationComponent<
     ConstructorOf<BaseActorSheet>,
     Params
 > {
     static TEMPLATE =
-        'systems/cosmere-rpg/templates/actors/character/components/effects-list.hbs';
+        'systems/cosmere-rpg/templates/actors/components/effects-list.hbs';
 
     /**
      * NOTE: Unbound methods is the standard for defining actions
@@ -50,7 +50,7 @@ export class CharacterEffectsListComponent extends HandlebarsApplicationComponen
     /* --- Actions --- */
 
     public static onToggleEffectActive(
-        this: CharacterEffectsListComponent,
+        this: ActorEffectsListComponent,
         event: Event,
     ) {
         const effect = this.getEffectFromEvent(event);
