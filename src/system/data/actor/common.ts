@@ -1,4 +1,6 @@
 import {
+    Size,
+    CreatureType,
     Attribute,
     Resource,
     AttributeGroup,
@@ -46,6 +48,8 @@ interface CurrencyDenominationData {
 }
 
 export interface CommonActorData {
+    size: Size;
+    type: CreatureType;
     senses: {
         range: Derived<number>;
         obscuredAffected: Derived<boolean>;
@@ -93,6 +97,20 @@ export class CommonActorDataModel<
 > extends foundry.abstract.TypeDataModel<Schema, CosmereActor> {
     static defineSchema() {
         return {
+            size: new foundry.data.fields.StringField({
+                required: true,
+                nullable: false,
+                blank: false,
+                initial: Size.Medium,
+                choices: Object.keys(CONFIG.COSMERE.sizes),
+            }),
+            type: new foundry.data.fields.StringField({
+                required: true,
+                nullable: false,
+                blank: false,
+                initial: CreatureType.Humanoid,
+                choices: Object.keys(CONFIG.COSMERE.creatureTypes),
+            }),
             senses: new foundry.data.fields.SchemaField({
                 range: new DerivedValueField(
                     new foundry.data.fields.NumberField({

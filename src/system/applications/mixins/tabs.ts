@@ -53,15 +53,18 @@ export function TabsApplicationMixin<
         public async _prepareContext(
             options: Partial<foundry.applications.api.ApplicationV2.RenderOptions>,
         ) {
+            // Get tabs list
+            const tabsList = (this.constructor as typeof mixin).TABS;
+
             // Get all tab groups used by tabs of this application
-            const usedGroups = Object.values(mixin.TABS)
+            const usedGroups = Object.values(tabsList)
                 .map((tab) => tab.group ?? PRIMARY_TAB_GROUP)
                 .filter((v, i, self) => self.indexOf(v) === i);
 
             // Ensure that the used tab groups are set up
             usedGroups.forEach((groupId) => {
                 if (!this.tabGroups[groupId]) {
-                    this.tabGroups[groupId] = Object.entries(mixin.TABS).find(
+                    this.tabGroups[groupId] = Object.entries(tabsList).find(
                         ([_, tab]) =>
                             (tab.group ?? PRIMARY_TAB_GROUP) === groupId,
                     )![0];
@@ -69,7 +72,7 @@ export function TabsApplicationMixin<
             });
 
             // Construct tabs
-            const tabs = Object.entries(mixin.TABS)
+            const tabs = Object.entries(tabsList)
                 .map(([tabId, tab], i) => {
                     const active = this.tabGroups.primary === tabId;
                     const cssClass = active ? 'active' : '';

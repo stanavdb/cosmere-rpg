@@ -22,7 +22,7 @@ interface AdditionalItemData {
 }
 
 interface RenderContext extends BaseActorSheetRenderContext {
-    actionsSearch: {
+    actionsSearch?: {
         text: string;
         sort: SortDirection;
     };
@@ -118,14 +118,17 @@ export class ActorActionsListComponent extends HandlebarsApplicationComponent<
             }
         });
 
+        const searchText = context.actionsSearch?.text ?? '';
+        const sortDir = context.actionsSearch?.sort ?? SortDirection.Descending;
+
         return {
             ...context,
 
             sections: [
                 ...(await this.categorizeItemsByType(
                     nonActionItems,
-                    context.actionsSearch.text,
-                    context.actionsSearch.sort,
+                    searchText,
+                    sortDir,
                 )),
                 ...(
                     await Promise.all(
@@ -133,15 +136,12 @@ export class ActorActionsListComponent extends HandlebarsApplicationComponent<
                             const items = actionItems
                                 .filter((i) => i.system.type === type)
                                 .filter((i) =>
-                                    i.name
-                                        .toLowerCase()
-                                        .includes(context.actionsSearch.text),
+                                    i.name.toLowerCase().includes(searchText),
                                 )
                                 .sort(
                                     (a, b) =>
                                         a.name.compare(b.name) *
-                                        (context.actionsSearch.sort ===
-                                        SortDirection.Descending
+                                        (sortDir === SortDirection.Descending
                                             ? 1
                                             : -1),
                                 );

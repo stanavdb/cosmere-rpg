@@ -1,12 +1,16 @@
 import { Resource } from '@src/system/types/cosmere';
 import { CosmereActor } from '@system/documents/actor';
-import { DeepPartial } from '@system/types/utils';
+import { DeepPartial, AnyObject } from '@system/types/utils';
+
+// Utils
+import AppUtils from '@system/applications/utils';
 
 // Mixins
 import {
     TabsApplicationMixin,
     DragDropApplicationMixin,
     ComponentHandlebarsApplicationMixin,
+    ComponentHandlebarsRenderOptions,
 } from '@system/applications/mixins';
 
 // Components
@@ -20,6 +24,8 @@ import {
     ActorInjuriesListComponent,
     ActorEquipmentListComponent,
     ActorEffectsListComponent,
+    SortDirection,
+    SearchBarInputEvent,
 } from './components';
 
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -64,17 +70,20 @@ export class BaseActorSheet<
     );
     /* eslint-enable @typescript-eslint/unbound-method */
 
-    static COMPONENTS = foundry.utils.mergeObject(super.COMPONENTS, {
-        'app-actor-details': ActorDetailsComponent,
-        'app-actor-resource': ActorResourceComponent,
-        'app-actor-attributes': ActorAttributesComponent,
-        'app-actor-actions-list': ActorActionsListComponent,
-        'app-actor-search-bar': ActorSearchBarComponent,
-        'app-actor-conditions': ActorConditionsComponent,
-        'app-actor-injuries-list': ActorInjuriesListComponent,
-        'app-actor-equipment-list': ActorEquipmentListComponent,
-        'app-actor-effects-list': ActorEffectsListComponent,
-    });
+    static COMPONENTS = foundry.utils.mergeObject(
+        foundry.utils.deepClone(super.COMPONENTS),
+        {
+            'app-actor-details': ActorDetailsComponent,
+            'app-actor-resource': ActorResourceComponent,
+            'app-actor-attributes': ActorAttributesComponent,
+            'app-actor-actions-list': ActorActionsListComponent,
+            'app-actor-search-bar': ActorSearchBarComponent,
+            'app-actor-conditions': ActorConditionsComponent,
+            'app-actor-injuries-list': ActorInjuriesListComponent,
+            'app-actor-equipment-list': ActorEquipmentListComponent,
+            'app-actor-effects-list': ActorEffectsListComponent,
+        },
+    );
 
     static PARTS = foundry.utils.mergeObject(super.PARTS, {
         navigation: {
@@ -102,10 +111,63 @@ export class BaseActorSheet<
         return super.document;
     }
 
+    private actionsSearchText = '';
+    private actionsSearchSort: SortDirection = SortDirection.Descending;
+
+    private equipmentSearchText = '';
+    private equipmentSearchSort: SortDirection = SortDirection.Descending;
+
+    private effectsSearchText = '';
+    private effectsSearchSort: SortDirection = SortDirection.Descending;
+
     /* --- Accessors --- */
 
     public get mode(): ActorSheetMode {
         return this.actor.getFlag('cosmere-rpg', 'sheetMode') ?? 'edit';
+    }
+
+    /* --- Drag drop --- */
+
+    protected override _canDragStart(): boolean {
+        return this.isEditable;
+    }
+
+    protected override _canDragDrop(): boolean {
+        return this.isEditable;
+    }
+
+    protected override _onDragStart(event: DragEvent) {
+        // Get dragged item
+        const item = AppUtils.getItemFromEvent(event, this.actor);
+        if (!item) return;
+
+        const dragData = {
+            type: 'Item',
+            uuid: item.uuid,
+        };
+
+        // Set data transfer
+        event.dataTransfer!.setData('text/plain', JSON.stringify(dragData));
+        event.dataTransfer!.setData('document/item', ''); // Mark the type
+    }
+
+    protected override _onDrop(event: DragEvent) {
+        const data = TextEditor.getDragEventData(event) as unknown as {
+            type: string;
+            uuid: string;
+        };
+
+        // Ensure document type can be embedded on actor
+        if (!(data.type in CosmereActor.metadata.embedded)) return;
+
+        // Get the document
+        const document = fromUuidSync(data.uuid);
+        if (!document) return;
+
+        if (document.parent !== this.actor) {
+            // Document not yet on this actor, create it
+            void this.actor.createEmbeddedDocuments(data.type, [document]);
+        }
     }
 
     /* --- Actions --- */
@@ -214,6 +276,72 @@ export class BaseActorSheet<
 
     /* --- Lifecycle --- */
 
+    protected _onRender(
+        context: AnyObject,
+        options: ComponentHandlebarsRenderOptions,
+    ) {
+        super._onRender(context, options);
+
+        if (options.parts.includes('sheet-content')) {
+            this.element
+                .querySelector('#actions-search')!
+                .addEventListener(
+                    'search',
+                    this.onActionsSearchChange.bind(this) as EventListener,
+                );
+
+            this.element
+                .querySelector('#equipment-search')
+                ?.addEventListener(
+                    'search',
+                    this.onEquipmentSearchChange.bind(this) as EventListener,
+                );
+
+            this.element
+                .querySelector('#effects-search')
+                ?.addEventListener(
+                    'search',
+                    this.onEffectsSearchChange.bind(this) as EventListener,
+                );
+        }
+    }
+
+    /* --- Event handlers --- */
+
+    private onActionsSearchChange(event: SearchBarInputEvent) {
+        this.actionsSearchText = event.detail.text;
+        this.actionsSearchSort = event.detail.sort;
+
+        void this.render({
+            parts: [],
+            componentRefs: ['sheet-content.app-actor-actions-list.0'],
+        });
+    }
+
+    private onEquipmentSearchChange(event: SearchBarInputEvent) {
+        this.equipmentSearchText = event.detail.text;
+        this.equipmentSearchSort = event.detail.sort;
+
+        void this.render({
+            parts: [],
+            componentRefs: ['sheet-content.app-actor-equipment-list.0'],
+        });
+    }
+
+    private onEffectsSearchChange(event: SearchBarInputEvent) {
+        this.effectsSearchText = event.detail.text;
+        this.effectsSearchSort = event.detail.sort;
+
+        void this.render({
+            parts: [],
+            componentRefs: [
+                'sheet-content.app-actor-effects-list.0',
+                'sheet-content.app-actor-effects-list.1',
+                'sheet-content.app-actor-effects-list.2',
+            ],
+        });
+    }
+
     /* --- Context --- */
 
     public async _prepareContext(
@@ -226,6 +354,22 @@ export class BaseActorSheet<
             editable: this.isEditable,
             mode: this.mode,
             isEditMode: this.mode === 'edit' && this.isEditable,
+
+            resources: Object.keys(this.actor.system.resources),
+
+            // Search
+            actionsSearch: {
+                text: this.actionsSearchText,
+                sort: this.actionsSearchSort,
+            },
+            equipmentSearch: {
+                text: this.equipmentSearchText,
+                sort: this.equipmentSearchSort,
+            },
+            effectsSearch: {
+                text: this.effectsSearchText,
+                sort: this.effectsSearchSort,
+            },
         };
     }
 }

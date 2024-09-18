@@ -1,0 +1,18 @@
+<section class="sheet-content flexrow">
+    <section class="col-left">
+        <app-actor-details></app-actor-details>
+        {{#each resources as |resourceId|}}
+        {{{component 'app-actor-resource' resource=resourceId}}}
+        {{/each}}
+
+    </section>
+    <section class="col-main">
+        <app-adversary-header></app-adversary-header>
+        <app-actor-attributes></app-actor-attributes>
+        <div class="tab-body">
+            {{> adv-actions-tab}}
+            {{> adv-equipment-tab}}
+            {{> adv-effects-tab}}
+        </div>
+    </section>
+</section>

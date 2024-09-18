@@ -53,6 +53,7 @@ Hooks.once('init', async () => {
         applications.actor.CharacterSheet as any,
         {
             types: ['character'],
+            makeDefault: true,
             label: `${game.i18n?.localize('COSMERE.Actor.Character.Character')}`,
         },
     );

@@ -3,7 +3,7 @@
         <img class="profile" src="{{actor.img}}" data-tooltip="{{actor.name}}" data-edit="img">
     </div>
 
-    {{#if editable}}
+    {{#if (and editable displayRestButtons)}}
     <a class="short-rest rest"
         data-action="short-rest" 
         data-tooltip="COSMERE.Actor.Sheet.ShortRest"
@@ -19,13 +19,17 @@
     </a>
     {{/if}}
 
-    <div class="deflect" data-tooltip="Deflect">
+    {{#if displayRecovery}}
+    <div class="deflect" 
+        data-tooltip="COSMERE.Actor.Statistics.Deflect"
+    >
         {{#with actor.system.resources.hea.deflect as |deflect|}}
 
         <span class="value">{{derived deflect}}</span>
 
         {{/with}}
     </div>
+    {{/if}}
 </div>
 
 <div class="derived-statistics flexrow">
@@ -41,6 +45,7 @@
     </div>
 
     {{!-- Recovery --}}
+    {{#if displayRecovery}}
     <div class="derived-stat recovery">
         <div class="container">
             <span class="value">{{derived actor.system.recovery.die}}</span>
@@ -49,20 +54,31 @@
             {{localize "COSMERE.Actor.Statistics.RecoveryDie"}}
         </span>
     </div>
+    {{else}}
+    <div class="derived-stat">
+        <div class="deflect">
+            {{#with actor.system.resources.hea.deflect as |deflect|}}
+            <span class="value">{{derived deflect}}</span>
+            {{/with}}
+        </div>
+        <span class="label">
+            {{localize "COSMERE.Actor.Statistics.Deflect"}}
+        </span>
+    </div>
+
+    {{/if}}
 
     {{!-- Senses --}}
     <div class="derived-stat senses">
         <div class="container">
-                {{#if (derived actor.system.senses.obscuredAffected)}}
-                <span class="value">
-                {{derived actor.system.senses.range}}
-                </span>
-                <spa class="unit">ft</spa>
-                {{else}}
-                <span class="value">—</span>
-                {{/if}}
-
-
+            {{#if (derived actor.system.senses.obscuredAffected)}}
+            <span class="value">
+            {{derived actor.system.senses.range}}
+            </span>
+            <spa class="unit">ft</spa>
+            {{else}}
+            <span class="value">—</span>
+            {{/if}}
         </div>
         <span class="label">
             {{localize "COSMERE.Actor.Statistics.SensesRange"}}

@@ -1,164 +1,5 @@
-.sheet.character {
-    overflow: visible;
-
-    .window-content {
-        overflow: visible;
-    }
-
-    > .window-header {
-        border: none;
-        background: none;
-
-        #mode-toggle {
-            display: none;
-        }
-    }
-
-    &:not(.minimized) > .window-header {
-        #mode-toggle {
-            display: unset;
-        }
-
-        .window-title {
-            visibility: hidden;
-        }
-    }
-
-    > *:not(.window-header) {
-        .controls-dropdown.expanded {
-            max-height: unset;
-        }
-    }
-
-    nav {
-        border: none;
-        flex-direction: column;
-        position: absolute;
-        left: 100%;
-        top: 15%;
-
-        > a {
-            background: rgba(11, 10, 19, 0.9);
-            width: 2.88867rem;
-            height: 2.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #302831;
-            border-top-right-radius: 0.3rem;
-            border-bottom-right-radius: 0.3rem;
-
-            &.active {
-                background-color: rgb(45 41 77 / 90%);
-            }
-        }
-    }
-
-    .sheet-header {
-        margin-bottom: 1rem;
-
-        .title {
-            padding-left: 2rem;
-            flex-direction: column;
-            align-items: flex-start;
-
-            .document-name > input {
-                margin: 0;
-                text-align: left;
-                font-size: inherit;
-            }
-
-            .details {
-                text-transform: uppercase;
-                font-size: 10pt;
-                margin-top: 0.3rem;
-
-                .delim {
-                    margin: 0.2rem;
-                    opacity: .5;
-                }
-            }
-        }
-
-        .level-details {
-            flex: unset;
-            display: flex;
-            align-items: center;
-
-            .advance {
-                margin-top: 1rem;
-                font-size: 13pt;
-            }
-
-            .level {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                margin-left: 0.5rem;
-
-                .label {
-                    text-transform: uppercase;
-                    font-size: 7.5pt;
-                }
-
-                .container {
-                    border: 1px solid;
-                    padding: 0.2rem;
-                }
-            }
-        }
-    }
-
-    .sheet-content {
-        align-items: flex-start;
-        flex: 1;
-
-        .col-left {
-            width: 25%;
-            flex: unset;
-        }
-
-        .col-main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            padding: 0 1rem;
-
-            .tab-body {
-                flex: 1;
-                display: flex;
-
-                .tab {
-                    flex: 1;
-                }
-            }
-
-            .tab-content.active {
-                flex: 1;
-                display: flex;
-                align-items: flex-start;
-                width: 100%;
-
-                section.skills {
-                    margin-right: .25rem;
-                }
-
-                section.paths {
-                    display: flex;
-                    flex-direction: column;
-                    height: 100%;
-                    margin-left: .25rem;
-                }
-            }
-        }
-    }
-
+.sheet.actor.character {
     /* --- Tabs --- */
-
-    .tab[data-tab] {
-        flex-direction: column;
-    }
 
     .tab.split {
         flex-direction: row;
@@ -197,6 +38,16 @@
     }
 
     /* --- Components --- */
+
+    app-actor-details {
+        .derived-statistics {
+            margin-top: 2rem;
+        }
+    }
+
+    app-actor-attributes {
+        margin-top: 2.5rem;
+    }
 
     app-character-skills-group {
         display: flex;
@@ -271,7 +122,6 @@
     }
 
     app-character-expertises {
-
         .header {
             display: flex;
             flex-direction: row;

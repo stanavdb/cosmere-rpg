@@ -1,0 +1,26 @@
+<header class="sheet-header">
+    <div class="title">
+        <h1 class="document-name">
+            {{#if isEditMode}}
+            <input class="value" type="text" name="name" value="{{actor.name}}">
+            {{else}}
+            {{actor.name}}
+            {{/if}}
+        </h1>
+        <div class="details">
+            <span class="role">{{localize roleLabel}}</span>
+            <i class="cosmere-icon delim">o</i>
+            <span class="size">{{localize sizeLabel}}</span>
+            <span class="type">{{localize typeLabel}}</span>
+        </div>
+    </div>
+
+    <div class="level-details">
+        <div class="level">
+            <span class="label">{{localize "COSMERE.Actor.Sheet.Tier"}}</span>
+            <div class="container">
+                <span class="value">{{actor.system.tier}}</span>
+            </div>
+        </div>
+    </div>
+</header>
