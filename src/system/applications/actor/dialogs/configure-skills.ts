@@ -47,7 +47,7 @@ export class ConfigureSkillsDialog extends ComponentHandlebarsApplicationMixin(
 
     private constructor(private actor: CosmereActor) {
         super({
-            id: `Actor.${actor.id}.skills`,
+            id: `${actor.uuid}.skills`,
         });
     }
 

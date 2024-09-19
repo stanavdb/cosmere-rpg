@@ -1,5 +1,11 @@
 import { ConstructorOf } from '@system/types/utils';
 
+// Dialogs
+import { EditCreatureTypeDialog } from '@system/applications/actor/dialogs/edit-creature-type';
+
+// Utils
+import ActorUtils from '@system/util/actor';
+
 // Component imports
 import { HandlebarsApplicationComponent } from '../../../mixins/component-handlebars-application-mixin';
 import {
@@ -12,6 +18,25 @@ export class AdversaryHeaderComponent extends HandlebarsApplicationComponent<
 > {
     static TEMPLATE =
         'systems/cosmere-rpg/templates/actors/adversary/components/header.hbs';
+
+    /**
+     * NOTE: Unbound methods is the standard for defining actions
+     * within ApplicationV2
+     */
+    /* eslint-disable @typescript-eslint/unbound-method */
+    static ACTIONS = foundry.utils.mergeObject(
+        foundry.utils.deepClone(super.ACTIONS),
+        {
+            'edit-type': this.onEditType,
+        },
+    );
+    /* eslint-enable @typescript-eslint/unbound-method */
+
+    /* --- Actions --- */
+
+    private static onEditType(this: AdversaryHeaderComponent) {
+        void EditCreatureTypeDialog.show(this.application.actor);
+    }
 
     /* --- Context --- */
 
@@ -40,8 +65,7 @@ export class AdversaryHeaderComponent extends HandlebarsApplicationComponent<
             roleLabel:
                 CONFIG.COSMERE.adversary.roles[context.actor.system.role].label,
             sizeLabel: CONFIG.COSMERE.sizes[context.actor.system.size].label,
-            typeLabel:
-                CONFIG.COSMERE.creatureTypes[context.actor.system.type].label,
+            typeLabel: ActorUtils.getTypeLabel(context.actor.system.type),
         });
     }
 }

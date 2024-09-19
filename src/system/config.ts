@@ -60,6 +60,9 @@ const COSMERE: CosmereRPGConfig = {
         },
     },
     creatureTypes: {
+        [CreatureType.Custom]: {
+            label: 'COSMERE.Actor.Type.Custom',
+        },
         [CreatureType.Humanoid]: {
             label: 'COSMERE.Actor.Type.Humanoid',
         },

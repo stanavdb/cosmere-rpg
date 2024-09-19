@@ -1,6 +1,6 @@
 import { ExpertiseType } from '@system/types/cosmere';
 import { CosmereActor } from '@system/documents';
-import { DeepPartial, AnyObject } from '@system/types/utils';
+import { AnyObject } from '@system/types/utils';
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -55,7 +55,7 @@ export class EditExpertisesDialog extends HandlebarsApplicationMixin(
 
     private constructor(private actor: CosmereActor) {
         super({
-            id: `Actor.${actor.id}.expertises`,
+            id: `${actor.uuid}.expertises`,
         });
     }
 

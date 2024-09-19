@@ -25,6 +25,13 @@
             {{/if}}
 
             <span class="type">{{localize typeLabel}}</span>
+            {{#if isEditMode}}
+            <a data-action="edit-type"
+                data-tooltip="COSMERE.Actor.Sheet.EditType"
+            >
+                <i class="fa-solid fa-gear"></i>
+            </a>
+            {{/if}}
         </div>
     </div>
 

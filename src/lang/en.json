@@ -135,6 +135,7 @@
                 "Gargantuan": "Gargantuan"
             },
             "Type": {
+                "Custom": "Custom",
                 "Humanoid": "Humanoid",
                 "Animal": "Animal"
             },
@@ -194,6 +195,9 @@
                 "EditRole": "Edit Role",
                 "EditSize": "Edit Size",
                 "EditType": "Edit Type",
+                "CreatureType": "Type",
+                "CustomType": "Custom Type",
+                "Subtype": "Subtype",
                 "Edit": "Edit",
                 "View": "View",
                 "Favorites": "Favorites",
@@ -549,7 +553,8 @@
             "Remove": "Remove",
             "Edit": "Edit",
             "Save": "Save",
-            "Cancel": "Cancel"
+            "Cancel": "Cancel",
+            "Update": "Update"
         },
         "Warning": {
             "NotImplemented": "Sorry! [action] is not implemented yet",
