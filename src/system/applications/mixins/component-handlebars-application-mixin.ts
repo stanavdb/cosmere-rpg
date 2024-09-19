@@ -584,7 +584,7 @@ export function ComponentHandlebarsApplicationMixin<
                                 : type === 'number'
                                   ? Number(value)
                                   : type === 'boolean'
-                                    ? Boolean(value)
+                                    ? value.toLowerCase() === 'true'
                                     : type === 'Object'
                                       ? (JSON.parse(value) as object)
                                       : undefined;

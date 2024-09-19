@@ -123,7 +123,7 @@ export class BaseActorSheet<
     /* --- Accessors --- */
 
     public get mode(): ActorSheetMode {
-        return this.actor.getFlag('cosmere-rpg', 'sheetMode') ?? 'edit';
+        return this.actor.getFlag('cosmere-rpg', 'sheet.mode') ?? 'edit';
     }
 
     /* --- Drag drop --- */
@@ -181,7 +181,7 @@ export class BaseActorSheet<
         // Update the actor
         await this.actor.update(
             {
-                'flags.cosmere-rpg.sheetMode':
+                'flags.cosmere-rpg.sheet.mode':
                     this.mode === 'view' ? 'edit' : 'view',
             },
             { render: false },
@@ -356,6 +356,7 @@ export class BaseActorSheet<
             isEditMode: this.mode === 'edit' && this.isEditable,
 
             resources: Object.keys(this.actor.system.resources),
+            attributeGroups: Object.keys(CONFIG.COSMERE.attributeGroups),
 
             // Search
             actionsSearch: {

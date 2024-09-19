@@ -190,6 +190,7 @@
                 "Tier": "Tier",
                 "Expertises": "Expertises",
                 "EditExpertises": "Edit Expertises",
+                "ConfigureSkills": "Configure Skills",
                 "Edit": "Edit",
                 "View": "View",
                 "Favorites": "Favorites",
@@ -198,6 +199,8 @@
                 "PathPlaceholder": "Add Path",
                 "ShortRest": "Short rest",
                 "LongRest": "Long rest",
+                "ToggleShowSkills": "Show skills without ranks",
+                "ToggleCollapseSkills": "Hide skills without ranks",
                 "Tabs": {
                     "Details": "Details",
                     "Actions": "Actions",

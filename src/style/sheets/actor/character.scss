@@ -1,4 +1,10 @@
 .sheet.actor.character {
+    .sheet-header {
+        .title {
+            padding-left: 2rem;
+        }
+    }
+
     /* --- Tabs --- */
 
     .tab.split {
@@ -47,78 +53,6 @@
 
     app-actor-attributes {
         margin-top: 2.5rem;
-    }
-
-    app-character-skills-group {
-        display: flex;
-        padding: 0.4rem 0.2rem;
-        margin-bottom: .5rem;
-        border-radius: 0.3rem;   
-
-        border: 1px solid #463a47;
-        background: #0b0a13;
-
-        .skill-list {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            margin: 0;
-            padding: 0;
-
-            .skill {
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-
-                &:hover {
-                    background-color: rgba(0, 0, 0, .25);
-                }
-
-                [data-action] {
-                    cursor: pointer;
-                }
-
-                .mod {
-                    width: 2rem;
-                    text-align: center;
-                    margin: 0 0.3rem;
-                }
-
-                .name {
-                    flex: 1;
-                }
-
-                .attribute {
-                    width: 3rem;
-                    text-align: center;
-                    margin: 0 0.3rem;
-                }
-
-                .pip-list {
-                    display: flex;
-                    flex-direction: row;
-                    list-style-type: none;
-                    padding: 0;
-                    margin: 0 0.3rem 0 0;
-
-                    .pip {
-                        > div {
-                            width: 0.65rem;
-                            height: 0.65rem;
-                            border: 1px solid;
-                            border-radius: 50%;
-                            margin: 0.1rem;
-                        }
-
-                        &.active {
-                            > div {
-                                background-color: white;
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
 
     app-character-expertises {

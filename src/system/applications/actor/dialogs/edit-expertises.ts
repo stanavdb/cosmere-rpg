@@ -8,7 +8,7 @@ export class EditExpertisesDialog extends HandlebarsApplicationMixin(
     ApplicationV2<AnyObject>,
 ) {
     static DEFAULT_OPTIONS = foundry.utils.mergeObject(
-        foundry.utils.mergeObject({}, super.DEFAULT_OPTIONS),
+        foundry.utils.deepClone(super.DEFAULT_OPTIONS),
         {
             window: {
                 title: 'COSMERE.Actor.Sheet.EditExpertises',
@@ -34,24 +34,29 @@ export class EditExpertisesDialog extends HandlebarsApplicationMixin(
         },
     );
 
-    static PARTS = foundry.utils.mergeObject(super.PARTS, {
-        form: {
-            template:
-                'systems/cosmere-rpg/templates/actors/character/dialogs/edit-expertises.hbs',
-            // See note above
-            /* eslint-disable @typescript-eslint/unbound-method */
-            forms: {
-                form: {
-                    handler: this.onFormEvent,
-                    submitOnChange: true,
+    static PARTS = foundry.utils.mergeObject(
+        foundry.utils.deepClone(super.PARTS),
+        {
+            form: {
+                template:
+                    'systems/cosmere-rpg/templates/actors/character/dialogs/edit-expertises.hbs',
+                // See note above
+                /* eslint-disable @typescript-eslint/unbound-method */
+                forms: {
+                    form: {
+                        handler: this.onFormEvent,
+                        submitOnChange: true,
+                    },
                 },
+                /* eslint-enable @typescript-eslint/unbound-method */
             },
-            /* eslint-enable @typescript-eslint/unbound-method */
         },
-    });
+    );
 
     private constructor(private actor: CosmereActor) {
-        super({});
+        super({
+            id: `Actor.${actor.id}.expertises`,
+        });
     }
 
     /* --- Statics --- */

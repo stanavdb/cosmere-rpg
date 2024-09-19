@@ -2,8 +2,8 @@ import { ItemType } from '@system/types/cosmere';
 import { CharacterActor } from '@system/documents';
 
 // Components
+import { ActorSkillsGroupComponent } from './components';
 import {
-    CharacterSkillsGroupComponent,
     CharacterExpertisesComponent,
     CharacterAncestryComponent,
     CharacterPathsComponent,
@@ -35,7 +35,7 @@ export class CharacterSheet extends BaseActorSheet {
     static COMPONENTS = foundry.utils.mergeObject(
         foundry.utils.deepClone(super.COMPONENTS),
         {
-            'app-character-skills-group': CharacterSkillsGroupComponent,
+            'app-actor-skills-group': ActorSkillsGroupComponent,
             'app-character-expertises': CharacterExpertisesComponent,
             'app-character-ancestry': CharacterAncestryComponent,
             'app-character-paths-list': CharacterPathsComponent,
@@ -109,8 +109,6 @@ export class CharacterSheet extends BaseActorSheet {
 
             // TODO: Default localization
             ancestryLabel: ancestryItem?.name ?? 'DEFAULT_ANCESTRY_LABEL',
-
-            attributeGroups: Object.keys(CONFIG.COSMERE.attributeGroups),
         };
     }
 }

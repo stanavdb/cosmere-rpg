@@ -7,3 +7,4 @@ export * from './conditions';
 export * from './injuries-list';
 export * from './effects-list';
 export * from './equipment-list';
+export * from './skills-group';

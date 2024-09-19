@@ -18,6 +18,7 @@ export class ConfigureResourceDialog extends foundry.applications.api.DialogV2 {
 
         // Init
         super({
+            id: `Actor.${actor.id}.resource.${resourceId}`,
             window: {
                 title: game
                     .i18n!.localize('DIALOG.EditResource.Title')

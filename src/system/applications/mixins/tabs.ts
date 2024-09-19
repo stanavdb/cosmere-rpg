@@ -56,37 +56,41 @@ export function TabsApplicationMixin<
             // Get tabs list
             const tabsList = (this.constructor as typeof mixin).TABS;
 
+            // Construct tabs data
+            const tabsData = Object.entries(tabsList)
+                .map(([tabId, tab], i) => ({
+                    ...tab,
+                    id: tabId,
+                    group: tab.group ?? PRIMARY_TAB_GROUP,
+                    sortIndex: tab.sortIndex ?? (1 + i) * 10,
+                }))
+                .sort((a, b) => a.sortIndex - b.sortIndex);
+
             // Get all tab groups used by tabs of this application
-            const usedGroups = Object.values(tabsList)
-                .map((tab) => tab.group ?? PRIMARY_TAB_GROUP)
+            const usedGroups = tabsData
+                .map((tab) => tab.group)
                 .filter((v, i, self) => self.indexOf(v) === i);
 
             // Ensure that the used tab groups are set up
             usedGroups.forEach((groupId) => {
                 if (!this.tabGroups[groupId]) {
-                    this.tabGroups[groupId] = Object.entries(tabsList).find(
-                        ([_, tab]) =>
-                            (tab.group ?? PRIMARY_TAB_GROUP) === groupId,
-                    )![0];
+                    this.tabGroups[groupId] = tabsData.find(
+                        (tab) => tab.group === groupId,
+                    )!.id;
                 }
             });
 
             // Construct tabs
-            const tabs = Object.entries(tabsList)
-                .map(([tabId, tab], i) => {
-                    const active = this.tabGroups.primary === tabId;
-                    const cssClass = active ? 'active' : '';
+            const tabs = tabsData.map((tab) => {
+                const active = this.tabGroups[tab.group] === tab.id;
+                const cssClass = active ? 'active' : '';
 
-                    return {
-                        ...tab,
-                        id: tabId,
-                        group: tab.group ?? PRIMARY_TAB_GROUP,
-                        active,
-                        cssClass,
-                        sortIndex: tab.sortIndex ?? (1 + i) * 10,
-                    };
-                })
-                .sort((a, b) => a.sortIndex - b.sortIndex);
+                return {
+                    ...tab,
+                    active,
+                    cssClass,
+                };
+            });
 
             // Construct tabs map
             const tabsMap = tabs.reduce(
