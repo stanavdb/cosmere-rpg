@@ -215,7 +215,8 @@ export class BaseActorSheet<
     ) {
         if (
             !(event.target instanceof HTMLInputElement) &&
-            !(event.target instanceof HTMLTextAreaElement)
+            !(event.target instanceof HTMLTextAreaElement) &&
+            !(event.target instanceof HTMLSelectElement)
         )
             return;
         if (!event.target.name) return;

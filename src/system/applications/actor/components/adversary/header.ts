@@ -22,6 +22,14 @@ export class AdversaryHeaderComponent extends HandlebarsApplicationComponent<
         return Promise.resolve({
             ...context,
 
+            roles: Object.entries(CONFIG.COSMERE.adversary.roles).reduce(
+                (roles, [id, config]) => ({
+                    ...roles,
+                    [id]: config.label,
+                }),
+                {} as Record<string, string>,
+            ),
+
             roleLabel:
                 CONFIG.COSMERE.adversary.roles[context.actor.system.role].label,
             sizeLabel: CONFIG.COSMERE.sizes[context.actor.system.size].label,
