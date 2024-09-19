@@ -16,7 +16,14 @@
             <span class="role">{{localize roleLabel}}</span>
             {{/if}}
             <i class="cosmere-icon delim">o</i>
+            {{#if isEditMode}}
+            <select name="system.size">
+                {{selectOptions sizes selected=actor.system.size localize=true}}
+            </select>
+            {{else}}
             <span class="size">{{localize sizeLabel}}</span>
+            {{/if}}
+
             <span class="type">{{localize typeLabel}}</span>
         </div>
     </div>

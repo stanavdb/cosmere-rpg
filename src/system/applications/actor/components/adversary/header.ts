@@ -29,6 +29,13 @@ export class AdversaryHeaderComponent extends HandlebarsApplicationComponent<
                 }),
                 {} as Record<string, string>,
             ),
+            sizes: Object.entries(CONFIG.COSMERE.sizes).reduce(
+                (sizes, [id, config]) => ({
+                    ...sizes,
+                    [id]: config.label,
+                }),
+                {} as Record<string, string>,
+            ),
 
             roleLabel:
                 CONFIG.COSMERE.adversary.roles[context.actor.system.role].label,
