@@ -26,6 +26,13 @@
             <div class="defense">
                 <div class="defense-box">
                     <span class="value">{{ derived defense.value }}</span>
+                    {{#if @root.isEditMode}}
+                    <a data-action="configure-defense"
+                        data-tooltip="COSMERE.Actor.Sheet.ConfigureDefense"
+                    >
+                        <i class="fa-solid fa-gear"></i>
+                    </a>
+                    {{/if}}
                 </div>
             </div>
             {{/with}}

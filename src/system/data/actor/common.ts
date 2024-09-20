@@ -265,7 +265,6 @@ export class CommonActorDataModel<
                                 nullable: false,
                                 integer: true,
                                 min: 0,
-                                max: 5,
                                 initial: 0,
                             }),
                         ),

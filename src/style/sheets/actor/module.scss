@@ -469,6 +469,7 @@ app-actor-attributes {
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
 
             border: 1px solid #463a47;
             border-bottom-left-radius: 50%;
@@ -481,6 +482,13 @@ app-actor-attributes {
 
             .value {
                 font-size: 13pt;
+            }
+
+            > a {
+                font-size: 6pt;
+                position: absolute;
+                top: 0.1rem;
+                right: 0.1rem;
             }
         }
     }

@@ -86,7 +86,8 @@ export class EditCreatureTypeDialog extends HandlebarsApplicationMixin(
         form: HTMLFormElement,
         formData: FormDataExtended,
     ) {
-        console.log(formData.object, event, form);
+        if (event instanceof SubmitEvent) return;
+
         const target = event.target as HTMLInputElement;
 
         if (formData.object.custom && target.name !== 'primaryType') {
@@ -100,7 +101,7 @@ export class EditCreatureTypeDialog extends HandlebarsApplicationMixin(
         this.type.subtype = formData.object.subtype as string;
 
         // Render
-        if (!(event instanceof SubmitEvent)) void this.render(true);
+        void this.render(true);
     }
 
     /* --- Lifecycle --- */

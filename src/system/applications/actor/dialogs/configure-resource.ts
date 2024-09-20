@@ -1,6 +1,8 @@
 import { Resource } from '@system/types/cosmere';
 import { CosmereActor } from '@system/documents';
 
+import { Derived } from '@system/data/fields';
+
 // Constants
 const CONFIGURE_RESOURCE_TEMPLATE =
     'systems/cosmere-rpg/templates/actors/character/dialogs/edit-resource.hbs';
@@ -57,11 +59,8 @@ export class ConfigureResourceDialog extends foundry.applications.api.DialogV2 {
 
         // Render dialog inner HTML
         const content = await renderTemplate(CONFIGURE_RESOURCE_TEMPLATE, {
-            mode: resource.max.useOverride ? 'override' : 'derived',
-            modes: {
-                derived: 'DIALOG.EditResource.Mode.Derived',
-                override: 'DIALOG.EditResource.Mode.Override',
-            },
+            mode: Derived.getMode(resource.max),
+            modes: Derived.Modes,
             value: resource.max,
             formula: config.formula ?? '',
         });

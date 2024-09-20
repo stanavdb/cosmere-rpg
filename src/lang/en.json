@@ -208,6 +208,8 @@
                 "LongRest": "Long rest",
                 "ToggleShowSkills": "Show skills without ranks",
                 "ToggleCollapseSkills": "Hide skills without ranks",
+                "ConfigureDefense": "Configure Defense",
+                "ConfigureDefenseTitle": "Configure {attribute-group} Defense: {actor}",
                 "Tabs": {
                     "Details": "Details",
                     "Actions": "Actions",
@@ -522,11 +524,7 @@
         },
         "EditResource": {
             "Title": "Configure Max [resource]",
-            "ResourceMode": "Resource Mode",
-            "Mode": {
-                "Derived": "Derived",
-                "Override": "Custom"
-            }
+            "ResourceMode": "Resource Mode"
         },
         "LongRest": {
             "ShouldPerform": "Perform long rest?"
@@ -534,6 +532,9 @@
         "ShortRest": {
             "Title": "Short rest",
             "TendedToBy": "Tended to by"
+        },
+        "ConfigureDefense": {
+            "DefenseMode": "Defense Mode"
         }
     },
     "GENERIC": {
@@ -547,6 +548,7 @@
         "DistanceUnit": "ft.",
         "ViewDetails": "View Details",
         "HideDetails": "Hide Details",
+        "Bonus": "Bonus",
         "Button": {
             "Roll": "Roll",
             "Continue": "Continue",
@@ -562,6 +564,12 @@
             "NotEnoughResource": "Cannot consume, not enough of resource",
             "ItemConsumeResourceNotConfigured": "The resource selected to be consumed is not configured on this item",
             "NoDuplicateExpertises": "Cannot create duplicate expertise"
+        },
+        "DerivedValue": {
+            "Mode": {
+                "Derived": "Derived",
+                "Override": "Custom"
+            }
         }
     },
     "TYPES": {
