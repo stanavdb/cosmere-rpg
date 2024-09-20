@@ -209,7 +209,7 @@
                 "ToggleShowSkills": "Show skills without ranks",
                 "ToggleCollapseSkills": "Hide skills without ranks",
                 "ConfigureDefense": "Configure Defense",
-                "ConfigureDefenseTitle": "Configure {attribute-group} Defense: {actor}",
+                "ConfigureMovement": "Configure Movement Rate",
                 "Tabs": {
                     "Details": "Details",
                     "Actions": "Actions",
@@ -534,7 +534,10 @@
             "TendedToBy": "Tended to by"
         },
         "ConfigureDefense": {
-            "DefenseMode": "Defense Mode"
+            "Title": "Configure {attribute-group} Defense: {actor}"
+        },
+        "ConfigureMovementRate": {
+            "Title": "Configure Movement Rate: {actor}"
         }
     },
     "GENERIC": {
@@ -549,6 +552,7 @@
         "ViewDetails": "View Details",
         "HideDetails": "Hide Details",
         "Bonus": "Bonus",
+        "Mode": "Mode",
         "Button": {
             "Roll": "Roll",
             "Continue": "Continue",

@@ -37,10 +37,18 @@
     <div class="derived-stat movement">
         <div class="container">
             <span class="value">{{derived actor.system.movement.rate}}</span>
-            <spa class="unit">ft</spa>
+            <span class="unit">ft</span>
         </div>
         <span class="label">
             {{localize "COSMERE.Actor.Statistics.MovementRate"}}
+
+            {{#if isEditMode}}
+            <a data-action="configure-movement-rate"
+                data-tooltip="COSMERE.Actor.Sheet.ConfigureMovement"
+            >
+                <i class="fa-solid fa-gear"></i>
+            </a>
+            {{/if}}
         </span>
     </div>
 
@@ -75,7 +83,7 @@
             <span class="value">
             {{derived actor.system.senses.range}}
             </span>
-            <spa class="unit">ft</spa>
+            <span class="unit">ft</span>
             {{else}}
             <span class="value">—</span>
             {{/if}}

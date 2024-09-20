@@ -1,4 +1,3 @@
-import { AttributeGroup } from '@system/types/cosmere';
 import { CosmereActor } from '@system/documents';
 import { AnyObject } from '@system/types/utils';
 
@@ -7,7 +6,7 @@ import { Derived } from '@system/data/fields';
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
-export class ConfigureDefenseDialog extends HandlebarsApplicationMixin(
+export class ConfigureMovementRateDialog extends HandlebarsApplicationMixin(
     ApplicationV2<AnyObject>,
 ) {
     /**
@@ -22,13 +21,13 @@ export class ConfigureDefenseDialog extends HandlebarsApplicationMixin(
                 minimizable: false,
                 positioned: true,
             },
-            classes: ['dialog', 'configure-defense'],
+            classes: ['dialog', 'configure-movement-rate'],
             tag: 'dialog',
             position: {
                 width: 300,
             },
             actions: {
-                'update-defense': this.onUpdateDefense,
+                'update-movement': this.onUpdateMovementRate,
             },
         },
     );
@@ -38,7 +37,7 @@ export class ConfigureDefenseDialog extends HandlebarsApplicationMixin(
         {
             form: {
                 template:
-                    'systems/cosmere-rpg/templates/actors/dialogs/configure-defense.hbs',
+                    'systems/cosmere-rpg/templates/actors/dialogs/configure-movement-rate.hbs',
                 forms: {
                     form: {
                         handler: this.onFormEvent,
@@ -50,47 +49,35 @@ export class ConfigureDefenseDialog extends HandlebarsApplicationMixin(
     );
     /* eslint-enable @typescript-eslint/unbound-method */
 
-    private defenseData: CommonActorData['defenses'][keyof CommonActorData['defenses']];
+    private movementData: CommonActorData['movement'];
     private mode: Derived.Mode;
 
-    private constructor(
-        private actor: CosmereActor,
-        private group: AttributeGroup,
-    ) {
+    private constructor(private actor: CosmereActor) {
         super({
-            id: `${actor.uuid}.AttributeGroup.${group}.Defense`,
+            id: `${actor.uuid}.MovementRate`,
             window: {
                 title: game
-                    .i18n!.localize('DIALOG.ConfigureDefense.Title')
-                    .replace(
-                        '{attribute-group}',
-                        game.i18n!.localize(
-                            CONFIG.COSMERE.attributeGroups[group].label,
-                        ),
-                    )
+                    .i18n!.localize('DIALOG.ConfigureMovementRate.Title')
                     .replace('{actor}', actor.name),
             },
         });
 
-        this.defenseData = this.actor.system.defenses[group];
-        this.defenseData.value.override =
-            this.defenseData.value.override ??
-            this.defenseData.value.value ??
-            10;
-        this.mode = Derived.getMode(this.defenseData.value);
+        this.movementData = this.actor.system.movement;
+        this.movementData.rate.override ??= this.movementData.rate.value ?? 0;
+        this.mode = Derived.getMode(this.actor.system.movement.rate);
     }
 
     /* --- Statics --- */
 
-    public static async show(actor: CosmereActor, group: AttributeGroup) {
-        await new ConfigureDefenseDialog(actor, group).render(true);
+    public static async show(actor: CosmereActor) {
+        await new ConfigureMovementRateDialog(actor).render(true);
     }
 
     /* --- Actions --- */
 
-    private static onUpdateDefense(this: ConfigureDefenseDialog) {
+    private static onUpdateMovementRate(this: ConfigureMovementRateDialog) {
         void this.actor.update({
-            [`system.defenses.${this.group}`]: this.defenseData,
+            'system.movement': this.movementData,
         });
         void this.close();
     }
@@ -98,25 +85,25 @@ export class ConfigureDefenseDialog extends HandlebarsApplicationMixin(
     /* --- Form --- */
 
     private static onFormEvent(
-        this: ConfigureDefenseDialog,
+        this: ConfigureMovementRateDialog,
         event: Event,
         form: HTMLFormElement,
         formData: FormDataExtended,
     ) {
         if (event instanceof SubmitEvent) return;
 
+        // Get event target
         const target = event.target as HTMLInputElement;
 
+        // Get mode
         this.mode = formData.object.mode as Derived.Mode;
 
-        if (this.mode === Derived.Mode.Override && target.name === 'formula')
-            this.defenseData.value.override = formData.object.formula as number;
-
-        if (target.name === 'bonus')
-            this.defenseData.bonus = formData.object.bonus as number;
-
         // Assign mode
-        Derived.setMode(this.defenseData.value, this.mode);
+        Derived.setMode(this.movementData.rate, this.mode);
+
+        // Assign rate
+        if (this.mode === Derived.Mode.Override && target.name === 'rate')
+            this.movementData.rate.override = formData.object.rate as number;
 
         // Render
         void this.render(true);
@@ -131,21 +118,12 @@ export class ConfigureDefenseDialog extends HandlebarsApplicationMixin(
     /* --- Context --- */
 
     protected _prepareContext() {
-        // Get attribute group config
-        const config = CONFIG.COSMERE.attributeGroups[this.group];
-
-        // Construct formula
-        const formula = `10 + @attr.${config.attributes[0]} + @attr.${config.attributes[1]} + @bonus`;
-
         return Promise.resolve({
             actor: this.actor,
-            group: this.group,
-            ...config,
-            formula,
             mode: this.mode,
             modes: Derived.Modes,
-            override: this.defenseData.value.override!,
-            bonus: this.defenseData.bonus,
+            ...this.movementData,
+            override: this.movementData.rate.override,
         });
     }
 }

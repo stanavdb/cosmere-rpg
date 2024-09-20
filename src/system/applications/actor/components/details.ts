@@ -1,6 +1,9 @@
 import { ActorType } from '@system/types/cosmere';
 import { ConstructorOf } from '@system/types/utils';
 
+// Dialogs
+import { ConfigureMovementRateDialog } from '@system/applications/actor/dialogs/configure-movement-rate';
+
 // Component imports
 import { HandlebarsApplicationComponent } from '../../mixins/component-handlebars-application-mixin';
 import { BaseActorSheet, BaseActorSheetRenderContext } from '../base';
@@ -19,6 +22,7 @@ export class ActorDetailsComponent extends HandlebarsApplicationComponent<
     static readonly ACTIONS = {
         'short-rest': this.onShortRest,
         'long-rest': this.onLongRest,
+        'configure-movement-rate': this.onConfigureMovementRate,
     };
     /* eslint-enable @typescript-eslint/unbound-method */
 
@@ -30,6 +34,10 @@ export class ActorDetailsComponent extends HandlebarsApplicationComponent<
 
     private static onLongRest(this: ActorDetailsComponent) {
         void this.application.actor.longRest();
+    }
+
+    private static onConfigureMovementRate(this: ActorDetailsComponent) {
+        void ConfigureMovementRateDialog.show(this.application.actor);
     }
 
     /* --- Context --- */
