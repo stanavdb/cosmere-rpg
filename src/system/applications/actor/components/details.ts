@@ -3,6 +3,7 @@ import { ConstructorOf } from '@system/types/utils';
 
 // Dialogs
 import { ConfigureMovementRateDialog } from '@system/applications/actor/dialogs/configure-movement-rate';
+import { ConfigureSensesRangeDialog } from '@system/applications/actor/dialogs/configure-senses-range';
 
 // Component imports
 import { HandlebarsApplicationComponent } from '../../mixins/component-handlebars-application-mixin';
@@ -23,6 +24,7 @@ export class ActorDetailsComponent extends HandlebarsApplicationComponent<
         'short-rest': this.onShortRest,
         'long-rest': this.onLongRest,
         'configure-movement-rate': this.onConfigureMovementRate,
+        'configure-senses-range': this.onConfigureSensesRange,
     };
     /* eslint-enable @typescript-eslint/unbound-method */
 
@@ -38,6 +40,10 @@ export class ActorDetailsComponent extends HandlebarsApplicationComponent<
 
     private static onConfigureMovementRate(this: ActorDetailsComponent) {
         void ConfigureMovementRateDialog.show(this.application.actor);
+    }
+
+    private static onConfigureSensesRange(this: ActorDetailsComponent) {
+        void ConfigureSensesRangeDialog.show(this.application.actor);
     }
 
     /* --- Context --- */

@@ -56,7 +56,6 @@ export interface CommonActorData {
     };
     senses: {
         range: Derived<number>;
-        obscuredAffected: Derived<boolean>;
     };
     immunities: {
         damage: DamageType[];
@@ -131,13 +130,11 @@ export class CommonActorDataModel<
                         initial: 5,
                     }),
                 ),
-                obscuredAffected: new DerivedValueField(
-                    new foundry.data.fields.BooleanField({
-                        required: true,
-                        nullable: false,
-                        initial: true,
-                    }),
-                ),
+                obscuredAffected: new foundry.data.fields.BooleanField({
+                    required: true,
+                    nullable: false,
+                    initial: true,
+                }),
             }),
             immunities: new foundry.data.fields.SchemaField({
                 damage: new foundry.data.fields.ArrayField(
@@ -240,7 +237,7 @@ export class CommonActorDataModel<
                             nullable: false,
                             integer: true,
                             min: 0,
-                            max: 5,
+                            max: 10,
                             initial: 0,
                         }),
                     });
@@ -463,7 +460,6 @@ export class CommonActorDataModel<
         this.senses.range.value = awarenessToSensesRange(
             this.attributes.awa.value,
         );
-        this.senses.obscuredAffected.value = this.attributes.awa.value < 9;
 
         // Derive defenses
         (Object.keys(this.defenses) as AttributeGroup[]).forEach((group) => {

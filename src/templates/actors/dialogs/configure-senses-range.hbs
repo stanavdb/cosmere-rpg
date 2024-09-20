@@ -1,0 +1,48 @@
+<form>
+    <div class="form-group">
+        {{#with (derived range) as |value|}}
+        <input name="range"
+            style="text-align: center; font-size: 15pt"
+
+            {{#if (isNumMax value)}}
+            type="text"
+            value="—"
+
+            {{else}}
+            type="number"
+            value="{{value}}"
+            min="0"
+            step="1"
+            {{/if}}
+
+            {{#if (or (eq @root.mode 'derived') (isNumMax value))}}
+            readonly
+            {{/if}}
+        >
+        {{/with}}
+    </div>
+    <div class="form-group">
+        <label>{{localize "DIALOG.ConfigureSensesRange.ObscuredUnaffected"}}</label>
+        <input type="checkbox" 
+            name="obscuredUnaffected"
+            {{#if (isNumMax (derived range))}}
+            checked
+            {{/if}}
+            {{#if (eq mode 'derived')}}
+            readonly
+            {{/if}}
+        >
+    </div>
+    <div class="form-group">
+        <label>{{localize "GENERIC.Mode"}}</label>
+        <select name="mode">
+            {{selectOptions modes selected=mode localize=true}}
+        </select>
+    </div>
+    <br>
+    <div class="form-group">
+        <button data-action="update-sense" type="submit">
+            {{localize "GENERIC.Button.Update"}}
+        </button>
+    </div>
+</form>

@@ -79,17 +79,27 @@
     {{!-- Senses --}}
     <div class="derived-stat senses">
         <div class="container">
-            {{#if (derived actor.system.senses.obscuredAffected)}}
-            <span class="value">
-            {{derived actor.system.senses.range}}
+            {{#with (derived actor.system.senses.range) as |range|}}
+            {{#if (isNumMax range)}}
+            <span class="value">—</span>
+            {{else}}
+            <span class="value"></span>
+            {{range}}
             </span>
             <span class="unit">ft</span>
-            {{else}}
-            <span class="value">—</span>
             {{/if}}
+            {{/with}}
         </div>
         <span class="label">
             {{localize "COSMERE.Actor.Statistics.SensesRange"}}
+
+            {{#if isEditMode}}
+            <a data-action="configure-senses-range"
+                data-tooltip="COSMERE.Actor.Sheet.ConfigureSensesRange"
+            >
+                <i class="fa-solid fa-gear"></i>
+            </a>
+            {{/if}}
         </span>
     </div>
 </div>

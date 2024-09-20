@@ -54,6 +54,11 @@ Handlebars.registerHelper(
             .join(''),
 );
 
+Handlebars.registerHelper(
+    'isNumMax',
+    (value: number) => value === Number.MAX_VALUE,
+);
+
 Handlebars.registerHelper('cosmereDingbat', (type: ActionCostType) => {
     switch (type) {
         case ActionCostType.FreeAction:
@@ -66,26 +71,6 @@ Handlebars.registerHelper('cosmereDingbat', (type: ActionCostType) => {
             return '';
     }
 });
-
-Handlebars.registerHelper(
-    'greaterThan',
-    (a: number, b: number, equal?: boolean) => (equal ? a >= b : a > b),
-);
-
-Handlebars.registerHelper(
-    'expertisesList',
-    (actor: CharacterActor, defaultValue = '-'): string => {
-        if (!actor.system.expertises?.length) return defaultValue;
-        return actor.system.expertises
-            .map(
-                (expertise) =>
-                    `${expertise.label} (${game.i18n!.localize(
-                        CONFIG.COSMERE.expertiseTypes[expertise.type].label,
-                    )})`,
-            )
-            .join(', ');
-    },
-);
 
 Handlebars.registerHelper('derived', (derived?: Derived<string | number>) => {
     if (!derived) return;

@@ -210,6 +210,7 @@
                 "ToggleCollapseSkills": "Hide skills without ranks",
                 "ConfigureDefense": "Configure Defense",
                 "ConfigureMovement": "Configure Movement Rate",
+                "ConfigureSensesRange": "Configure Senses Range",
                 "Tabs": {
                     "Details": "Details",
                     "Actions": "Actions",
@@ -538,6 +539,10 @@
         },
         "ConfigureMovementRate": {
             "Title": "Configure Movement Rate: {actor}"
+        },
+        "ConfigureSensesRange": {
+            "Title": "Configure Senses Range: {actor}",
+            "ObscuredUnaffected": "Unaffected by obscured senses"
         }
     },
     "GENERIC": {
