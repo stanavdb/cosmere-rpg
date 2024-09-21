@@ -529,7 +529,7 @@ app-actor-equipment-list {
                 border-top-right-radius: .3rem;
             }
 
-            &:nth-last-child(2) {
+            &:nth-last-child(2):not(.expanded), &:nth-last-child(2).expanded + li {
                 border-bottom-left-radius: .3rem;
                 border-bottom-right-radius: .3rem;
             }
@@ -629,6 +629,10 @@ app-actor-equipment-list {
 
             .activation {
                 width: 3rem;
+
+                i {
+                    opacity: 1 !important;
+                }
             }
 
             .consume {
@@ -760,7 +764,10 @@ app-actor-equipment-list {
             &.expanded {
                 display: flex;
                 padding: 0 0.5rem;
-                border-bottom: 1px solid #463a47;
+
+                &:not(:last-child) {
+                    border-bottom: 1px solid #463a47;
+                }  
             }
         }
     }
