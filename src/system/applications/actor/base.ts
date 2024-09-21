@@ -111,14 +111,14 @@ export class BaseActorSheet<
         return super.document;
     }
 
-    private actionsSearchText = '';
-    private actionsSearchSort: SortDirection = SortDirection.Descending;
+    protected actionsSearchText = '';
+    protected actionsSearchSort: SortDirection = SortDirection.Descending;
 
-    private equipmentSearchText = '';
-    private equipmentSearchSort: SortDirection = SortDirection.Descending;
+    protected equipmentSearchText = '';
+    protected equipmentSearchSort: SortDirection = SortDirection.Descending;
 
-    private effectsSearchText = '';
-    private effectsSearchSort: SortDirection = SortDirection.Descending;
+    protected effectsSearchText = '';
+    protected effectsSearchSort: SortDirection = SortDirection.Descending;
 
     /* --- Accessors --- */
 
@@ -309,7 +309,7 @@ export class BaseActorSheet<
 
     /* --- Event handlers --- */
 
-    private onActionsSearchChange(event: SearchBarInputEvent) {
+    protected onActionsSearchChange(event: SearchBarInputEvent) {
         this.actionsSearchText = event.detail.text;
         this.actionsSearchSort = event.detail.sort;
 
@@ -319,7 +319,7 @@ export class BaseActorSheet<
         });
     }
 
-    private onEquipmentSearchChange(event: SearchBarInputEvent) {
+    protected onEquipmentSearchChange(event: SearchBarInputEvent) {
         this.equipmentSearchText = event.detail.text;
         this.equipmentSearchSort = event.detail.sort;
 
@@ -329,7 +329,7 @@ export class BaseActorSheet<
         });
     }
 
-    private onEffectsSearchChange(event: SearchBarInputEvent) {
+    protected onEffectsSearchChange(event: SearchBarInputEvent) {
         this.effectsSearchText = event.detail.text;
         this.effectsSearchSort = event.detail.sort;
 

@@ -1,4 +1,3 @@
-import { ExpertiseType } from '@system/types/cosmere';
 import { ConstructorOf } from '@system/types/utils';
 
 // Dialog
@@ -26,7 +25,7 @@ export class CharacterExpertisesComponent extends HandlebarsApplicationComponent
 
     /* --- Actions --- */
 
-    public static async onEditExpertises(this: CharacterExpertisesComponent) {
+    private static async onEditExpertises(this: CharacterExpertisesComponent) {
         await EditExpertisesDialog.show(this.application.actor);
     }
 

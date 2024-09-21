@@ -315,6 +315,8 @@ export function ComponentHandlebarsApplicationMixin<
             // Component rendering
             if (options.componentRefs.length > 0) {
                 for (const ref of options.componentRefs) {
+                    if (!this._components[ref]) continue;
+
                     // Get component instance and element
                     const { element: componentElement } = this._components[ref];
 

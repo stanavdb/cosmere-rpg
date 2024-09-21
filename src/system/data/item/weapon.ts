@@ -1,4 +1,9 @@
-import { WeaponId } from '@system/types/cosmere';
+import {
+    WeaponId,
+    WeaponTraitId,
+    HoldType,
+    EquipHand,
+} from '@system/types/cosmere';
 import { CosmereItem } from '@src/system/documents';
 
 // Mixins
@@ -46,5 +51,25 @@ export class WeaponItemDataModel extends DataModelMixin<
 ) {
     static defineSchema() {
         return foundry.utils.mergeObject(super.defineSchema(), {});
+    }
+
+    public prepareDerivedData() {
+        super.prepareDerivedData();
+
+        // Get active traits
+        const activeTraits = this.traits.filter((trait) => trait.active);
+
+        // Check if Two Handed is active
+        const twoHandedActive = activeTraits.some(
+            (trait) => trait.id === WeaponTraitId.TwoHanded,
+        );
+
+        // Set hold type
+        if (twoHandedActive) {
+            this.equip.hold = HoldType.TwoHanded;
+        } else {
+            this.equip.hold = HoldType.OneHanded;
+            this.equip.hand ??= EquipHand.Main;
+        }
     }
 }

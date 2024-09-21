@@ -1,13 +1,16 @@
 import { AdversaryActor } from '@system/documents';
 
 // Components
+import { SearchBarInputEvent } from './components';
 import {
     AdversaryHeaderComponent,
     AdversarySkillsGroupComponent,
+    AdversaryActionsListComponent,
 } from './components/adversary';
 
 // Dialogs
 import { ConfigureSkillsDialog } from './dialogs/configure-skills';
+import { EditExpertisesDialog } from './dialogs/edit-expertises';
 
 // Base
 import { BaseActorSheet, BaseActorSheetRenderContext } from './base';
@@ -41,6 +44,7 @@ export class AdversarySheet extends BaseActorSheet<AdversarySheetRenderContext> 
             actions: {
                 'toggle-skills-collapsed': this.onToggleSkillsCollapsed,
                 'configure-skills': this.onConfigureSkills,
+                'edit-expertises': this.onEditExpertises,
             },
         },
     );
@@ -51,6 +55,7 @@ export class AdversarySheet extends BaseActorSheet<AdversarySheetRenderContext> 
         {
             'app-adversary-header': AdversaryHeaderComponent,
             'app-adversary-skills-group': AdversarySkillsGroupComponent,
+            'app-adversary-actions-list': AdversaryActionsListComponent,
         },
     );
 
@@ -87,6 +92,22 @@ export class AdversarySheet extends BaseActorSheet<AdversarySheetRenderContext> 
 
     private static onConfigureSkills(this: AdversarySheet) {
         void ConfigureSkillsDialog.show(this.actor);
+    }
+
+    private static onEditExpertises(this: AdversarySheet) {
+        void EditExpertisesDialog.show(this.actor);
+    }
+
+    /* --- Event handlers --- */
+
+    protected onActionsSearchChange(event: SearchBarInputEvent) {
+        this.actionsSearchText = event.detail.text;
+        this.actionsSearchSort = event.detail.sort;
+
+        void this.render({
+            parts: [],
+            componentRefs: ['sheet-content.app-adversary-actions-list.0'],
+        });
     }
 
     /* --- Context --- */

@@ -5,6 +5,17 @@
         {{{component 'app-actor-resource' resource=resourceId}}}
         {{/each}}
 
+        {{#if isEditMode}}
+        <section class="expertises">
+            <span>{{localize "COSMERE.Actor.Sheet.Expertises"}}</span>
+            <a data-action="edit-expertises"
+                data-tooltip="COSMERE.Actor.Sheet.EditExpertises"
+            >
+                <i class="fa-solid fa-pen-to-square"></i>
+            </a>
+        </section>
+        {{/if}}
+
         <section class="skills">
             <header>
                 <span>{{localize "COSMERE.Actor.Skill.label_p"}}</span>

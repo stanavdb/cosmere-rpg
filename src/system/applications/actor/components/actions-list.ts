@@ -21,7 +21,8 @@ interface AdditionalItemData {
     descriptionHTML?: string;
 }
 
-interface RenderContext extends BaseActorSheetRenderContext {
+export interface ActorActionsListComponentRenderContext
+    extends BaseActorSheetRenderContext {
     actionsSearch?: {
         text: string;
         sort: SortDirection;
@@ -48,7 +49,7 @@ export class ActorActionsListComponent extends HandlebarsApplicationComponent<
     /**
      * Map of id to state
      */
-    private itemState: Record<string, ActionItemState> = {};
+    protected itemState: Record<string, ActionItemState> = {};
 
     /* --- Actions --- */
 
@@ -83,7 +84,10 @@ export class ActorActionsListComponent extends HandlebarsApplicationComponent<
 
     /* --- Context --- */
 
-    public async _prepareContext(params: unknown, context: RenderContext) {
+    public async _prepareContext(
+        params: unknown,
+        context: ActorActionsListComponentRenderContext,
+    ) {
         // Get action types
         const actionTypes = Object.keys(
             CONFIG.COSMERE.action.types,
@@ -162,7 +166,7 @@ export class ActorActionsListComponent extends HandlebarsApplicationComponent<
         };
     }
 
-    private async categorizeItemsByType(
+    protected async categorizeItemsByType(
         items: CosmereItem[],
         filterText: string,
         sort: SortDirection,
@@ -201,7 +205,7 @@ export class ActorActionsListComponent extends HandlebarsApplicationComponent<
         );
     }
 
-    private async prepareItemData(items: CosmereItem[]) {
+    protected async prepareItemData(items: CosmereItem[]) {
         return await items.reduce(
             async (prev, item) => ({
                 ...(await prev),
