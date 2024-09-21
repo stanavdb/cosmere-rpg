@@ -9,6 +9,7 @@ import { ConfigureRecoveryDieDialog } from '@system/applications/actor/dialogs/c
 // Component imports
 import { HandlebarsApplicationComponent } from '../../mixins/component-handlebars-application-mixin';
 import { BaseActorSheet, BaseActorSheetRenderContext } from '../base';
+import { CosmereActor } from '@src/system/documents';
 
 export class ActorDetailsComponent extends HandlebarsApplicationComponent<
     ConstructorOf<BaseActorSheet>
@@ -27,6 +28,7 @@ export class ActorDetailsComponent extends HandlebarsApplicationComponent<
         'configure-movement-rate': this.onConfigureMovementRate,
         'configure-senses-range': this.onConfigureSensesRange,
         'configure-recovery': this.onConfigureRecovery,
+        'edit-img': this.onEditImg,
     };
     /* eslint-enable @typescript-eslint/unbound-method */
 
@@ -51,6 +53,25 @@ export class ActorDetailsComponent extends HandlebarsApplicationComponent<
     private static onConfigureRecovery(this: ActorDetailsComponent) {
         if (this.application.actor.isCharacter())
             void ConfigureRecoveryDieDialog.show(this.application.actor);
+    }
+
+    private static onEditImg(this: ActorDetailsComponent) {
+        const { img: defaultImg } = CosmereActor.getDefaultArtwork(
+            this.application.actor.toObject(),
+        );
+
+        void new FilePicker({
+            current: this.application.actor.img,
+            type: 'image',
+            redirectToRoot: [defaultImg],
+            top: this.application.position.top + 40,
+            left: this.application.position.left + 10,
+            callback: (path) => {
+                void this.application.actor.update({
+                    img: path,
+                });
+            },
+        }).browse();
     }
 
     /* --- Context --- */

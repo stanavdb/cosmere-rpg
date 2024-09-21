@@ -19,6 +19,7 @@ declare class Actor<
 > extends _ClientDocumentMixin<D>(foundry.documents.BaseActor<D>) {
     public readonly type: string;
     public readonly name: string;
+    public readonly img: string;
     public readonly system: D;
 
     /**
@@ -61,4 +62,14 @@ declare class Actor<
      * @yields {ActiveEffect}
      */
     public *allApplicableEffects(): Generator<ActiveEffect, void, void>;
+
+    /**
+     * Determine default artwork based on the provided actor data.
+     * @param actorData     The source actor data.
+     * @returns             Candidate actor image and prototype token artwork.
+     */
+    public static getDefaultArtwork(actorData: object): {
+        img: string;
+        texture: { src: string };
+    };
 }
