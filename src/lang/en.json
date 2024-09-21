@@ -524,9 +524,8 @@
             "Add": "Add Custom Expertise",
             "AddPlaceholder": "Custom Expertise"
         },
-        "EditResource": {
-            "Title": "Configure Max [resource]",
-            "ResourceMode": "Resource Mode"
+        "ConfigureResource": {
+            "Title": "Configure Max {resource}: {actor}"
         },
         "LongRest": {
             "ShouldPerform": "Perform long rest?"

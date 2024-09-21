@@ -72,7 +72,7 @@ export class ActorResourceComponent extends HandlebarsApplicationComponent<
             .data('id') as Resource;
 
         // Show dialog
-        await ConfigureResourceDialog.show(resourceId, this.application.actor);
+        await ConfigureResourceDialog.show(this.application.actor, resourceId);
     }
 
     /* --- Context --- */

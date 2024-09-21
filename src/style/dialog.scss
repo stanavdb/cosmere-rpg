@@ -1,3 +1,9 @@
+dialog.application {
+    label:has(+ input[type="checkbox"][readonly]) {
+        opacity: .5;
+    }
+}
+
 dialog.application ul {
     list-style: none;
 
