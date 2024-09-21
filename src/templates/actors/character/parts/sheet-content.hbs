@@ -1,13 +1,13 @@
 <section class="sheet-content flexrow">
     <section class="col-left">
-        <app-character-details></app-character-details>
+        <app-actor-details></app-actor-details>
         {{#each resources as |resourceId|}}
-        {{{component 'app-character-resource' resource=resourceId}}}
+        {{{component 'app-actor-resource' resource=resourceId}}}
         {{/each}}
-        <app-character-favorites></app-character-favorites>
+        <app-character-favorites class="list-component"></app-character-favorites>
     </section>
     <section class="col-main">
-        <app-character-attributes></app-character-attributes>
+        <app-actor-attributes></app-actor-attributes>
         <div class="tab-body">
             {{> char-details-tab}}
             {{> char-actions-tab}}

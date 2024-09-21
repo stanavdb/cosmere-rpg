@@ -6,7 +6,7 @@ export interface EquippableItemData {
     alwaysEquipped?: boolean;
     equip: {
         type: EquipType;
-        hold?: HoldType;
+        hold?: HoldType; // Derived from two handed trait
         hand?: EquipHand;
     };
 }

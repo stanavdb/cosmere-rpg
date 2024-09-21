@@ -1,4 +1,6 @@
 import {
+    Size,
+    CreatureType,
     Attribute,
     Resource,
     AttributeGroup,
@@ -46,9 +48,14 @@ interface CurrencyDenominationData {
 }
 
 export interface CommonActorData {
+    size: Size;
+    type: {
+        id: CreatureType;
+        custom?: string | null;
+        subtype?: string | null;
+    };
     senses: {
         range: Derived<number>;
-        obscuredAffected: Derived<boolean>;
     };
     immunities: {
         damage: DamageType[];
@@ -93,6 +100,26 @@ export class CommonActorDataModel<
 > extends foundry.abstract.TypeDataModel<Schema, CosmereActor> {
     static defineSchema() {
         return {
+            size: new foundry.data.fields.StringField({
+                required: true,
+                nullable: false,
+                blank: false,
+                initial: Size.Medium,
+                choices: Object.keys(CONFIG.COSMERE.sizes),
+            }),
+            type: new foundry.data.fields.SchemaField({
+                id: new foundry.data.fields.StringField({
+                    required: true,
+                    nullable: false,
+                    blank: false,
+                    initial: CreatureType.Humanoid,
+                    choices: Object.keys(CONFIG.COSMERE.creatureTypes),
+                }),
+                custom: new foundry.data.fields.StringField({ nullable: true }),
+                subtype: new foundry.data.fields.StringField({
+                    nullable: true,
+                }),
+            }),
             senses: new foundry.data.fields.SchemaField({
                 range: new DerivedValueField(
                     new foundry.data.fields.NumberField({
@@ -103,13 +130,11 @@ export class CommonActorDataModel<
                         initial: 5,
                     }),
                 ),
-                obscuredAffected: new DerivedValueField(
-                    new foundry.data.fields.BooleanField({
-                        required: true,
-                        nullable: false,
-                        initial: true,
-                    }),
-                ),
+                obscuredAffected: new foundry.data.fields.BooleanField({
+                    required: true,
+                    nullable: false,
+                    initial: true,
+                }),
             }),
             immunities: new foundry.data.fields.SchemaField({
                 damage: new foundry.data.fields.ArrayField(
@@ -212,7 +237,7 @@ export class CommonActorDataModel<
                             nullable: false,
                             integer: true,
                             min: 0,
-                            max: 5,
+                            max: 10,
                             initial: 0,
                         }),
                     });
@@ -237,7 +262,6 @@ export class CommonActorDataModel<
                                 nullable: false,
                                 integer: true,
                                 min: 0,
-                                max: 5,
                                 initial: 0,
                             }),
                         ),
@@ -436,7 +460,6 @@ export class CommonActorDataModel<
         this.senses.range.value = awarenessToSensesRange(
             this.attributes.awa.value,
         );
-        this.senses.obscuredAffected.value = this.attributes.awa.value < 9;
 
         // Derive defenses
         (Object.keys(this.defenses) as AttributeGroup[]).forEach((group) => {

@@ -32,6 +32,7 @@ export class ShortRestDialog extends foundry.applications.api.DialogV2 {
         content: string,
     ) {
         super({
+            id: `${actor.uuid}.rest`,
             window: {
                 title: 'COSMERE.Actor.Sheet.ShortRest',
             },

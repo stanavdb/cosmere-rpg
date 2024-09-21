@@ -2,8 +2,8 @@ import { AttributeGroup, Skill } from '@system/types/cosmere';
 import { ConstructorOf, MouseButton } from '@system/types/utils';
 
 // Component imports
-import { HandlebarsApplicationComponent } from '../../../mixins/component-handlebars-application-mixin';
-import { BaseActorSheet, BaseActorSheetRenderContext } from '../../base';
+import { HandlebarsApplicationComponent } from '../../mixins/component-handlebars-application-mixin';
+import { BaseActorSheet, BaseActorSheetRenderContext } from '../base';
 
 // NOTE: Must use type here instead of interface as an interface doesn't match AnyObject type
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
@@ -11,12 +11,12 @@ type Params = {
     'group-id': AttributeGroup;
 };
 
-export class CharacterSkillsGroupComponent extends HandlebarsApplicationComponent<
+export class ActorSkillsGroupComponent extends HandlebarsApplicationComponent<
     ConstructorOf<BaseActorSheet>,
     Params
 > {
     static TEMPLATE =
-        'systems/cosmere-rpg/templates/actors/character/components/skills-group.hbs';
+        'systems/cosmere-rpg/templates/actors/components/skills-group.hbs';
 
     /**
      * NOTE: Unbound methods is the standard for defining actions
@@ -34,10 +34,7 @@ export class CharacterSkillsGroupComponent extends HandlebarsApplicationComponen
 
     /* --- Actions --- */
 
-    public static onRollSkill(
-        this: CharacterSkillsGroupComponent,
-        event: Event,
-    ) {
+    public static onRollSkill(this: ActorSkillsGroupComponent, event: Event) {
         event.preventDefault();
 
         const skillId = $(event.currentTarget!)
@@ -47,7 +44,7 @@ export class CharacterSkillsGroupComponent extends HandlebarsApplicationComponen
     }
 
     public static async onAdjustSkillRank(
-        this: CharacterSkillsGroupComponent,
+        this: ActorSkillsGroupComponent,
         event: Event,
     ) {
         event.preventDefault();
@@ -60,14 +57,7 @@ export class CharacterSkillsGroupComponent extends HandlebarsApplicationComponen
             .data('id') as Skill;
 
         // Modify skill rank
-        await this.application.actor.modifySkillRank(
-            skillId,
-            incrementBool,
-            false,
-        );
-
-        // Only re-render this component
-        void this.render();
+        await this.application.actor.modifySkillRank(skillId, incrementBool);
     }
 
     /* --- Context --- */

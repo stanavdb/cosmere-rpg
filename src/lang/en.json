@@ -135,6 +135,7 @@
                 "Gargantuan": "Gargantuan"
             },
             "Type": {
+                "Custom": "Custom",
                 "Humanoid": "Humanoid",
                 "Animal": "Animal"
             },
@@ -187,8 +188,16 @@
                     "Disable": "Disable Effect"
                 },
                 "Level": "Level",
+                "Tier": "Tier",
                 "Expertises": "Expertises",
                 "EditExpertises": "Edit Expertises",
+                "ConfigureSkills": "Configure Skills",
+                "EditRole": "Edit Role",
+                "EditSize": "Edit Size",
+                "EditType": "Edit Type",
+                "CreatureType": "Type",
+                "CustomType": "Custom Type",
+                "Subtype": "Subtype",
                 "Edit": "Edit",
                 "View": "View",
                 "Favorites": "Favorites",
@@ -197,6 +206,12 @@
                 "PathPlaceholder": "Add Path",
                 "ShortRest": "Short rest",
                 "LongRest": "Long rest",
+                "ToggleShowSkills": "Show skills without ranks",
+                "ToggleCollapseSkills": "Hide skills without ranks",
+                "ConfigureDefense": "Configure Defense",
+                "ConfigureMovement": "Configure Movement Rate",
+                "ConfigureSensesRange": "Configure Senses Range",
+                "ConfigureRecovery": "Configure Recovery Die",
                 "Tabs": {
                     "Details": "Details",
                     "Actions": "Actions",
@@ -509,13 +524,8 @@
             "Add": "Add Custom Expertise",
             "AddPlaceholder": "Custom Expertise"
         },
-        "EditResource": {
-            "Title": "Configure Max [resource]",
-            "ResourceMode": "Resource Mode",
-            "Mode": {
-                "Derived": "Derived",
-                "Override": "Custom"
-            }
+        "ConfigureResource": {
+            "Title": "Configure Max {resource}: {actor}"
         },
         "LongRest": {
             "ShouldPerform": "Perform long rest?"
@@ -523,6 +533,19 @@
         "ShortRest": {
             "Title": "Short rest",
             "TendedToBy": "Tended to by"
+        },
+        "ConfigureDefense": {
+            "Title": "Configure {attribute-group} Defense: {actor}"
+        },
+        "ConfigureMovementRate": {
+            "Title": "Configure Movement Rate: {actor}"
+        },
+        "ConfigureSensesRange": {
+            "Title": "Configure Senses Range: {actor}",
+            "ObscuredUnaffected": "Unaffected by obscured senses"
+        },
+        "ConfigureRecoveryDie": {
+            "Title": "Configure Recovery Die: {actor}"
         }
     },
     "GENERIC": {
@@ -536,13 +559,16 @@
         "DistanceUnit": "ft.",
         "ViewDetails": "View Details",
         "HideDetails": "Hide Details",
+        "Bonus": "Bonus",
+        "Mode": "Mode",
         "Button": {
             "Roll": "Roll",
             "Continue": "Continue",
             "Remove": "Remove",
             "Edit": "Edit",
             "Save": "Save",
-            "Cancel": "Cancel"
+            "Cancel": "Cancel",
+            "Update": "Update"
         },
         "Warning": {
             "NotImplemented": "Sorry! [action] is not implemented yet",
@@ -550,6 +576,12 @@
             "NotEnoughResource": "Cannot consume, not enough of resource",
             "ItemConsumeResourceNotConfigured": "The resource selected to be consumed is not configured on this item",
             "NoDuplicateExpertises": "Cannot create duplicate expertise"
+        },
+        "DerivedValue": {
+            "Mode": {
+                "Derived": "Derived",
+                "Override": "Custom"
+            }
         }
     },
     "TYPES": {

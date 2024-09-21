@@ -16,6 +16,7 @@ import {
     ConnectionItemDataModel,
     InjuryItemDataModel,
     ActionItemDataModel,
+    TraitItemDataModel,
 } from '@system/data/item';
 
 import { ActivatableItemData } from '@system/data/item/mixins/activatable';
@@ -91,6 +92,10 @@ export class CosmereItem<
 
     public isAction(): this is CosmereItem<ActionItemDataModel> {
         return this.type === ItemType.Action;
+    }
+
+    public isTrait(): this is CosmereItem<TraitItemDataModel> {
+        return this.type === ItemType.Trait;
     }
 
     /* --- Mixin type guards --- */

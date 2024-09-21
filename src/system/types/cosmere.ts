@@ -11,6 +11,7 @@ export const enum Size {
  * Used to provide standard options.
  */
 export const enum CreatureType {
+    Custom = 'custom',
     Humanoid = 'humanoid',
     Animal = 'animal',
 }

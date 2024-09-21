@@ -1,15 +1,45 @@
 import { AttributeGroup, Attribute } from '@system/types/cosmere';
 import { ConstructorOf } from '@system/types/utils';
 
-// Component imports
-import { HandlebarsApplicationComponent } from '../../../mixins/component-handlebars-application-mixin';
-import { BaseActorSheet, BaseActorSheetRenderContext } from '../../base';
+// Dialogs
+import { ConfigureDefenseDialog } from '@system/applications/actor/dialogs/configure-defense';
 
-export class CharacterAttributesComponent extends HandlebarsApplicationComponent<
+// Component imports
+import { HandlebarsApplicationComponent } from '../../mixins/component-handlebars-application-mixin';
+import { BaseActorSheet, BaseActorSheetRenderContext } from '../base';
+
+export class ActorAttributesComponent extends HandlebarsApplicationComponent<
     ConstructorOf<BaseActorSheet>
 > {
     static TEMPLATE =
-        'systems/cosmere-rpg/templates/actors/character/components/attributes.hbs';
+        'systems/cosmere-rpg/templates/actors/components/attributes.hbs';
+
+    /**
+     * NOTE: Unbound methods is the standard for defining actions and forms
+     * within ApplicationV2
+     */
+    /* eslint-disable @typescript-eslint/unbound-method */
+    static ACTIONS = foundry.utils.mergeObject(
+        foundry.utils.deepClone(super.ACTIONS),
+        {
+            'configure-defense': this.onConfigureDefense,
+        },
+    );
+    /* eslint-enable @typescript-eslint/unbound-method */
+
+    /* --- Actions --- */
+
+    private static onConfigureDefense(
+        this: ActorAttributesComponent,
+        event: Event,
+    ) {
+        // Get the group id
+        const groupId = $(event.target!)
+            .closest('[data-id]')
+            .data('id') as AttributeGroup;
+
+        void ConfigureDefenseDialog.show(this.application.actor, groupId);
+    }
 
     /* --- Context --- */
 

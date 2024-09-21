@@ -10,6 +10,13 @@ export interface ApplicationTab {
     label: string;
 
     /**
+     * The index for sorting the tabs
+     *
+     * @default - One plus the index at which the tab id is encountered in `TABS` multiplied by 10 - (1 + i) * 10
+     */
+    sortIndex?: number;
+
+    /**
      * An optional icon to show for this tab
      */
     icon?: string;
@@ -46,30 +53,40 @@ export function TabsApplicationMixin<
         public async _prepareContext(
             options: Partial<foundry.applications.api.ApplicationV2.RenderOptions>,
         ) {
+            // Get tabs list
+            const tabsList = (this.constructor as typeof mixin).TABS;
+
+            // Construct tabs data
+            const tabsData = Object.entries(tabsList)
+                .map(([tabId, tab], i) => ({
+                    ...tab,
+                    id: tabId,
+                    group: tab.group ?? PRIMARY_TAB_GROUP,
+                    sortIndex: tab.sortIndex ?? (1 + i) * 10,
+                }))
+                .sort((a, b) => a.sortIndex - b.sortIndex);
+
             // Get all tab groups used by tabs of this application
-            const usedGroups = Object.values(mixin.TABS)
-                .map((tab) => tab.group ?? PRIMARY_TAB_GROUP)
+            const usedGroups = tabsData
+                .map((tab) => tab.group)
                 .filter((v, i, self) => self.indexOf(v) === i);
 
             // Ensure that the used tab groups are set up
             usedGroups.forEach((groupId) => {
                 if (!this.tabGroups[groupId]) {
-                    this.tabGroups[groupId] = Object.entries(mixin.TABS).find(
-                        ([_, tab]) =>
-                            (tab.group ?? PRIMARY_TAB_GROUP) === groupId,
-                    )![0];
+                    this.tabGroups[groupId] = tabsData.find(
+                        (tab) => tab.group === groupId,
+                    )!.id;
                 }
             });
 
             // Construct tabs
-            const tabs = Object.entries(mixin.TABS).map(([tabId, tab]) => {
-                const active = this.tabGroups.primary === tabId;
+            const tabs = tabsData.map((tab) => {
+                const active = this.tabGroups[tab.group] === tab.id;
                 const cssClass = active ? 'active' : '';
 
                 return {
                     ...tab,
-                    id: tabId,
-                    group: tab.group ?? PRIMARY_TAB_GROUP,
                     active,
                     cssClass,
                 };

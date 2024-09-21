@@ -1,8 +1,8 @@
 import { ConstructorOf } from '@system/types/utils';
 
 // Component imports
-import { HandlebarsApplicationComponent } from '../../../mixins/component-handlebars-application-mixin';
-import { BaseActorSheet } from '../../base';
+import { HandlebarsApplicationComponent } from '../../mixins/component-handlebars-application-mixin';
+import { BaseActorSheet } from '../base';
 
 export interface SearchBarInputEventDetail {
     text: string;
@@ -22,12 +22,12 @@ type Params = {
     placeholder?: string;
 };
 
-export class CharacterSearchBarComponent extends HandlebarsApplicationComponent<
+export class ActorSearchBarComponent extends HandlebarsApplicationComponent<
     ConstructorOf<BaseActorSheet>,
     Params
 > {
     static TEMPLATE =
-        'systems/cosmere-rpg/templates/actors/character/components/search-bar.hbs';
+        'systems/cosmere-rpg/templates/actors/components/search-bar.hbs';
 
     /**
      * NOTE: Unbound methods is the standard for defining actions
@@ -45,14 +45,14 @@ export class CharacterSearchBarComponent extends HandlebarsApplicationComponent<
 
     /* --- Actions --- */
 
-    public static onClearActionsSearch(this: CharacterSearchBarComponent) {
+    public static onClearActionsSearch(this: ActorSearchBarComponent) {
         this.searchText = '';
 
         void this.render();
         this.triggerChange();
     }
 
-    public static onToggleActionsSearchSort(this: CharacterSearchBarComponent) {
+    public static onToggleActionsSearchSort(this: ActorSearchBarComponent) {
         this.sortDirection =
             this.sortDirection === SortDirection.Ascending
                 ? SortDirection.Descending

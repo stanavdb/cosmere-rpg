@@ -8,6 +8,8 @@ export type ComponentHandlebarsRenderOptions =
         componentRefs: string[];
     };
 
+type ComponentEvent<T extends AnyObject> = CustomEvent<{ params: T }>;
+
 export class HandlebarsApplicationComponent<
     BaseClass extends ApplicationV2Constructor<
         AnyObject,
@@ -24,7 +26,7 @@ export class HandlebarsApplicationComponent<
         ? R
         : never,
 > extends foundry.utils.EventEmitterMixin(Object) {
-    static emittedEvents = ['render'];
+    static emittedEvents = ['initialize', 'attachListeners', 'render'];
 
     /**
      * The template entry-point for the Component
@@ -78,6 +80,15 @@ export class HandlebarsApplicationComponent<
         >,
     ) {
         super();
+
+        this.addEventListener('initialize', (event) =>
+            this._onInitialize((event as ComponentEvent<Params>).detail.params),
+        );
+        this.addEventListener('attachListeners', (event) =>
+            this._onAttachListeners(
+                (event as ComponentEvent<Params>).detail.params,
+            ),
+        );
     }
 
     public get element(): HTMLElement {
@@ -208,7 +219,9 @@ export function ComponentHandlebarsApplicationMixin<
 
             // Load component templates
             const allTemplates = new Set<string>();
-            Object.values(mixin.COMPONENTS).forEach((componentCls) => {
+            Object.values(
+                (this.constructor as typeof mixin).COMPONENTS,
+            ).forEach((componentCls) => {
                 const componentTemplates = [
                     componentCls.TEMPLATE,
                     ...(componentCls.TEMPLATES ?? []),
@@ -235,66 +248,66 @@ export function ComponentHandlebarsApplicationMixin<
                 // Mark all components in rendered parts for rendering
                 Object.entries(renderedParts).forEach(
                     ([partId, partElement]) => {
-                        Object.entries(mixin.COMPONENTS).forEach(
-                            ([selector, componentCls]) => {
-                                // Find all elements that should contain the component
-                                const componentElements = $(partElement)
-                                    .find(selector)
-                                    .toArray();
+                        Object.entries(
+                            (this.constructor as typeof mixin).COMPONENTS,
+                        ).forEach(([selector, componentCls]) => {
+                            // Find all elements that should contain the component
+                            const componentElements = $(partElement)
+                                .find(selector)
+                                .toArray();
 
-                                componentElements.forEach(
-                                    (componentElement, i) => {
-                                        // Assign id
-                                        const id = i.toFixed();
+                            componentElements.forEach((componentElement, i) => {
+                                // Assign id
+                                const id = i.toFixed();
 
-                                        // Construct ref
-                                        const ref = `${partId}.${selector}.${id}`;
+                                // Construct ref
+                                const ref = `${partId}.${selector}.${id}`;
 
-                                        // Instantiate component class if no instance exists
-                                        if (!this._components[ref]) {
-                                            this._components[ref] = {
-                                                instance: new componentCls(
-                                                    id,
-                                                    selector,
-                                                    partId,
-                                                    ref,
-                                                    this,
-                                                ),
-                                                element: componentElement,
-                                            };
-
-                                            // Invoke lifecycle event
-                                            const params =
-                                                this.getComponentParams(
-                                                    componentElement,
-                                                );
-                                            this._components[
-                                                ref
-                                            ].instance._onInitialize(params);
-                                        } else {
-                                            this._components[ref].element =
-                                                componentElement;
-                                        }
-
-                                        // Assign data attribute
-                                        $(componentElement).attr(
-                                            'data-application-component-id',
+                                // Instantiate component class if no instance exists
+                                if (!this._components[ref]) {
+                                    this._components[ref] = {
+                                        instance: new componentCls(
                                             id,
-                                        );
+                                            selector,
+                                            partId,
+                                            ref,
+                                            this,
+                                        ),
+                                        element: componentElement,
+                                    };
 
-                                        // Apply classes
-                                        componentCls.CLASSES.forEach((cssCls) =>
-                                            $(componentElement).addClass(
-                                                cssCls,
-                                            ),
+                                    // Invoke lifecycle event
+                                    const params =
+                                        this.getComponentParams(
+                                            componentElement,
                                         );
+                                    this._components[
+                                        ref
+                                    ].instance.dispatchEvent(
+                                        new CustomEvent('initialize', {
+                                            detail: { params },
+                                        }),
+                                    );
+                                } else {
+                                    this._components[ref].element =
+                                        componentElement;
+                                }
 
-                                        // Mark component for rendering
-                                        options.componentRefs.push(ref);
-                                    },
+                                // Assign data attribute
+                                $(componentElement).attr(
+                                    'data-application-component-id',
+                                    id,
                                 );
-                            },
-                        );
+
+                                // Apply classes
+                                componentCls.CLASSES.forEach((cssCls) =>
+                                    $(componentElement).addClass(cssCls),
+                                );
+
+                                // Mark component for rendering
+                                options.componentRefs.push(ref);
+                            });
+                        });
                     },
                 );
             }
@@ -302,6 +315,8 @@ export function ComponentHandlebarsApplicationMixin<
             // Component rendering
             if (options.componentRefs.length > 0) {
                 for (const ref of options.componentRefs) {
+                    if (!this._components[ref]) continue;
+
                     // Get component instance and element
                     const { element: componentElement } = this._components[ref];
 
@@ -356,7 +371,8 @@ export function ComponentHandlebarsApplicationMixin<
 
             try {
                 const htmlString = await renderTemplate(
-                    mixin.COMPONENTS[selector].TEMPLATE,
+                    (this.constructor as typeof mixin).COMPONENTS[selector]
+                        .TEMPLATE,
                     componentContext,
                 );
                 const t = document.createElement('template');
@@ -438,7 +454,9 @@ export function ComponentHandlebarsApplicationMixin<
                 const params = this.getComponentParams(priorElement);
 
                 // Invoke lifecycle
-                instance._onAttachListeners(params);
+                instance.dispatchEvent(
+                    new CustomEvent('attachListeners', { detail: { params } }),
+                );
             });
         }
 
@@ -474,7 +492,9 @@ export function ComponentHandlebarsApplicationMixin<
             priorElement: HTMLElement,
         ) {
             // Get the component class (for config)
-            const componentCls = mixin.COMPONENTS[selector];
+            const componentCls = (this.constructor as typeof mixin).COMPONENTS[
+                selector
+            ];
 
             // Prepare return state
             const state = {} as Partial<ComponentState>;
@@ -566,7 +586,7 @@ export function ComponentHandlebarsApplicationMixin<
                                 : type === 'number'
                                   ? Number(value)
                                   : type === 'boolean'
-                                    ? Boolean(value)
+                                    ? value.toLowerCase() === 'true'
                                     : type === 'Object'
                                       ? (JSON.parse(value) as object)
                                       : undefined;
@@ -591,7 +611,9 @@ export function ComponentHandlebarsApplicationMixin<
             htmlElement: HTMLElement,
         ) {
             // Get the component actions
-            const actions = mixin.COMPONENTS[componentSelector].ACTIONS;
+            const actions = (this.constructor as typeof mixin).COMPONENTS[
+                componentSelector
+            ].ACTIONS;
 
             Object.entries(actions).forEach(([actionId, handler]) => {
                 // Construct selector

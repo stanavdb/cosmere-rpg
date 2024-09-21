@@ -4,11 +4,11 @@ import { ConstructorOf } from '@system/types/utils';
 import { Derived } from '@system/data/fields';
 
 // Dialog
-import { ConfigureResourceDialog } from '../../dialogs/configure-resource';
+import { ConfigureResourceDialog } from '../dialogs/configure-resource';
 
 // Component imports
-import { HandlebarsApplicationComponent } from '../../../mixins/component-handlebars-application-mixin';
-import { BaseActorSheet, BaseActorSheetRenderContext } from '../../base';
+import { HandlebarsApplicationComponent } from '../../mixins/component-handlebars-application-mixin';
+import { BaseActorSheet, BaseActorSheetRenderContext } from '../base';
 
 // NOTE: Must use a type instead of an interface to match `AnyObject` type
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
@@ -16,12 +16,12 @@ type Params = {
     resource: Resource;
 };
 
-export class CharacterResourceComponent extends HandlebarsApplicationComponent<
+export class ActorResourceComponent extends HandlebarsApplicationComponent<
     ConstructorOf<BaseActorSheet>,
     Params
 > {
     static readonly TEMPLATE =
-        'systems/cosmere-rpg/templates/actors/character/components/resource.hbs';
+        'systems/cosmere-rpg/templates/actors/components/resource.hbs';
 
     /**
      * NOTE: Unbound methods is the standard for defining actions
@@ -36,7 +36,7 @@ export class CharacterResourceComponent extends HandlebarsApplicationComponent<
 
     /* --- Actions --- */
 
-    public static onEditValue(this: CharacterResourceComponent, event: Event) {
+    public static onEditValue(this: ActorResourceComponent, event: Event) {
         if (!this.application.isEditable) return;
 
         const resourceBarElement = $(event.target!).closest(
@@ -63,7 +63,7 @@ export class CharacterResourceComponent extends HandlebarsApplicationComponent<
     }
 
     private static async onConfigureResource(
-        this: CharacterResourceComponent,
+        this: ActorResourceComponent,
         event: Event,
     ) {
         // Get the resource id
@@ -72,7 +72,7 @@ export class CharacterResourceComponent extends HandlebarsApplicationComponent<
             .data('id') as Resource;
 
         // Show dialog
-        await ConfigureResourceDialog.show(resourceId, this.application.actor);
+        await ConfigureResourceDialog.show(this.application.actor, resourceId);
     }
 
     /* --- Context --- */

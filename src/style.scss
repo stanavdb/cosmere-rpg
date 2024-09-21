@@ -97,4 +97,44 @@
 i.cosmere-icon {
     font-family: 'cosmere-dingbats';
     font-style: normal;
+
+    &.complication {
+        color: red;
+
+        &::after {
+            content: 'C';
+        }
+    }
+
+    &.opportunity {
+        color: #98a4f5;
+
+        &::after {
+            content: 'O'
+        }
+    }
+
+    &.action1::after {
+        content: '1';
+    }
+
+    &.action2::after {
+        content: '2';
+    }
+
+    &.action3::after {
+        content: '3';
+    }
+
+    &.reaction::after {
+        content: 'r';
+    }
+
+    &.free::after {
+        content: '0';
+    }
+
+    &.special::after {
+        content: '*';
+    }
 }

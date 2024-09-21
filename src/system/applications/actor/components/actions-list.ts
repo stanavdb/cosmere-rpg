@@ -9,8 +9,8 @@ import { AppContextMenu } from '@system/applications/utils/context-menu';
 import AppUtils from '@system/applications/utils';
 
 // Component imports
-import { HandlebarsApplicationComponent } from '../../../mixins/component-handlebars-application-mixin';
-import { BaseActorSheet, BaseActorSheetRenderContext } from '../../base';
+import { HandlebarsApplicationComponent } from '../../mixins/component-handlebars-application-mixin';
+import { BaseActorSheet, BaseActorSheetRenderContext } from '../base';
 import { SortDirection } from './search-bar';
 
 interface ActionItemState {
@@ -21,18 +21,19 @@ interface AdditionalItemData {
     descriptionHTML?: string;
 }
 
-interface RenderContext extends BaseActorSheetRenderContext {
-    actionsSearch: {
+export interface ActorActionsListComponentRenderContext
+    extends BaseActorSheetRenderContext {
+    actionsSearch?: {
         text: string;
         sort: SortDirection;
     };
 }
 
-export class CharacterActionsListComponent extends HandlebarsApplicationComponent<
+export class ActorActionsListComponent extends HandlebarsApplicationComponent<
     ConstructorOf<BaseActorSheet>
 > {
     static TEMPLATE =
-        'systems/cosmere-rpg/templates/actors/character/components/actions-list.hbs';
+        'systems/cosmere-rpg/templates/actors/components/actions-list.hbs';
 
     /**
      * NOTE: Unbound methods is the standard for defining actions
@@ -48,12 +49,12 @@ export class CharacterActionsListComponent extends HandlebarsApplicationComponen
     /**
      * Map of id to state
      */
-    private itemState: Record<string, ActionItemState> = {};
+    protected itemState: Record<string, ActionItemState> = {};
 
     /* --- Actions --- */
 
     public static onToggleActionDetails(
-        this: CharacterActionsListComponent,
+        this: ActorActionsListComponent,
         event: Event,
     ) {
         // Get item element
@@ -72,7 +73,7 @@ export class CharacterActionsListComponent extends HandlebarsApplicationComponen
             .toggleClass('expanded', this.itemState[itemId].expanded);
     }
 
-    public static onUseItem(this: CharacterActionsListComponent, event: Event) {
+    public static onUseItem(this: ActorActionsListComponent, event: Event) {
         // Get item
         const item = AppUtils.getItemFromEvent(event, this.application.actor);
         if (!item) return;
@@ -83,7 +84,10 @@ export class CharacterActionsListComponent extends HandlebarsApplicationComponen
 
     /* --- Context --- */
 
-    public async _prepareContext(params: unknown, context: RenderContext) {
+    public async _prepareContext(
+        params: unknown,
+        context: ActorActionsListComponentRenderContext,
+    ) {
         // Get action types
         const actionTypes = Object.keys(
             CONFIG.COSMERE.action.types,
@@ -118,14 +122,17 @@ export class CharacterActionsListComponent extends HandlebarsApplicationComponen
             }
         });
 
+        const searchText = context.actionsSearch?.text ?? '';
+        const sortDir = context.actionsSearch?.sort ?? SortDirection.Descending;
+
         return {
             ...context,
 
             sections: [
                 ...(await this.categorizeItemsByType(
                     nonActionItems,
-                    context.actionsSearch.text,
-                    context.actionsSearch.sort,
+                    searchText,
+                    sortDir,
                 )),
                 ...(
                     await Promise.all(
@@ -133,15 +140,12 @@ export class CharacterActionsListComponent extends HandlebarsApplicationComponen
                             const items = actionItems
                                 .filter((i) => i.system.type === type)
                                 .filter((i) =>
-                                    i.name
-                                        .toLowerCase()
-                                        .includes(context.actionsSearch.text),
+                                    i.name.toLowerCase().includes(searchText),
                                 )
                                 .sort(
                                     (a, b) =>
                                         a.name.compare(b.name) *
-                                        (context.actionsSearch.sort ===
-                                        SortDirection.Descending
+                                        (sortDir === SortDirection.Descending
                                             ? 1
                                             : -1),
                                 );
@@ -162,7 +166,7 @@ export class CharacterActionsListComponent extends HandlebarsApplicationComponen
         };
     }
 
-    private async categorizeItemsByType(
+    protected async categorizeItemsByType(
         items: CosmereItem[],
         filterText: string,
         sort: SortDirection,
@@ -201,7 +205,7 @@ export class CharacterActionsListComponent extends HandlebarsApplicationComponen
         );
     }
 
-    private async prepareItemData(items: CosmereItem[]) {
+    protected async prepareItemData(items: CosmereItem[]) {
         return await items.reduce(
             async (prev, item) => ({
                 ...(await prev),

@@ -46,3 +46,4 @@ export * from './talent';
 export * from './action';
 export * from './injury';
 export * from './connection';
+export * from './trait';

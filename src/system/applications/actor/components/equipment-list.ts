@@ -8,8 +8,8 @@ import { AppContextMenu } from '@system/applications/utils/context-menu';
 import AppUtils from '@system/applications/utils';
 
 // Component imports
-import { HandlebarsApplicationComponent } from '../../../mixins/component-handlebars-application-mixin';
-import { BaseActorSheet, BaseActorSheetRenderContext } from '../../base';
+import { HandlebarsApplicationComponent } from '../../mixins/component-handlebars-application-mixin';
+import { BaseActorSheet, BaseActorSheetRenderContext } from '../base';
 import { SortDirection } from './search-bar';
 
 interface EquipmentItemState {
@@ -27,11 +27,11 @@ interface RenderContext extends BaseActorSheetRenderContext {
     };
 }
 
-export class CharacterEquipmentListComponent extends HandlebarsApplicationComponent<
+export class ActorEquipmentListComponent extends HandlebarsApplicationComponent<
     ConstructorOf<BaseActorSheet>
 > {
     static TEMPLATE =
-        'systems/cosmere-rpg/templates/actors/character/components/equipment-list.hbs';
+        'systems/cosmere-rpg/templates/actors/components/equipment-list.hbs';
 
     /**
      * NOTE: Unbound methods is the standard for defining actions
@@ -56,7 +56,7 @@ export class CharacterEquipmentListComponent extends HandlebarsApplicationCompon
     /* --- Actions --- */
 
     public static onToggleActionDetails(
-        this: CharacterEquipmentListComponent,
+        this: ActorEquipmentListComponent,
         event: Event,
     ) {
         // Get item element
@@ -75,10 +75,7 @@ export class CharacterEquipmentListComponent extends HandlebarsApplicationCompon
             .toggleClass('expanded', this.itemState[itemId].expanded);
     }
 
-    public static onUseItem(
-        this: CharacterEquipmentListComponent,
-        event: Event,
-    ) {
+    public static onUseItem(this: ActorEquipmentListComponent, event: Event) {
         // Get item
         const item = AppUtils.getItemFromEvent(event, this.application.actor);
         if (!item) return;
@@ -88,7 +85,7 @@ export class CharacterEquipmentListComponent extends HandlebarsApplicationCompon
     }
 
     public static onToggleEquip(
-        this: CharacterEquipmentListComponent,
+        this: ActorEquipmentListComponent,
         event: Event,
     ) {
         if (!this.application.isEditable) return;
@@ -104,7 +101,7 @@ export class CharacterEquipmentListComponent extends HandlebarsApplicationCompon
     }
 
     public static onCycleEquip(
-        this: CharacterEquipmentListComponent,
+        this: ActorEquipmentListComponent,
         event: Event,
     ) {
         if (!this.application.isEditable) return;
@@ -139,7 +136,7 @@ export class CharacterEquipmentListComponent extends HandlebarsApplicationCompon
     }
 
     public static async onDecreaseQuantity(
-        this: CharacterEquipmentListComponent,
+        this: ActorEquipmentListComponent,
         event: Event,
     ) {
         // Get item
@@ -157,7 +154,7 @@ export class CharacterEquipmentListComponent extends HandlebarsApplicationCompon
     }
 
     public static async onIncreaseQuantity(
-        this: CharacterEquipmentListComponent,
+        this: ActorEquipmentListComponent,
         event: Event,
     ) {
         // Get item

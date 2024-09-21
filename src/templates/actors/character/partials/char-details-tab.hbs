@@ -3,7 +3,7 @@
 <div class="tab tab-content split flexrow {{tab.cssClass}}" data-tab="details" data-group="primary">
     <section class="skills">
         {{#each @root.attributeGroups as |group|}}
-        {{{component 'app-character-skills-group' group-id=group}}}
+        {{{component 'app-actor-skills-group' group-id=group}}}
         {{/each}}
         <app-character-expertises></app-character-expertises>
     </section>
