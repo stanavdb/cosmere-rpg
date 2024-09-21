@@ -546,8 +546,7 @@
             "ObscuredUnaffected": "Unaffected by obscured senses"
         },
         "ConfigureRecoveryDie": {
-            "Title": "Configure Recovery Die: {actor}",
-            "RecoveryDie": "Recovery Die"
+            "Title": "Configure Recovery Die: {actor}"
         }
     },
     "GENERIC": {
