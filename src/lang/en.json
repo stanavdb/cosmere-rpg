@@ -211,6 +211,7 @@
                 "ConfigureDefense": "Configure Defense",
                 "ConfigureMovement": "Configure Movement Rate",
                 "ConfigureSensesRange": "Configure Senses Range",
+                "ConfigureRecovery": "Configure Recovery Die",
                 "Tabs": {
                     "Details": "Details",
                     "Actions": "Actions",
@@ -543,6 +544,10 @@
         "ConfigureSensesRange": {
             "Title": "Configure Senses Range: {actor}",
             "ObscuredUnaffected": "Unaffected by obscured senses"
+        },
+        "ConfigureRecoveryDie": {
+            "Title": "Configure Recovery Die: {actor}",
+            "RecoveryDie": "Recovery Die"
         }
     },
     "GENERIC": {

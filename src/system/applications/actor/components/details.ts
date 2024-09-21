@@ -4,6 +4,7 @@ import { ConstructorOf } from '@system/types/utils';
 // Dialogs
 import { ConfigureMovementRateDialog } from '@system/applications/actor/dialogs/configure-movement-rate';
 import { ConfigureSensesRangeDialog } from '@system/applications/actor/dialogs/configure-senses-range';
+import { ConfigureRecoveryDieDialog } from '@system/applications/actor/dialogs/configure-recovery-die';
 
 // Component imports
 import { HandlebarsApplicationComponent } from '../../mixins/component-handlebars-application-mixin';
@@ -25,6 +26,7 @@ export class ActorDetailsComponent extends HandlebarsApplicationComponent<
         'long-rest': this.onLongRest,
         'configure-movement-rate': this.onConfigureMovementRate,
         'configure-senses-range': this.onConfigureSensesRange,
+        'configure-recovery': this.onConfigureRecovery,
     };
     /* eslint-enable @typescript-eslint/unbound-method */
 
@@ -44,6 +46,11 @@ export class ActorDetailsComponent extends HandlebarsApplicationComponent<
 
     private static onConfigureSensesRange(this: ActorDetailsComponent) {
         void ConfigureSensesRangeDialog.show(this.application.actor);
+    }
+
+    private static onConfigureRecovery(this: ActorDetailsComponent) {
+        if (this.application.actor.isCharacter())
+            void ConfigureRecoveryDieDialog.show(this.application.actor);
     }
 
     /* --- Context --- */

@@ -60,6 +60,14 @@
         </div>
         <span class="label">
             {{localize "COSMERE.Actor.Statistics.RecoveryDie"}}
+
+            {{#if isEditMode}}
+            <a data-action="configure-recovery"
+                data-tooltip="COSMERE.Actor.Sheet.ConfigureRecovery"
+            >
+                <i class="fa-solid fa-gear"></i>
+            </a>
+            {{/if}}
         </span>
     </div>
     {{else}}

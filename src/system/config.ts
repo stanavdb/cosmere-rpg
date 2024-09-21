@@ -230,12 +230,12 @@ const COSMERE: CosmereRPGConfig = {
             key: Resource.Health,
             label: 'COSMERE.Actor.Resource.Health',
             deflect: true,
-            formula: '10 + @attributes.str.value + @bonus',
+            formula: '10 + @attr.str + @bonus',
         },
         [Resource.Focus]: {
             key: Resource.Health,
             label: 'COSMERE.Actor.Resource.Focus',
-            formula: '2 + @attributes.wil.value + @bonus',
+            formula: '2 + @attr.wil + @bonus',
         },
         [Resource.Investiture]: {
             key: Resource.Health,

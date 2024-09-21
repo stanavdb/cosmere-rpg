@@ -120,7 +120,7 @@ export class CharacterActorDataModel extends CommonActorDataModel<CharacterActor
     }
 }
 
-const RECOVERY_DICE = ['d4', 'd6', 'd8', 'd10', 'd12', 'd20'];
+export const RECOVERY_DICE = ['d4', 'd6', 'd8', 'd10', 'd12', 'd20'];
 function willpowerToRecoveryDie(willpower: number) {
     return RECOVERY_DICE[
         Math.min(Math.ceil(willpower / 2), RECOVERY_DICE.length)
