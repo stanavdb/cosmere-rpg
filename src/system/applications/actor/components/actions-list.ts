@@ -232,6 +232,23 @@ export class ActorActionsListComponent extends HandlebarsApplicationComponent<
                 this,
                 'right',
                 [
+                    /**
+                     * NOTE: This is a TEMPORARY context menu option
+                     * until we can handle recharging properly.
+                     */
+                    {
+                        name: 'COSMERE.Item.Resources.Recharge.Label',
+                        icon: 'fa-solid fa-rotate-left',
+                        callback: (element) => {
+                            const item = AppUtils.getItemFromElement(
+                                element,
+                                this.application.actor,
+                            );
+                            if (!item) return;
+
+                            void item.recharge();
+                        },
+                    },
                     {
                         name: 'GENERIC.Button.Edit',
                         icon: 'fa-solid fa-pen-to-square',

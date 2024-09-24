@@ -73,7 +73,11 @@
                 {{localize ctx.consume.resourceRechargeLabel }}
             </span>
             {{else}}
+            {{#if (eq ctx.consume.resource 'charge')}}
+                <span>{{ ctx.consume.value }} ({{ctx.resources.charge.value}}/{{ctx.resources.charge.max}})</span>
+            {{else}}
             <span>{{ ctx.consume.value }} {{localize ctx.consume.resourceLabel }}</span>
+            {{/if}}
             {{/if}}
             {{/if}}
 

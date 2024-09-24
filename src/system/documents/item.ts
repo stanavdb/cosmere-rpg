@@ -507,6 +507,33 @@ export class CosmereItem<
 
     /* --- Functions --- */
 
+    public async recharge() {
+        if (!this.hasActivation() || !this.system.resources) return;
+
+        // Get resources
+        const resourceIds = (
+            Object.keys(this.system.resources) as ItemResource[]
+        ).filter(
+            (resourceId) =>
+                this.system.resources![resourceId]?.max != undefined,
+        );
+
+        // Recharge resource
+        await this.update({
+            system: {
+                resources: resourceIds.reduce(
+                    (updates, resourceId) => ({
+                        ...updates,
+                        [resourceId]: {
+                            value: this.system.resources![resourceId]!.max,
+                        },
+                    }),
+                    {},
+                ),
+            },
+        });
+    }
+
     public async markFavorite(index: number, render = true) {
         await this.update(
             {

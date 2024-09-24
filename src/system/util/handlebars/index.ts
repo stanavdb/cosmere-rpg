@@ -371,7 +371,14 @@ Handlebars.registerHelper(
                                     : {}),
                             };
                         })
-                        .filter((v) => !!v);
+                        .filter((v) => !!v)
+                        .reduce(
+                            (resources, resource) => ({
+                                ...resources,
+                                [resource.id]: resource,
+                            }),
+                            {},
+                        );
                 }
             }
 

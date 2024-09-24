@@ -75,18 +75,21 @@ export interface ItemContext {
     }>;
 
     hasResources: boolean;
-    resources: Partial<{
-        id: string;
-        label: string;
-        labelPlural: string;
-        value: number;
-        hasMax: boolean;
-        max: number;
+    resources: Record<
+        string,
+        Partial<{
+            id: string;
+            label: string;
+            labelPlural: string;
+            value: number;
+            hasMax: boolean;
+            max: number;
 
-        hasRecharge: boolean;
-        recharge?: string;
-        rechargeLabel?: string;
-    }>[];
+            hasRecharge: boolean;
+            recharge?: string;
+            rechargeLabel?: string;
+        }>
+    >;
 
     hasDamage: boolean;
     damage: Partial<{
