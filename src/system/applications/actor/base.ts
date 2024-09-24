@@ -151,7 +151,7 @@ export class BaseActorSheet<
         event.dataTransfer!.setData('document/item', ''); // Mark the type
     }
 
-    protected override _onDrop(event: DragEvent) {
+    protected override async _onDrop(event: DragEvent) {
         const data = TextEditor.getDragEventData(event) as unknown as {
             type: string;
             uuid: string;
@@ -164,7 +164,19 @@ export class BaseActorSheet<
         const document = fromUuidSync(data.uuid);
         if (!document) return;
 
-        if (document.parent !== this.actor) {
+        if (!(document instanceof foundry.abstract.Document)) {
+            const index = document as Record<string, string>;
+
+            // Get the pack
+            const pack = game.packs!.get(index.pack);
+            if (!pack) return;
+
+            // Get the document
+            const packDocument = (await pack.getDocument(index._id))!;
+
+            // Embed document
+            void this.actor.createEmbeddedDocuments(data.type, [packDocument]);
+        } else if (document.parent !== this.actor) {
             // Document not yet on this actor, create it
             void this.actor.createEmbeddedDocuments(data.type, [document]);
         }
