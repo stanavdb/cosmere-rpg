@@ -3,11 +3,13 @@ import {
     WeaponTraitId,
     HoldType,
     EquipHand,
+    WeaponType,
 } from '@system/types/cosmere';
 import { CosmereItem } from '@src/system/documents';
 
 // Mixins
 import { DataModelMixin } from '../mixins';
+import { IdItemMixin, IdItemData } from './mixins/id';
 import { TypedItemMixin, TypedItemData } from './mixins/typed';
 import {
     DescriptionItemMixin,
@@ -25,7 +27,8 @@ import { PhysicalItemMixin, PhysicalItemData } from './mixins/physical';
 import { ExpertiseItemMixin, ExpertiseItemData } from './mixins/expertise';
 
 export interface WeaponItemData
-    extends TypedItemData<WeaponId>,
+    extends IdItemData<WeaponId>,
+        TypedItemData<WeaponType>,
         DescriptionItemData,
         EquippableItemData,
         ActivatableItemData,
@@ -39,7 +42,14 @@ export class WeaponItemDataModel extends DataModelMixin<
     WeaponItemData,
     CosmereItem
 >(
-    TypedItemMixin(),
+    IdItemMixin({
+        initial: 'none',
+        choices: () => ['none', ...Object.keys(CONFIG.COSMERE.weapons)],
+    }),
+    TypedItemMixin({
+        initial: WeaponType.Light,
+        choices: () => Object.keys(CONFIG.COSMERE.weaponTypes),
+    }),
     DescriptionItemMixin(),
     EquippableItemMixin(),
     ActivatableItemMixin(),

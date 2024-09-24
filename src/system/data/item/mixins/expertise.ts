@@ -1,5 +1,5 @@
 import { CosmereItem } from '@system/documents/item';
-import { TypedItemData } from './typed';
+import { IdItemData } from './id';
 
 export interface ExpertiseItemData {
     expertise: boolean;
@@ -8,7 +8,7 @@ export interface ExpertiseItemData {
 export function ExpertiseItemMixin<P extends CosmereItem>() {
     return (
         base: typeof foundry.abstract.TypeDataModel<
-            ExpertiseItemData & TypedItemData,
+            ExpertiseItemData & IdItemData,
             P
         >,
     ) => {
@@ -17,9 +17,9 @@ export function ExpertiseItemMixin<P extends CosmereItem>() {
                 const superSchema = super.defineSchema();
 
                 // Ensure schema contains id (id mixin was used)
-                if (!('type' in superSchema)) {
+                if (!('id' in superSchema)) {
                     throw new Error(
-                        'ExpertiseItemMixin must be used in combination with TypedItemMixin',
+                        'ExpertiseItemMixin must be used in combination with IdItemMixin',
                     );
                 }
 
@@ -46,7 +46,7 @@ export function ExpertiseItemMixin<P extends CosmereItem>() {
                     // Check if the actor has the expertise
                     const actorHasExpertise =
                         parent.actor.system.expertises?.some(
-                            (expertise) => expertise.id === this.type,
+                            (expertise) => expertise.id === this.id,
                         );
 
                     // If the actor has the expertise, enable it

@@ -2,7 +2,7 @@ import { CosmereItem } from '@src/system/documents';
 
 // Mixins
 import { DataModelMixin } from '../mixins';
-import { TypedItemMixin, TypedItemData } from './mixins/typed';
+import { IdItemMixin, IdItemData } from './mixins/id';
 import {
     DescriptionItemMixin,
     DescriptionItemData,
@@ -13,7 +13,7 @@ import { PhysicalItemMixin, PhysicalItemData } from './mixins/physical';
 import { ExpertiseItemMixin, ExpertiseItemData } from './mixins/expertise';
 
 export interface ArmorItemData
-    extends TypedItemData,
+    extends IdItemData,
         DescriptionItemData,
         EquippableItemData,
         ExpertiseItemData,
@@ -26,7 +26,10 @@ export class ArmorItemDataModel extends DataModelMixin<
     ArmorItemData,
     CosmereItem
 >(
-    TypedItemMixin(),
+    IdItemMixin({
+        initial: 'none',
+        choices: () => ['none', ...Object.keys(CONFIG.COSMERE.armors)],
+    }),
     DescriptionItemMixin(),
     EquippableItemMixin(),
     ExpertiseItemMixin(),
