@@ -137,4 +137,8 @@ i.cosmere-icon {
     &.special::after {
         content: '*';
     }
+
+    &.passive::after {
+        content: '8';
+    }
 }
