@@ -44,7 +44,6 @@ export class WeaponItemDataModel extends DataModelMixin<
 >(
     IdItemMixin({
         initial: 'none',
-        choices: () => ['none', ...Object.keys(CONFIG.COSMERE.weapons)],
     }),
     TypedItemMixin({
         initial: WeaponType.Light,

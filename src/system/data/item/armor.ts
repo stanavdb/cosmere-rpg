@@ -28,7 +28,6 @@ export class ArmorItemDataModel extends DataModelMixin<
 >(
     IdItemMixin({
         initial: 'none',
-        choices: () => ['none', ...Object.keys(CONFIG.COSMERE.armors)],
     }),
     DescriptionItemMixin(),
     EquippableItemMixin(),
