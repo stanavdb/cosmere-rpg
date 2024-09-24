@@ -19,6 +19,7 @@ export class EditExpertisesDialog extends HandlebarsApplicationMixin(
             tag: 'dialog',
             position: {
                 width: 300,
+                height: 600,
             },
 
             /**
@@ -313,6 +314,9 @@ export class EditExpertisesDialog extends HandlebarsApplicationMixin(
                     id,
                     ...config,
                     hasExpertise: this.actor.hasExpertise(type, id),
+                    locked:
+                        this.actor.system.expertises?.find((e) => e.id === id)
+                            ?.locked ?? false,
                 }),
             );
         } else if (type === ExpertiseType.Armor) {
@@ -321,6 +325,9 @@ export class EditExpertisesDialog extends HandlebarsApplicationMixin(
                     id,
                     ...config,
                     hasExpertise: this.actor.hasExpertise(type, id),
+                    locked:
+                        this.actor.system.expertises?.find((e) => e.id === id)
+                            ?.locked ?? false,
                 }),
             );
         } else if (type === ExpertiseType.Cultural) {
@@ -329,6 +336,9 @@ export class EditExpertisesDialog extends HandlebarsApplicationMixin(
                     id,
                     ...config,
                     hasExpertise: this.actor.hasExpertise(type, id),
+                    locked:
+                        this.actor.system.expertises?.find((e) => e.id === id)
+                            ?.locked ?? false,
                 }),
             );
         } else {

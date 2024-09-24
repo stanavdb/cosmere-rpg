@@ -10,14 +10,24 @@
             <ul>
                 {{#each category.configuredExpertises as |expertise|}}
                 <li class="form-group configured">
-                    <input type="checkbox" name="{{category.type}}.{{expertise.id}}" {{#if expertise.hasExpertise}}checked{{/if}}>
+                    <input type="checkbox" name="{{category.type}}.{{expertise.id}}" 
+                        {{#if expertise.hasExpertise}}checked{{/if}}
+                        {{#if expertise.locked}}readonly{{/if}}
+                    >
                     <label>{{localize expertise.label}}</label>
+                    {{#if expertise.hasExpertise}}
+                    {{log expertise}}
+                    {{/if}}
                 </li>
                 {{/each}}
 
                 {{#each category.customExpertises as |expertise|}}
                 <li class="form-group custom">
-                    <input type="text" name="{{category.type}}.{{expertise.id}}" value="{{expertise.label}}">
+                    <input type="text" name="{{category.type}}.{{expertise.id}}" value="{{expertise.label}}" 
+                        {{#if expertise.locked}}readonly{{/if}}
+                    >
+
+                    {{#if (not expertise.locked)}}
                     <a data-action="remove-custom-expertise"
                         data-category="{{category.type}}"
                         data-id="{{expertise.id}}"
@@ -25,6 +35,7 @@
                     >
                         <i class="fa-solid fa-trash"></i>
                     </a>
+                    {{/if}}
                 </li>
                 {{/each}}
 

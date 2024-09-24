@@ -23,11 +23,12 @@ interface DeflectData {
     source?: DeflectSource;
 }
 
-interface ExpertiseData {
+export interface ExpertiseData {
     type: ExpertiseType;
     id: string;
     label: string;
     custom?: boolean;
+    locked?: boolean;
 }
 
 interface CurrencyDenominationData {
@@ -217,6 +218,7 @@ export class CommonActorDataModel<
                         blank: false,
                     }),
                     custom: new foundry.data.fields.BooleanField(),
+                    locked: new foundry.data.fields.BooleanField(),
                 }),
             ),
             languages: new foundry.data.fields.ArrayField(

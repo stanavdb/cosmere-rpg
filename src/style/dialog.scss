@@ -2,6 +2,11 @@ dialog.application {
     label:has(+ input[type="checkbox"][readonly]) {
         opacity: .5;
     }
+
+    form {
+        height: 100%;
+        overflow: auto;
+    }
 }
 
 dialog.application ul {
