@@ -155,6 +155,7 @@ export const enum WeaponTraitId {
     TwoHanded = 'two_handed',
     Unique = 'unique',
     Fragile = 'fragile',
+    Reach = 'reach',
 }
 
 /**
@@ -215,6 +216,10 @@ export const enum EquipHand {
     Off = 'off_hand',
 }
 
+export const enum EquipmentType {
+    Basic = 'basic',
+}
+
 export const enum ActionType {
     Basic = 'basic',
 }
@@ -251,9 +256,12 @@ export const enum ItemType {
     Weapon = 'weapon',
     Armor = 'armor',
     Equipment = 'equipment',
+    Loot = 'loot',
 
     Ancestry = 'ancestry',
+    Culture = 'culture',
     Path = 'path',
+    Specialty = 'specialty',
     Talent = 'talent',
     Trait = 'trait',
 

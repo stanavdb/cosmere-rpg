@@ -282,13 +282,25 @@
                     "label": "Equipment",
                     "label_plural": "Equipment"
                 },
+                "Loot": {
+                    "label": "Loot",
+                    "label_plural": "Loot"
+                },
                 "Ancestry": {
                     "label": "Ancestry",
                     "label_plural": "Ancestries"
                 },
+                "Culture": {
+                    "label": "Culture",
+                    "label_plural": "Cultures"
+                },
                 "Path": {
                     "label": "Path",
                     "label_plural": "Paths"
+                },
+                "Specialty": {
+                    "label": "Specialty",
+                    "label_plural": "Specialties"
                 },
                 "Talent": {
                     "label": "Talent",
@@ -335,7 +347,8 @@
                     "Thrown": "Thrown",
                     "TwoHanded": "Two-Handed",
                     "Unique": "Unique",
-                    "Fragile": "Fragile"
+                    "Fragile": "Fragile",
+                    "Reach": "Reach"
                 },
                 "Strike": "Strike",
                 "Improvised": "Improvised Weapon",
@@ -351,6 +364,11 @@
                     "Presentable": "Presentable"
                 },
                 "Deflect": "Deflect"
+            },
+            "Equipment": {
+                "Type": {
+                    "Basic": "Basic"
+                }
             },
             "Action": {
                 "Type": {
@@ -403,6 +421,7 @@
                     "Plural": "Uses"
                 },
                 "Recharge": {
+                    "Label": "Recharge",
                     "PerScene": "Per scene"
                 }
             },

@@ -28,6 +28,7 @@ import {
     HoldType,
     EquipHand,
     PathType,
+    EquipmentType,
 } from './cosmere';
 
 export interface SizeConfig {
@@ -196,6 +197,16 @@ export interface EquipHandConfig {
 
 export interface CultureConfig {
     label: string;
+    reference?: string;
+}
+
+export interface AncestriesConfig {
+    label: string;
+    reference?: string;
+}
+
+export interface EquipmentTypeConfig {
+    label: string;
 }
 
 export interface CosmereRPGConfig {
@@ -229,6 +240,10 @@ export interface CosmereRPGConfig {
             hold: Record<HoldType, HoldTypeConfig>;
             hand: Record<EquipHand, EquipHandConfig>;
         };
+
+        equipment: {
+            types: Record<EquipmentType, EquipmentTypeConfig>;
+        };
     };
 
     weaponTypes: Record<WeaponType, WeaponTypeConfig>;
@@ -261,4 +276,5 @@ export interface CosmereRPGConfig {
     damageTypes: Record<DamageType, DamageTypeConfig>;
 
     cultures: Record<string, CultureConfig>;
+    ancestries: Record<string, AncestriesConfig>;
 }

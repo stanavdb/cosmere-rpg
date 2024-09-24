@@ -12,7 +12,10 @@ import { CosmereActor } from './actor';
 import {
     WeaponItemDataModel,
     ArmorItemDataModel,
+    AncestryItemDataModel,
     PathItemDataModel,
+    SpecialtyItemDataModel,
+    TalentItemDataModel,
     ConnectionItemDataModel,
     InjuryItemDataModel,
     ActionItemDataModel,
@@ -78,8 +81,20 @@ export class CosmereItem<
         return this.type === ItemType.Armor;
     }
 
+    public isAncestry(): this is CosmereItem<AncestryItemDataModel> {
+        return this.type === ItemType.Ancestry;
+    }
+
     public isPath(): this is CosmereItem<PathItemDataModel> {
         return this.type === ItemType.Path;
+    }
+
+    public isSpecialty(): this is CosmereItem<SpecialtyItemDataModel> {
+        return this.type === ItemType.Specialty;
+    }
+
+    public isTalent(): this is CosmereItem<TalentItemDataModel> {
+        return this.type === ItemType.Talent;
     }
 
     public isConnection(): this is CosmereItem<ConnectionItemDataModel> {

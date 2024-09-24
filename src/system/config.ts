@@ -29,6 +29,7 @@ import {
     HoldType,
     PathType,
     EquipHand,
+    EquipmentType,
 } from './types/cosmere';
 
 const COSMERE: CosmereRPGConfig = {
@@ -378,13 +379,25 @@ const COSMERE: CosmereRPGConfig = {
                 label: 'COSMERE.Item.Type.Equipment.label',
                 labelPlural: 'COSMERE.Item.Type.Equipment.label_plural',
             },
+            [ItemType.Loot]: {
+                label: 'COSMERE.Item.Type.Loot.label',
+                labelPlural: 'COSMERE.Item.Type.Loot.label_plural',
+            },
             [ItemType.Ancestry]: {
                 label: 'COSMERE.Item.Type.Ancestry.label',
                 labelPlural: 'COSMERE.Item.Type.Ancestry.label_plural',
             },
+            [ItemType.Culture]: {
+                label: 'COSMERE.Item.Type.Culture.label',
+                labelPlural: 'COSMERE.Item.Type.Culture.label_plural',
+            },
             [ItemType.Path]: {
                 label: 'COSMERE.Item.Type.Path.label',
                 labelPlural: 'COSMERE.Item.Type.Path.label_plural',
+            },
+            [ItemType.Specialty]: {
+                label: 'COSMERE.Item.Type.Specialty.label',
+                labelPlural: 'COSMERE.Item.Type.Specialty.label_plural',
             },
             [ItemType.Talent]: {
                 label: 'COSMERE.Item.Type.Talent.label',
@@ -471,6 +484,13 @@ const COSMERE: CosmereRPGConfig = {
                 },
                 [EquipHand.Off]: {
                     label: 'COSMERE.Item.Equip.Hand.Off.Label',
+                },
+            },
+        },
+        equipment: {
+            types: {
+                [EquipmentType.Basic]: {
+                    label: 'COSMERE.Item.Equipment.Type.Basic',
                 },
             },
         },
@@ -571,6 +591,9 @@ const COSMERE: CosmereRPGConfig = {
             [WeaponTraitId.Fragile]: {
                 label: 'COSMERE.Item.Weapon.Trait.Fragile',
             },
+            [WeaponTraitId.Reach]: {
+                label: 'COSMERE.Item.Weapon.Trait.Reach',
+            },
         },
 
         armorTraits: {
@@ -670,6 +693,7 @@ const COSMERE: CosmereRPGConfig = {
     },
 
     cultures: {},
+    ancestries: {},
 };
 
 export default COSMERE;
