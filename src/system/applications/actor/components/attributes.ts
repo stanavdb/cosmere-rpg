@@ -5,7 +5,7 @@ import { ConstructorOf } from '@system/types/utils';
 import { ConfigureDefenseDialog } from '@system/applications/actor/dialogs/configure-defense';
 
 // Component imports
-import { HandlebarsApplicationComponent } from '../../mixins/component-handlebars-application-mixin';
+import { HandlebarsApplicationComponent } from '@system/applications/component-system';
 import { BaseActorSheet, BaseActorSheetRenderContext } from '../base';
 
 export class ActorAttributesComponent extends HandlebarsApplicationComponent<
@@ -81,3 +81,6 @@ export class ActorAttributesComponent extends HandlebarsApplicationComponent<
         };
     }
 }
+
+// Register
+ActorAttributesComponent.register('app-actor-attributes');

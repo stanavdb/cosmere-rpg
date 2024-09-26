@@ -7,7 +7,7 @@ import { EditCreatureTypeDialog } from '@system/applications/actor/dialogs/edit-
 import ActorUtils from '@system/util/actor';
 
 // Component imports
-import { HandlebarsApplicationComponent } from '../../../mixins/component-handlebars-application-mixin';
+import { HandlebarsApplicationComponent } from '@system/applications/component-system';
 import {
     AdversarySheet,
     AdversarySheetRenderContext,
@@ -69,3 +69,6 @@ export class AdversaryHeaderComponent extends HandlebarsApplicationComponent<
         });
     }
 }
+
+// Register
+AdversaryHeaderComponent.register('app-adversary-header');

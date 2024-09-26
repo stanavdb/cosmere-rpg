@@ -4,7 +4,7 @@ import { CosmereItem } from '@system/documents';
 import { AppContextMenu } from '@system/applications/utils/context-menu';
 
 // Component imports
-import { HandlebarsApplicationComponent } from '../../mixins/component-handlebars-application-mixin';
+import { HandlebarsApplicationComponent } from '@system/applications/component-system';
 import { BaseActorSheet, BaseActorSheetRenderContext } from '../base';
 import { SortDirection } from './search-bar';
 
@@ -106,7 +106,7 @@ export class ActorEffectsListComponent extends HandlebarsApplicationComponent<
         if (this.application.isEditable) {
             // Create context menu
             AppContextMenu.create(
-                this,
+                this as AppContextMenu.Parent,
                 'right',
                 [
                     {
@@ -184,3 +184,6 @@ export class ActorEffectsListComponent extends HandlebarsApplicationComponent<
         }
     }
 }
+
+// Register
+ActorEffectsListComponent.register('app-actor-effects-list');

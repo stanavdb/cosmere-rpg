@@ -1,6 +1,6 @@
-export * from './expertises';
-export * from './ancestry';
-export * from './paths';
-export * from './goals-list';
-export * from './connections-list';
-export * from './favorites';
+import './favorites';
+import './expertises';
+import './paths';
+import './ancestry';
+import './goals-list';
+import './connections-list';

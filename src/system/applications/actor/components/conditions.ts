@@ -2,7 +2,7 @@ import { Condition } from '@system/types/cosmere';
 import { ConstructorOf } from '@system/types/utils';
 
 // Component imports
-import { HandlebarsApplicationComponent } from '../../mixins/component-handlebars-application-mixin';
+import { HandlebarsApplicationComponent } from '@system/applications/component-system';
 import { BaseActorSheetRenderContext } from '../base';
 import { BaseActorSheet } from '../base';
 
@@ -62,3 +62,6 @@ export class ActorConditionsComponent extends HandlebarsApplicationComponent<
         });
     }
 }
+
+// Register
+ActorConditionsComponent.register('app-actor-conditions');

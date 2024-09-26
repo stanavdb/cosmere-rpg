@@ -7,7 +7,7 @@ import { Derived } from '@system/data/fields';
 import { ConfigureResourceDialog } from '../dialogs/configure-resource';
 
 // Component imports
-import { HandlebarsApplicationComponent } from '../../mixins/component-handlebars-application-mixin';
+import { HandlebarsApplicationComponent } from '@system/applications/component-system';
 import { BaseActorSheet, BaseActorSheetRenderContext } from '../base';
 
 // NOTE: Must use a type instead of an interface to match `AnyObject` type
@@ -103,3 +103,6 @@ export class ActorResourceComponent extends HandlebarsApplicationComponent<
         });
     }
 }
+
+// Register
+ActorResourceComponent.register('app-actor-resource');

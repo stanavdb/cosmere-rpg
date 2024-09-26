@@ -4,7 +4,7 @@ import { ConnectionItemDataModel } from '@system/data/item';
 import { ConstructorOf } from '@system/types/utils';
 
 // Component imports
-import { HandlebarsApplicationComponent } from '../../../mixins/component-handlebars-application-mixin';
+import { HandlebarsApplicationComponent } from '@system/applications/component-system';
 import { BaseActorSheet, BaseActorSheetRenderContext } from '../../base';
 
 interface ConnectionItemState {
@@ -57,7 +57,7 @@ export class CharacterConnectionsListComponent extends HandlebarsApplicationComp
                 '.connection',
             )!;
             const targetRect = target.getBoundingClientRect();
-            const rootRect = this.element.getBoundingClientRect();
+            const rootRect = this.element!.getBoundingClientRect();
 
             this.controlsDropdownPosition = {
                 top: targetRect.bottom - rootRect.top,
@@ -195,7 +195,7 @@ export class CharacterConnectionsListComponent extends HandlebarsApplicationComp
 
     private editConnection(id: string) {
         // Get goal element
-        const element = $(this.element).find(
+        const element = $(this.element!).find(
             `.connection:not(.details)[data-id="${id}"]`,
         );
 
@@ -245,3 +245,6 @@ export class CharacterConnectionsListComponent extends HandlebarsApplicationComp
         });
     }
 }
+
+// Register
+CharacterConnectionsListComponent.register('app-character-connections-list');

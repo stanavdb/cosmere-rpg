@@ -99,10 +99,5 @@ export class AdversaryActionsListComponent extends ActorActionsListComponent {
     }
 }
 
-/* --- Helpers --- */
-
-function getActionName(item: CosmereItem): string {
-    return item.isWeapon()
-        ? `${game.i18n!.localize('COSMERE.Item.Weapon.Strike')}: ${item.name}`
-        : item.name;
-}
+// Register
+AdversaryActionsListComponent.register('app-adversary-actions-list');

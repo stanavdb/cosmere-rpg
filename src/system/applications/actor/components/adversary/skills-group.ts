@@ -2,7 +2,7 @@ import { AttributeGroup, Skill } from '@system/types/cosmere';
 import { ConstructorOf, MouseButton } from '@system/types/utils';
 
 // Component imports
-import { HandlebarsApplicationComponent } from '../../../mixins/component-handlebars-application-mixin';
+import { HandlebarsApplicationComponent } from '@system/applications/component-system';
 import {
     AdversarySheet,
     AdversarySheetRenderContext,
@@ -117,3 +117,6 @@ export class AdversarySkillsGroupComponent extends HandlebarsApplicationComponen
         });
     }
 }
+
+// Register
+AdversarySkillsGroupComponent.register('app-adversary-skills-group');

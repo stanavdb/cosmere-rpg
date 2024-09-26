@@ -1,11 +1,8 @@
 import { CosmereActor } from '@system/documents';
 import { AnyObject, DeepPartial } from '@system/types/utils';
 
-// Components
-import { ActorSkillsGroupComponent } from '../components';
-
 // Mixins
-import { ComponentHandlebarsApplicationMixin } from '@system/applications/mixins';
+import { ComponentHandlebarsApplicationMixin } from '@system/applications/component-system';
 
 const { ApplicationV2, DocumentSheetV2 } = foundry.applications.api;
 
@@ -25,13 +22,6 @@ export class ConfigureSkillsDialog extends ComponentHandlebarsApplicationMixin(
             position: {
                 width: 400,
             },
-        },
-    );
-
-    static COMPONENTS = foundry.utils.mergeObject(
-        foundry.utils.deepClone(super.COMPONENTS),
-        {
-            'app-actor-skills-group': ActorSkillsGroupComponent,
         },
     );
 

@@ -2,11 +2,6 @@ import { AdversaryActor } from '@system/documents';
 
 // Components
 import { SearchBarInputEvent } from './components';
-import {
-    AdversaryHeaderComponent,
-    AdversarySkillsGroupComponent,
-    AdversaryActionsListComponent,
-} from './components/adversary';
 
 // Dialogs
 import { ConfigureSkillsDialog } from './dialogs/configure-skills';
@@ -49,15 +44,6 @@ export class AdversarySheet extends BaseActorSheet<AdversarySheetRenderContext> 
         },
     );
     /* eslint-enable @typescript-eslint/unbound-method */
-
-    static COMPONENTS = foundry.utils.mergeObject(
-        foundry.utils.deepClone(super.COMPONENTS),
-        {
-            'app-adversary-header': AdversaryHeaderComponent,
-            'app-adversary-skills-group': AdversarySkillsGroupComponent,
-            'app-adversary-actions-list': AdversaryActionsListComponent,
-        },
-    );
 
     static PARTS = foundry.utils.mergeObject(
         foundry.utils.deepClone(super.PARTS),
@@ -106,7 +92,7 @@ export class AdversarySheet extends BaseActorSheet<AdversarySheetRenderContext> 
 
         void this.render({
             parts: [],
-            componentRefs: ['sheet-content.app-adversary-actions-list.0'],
+            components: ['app-adversary-actions-list'],
         });
     }
 

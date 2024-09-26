@@ -2,7 +2,7 @@ import { AttributeGroup, Skill } from '@system/types/cosmere';
 import { ConstructorOf, MouseButton } from '@system/types/utils';
 
 // Component imports
-import { HandlebarsApplicationComponent } from '../../mixins/component-handlebars-application-mixin';
+import { HandlebarsApplicationComponent } from '@system/applications/component-system';
 import { BaseActorSheet, BaseActorSheetRenderContext } from '../base';
 
 // NOTE: Must use type here instead of interface as an interface doesn't match AnyObject type
@@ -98,3 +98,6 @@ export class ActorSkillsGroupComponent extends HandlebarsApplicationComponent<
         });
     }
 }
+
+// Register
+ActorSkillsGroupComponent.register('app-actor-skills-group');

@@ -14,19 +14,19 @@
             flex: 1;
 
             &:not(:first-child) {
-                margin-left: .25rem;
+                margin-left: 0.25rem;
             }
 
             &:not(:last-child) {
-                margin-right: .25rem;
+                margin-right: 0.25rem;
             }
         }
     }
 
-    .tab[data-tab="goals"] {
+    .tab[data-tab='goals'] {
         .details-text {
             .label {
-                opacity: .5;
+                opacity: 0.5;
             }
 
             textarea {
@@ -37,7 +37,6 @@
 
                 &:read-only {
                     background: #0b0a13;
-
                 }
             }
         }
@@ -63,7 +62,7 @@
             margin-top: 1rem;
 
             .title {
-                flex: 1
+                flex: 1;
             }
         }
 
@@ -71,7 +70,7 @@
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
-            margin-top: .2rem;
+            margin-top: 0.2rem;
 
             .expertise {
                 border: 1px solid;
@@ -103,7 +102,7 @@
 
             .item-type {
                 font-size: 9pt;
-                opacity: .75;
+                opacity: 0.75;
             }
         }
 
@@ -112,7 +111,7 @@
             align-items: center;
             justify-content: center;
             padding: 0.25rem 0;
-            opacity: .5;
+            opacity: 0.5;
             box-shadow: 0 0 1rem 0.1rem black;
             background: #00000036;
         }
@@ -142,7 +141,7 @@
 
                 .item-type {
                     font-size: 9pt;
-                    opacity: .75;
+                    opacity: 0.75;
                 }
             }
 
@@ -156,25 +155,28 @@
                 align-items: center;
                 justify-content: center;
                 padding: 0.45rem 0;
-                opacity: .5;
+                opacity: 0.5;
                 box-shadow: 0 0 1rem 0.1rem black;
                 background: #00000036;
             }
         }
     }
 
-    app-character-goals-list, app-character-connections-list {
+    app-character-goals-list,
+    app-character-connections-list {
         position: relative;
         margin-top: 1rem;
         display: flex;
         flex-direction: column;
 
-        .goals-list, .connections-list {
+        .goals-list,
+        .connections-list {
             list-style: none;
             padding: 0;
             margin: 0 0 0.3rem 0;
 
-            .goal, .connection {
+            .goal,
+            .connection {
                 display: flex;
                 align-items: center;
 
@@ -182,7 +184,7 @@
                 padding: 0 0.5rem;
 
                 background: #302831;
-                
+
                 &:not(.collapsed):not(:first-child):not(:last-child) {
                     border-bottom: 1px solid #302831;
                 }
@@ -201,8 +203,8 @@
 
                 &.header {
                     background: #0f0610;
-                    border-top-left-radius: .3rem;
-                    border-top-right-radius: .3rem;
+                    border-top-left-radius: 0.3rem;
+                    border-top-right-radius: 0.3rem;
                 }
 
                 &.collapsed {
@@ -211,8 +213,8 @@
                 }
 
                 &:last-child {
-                    border-bottom-left-radius: .3rem;
-                    border-bottom-right-radius: .3rem;
+                    border-bottom-left-radius: 0.3rem;
+                    border-bottom-right-radius: 0.3rem;
                 }
 
                 &.new {
@@ -220,7 +222,7 @@
                     justify-content: center;
 
                     a {
-                        opacity: .6;
+                        opacity: 0.6;
 
                         &:hover {
                             opacity: 1;
@@ -230,22 +232,22 @@
 
                 &.achieved {
                     > * {
-                        opacity: .5;
+                        opacity: 0.5;
                     }
 
                     > i {
-                        opacity: .25;
+                        opacity: 0.25;
                     }
                 }
 
                 > i {
                     font-size: 5pt;
-                    opacity: .5;
+                    opacity: 0.5;
                 }
 
                 .title {
                     flex: 1;
-                    margin-left: .5rem;
+                    margin-left: 0.5rem;
 
                     &.toggle-details {
                         cursor: pointer;
@@ -266,11 +268,11 @@
 
                     li {
                         border: 1px solid #665467;
-                        width: .75rem;
-                        height: .75rem;
+                        width: 0.75rem;
+                        height: 0.75rem;
                         border-radius: 50%;
                         background: #0f0610;
-                        margin: 0 .1rem;
+                        margin: 0 0.1rem;
 
                         &.active {
                             background: currentColor;
@@ -311,7 +313,7 @@
             justify-content: flex-end;
 
             a:not(.active) {
-                opacity: .5;
+                opacity: 0.5;
 
                 &:hover {
                     opacity: 1;
@@ -340,7 +342,7 @@
             justify-content: center;
             height: 2rem;
             border: 1px dashed;
-            opacity: .5;
+            opacity: 0.5;
             border-radius: 0.3rem;
             box-shadow: 0 0 1rem 0.1rem black;
             margin-top: 0.5rem;
@@ -384,14 +386,16 @@
 
                 .col.controls {
                     width: unset;
-                    margin-left: .5rem;
+                    margin-left: 0.5rem;
                 }
 
                 &.usable {
-                    .img:hover, .img:has(+ .name:hover), .img:has(+ .activation:hover) {
+                    .img:hover,
+                    .img:has(+ .name:hover),
+                    .img:has(+ .activation:hover) {
                         .roll-icon {
                             display: block;
-                            opacity: .6;
+                            opacity: 0.6;
                             animation: rotating 2s linear infinite;
                             width: 90%;
                             height: 90%;
@@ -405,7 +409,7 @@
                 background: #af38d4;
                 border-radius: 1px;
                 box-shadow: 0 0 0.3rem 0 #af38d4;
-                opacity: .75;
+                opacity: 0.75;
             }
         }
     }
@@ -413,9 +417,9 @@
 
 @keyframes rotating {
     from {
-      transform: rotate(0deg);
+        transform: rotate(0deg);
     }
     to {
-      transform: rotate(360deg);
+        transform: rotate(360deg);
     }
-  }
+}

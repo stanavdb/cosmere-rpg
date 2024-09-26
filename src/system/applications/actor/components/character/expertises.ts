@@ -4,7 +4,7 @@ import { ConstructorOf } from '@system/types/utils';
 import { EditExpertisesDialog } from '../../dialogs/edit-expertises';
 
 // Component imports
-import { HandlebarsApplicationComponent } from '../../../mixins/component-handlebars-application-mixin';
+import { HandlebarsApplicationComponent } from '@system/applications/component-system';
 import { BaseActorSheet, BaseActorSheetRenderContext } from '../../base';
 
 export class CharacterExpertisesComponent extends HandlebarsApplicationComponent<
@@ -47,3 +47,6 @@ export class CharacterExpertisesComponent extends HandlebarsApplicationComponent
         });
     }
 }
+
+// Register
+CharacterExpertisesComponent.register('app-character-expertises');

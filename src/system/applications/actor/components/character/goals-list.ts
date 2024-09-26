@@ -1,7 +1,7 @@
 import { ConstructorOf, MouseButton } from '@system/types/utils';
 
 // Component imports
-import { HandlebarsApplicationComponent } from '../../../mixins/component-handlebars-application-mixin';
+import { HandlebarsApplicationComponent } from '@system/applications/component-system';
 import { BaseActorSheetRenderContext } from '../../base';
 
 import { CharacterSheet } from '../../character-sheet';
@@ -56,7 +56,7 @@ export class CharacterGoalsListComponent extends HandlebarsApplicationComponent<
                 '.goal',
             )!;
             const targetRect = target.getBoundingClientRect();
-            const rootRect = this.element.getBoundingClientRect();
+            const rootRect = this.element!.getBoundingClientRect();
 
             this.controlsDropdownPosition = {
                 top: targetRect.bottom - rootRect.top,
@@ -229,7 +229,7 @@ export class CharacterGoalsListComponent extends HandlebarsApplicationComponent<
 
     private editGoal(index: number) {
         // Get goal element
-        const element = $(this.element).find(`.goal[data-id="${index}"]`);
+        const element = $(this.element!).find(`.goal[data-id="${index}"]`);
 
         // Get span element
         const span = element.find('span.title');
@@ -278,3 +278,6 @@ export class CharacterGoalsListComponent extends HandlebarsApplicationComponent<
         });
     }
 }
+
+// Register
+CharacterGoalsListComponent.register('app-character-goals-list');

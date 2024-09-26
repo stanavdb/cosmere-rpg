@@ -8,7 +8,7 @@ import { DragDropComponentMixin } from '@system/applications/mixins/drag-drop';
 import AppUtils from '@system/applications/utils';
 
 // Component imports
-import { HandlebarsApplicationComponent } from '../../../mixins/component-handlebars-application-mixin';
+import { HandlebarsApplicationComponent } from '@system/applications/component-system';
 import { CharacterSheet } from '../../character-sheet';
 import { BaseActorSheetRenderContext } from '../../base';
 
@@ -68,8 +68,8 @@ export class CharacterFavoritesComponent extends DragDropComponentMixin(
         if (!event.dataTransfer?.types.includes('document/item')) return;
 
         // Clean up
-        $(this.element).find('.drop-area').removeClass('dropping');
-        $(this.element).find('.drop-indicator').remove();
+        $(this.element!).find('.drop-area').removeClass('dropping');
+        $(this.element!).find('.drop-indicator').remove();
 
         if ($(event.target!).closest('.drop-area').length) {
             $(event.target!).closest('.drop-area').addClass('dropping');
@@ -158,10 +158,10 @@ export class CharacterFavoritesComponent extends DragDropComponentMixin(
             }
 
             // Clean up
-            $(this.element)
+            $(this.element!)
                 .find('app-character-favorites .drop-area')
                 .removeClass('dropping');
-            $(this.element)
+            $(this.element!)
                 .find('app-character-favorites .drop-indicator')
                 .remove();
         }
@@ -180,3 +180,6 @@ export class CharacterFavoritesComponent extends DragDropComponentMixin(
         });
     }
 }
+
+// Register
+CharacterFavoritesComponent.register('app-character-favorites');

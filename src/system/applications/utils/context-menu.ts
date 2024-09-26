@@ -1,19 +1,21 @@
-export interface ContextMenuItem {
-    name: string;
-    icon: string;
-    classes?: string[];
-    callback?: (element: HTMLElement) => void;
-}
+export namespace AppContextMenu {
+    export interface Item {
+        name: string;
+        icon: string;
+        classes?: string[];
+        callback?: (element: HTMLElement) => void;
+    }
 
-interface ContextMenuParent {
-    element: HTMLElement;
-    addEventListener: (
-        event: string,
-        handler: (...args: unknown[]) => void,
-    ) => void;
-}
+    export interface Parent {
+        element: HTMLElement;
+        addEventListener: (
+            event: string,
+            handler: (...args: unknown[]) => void,
+        ) => void;
+    }
 
-type ContextMenuAnchor = 'left' | 'right';
+    export type Anchor = 'left' | 'right';
+}
 
 // Constants
 const TEMPLATE = '/systems/cosmere-rpg/templates/general/context-menu.hbs';
@@ -32,9 +34,9 @@ export class AppContextMenu {
     private bound = false;
 
     public constructor(
-        private parent: ContextMenuParent,
-        private anchor: ContextMenuAnchor,
-        private items: ContextMenuItem[],
+        private parent: AppContextMenu.Parent,
+        private anchor: AppContextMenu.Anchor,
+        private items: AppContextMenu.Item[],
     ) {
         void this.render();
     }
@@ -47,9 +49,9 @@ export class AppContextMenu {
      * This function takes care of re-binding on render.
      */
     public static create(
-        parent: ContextMenuParent,
-        anchor: ContextMenuAnchor,
-        items: ContextMenuItem[],
+        parent: AppContextMenu.Parent,
+        anchor: AppContextMenu.Anchor,
+        items: AppContextMenu.Item[],
         ...selectors: string[]
     ): AppContextMenu {
         // Create context menu

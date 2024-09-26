@@ -7,7 +7,8 @@ import { ConfigureSensesRangeDialog } from '@system/applications/actor/dialogs/c
 import { ConfigureRecoveryDieDialog } from '@system/applications/actor/dialogs/configure-recovery-die';
 
 // Component imports
-import { HandlebarsApplicationComponent } from '../../mixins/component-handlebars-application-mixin';
+// import { HandlebarsApplicationComponent } from '../../mixins/component-handlebars-application-mixin';
+import { HandlebarsApplicationComponent } from '@system/applications/component-system';
 import { BaseActorSheet, BaseActorSheetRenderContext } from '../base';
 import { CosmereActor } from '@src/system/documents';
 
@@ -80,14 +81,16 @@ export class ActorDetailsComponent extends HandlebarsApplicationComponent<
         params: never,
         context: BaseActorSheetRenderContext,
     ) {
-        const actor = context.actor;
+        const actor = this.application.actor;
 
         return Promise.resolve({
             ...context,
-
             type: actor.type,
             displayRestButtons: actor.type === ActorType.Character,
             displayRecovery: actor.type === ActorType.Character,
         });
     }
 }
+
+// Register
+ActorDetailsComponent.register('app-actor-details');

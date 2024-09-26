@@ -1,16 +1,7 @@
+import './components';
+
 import { ItemType } from '@system/types/cosmere';
 import { CharacterActor } from '@system/documents';
-
-// Components
-import { ActorSkillsGroupComponent } from './components';
-import {
-    CharacterExpertisesComponent,
-    CharacterAncestryComponent,
-    CharacterPathsComponent,
-    CharacterGoalsListComponent,
-    CharacterConnectionsListComponent,
-    CharacterFavoritesComponent,
-} from './components/character';
 
 // Base
 import { BaseActorSheet } from './base';
@@ -29,19 +20,6 @@ export class CharacterSheet extends BaseActorSheet {
                 width: 850,
                 height: 1000,
             },
-        },
-    );
-
-    static COMPONENTS = foundry.utils.mergeObject(
-        foundry.utils.deepClone(super.COMPONENTS),
-        {
-            'app-actor-skills-group': ActorSkillsGroupComponent,
-            'app-character-expertises': CharacterExpertisesComponent,
-            'app-character-ancestry': CharacterAncestryComponent,
-            'app-character-paths-list': CharacterPathsComponent,
-            'app-character-goals-list': CharacterGoalsListComponent,
-            'app-character-connections-list': CharacterConnectionsListComponent,
-            'app-character-favorites': CharacterFavoritesComponent,
         },
     );
 

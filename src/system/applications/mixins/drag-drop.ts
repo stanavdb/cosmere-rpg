@@ -1,6 +1,6 @@
 import { AnyObject, ConstructorOf } from '@system/types/utils';
 
-import { HandlebarsApplicationComponent } from './component-handlebars-application-mixin';
+import { HandlebarsApplicationComponent } from '@system/applications/component-system';
 
 interface DragDropApplicationConfiguration {
     dragDrop: Omit<DragDropConfiguration, 'permissions' | 'callbacks'>[];
@@ -125,7 +125,7 @@ export function DragDropComponentMixin<
             super._onAttachListeners(params);
 
             // Bind handlers
-            this._dragDrop.forEach((d) => d.bind(this.element));
+            this._dragDrop.forEach((d) => d.bind(this.element!));
         }
 
         /* --- Functions --- */

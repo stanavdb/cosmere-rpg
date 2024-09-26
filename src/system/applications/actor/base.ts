@@ -5,28 +5,22 @@ import { DeepPartial, AnyObject } from '@system/types/utils';
 // Utils
 import AppUtils from '@system/applications/utils';
 
+// Component System
+import {
+    ComponentHandlebarsApplicationMixin,
+    ComponentHandlebarsRenderOptions,
+} from '@system/applications/component-system';
+
 // Mixins
 import {
     TabsApplicationMixin,
     DragDropApplicationMixin,
-    ComponentHandlebarsApplicationMixin,
-    ComponentHandlebarsRenderOptions,
+    // ComponentHandlebarsApplicationMixin,
+    // ComponentHandlebarsRenderOptions,
 } from '@system/applications/mixins';
 
 // Components
-import {
-    ActorDetailsComponent,
-    ActorResourceComponent,
-    ActorAttributesComponent,
-    ActorActionsListComponent,
-    ActorSearchBarComponent,
-    ActorConditionsComponent,
-    ActorInjuriesListComponent,
-    ActorEquipmentListComponent,
-    ActorEffectsListComponent,
-    SortDirection,
-    SearchBarInputEvent,
-} from './components';
+import { SortDirection, SearchBarInputEvent } from './components';
 
 const { ActorSheetV2 } = foundry.applications.sheets;
 
@@ -69,21 +63,6 @@ export class BaseActorSheet<
         },
     );
     /* eslint-enable @typescript-eslint/unbound-method */
-
-    static COMPONENTS = foundry.utils.mergeObject(
-        foundry.utils.deepClone(super.COMPONENTS),
-        {
-            'app-actor-details': ActorDetailsComponent,
-            'app-actor-resource': ActorResourceComponent,
-            'app-actor-attributes': ActorAttributesComponent,
-            'app-actor-actions-list': ActorActionsListComponent,
-            'app-actor-search-bar': ActorSearchBarComponent,
-            'app-actor-conditions': ActorConditionsComponent,
-            'app-actor-injuries-list': ActorInjuriesListComponent,
-            'app-actor-equipment-list': ActorEquipmentListComponent,
-            'app-actor-effects-list': ActorEffectsListComponent,
-        },
-    );
 
     static PARTS = foundry.utils.mergeObject(super.PARTS, {
         navigation: {
@@ -327,7 +306,7 @@ export class BaseActorSheet<
 
         void this.render({
             parts: [],
-            componentRefs: ['sheet-content.app-actor-actions-list.0'],
+            components: ['app-actor-actions-list'],
         });
     }
 
@@ -337,7 +316,7 @@ export class BaseActorSheet<
 
         void this.render({
             parts: [],
-            componentRefs: ['sheet-content.app-actor-equipment-list.0'],
+            components: ['app-actor-equipment-list'],
         });
     }
 
@@ -347,11 +326,7 @@ export class BaseActorSheet<
 
         void this.render({
             parts: [],
-            componentRefs: [
-                'sheet-content.app-actor-effects-list.0',
-                'sheet-content.app-actor-effects-list.1',
-                'sheet-content.app-actor-effects-list.2',
-            ],
+            components: ['app-actor-effects-list'],
         });
     }
 

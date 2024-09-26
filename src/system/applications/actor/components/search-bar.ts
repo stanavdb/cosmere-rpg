@@ -1,7 +1,7 @@
 import { ConstructorOf } from '@system/types/utils';
 
 // Component imports
-import { HandlebarsApplicationComponent } from '../../mixins/component-handlebars-application-mixin';
+import { HandlebarsApplicationComponent } from '@system/applications/component-system';
 import { BaseActorSheet } from '../base';
 
 export interface SearchBarInputEventDetail {
@@ -65,7 +65,7 @@ export class ActorSearchBarComponent extends HandlebarsApplicationComponent<
     /* --- Life cycle --- */
 
     public _onAttachListeners(): void {
-        $(this.element)
+        $(this.element!)
             .find('input')
             .on('input', this.onActionsSearchChange.bind(this));
     }
@@ -91,7 +91,7 @@ export class ActorSearchBarComponent extends HandlebarsApplicationComponent<
             },
         });
 
-        this.element.dispatchEvent(event);
+        this.element!.dispatchEvent(event);
     }
 
     /* --- Context --- */
@@ -104,3 +104,6 @@ export class ActorSearchBarComponent extends HandlebarsApplicationComponent<
         });
     }
 }
+
+// Register
+ActorSearchBarComponent.register('app-actor-search-bar');

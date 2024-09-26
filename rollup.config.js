@@ -29,9 +29,9 @@ export default {
                 { src: 'src/system.json', dest: 'build' },
                 { src: 'src/templates/**/*.hbs', dest: 'build/' },
                 { src: 'src/lang/*.json', dest: 'build/' },
-                { src: 'src/assets/**/*', dest: 'build/' }
+                { src: 'src/assets/**/*', dest: 'build/' },
             ],
-            flatten: false
+            flatten: false,
         }),
     ],
 };

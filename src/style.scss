@@ -31,7 +31,7 @@
         --plotweaver-color-accent: #c9a760;
         --plotweaver-color-faded: #5e6c7e;
         --plotweaver-color-sheet: #132137;
-        
+
         --plotweaver-color-base-1: #010e2d;
         --plotweaver-color-base-2: #10213e;
         --plotweaver-color-base-3: #1b2d49;
@@ -48,7 +48,7 @@
         --plotweaver-color-accent: #c9a760;
         --plotweaver-color-faded: #5e6c7e;
         --plotweaver-color-sheet: #132137;
-        
+
         --plotweaver-color-base-1: #010e2d;
         --plotweaver-color-base-2: #10213e;
         --plotweaver-color-base-3: #1b2d49;
@@ -65,7 +65,8 @@
     font-family: 'Penumbra Web Pro';
     font-style: normal;
     font-weight: 400;
-    src: url('../../fonts/penumbra-web-pro/PenumbraWebPro-Serif.woff2') format('woff2');
+    src: url('../../fonts/penumbra-web-pro/PenumbraWebPro-Serif.woff2')
+        format('woff2');
 }
 
 @font-face {
@@ -110,7 +111,7 @@ i.cosmere-icon {
         color: #98a4f5;
 
         &::after {
-            content: 'O'
+            content: 'O';
         }
     }
 

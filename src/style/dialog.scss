@@ -1,6 +1,6 @@
 dialog.application {
-    label:has(+ input[type="checkbox"][readonly]) {
-        opacity: .5;
+    label:has(+ input[type='checkbox'][readonly]) {
+        opacity: 0.5;
     }
 
     form {
@@ -12,7 +12,7 @@ dialog.application {
 dialog.application ul {
     list-style: none;
 
-    margin: .25rem 0;
+    margin: 0.25rem 0;
     padding: 0;
 
     li {
@@ -21,7 +21,7 @@ dialog.application ul {
         &.form-group {
             > a {
                 flex: unset;
-                margin-left: .5rem;
+                margin-left: 0.5rem;
             }
         }
     }

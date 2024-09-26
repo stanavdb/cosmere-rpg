@@ -2,7 +2,7 @@ import { ItemType } from '@system/types/cosmere';
 import { ConstructorOf } from '@system/types/utils';
 
 // Component imports
-import { HandlebarsApplicationComponent } from '../../../mixins/component-handlebars-application-mixin';
+import { HandlebarsApplicationComponent } from '@system/applications/component-system';
 import { BaseActorSheet, BaseActorSheetRenderContext } from '../../base';
 
 export class CharacterAncestryComponent extends HandlebarsApplicationComponent<
@@ -35,3 +35,6 @@ export class CharacterAncestryComponent extends HandlebarsApplicationComponent<
         });
     }
 }
+
+// Register
+CharacterAncestryComponent.register('app-character-ancestry');

@@ -9,7 +9,7 @@ import { AppContextMenu } from '@system/applications/utils/context-menu';
 import AppUtils from '@system/applications/utils';
 
 // Component imports
-import { HandlebarsApplicationComponent } from '../../mixins/component-handlebars-application-mixin';
+import { HandlebarsApplicationComponent } from '@system/applications/component-system';
 import { BaseActorSheet, BaseActorSheetRenderContext } from '../base';
 import { SortDirection } from './search-bar';
 
@@ -68,7 +68,7 @@ export class ActorActionsListComponent extends HandlebarsApplicationComponent<
 
         // Set classes
         itemElement.toggleClass('expanded', this.itemState[itemId].expanded);
-        $(this.element)
+        $(this.element!)
             .find(`.details[data-item-id="${itemId}"]`)
             .toggleClass('expanded', this.itemState[itemId].expanded);
     }
@@ -229,7 +229,7 @@ export class ActorActionsListComponent extends HandlebarsApplicationComponent<
         if (this.application.isEditable) {
             // Create context menu
             AppContextMenu.create(
-                this,
+                this as AppContextMenu.Parent,
                 'right',
                 [
                     /**
@@ -285,3 +285,6 @@ export class ActorActionsListComponent extends HandlebarsApplicationComponent<
         }
     }
 }
+
+// Register
+ActorActionsListComponent.register('app-actor-actions-list');

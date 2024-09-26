@@ -6,7 +6,7 @@ import { InjuryItemDataModel } from '@system/data/item';
 import AppUtils from '@system/applications/utils';
 
 // Component imports
-import { HandlebarsApplicationComponent } from '../../mixins/component-handlebars-application-mixin';
+import { HandlebarsApplicationComponent } from '@system/applications/component-system';
 import { BaseActorSheet, BaseActorSheetRenderContext } from '../base';
 
 export class ActorInjuriesListComponent extends HandlebarsApplicationComponent<
@@ -53,7 +53,7 @@ export class ActorInjuriesListComponent extends HandlebarsApplicationComponent<
                 '.item',
             )!;
             const targetRect = target.getBoundingClientRect();
-            const rootRect = this.element.getBoundingClientRect();
+            const rootRect = this.element!.getBoundingClientRect();
 
             this.controlsDropdownPosition = {
                 top: targetRect.bottom - rootRect.top,
@@ -187,3 +187,6 @@ export class ActorInjuriesListComponent extends HandlebarsApplicationComponent<
         });
     }
 }
+
+// Register
+ActorInjuriesListComponent.register('app-actor-injuries-list');
