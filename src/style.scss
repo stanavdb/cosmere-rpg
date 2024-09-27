@@ -23,6 +23,8 @@
     --plotweaver-color-invest-front: #3e6abb;
     --plotweaver-color-invest-back: #182845;
 
+    --font-primary: 'Laski Sans';
+
     /* ----------------------------------------- */
     /*  Default Generic Theme                    */
     /* ----------------------------------------- */
@@ -65,34 +67,38 @@
     font-family: 'Penumbra Web Pro';
     font-style: normal;
     font-weight: 400;
-    src: url('../../fonts/penumbra-web-pro/PenumbraWebPro-Serif.woff2')
-        format('woff2');
+    src: url('assets/fonts/penumbra-web-pro/PenumbraWebPro-Serif.woff')
+        format('woff');
 }
 
 @font-face {
     font-family: 'Laski Sans';
     font-style: normal;
     font-weight: 400;
-    src: url('../../fonts/laski-sans/Laski-Sans-Regular.woff2') format('woff2');
+    src: url('assets/fonts/laski-sans/Laski-Sans-Regular.woff2') format('woff2');
 }
 
 @font-face {
     font-family: 'Laski Sans';
     font-style: normal;
     font-weight: 600;
-    src: url('../../fonts/laski-sans/Laski-Sans-SemiBold.woff2') format('woff2');
+    src: url('assets/fonts/laski-sans/Laski-Sans-SemiBold.woff2') format('woff2');
 }
 
 @font-face {
     font-family: 'Laski Sans';
     font-style: normal;
     font-weight: 700;
-    src: url('../../fonts/laski-sans/Laski-Sans-Bold.woff2') format('woff2');
+    src: url('assets/fonts/laski-sans/Laski-Sans-Bold.woff2') format('woff2');
 }
 
 @font-face {
     font-family: 'cosmere-dingbats';
     src: url('https://dl.dropboxusercontent.com/scl/fi/9909gen4fd0oveyzfposx/CosmereDingbats-Regular.otf?rlkey=ig6odq9hxyo1st8kt3ujp1czz&st=72qrads3&raw=1');
+}
+
+.application h1, span.document-name {
+    font-family: 'Penumbra Web Pro';
 }
 
 i.cosmere-icon {
