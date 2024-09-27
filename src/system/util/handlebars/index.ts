@@ -471,6 +471,7 @@ export async function preloadHandlebarsTemplates() {
         'systems/cosmere-rpg/templates/actors/adversary/partials/adv-actions-tab.hbs',
         'systems/cosmere-rpg/templates/actors/adversary/partials/adv-effects-tab.hbs',
         'systems/cosmere-rpg/templates/actors/adversary/partials/adv-equipment-tab.hbs',
+        'systems/cosmere-rpg/templates/item/partials/item-description-tab.hbs',
         'systems/cosmere-rpg/templates/combat/combatant.hbs',
     ];
     return await loadTemplates(

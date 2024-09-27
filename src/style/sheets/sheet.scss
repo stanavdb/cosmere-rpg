@@ -1,9 +1,11 @@
 .sheet .window-content {
+    display: flex;
     min-height: 0;
     overflow: hidden;
 
     .sheet-content {
         min-height: 0;
+        flex: 1;
     }
 }
 

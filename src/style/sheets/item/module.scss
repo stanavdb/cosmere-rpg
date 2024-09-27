@@ -1,0 +1,39 @@
+.sheet.item {
+    .sheet-content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .sheet-header {
+        position: relative;
+
+        .document-name {
+            font-weight: bold;
+            font-size: 20pt;
+        }
+
+        .document-type {
+            position: absolute;
+            top: 0;
+            right: 0;
+            font-style: italic;
+            font-size: 12pt;
+            opacity: .5;
+        }
+    }
+
+    .tab-body {
+        flex: 1;
+        display: flex;
+
+        .tab {
+            height: 100%;
+            width: 100%;
+        }
+    }
+
+    .editor {
+        height: 100%;
+        width: 100%;
+    }
+}

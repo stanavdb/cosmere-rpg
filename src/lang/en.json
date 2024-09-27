@@ -460,7 +460,13 @@
                     "Label": "Unequipped"
                 }
             },
-            "DefaultFlavor": "[actor] uses [item]"
+            "DefaultFlavor": "[actor] uses [item]",
+            "Sheet": {
+                "Tabs": {
+                    "Description": "Description",
+                    "Effects": "Effects"
+                }
+            }
         },
         "Attack": {
             "Type": {

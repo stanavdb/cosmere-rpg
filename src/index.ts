@@ -67,6 +67,18 @@ Hooks.once('init', async () => {
         },
     );
 
+    Items.unregisterSheet('core', ItemSheet);
+    Items.registerSheet(
+        'cosmere-rpg',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        applications.item.CultureItemSheet as any,
+        {
+            types: ['culture'],
+            makeDefault: true,
+            label: `${game.i18n?.localize('COSMERE.Item.Type.Culture.label')}`,
+        },
+    );
+
     CONFIG.Dice.types.push(dice.PlotDie);
     CONFIG.Dice.terms.p = dice.PlotDie;
     CONFIG.Dice.termTypes[dice.PlotDie.name] = dice.PlotDie;

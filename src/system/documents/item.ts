@@ -13,6 +13,7 @@ import {
     WeaponItemDataModel,
     ArmorItemDataModel,
     AncestryItemDataModel,
+    CultureItemDataModel,
     PathItemDataModel,
     SpecialtyItemDataModel,
     TalentItemDataModel,
@@ -83,6 +84,10 @@ export class CosmereItem<
 
     public isAncestry(): this is CosmereItem<AncestryItemDataModel> {
         return this.type === ItemType.Ancestry;
+    }
+
+    public isCulture(): this is CosmereItem<CultureItemDataModel> {
+        return this.type === ItemType.Culture;
     }
 
     public isPath(): this is CosmereItem<PathItemDataModel> {
@@ -600,3 +605,5 @@ export namespace CosmereItem {
         shouldConsume?: boolean;
     }
 }
+
+export type CultureItem = CosmereItem<CultureItemDataModel>;

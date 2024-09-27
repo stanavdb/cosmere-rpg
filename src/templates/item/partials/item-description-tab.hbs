@@ -1,0 +1,12 @@
+{{#with (lookup tabsMap "description") as |tab|}}
+
+<div class="tab tab-content {{tab.cssClass}}" data-tab="description" data-group="primary">
+    {{app-prose-mirror-editor
+        button=true
+        document=@root.item
+        fieldName="system.description.value"
+        collaborate=true
+    }}
+</div>
+
+{{/with}}
