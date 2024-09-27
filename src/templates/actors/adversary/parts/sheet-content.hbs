@@ -1,8 +1,8 @@
 <section class="sheet-content flexrow">
     <section class="col-left">
-        {{{app-actor-details}}}
+        {{app-actor-details}}
         {{#each resources as |resourceId|}}
-        {{{app-actor-resource resource=resourceId}}}
+        {{app-actor-resource resource=resourceId}}
         {{/each}}
 
         {{#if isEditMode}}
@@ -41,14 +41,14 @@
 
             <section>
             {{#each attributeGroups as |group|}}
-            {{{app-adversary-skills-group collapsed=@root.skillsCollapsed group-id=group}}}
+            {{app-adversary-skills-group collapsed=@root.skillsCollapsed group-id=group}}
             {{/each}}
             </section>
         </section>
     </section>
     <section class="col-main">
-        {{{app-adversary-header}}}
-        {{{app-actor-attributes}}}
+        {{app-adversary-header}}
+        {{app-actor-attributes}}
         <div class="tab-body">
             {{> adv-actions-tab}}
             {{> adv-equipment-tab}}

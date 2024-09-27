@@ -12,7 +12,7 @@
             <textarea name="system.purpose" {{#if (not @root.isEditMode)}}readonly{{/if}}>{{@root.actor.system.purpose}}</textarea>
         </div>
 
-        {{{app-character-goals-list}}}
+        {{app-character-goals-list}}
     </section>
     <section>
         <div class="details-text obstacle">
@@ -25,7 +25,7 @@
             <textarea name="system.obstacle" {{#if (not @root.isEditMode)}}readonly{{/if}}>{{@root.actor.system.obstacle}}</textarea>
         </div>
 
-        {{{app-character-connections-list}}}
+        {{app-character-connections-list}}
     </section>
 </div>
 

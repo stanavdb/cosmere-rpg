@@ -133,14 +133,14 @@ export function registerComponent(
         }
 
         // Return result
-        return `
+        return new Handlebars.SafeString(`
             <${selector} data-component-id="${componentId}" 
                 ${htmlId ? `id="${htmlId}"` : ''} 
                 ${cssClassList.length > 0 ? `class="${cssClassList}"` : ''}
                 ${cssStyle ? `style="${cssStyle}"` : ''}
             >
             </${selector}>
-        `;
+        `);
     });
 }
 
