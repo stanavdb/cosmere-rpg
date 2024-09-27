@@ -279,7 +279,8 @@
                 },
                 "Ancestry": {
                     "label": "Ancestry",
-                    "label_plural": "Ancestries"
+                    "label_plural": "Ancestries",
+                    "desc_placeholder": "Edit this and enter a brief description of the heritage in question. Also include any special rules text for players to read."
                 },
                 "Culture": {
                     "label": "Culture",
@@ -624,7 +625,8 @@
             "adversary": "Adversary"
         },
         "Item": {
-            "culture": "Culture"
+            "culture": "Culture",
+            "ancestry": "Ancestry"
         }
     }
 }

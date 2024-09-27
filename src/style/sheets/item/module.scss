@@ -1,7 +1,37 @@
 .sheet.item {
+    overflow: visible;
+
+    .window-content {
+        overflow: visible;
+    }
+
     .sheet-content {
         display: flex;
         flex-direction: column;
+    }
+
+    nav {
+        border: none;
+        flex-direction: column;
+        position: absolute;
+        left: 100%;
+        top: 15%;
+
+        > a {
+            background: rgba(11, 10, 19, 0.9);
+            width: 2.88867rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #302831;
+            border-top-right-radius: 0.3rem;
+            border-bottom-right-radius: 0.3rem;
+
+            &.active {
+                background-color: rgb(45 41 77 / 90%);
+            }
+        }
     }
 
     .sheet-header {

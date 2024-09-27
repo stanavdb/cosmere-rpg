@@ -607,3 +607,4 @@ export namespace CosmereItem {
 }
 
 export type CultureItem = CosmereItem<CultureItemDataModel>;
+export type AncestryItem = CosmereItem<AncestryItemDataModel>;

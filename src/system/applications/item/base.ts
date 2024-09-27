@@ -24,9 +24,11 @@ export class BaseItemSheet extends TabsApplicationMixin(
         {
             description: {
                 label: 'COSMERE.Item.Sheet.Tabs.Description',
+                icon: '<i class="fa-solid fa-feather-pointed"></i>',
             },
             effects: {
                 label: 'COSMERE.Item.Sheet.Tabs.Effects',
+                icon: '<i class="fa-solid fa-gear"></i>',
             },
         },
     );
@@ -45,5 +47,30 @@ export class BaseItemSheet extends TabsApplicationMixin(
             item: this.item,
             editable: this.isEditable,
         };
+    }
+
+    /* --- Form --- */
+
+    public static onFormEvent(
+        this: BaseItemSheet,
+        event: Event,
+        form: HTMLFormElement,
+        formData: FormDataExtended,
+    ) {
+        if (
+            !(event.target instanceof HTMLInputElement) &&
+            !(event.target instanceof HTMLTextAreaElement) &&
+            !(
+                event.target instanceof
+                foundry.applications.elements.HTMLProseMirrorElement
+            )
+        )
+            return;
+        if (!event.target.name) return;
+
+        console.dir(formData);
+
+        // Update document
+        void this.item.update(formData.object, { diff: false });
     }
 }

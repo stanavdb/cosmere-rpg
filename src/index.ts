@@ -79,6 +79,17 @@ Hooks.once('init', async () => {
         },
     );
 
+    Items.registerSheet(
+        'cosmere-rpg',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        applications.item.AncestrySheet as any,
+        {
+            types: ['ancestry'],
+            label: `${game.i18n?.localize('COSMERE.Item.Type.Ancestry.label')}`,
+            makeDefault: true,
+        },
+    );
+
     CONFIG.Dice.types.push(dice.PlotDie);
     CONFIG.Dice.terms.p = dice.PlotDie;
     CONFIG.Dice.termTypes[dice.PlotDie.name] = dice.PlotDie;
