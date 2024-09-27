@@ -1,0 +1,9 @@
+{{#with (lookup tabsMap "effects") as |tab|}}
+
+<div class="tab tab-content {{tab.cssClass}}" data-tab="effects" data-group="primary">
+    {{app-item-effects-list type="temporary"}}
+    {{app-item-effects-list type="passive"}}
+    {{app-item-effects-list type="inactive"}}
+</div>
+
+{{/with}}

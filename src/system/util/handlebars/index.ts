@@ -91,6 +91,26 @@ Handlebars.registerHelper(
     },
 );
 
+Handlebars.registerHelper('effect-duration', (effect: ActiveEffect) => {
+    if (!effect.isTemporary) return '—';
+
+    const seconds = effect.duration.seconds;
+    const turns = effect.duration.turns;
+    const rounds = effect.duration.rounds;
+
+    if (seconds) return `${seconds}s`;
+    else {
+        return [
+            rounds
+                ? `${rounds} ${game.i18n!.localize('GENERIC.Rounds')}`
+                : null,
+            turns ? `${turns} ${game.i18n!.localize('GENERIC.Turns')}` : null,
+        ]
+            .filter((v) => !!v)
+            .join(', ');
+    }
+});
+
 Handlebars.registerHelper(
     'itemContext',
     (item: CosmereItem, options?: { hash?: ItemContextOptions }) => {
@@ -472,6 +492,7 @@ export async function preloadHandlebarsTemplates() {
         'systems/cosmere-rpg/templates/actors/adversary/partials/adv-effects-tab.hbs',
         'systems/cosmere-rpg/templates/actors/adversary/partials/adv-equipment-tab.hbs',
         'systems/cosmere-rpg/templates/item/partials/item-description-tab.hbs',
+        'systems/cosmere-rpg/templates/item/partials/item-effects-tab.hbs',
         'systems/cosmere-rpg/templates/combat/combatant.hbs',
     ];
     return await loadTemplates(

@@ -43,6 +43,7 @@ export class BaseItemSheet extends TabsApplicationMixin(
         return {
             ...(await super._prepareContext(options)),
             item: this.item,
+            editable: this.isEditable,
         };
     }
 }

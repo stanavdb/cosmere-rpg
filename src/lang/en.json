@@ -178,15 +178,6 @@
                     "DecreaseDuration": "Decrease Injury Duration",
                     "IncreaseDuration": "Increase Injury Duration"
                 },
-                "Effects": {
-                    "Label": "Effects",
-                    "Inactive": "Inactive Effects",
-                    "Passive": "Passive Effects",
-                    "Temporary": "Temporary Effects",
-                    "Source": "Source",
-                    "Enable": "Enable Effect",
-                    "Disable": "Disable Effect"
-                },
                 "Level": "Level",
                 "Tier": "Tier",
                 "Expertises": "Expertises",
@@ -515,6 +506,22 @@
             "Stunned": "Stunned",
             "Surprised": "Surprised",
             "Unconscious": "Unconscious"
+        },
+        "Sheet": {
+            "Effects": {
+                "Label": "Effects",
+                "Inactive": "Inactive Effects",
+                "Passive": "Passive Effects",
+                "Temporary": "Temporary Effects",
+                "Source": "Source",
+                "Enable": "Enable Effect",
+                "Disable": "Disable Effect",
+                "Duration": "Duration",
+                "Create": "New Effect",
+                "Edit": "Edit Effect",
+                "Delete": "Remove Effect",
+                "ToggleActive": "Toggle Active"
+            }
         }
     },
     "DICE": {
@@ -586,6 +593,8 @@
         "HideDetails": "Hide Details",
         "Bonus": "Bonus",
         "Mode": "Mode",
+        "Turns": "Turns",
+        "Rounds": "Rounds",
         "Button": {
             "Roll": "Roll",
             "Continue": "Continue",
@@ -613,6 +622,9 @@
         "Actor": {
             "character": "Character",
             "adversary": "Adversary"
+        },
+        "Item": {
+            "culture": "Culture"
         }
     }
 }
