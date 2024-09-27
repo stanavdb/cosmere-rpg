@@ -30,12 +30,12 @@ declare namespace ActiveEffect {
         /**
          * The world time when the active effect first started
          */
-        startTime: number;
+        startTime: number | null;
 
         /**
          * The maximum duration of the effect, in seconds
          */
-        seconds: number;
+        seconds: number | null;
 
         /**
          * The _id of the CombatEncounter in which the effect first started
@@ -45,22 +45,22 @@ declare namespace ActiveEffect {
         /**
          * The maximum duration of the effect, in combat rounds
          */
-        rounds: number;
+        rounds: number | null;
 
         /**
          * The maximum duration of the effect, in combat turns
          */
-        turns: number;
+        turns: number | null;
 
         /**
          * The round of the CombatEncounter in which the effect first started
          */
-        startRound: number;
+        startRound: number | null;
 
         /**
          * The turn of the CombatEncounter in which the effect first started
          */
-        startTurn: number;
+        startTurn: number | null;
     }
 
     interface ActiveEffectData {
@@ -184,6 +184,7 @@ declare class ActiveEffect<
     public readonly system: D;
     public disabled: boolean;
     public origin: string | null;
+    public duration: ActiveEffect.EffectDurationData;
 
     /**
      * Is there some system logic that makes this active effect ineligible for application?

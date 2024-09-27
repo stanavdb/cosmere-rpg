@@ -7,9 +7,11 @@ declare class Item<
 > extends _ClientDocumentMixin<D, P>(foundry.documents.BaseItem<D, P>) {
     public readonly type: string;
     public readonly name: string;
+    public readonly img: string;
     public readonly system: D;
 
     get actor(): P | undefined;
+    get effects(): Collection<ActiveEffect>;
 
     public getRollData(): D;
 }
