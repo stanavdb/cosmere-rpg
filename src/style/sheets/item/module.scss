@@ -10,6 +10,15 @@
         .document-name {
             font-weight: bold;
             font-size: 20pt;
+
+            span {
+                cursor: pointer;
+            }
+
+            input {
+                font-weight: inherit;
+                font-size: inherit;
+            }
         }
 
         .document-type {
