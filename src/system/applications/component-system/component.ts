@@ -80,6 +80,9 @@ export class HandlebarsApplicationComponent<
         this.addEventListener('initialize', (event) =>
             this._onInitialize((event as ComponentEvent<Params>).detail.params),
         );
+        this.addEventListener('render', (event) =>
+            this._onRender((event as ComponentEvent<Params>).detail.params),
+        );
         this.addEventListener('attachListeners', (event) =>
             this._onAttachListeners(
                 (event as ComponentEvent<Params>).detail.params,
@@ -148,14 +151,19 @@ export class HandlebarsApplicationComponent<
     /**
      * Actions performed after Component initialization.
      */
-    public _onInitialize(params: Params) {}
+    protected _onInitialize(params: Params) {}
+
+    /**
+     * Actions performed after Component rendering.
+     */
+    protected _onRender(params: Params) {}
 
     /**
      * Actions performed after Component listeners are attached.
      * Use this to attach your own event listeners.
      * @param params
      */
-    public _onAttachListeners(params: Params) {}
+    protected _onAttachListeners(params: Params) {}
 
     /* --- Registration --- */
 

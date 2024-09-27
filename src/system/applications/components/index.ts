@@ -1,0 +1,1 @@
+import './prose-mirror-editor';

@@ -208,7 +208,13 @@ export function ComponentHandlebarsApplicationMixin<
 
             // Dispatch event
             component.dispatchEvent(
-                new Event('render', { bubbles: true, cancelable: true }),
+                new CustomEvent('render', {
+                    detail: {
+                        params: ComponentSystem.getComponentParams(
+                            componentRef,
+                        ),
+                    },
+                }),
             );
 
             // Recursive call for children
