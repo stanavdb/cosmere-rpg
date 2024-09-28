@@ -34,7 +34,14 @@ export class InjuryItemDataModel extends DataModelMixin<
     TypedItemMixin({
         // Default to flesh wound data as the least impactful injury type
         initial: InjuryType.FleshWound,
-        choices: () => Object.keys(CONFIG.COSMERE.injuries),
+        choices: () =>
+            Object.entries(CONFIG.COSMERE.injuries).reduce(
+                (acc, [key, { label }]) => ({
+                    ...acc,
+                    [key]: label,
+                }),
+                {} as Record<InjuryType, string>,
+            ),
     }),
     DescriptionItemMixin(),
 ) {
@@ -55,5 +62,9 @@ export class InjuryItemDataModel extends DataModelMixin<
                 }),
             }),
         });
+    }
+
+    get typeLabel(): string {
+        return CONFIG.COSMERE.injuries[this.type].label;
     }
 }

@@ -34,6 +34,24 @@ export function TypedItemMixin<
                     }),
                 });
             }
+
+            get typeSelectOptions(): Record<string | number, string> {
+                const choices = (
+                    this.schema.fields.type as foundry.data.fields.StringField
+                ).choices;
+
+                if (Array.isArray(choices)) {
+                    return (choices as string[]).reduce(
+                        (acc, key, i) => ({
+                            ...acc,
+                            [i]: key,
+                        }),
+                        {} as Record<number, string>,
+                    );
+                } else {
+                    return choices as Record<string, string>;
+                }
+            }
         };
     };
 }

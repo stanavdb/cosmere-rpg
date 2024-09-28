@@ -43,9 +43,4 @@ export class PathItemDataModel extends DataModelMixin<
     get typeLabel(): string {
         return CONFIG.COSMERE.paths.types[this.type].label;
     }
-
-    get typeSelectOptions(): Record<string, string> {
-        return (this.schema.fields.type as foundry.data.fields.StringField)
-            .choices as Record<string, string>;
-    }
 }
