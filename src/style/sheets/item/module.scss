@@ -36,6 +36,8 @@
 
     .sheet-header {
         position: relative;
+        border-bottom: 1px solid var(--plotweaver-color-grey-5);
+        padding-bottom: 0.5rem;
 
         .document-name {
             font-weight: bold;
@@ -55,6 +57,7 @@
     .tab-body {
         flex: 1;
         display: flex;
+        margin-top: 0.5rem;
 
         .tab {
             height: 100%;
