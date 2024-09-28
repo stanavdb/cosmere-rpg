@@ -1,0 +1,12 @@
+{{#if isTyped}}
+<div class="form-group">
+    <label>{{localize "COSMERE.Item.Sheet.Type"}}</label>
+    {{#if editable}}
+    <select name="system.type">
+        {{selectOptions item.system.typeSelectOptions selected=item.system.type localize=true}}
+    </select>
+    {{else}}
+
+    {{/if}}
+</div>
+{{/if}}

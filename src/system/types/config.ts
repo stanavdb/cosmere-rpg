@@ -102,6 +102,7 @@ export interface CurrencyDenominationConfig {
     label: string;
     conversionRate: number; // Value relative to base denomination
     base?: boolean; // Present if this denomination is considered the base
+    unit?: string; // Present for the base denomination
 }
 
 export interface WeaponTypeConfig {
@@ -278,4 +279,8 @@ export interface CosmereRPGConfig {
 
     cultures: Record<string, CultureConfig>;
     ancestries: Record<string, AncestriesConfig>;
+
+    units: {
+        weight: string[];
+    };
 }

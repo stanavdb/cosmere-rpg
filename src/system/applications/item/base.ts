@@ -14,10 +14,21 @@ export interface BaseItemSheetRenderContext {
 export class BaseItemSheet extends TabsApplicationMixin(
     ComponentHandlebarsApplicationMixin(ItemSheetV2),
 )<AnyObject> {
+    /**
+     * NOTE: Unbound methods is the standard for defining actions and forms
+     * within ApplicationV2
+     */
+    /* eslint-disable @typescript-eslint/unbound-method */
     static DEFAULT_OPTIONS = foundry.utils.mergeObject(
         foundry.utils.deepClone(super.DEFAULT_OPTIONS),
-        {},
+        {
+            form: {
+                handler: this.onFormEvent,
+                submitOnChange: true,
+            } as unknown,
+        },
     );
+    /* eslint-enable @typescript-eslint/unbound-method */
 
     static TABS = foundry.utils.mergeObject(
         foundry.utils.deepClone(super.TABS),
@@ -37,21 +48,9 @@ export class BaseItemSheet extends TabsApplicationMixin(
         return super.document;
     }
 
-    /* --- Context --- */
-
-    public async _prepareContext(
-        options: DeepPartial<foundry.applications.api.ApplicationV2.RenderOptions>,
-    ) {
-        return {
-            ...(await super._prepareContext(options)),
-            item: this.item,
-            editable: this.isEditable,
-        };
-    }
-
     /* --- Form --- */
 
-    public static onFormEvent(
+    protected static onFormEvent(
         this: BaseItemSheet,
         event: Event,
         form: HTMLFormElement,
@@ -68,9 +67,49 @@ export class BaseItemSheet extends TabsApplicationMixin(
             return;
         if (!event.target.name) return;
 
-        console.dir(formData);
+        if (this.item.isPhysical() && 'system.price.unit' in formData.object) {
+            // Get currency id
+            const [currencyId, denominationId] = (
+                formData.object['system.price.unit'] as string
+            ).split('.');
 
-        // Update document
-        void this.item.update(formData.object, { diff: false });
+            // Remove the unit
+            formData.delete('system.price.unit');
+
+            // Get the currency
+            const currency = CONFIG.COSMERE.currencies[currencyId];
+
+            formData.set(
+                'system.price.currency',
+                currency ? currencyId : 'none',
+            );
+
+            if (currency) {
+                // Get the primary denomination
+                const primaryDenomination = currency.denominations.primary.find(
+                    (denomination) => denomination.id === denominationId,
+                );
+
+                formData.set(
+                    'system.price.denomination.primary',
+                    primaryDenomination?.id ?? 'none',
+                );
+            }
+        }
+
+        // Update the document
+        void this.item.update(formData.object);
+    }
+
+    /* --- Context --- */
+
+    public async _prepareContext(
+        options: DeepPartial<foundry.applications.api.ApplicationV2.RenderOptions>,
+    ) {
+        return {
+            ...(await super._prepareContext(options)),
+            item: this.item,
+            editable: this.isEditable,
+        };
     }
 }

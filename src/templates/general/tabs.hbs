@@ -4,7 +4,9 @@
         data-tab="{{tab.id}}"
         data-group="{{tab.group}}"
         data-action="tab"
+        {{#if (eq ../includeLabel false)}}
         data-tooltip="{{localize tab.label}}"
+        {{/if}}
     >
         {{#if (not (eq ../includeLabel false))}}
         <label>{{localize tab.label}}</label>

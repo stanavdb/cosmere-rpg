@@ -9,6 +9,8 @@
         "prepare": "husky",
         "lint": "eslint",
         "lint:fix": "eslint --fix",
+        "prettier": "prettier .",
+        "prettier:write": "prettier --write .",
         "link": "node ./scripts/link-foundry"
     },
     "devDependencies": {

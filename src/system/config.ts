@@ -696,6 +696,10 @@ const COSMERE: CosmereRPGConfig = {
 
     cultures: {},
     ancestries: {},
+
+    units: {
+        weight: ['lb'],
+    },
 };
 
 export default COSMERE;

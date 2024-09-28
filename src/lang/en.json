@@ -457,7 +457,31 @@
             "Sheet": {
                 "Tabs": {
                     "Description": "Description",
-                    "Effects": "Effects"
+                    "Effects": "Effects",
+                    "Details": "Details"
+                },
+                "Identifier": {
+                    "Label": "Identifier",
+                    "Description": "Used to uniquely identify this [type]. Identifier can only contain letters (a-z), numbers (0-9), dashes (-), and underscores (_)."
+                },
+                "Type": "Type",
+                "Injury": {
+                    "Duration": "Duration",
+                    "InitialDuration": "Initial",
+                    "RemainingDuration": "Remaining"
+                },
+                "Specialty": {
+                    "PathId": "Path Identifier",
+                    "PathIdDescription": "The identifier of the path this specialty belongs to. The path identifier can only contain letters (a-z), numbers (0-9), dashes (-), and underscores (_)."
+                },
+                "Loot": {
+                    "IsMoney": "Is Money",
+                    "IsMoneyDescription": "Is this loot item a form of currency?"
+                },
+                "Properties": {
+                    "Quantity": "Quantity",
+                    "Weight": "Weight",
+                    "Price": "Price"
                 }
             }
         },
@@ -618,6 +642,9 @@
                 "Derived": "Derived",
                 "Override": "Custom"
             }
+        },
+        "Units": {
+            "Days": "Days"
         }
     },
     "TYPES": {
@@ -627,7 +654,12 @@
         },
         "Item": {
             "culture": "Culture",
-            "ancestry": "Ancestry"
+            "ancestry": "Ancestry",
+            "path": "Path",
+            "connection": "Connection",
+            "injury": "Injury",
+            "specialty": "Specialty",
+            "loot": "Loot"
         }
     }
 }

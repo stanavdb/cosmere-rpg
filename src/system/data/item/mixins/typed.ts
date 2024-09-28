@@ -2,7 +2,10 @@ import { CosmereItem } from '@system/documents';
 
 interface TypedItemMixinOptions<Type extends string = string> {
     initial?: Type;
-    choices?: Type[] | (() => Type[]);
+    choices?:
+        | Type[]
+        | Record<Type, string>
+        | (() => Type[] | Record<Type, string>);
 }
 
 export interface TypedItemData<T extends string = string> {
@@ -30,6 +33,24 @@ export function TypedItemMixin<
                         choices,
                     }),
                 });
+            }
+
+            get typeSelectOptions(): Record<string | number, string> {
+                const choices = (
+                    this.schema.fields.type as foundry.data.fields.StringField
+                ).choices;
+
+                if (Array.isArray(choices)) {
+                    return (choices as string[]).reduce(
+                        (acc, key, i) => ({
+                            ...acc,
+                            [i]: key,
+                        }),
+                        {} as Record<number, string>,
+                    );
+                } else {
+                    return choices as Record<string, string>;
+                }
             }
         };
     };

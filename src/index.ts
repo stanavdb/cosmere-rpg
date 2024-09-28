@@ -1,3 +1,5 @@
+import { ActorType, Condition, ItemType } from './system/types/cosmere';
+
 import COSMERE from './system/config';
 
 import './style.scss';
@@ -9,7 +11,7 @@ import * as applications from './system/applications';
 import * as dataModels from './system/data';
 import * as documents from './system/documents';
 import * as dice from './system/dice';
-import { Condition } from './system/types/cosmere';
+
 import CosmereAPI from './system/api';
 
 declare global {
@@ -46,38 +48,19 @@ Hooks.once('init', async () => {
     CONFIG.ActiveEffect.legacyTransferral = false;
 
     Actors.unregisterSheet('core', ActorSheet);
-    // NOTE: Must cast to `any` as registerSheet type doesn't accept ApplicationV2 (even though it's valid to pass it)
-    Actors.registerSheet(
-        'cosmere-rpg',
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        applications.actor.CharacterSheet as any,
-        {
-            types: ['character'],
-            makeDefault: true,
-            label: `${game.i18n?.localize('COSMERE.Actor.Character.Character')}`,
-        },
-    );
-    Actors.registerSheet(
-        'cosmere-rpg',
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        applications.actor.AdversarySheet as any,
-        {
-            types: ['adversary'],
-            label: `${game.i18n?.localize('COSMERE.Actor.Adversary.Adversary')}`,
-        },
-    );
+    registerActorSheet(ActorType.Character, applications.actor.CharacterSheet);
+    registerActorSheet(ActorType.Adversary, applications.actor.AdversarySheet);
 
     Items.unregisterSheet('core', ItemSheet);
-    Items.registerSheet(
-        'cosmere-rpg',
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        applications.item.CultureItemSheet as any,
-        {
-            types: ['culture'],
-            makeDefault: true,
-            label: `${game.i18n?.localize('COSMERE.Item.Type.Culture.label')}`,
-        },
+    registerItemSheet(ItemType.Culture, applications.item.CultureItemSheet);
+    registerItemSheet(ItemType.Path, applications.item.PathItemSheet);
+    registerItemSheet(
+        ItemType.Connection,
+        applications.item.ConnectionItemSheet,
     );
+    registerItemSheet(ItemType.Injury, applications.item.InjuryItemSheet);
+    registerItemSheet(ItemType.Specialty, applications.item.SpecialtyItemSheet);
+    registerItemSheet(ItemType.Loot, applications.item.LootItemSheet);
 
     Items.registerSheet(
         'cosmere-rpg',
@@ -138,3 +121,28 @@ function registerStatusEffects() {
     // Register status effects
     CONFIG.statusEffects = statusEffects;
 }
+
+// NOTE: Must cast to `any` as registerSheet type doesn't accept ApplicationV2 (even though it's valid to pass it)
+/* eslint-disable @typescript-eslint/no-explicit-any */
+function registerActorSheet(
+    type: ActorType,
+    sheet: typeof foundry.applications.api.ApplicationV2<any, any, any>,
+) {
+    Actors.registerSheet('cosmere-rpg', sheet as any, {
+        types: [type],
+        makeDefault: true,
+        label: `TYPES.Actor.${type}`,
+    });
+}
+
+function registerItemSheet(
+    type: ItemType,
+    sheet: typeof foundry.applications.api.ApplicationV2<any, any, any>,
+) {
+    Items.registerSheet('cosmere-rpg', sheet as any, {
+        types: [type],
+        makeDefault: true,
+        label: `TYPES.Item.${type}`,
+    });
+}
+/* eslint-enable @typescript-eslint/no-explicit-any */

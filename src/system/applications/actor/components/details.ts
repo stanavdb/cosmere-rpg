@@ -57,6 +57,8 @@ export class ActorDetailsComponent extends HandlebarsApplicationComponent<
     }
 
     private static onEditImg(this: ActorDetailsComponent) {
+        if (this.application.mode !== 'edit') return;
+
         const { img: defaultImg } = CosmereActor.getDefaultArtwork(
             this.application.actor.toObject(),
         );
