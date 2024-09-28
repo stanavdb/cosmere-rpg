@@ -53,7 +53,7 @@ export class AncestrySheet extends BaseItemSheet {
         options: DeepPartial<foundry.applications.api.ApplicationV2.RenderOptions>,
     ) {
         if (
-            this.item.system.description!.value! ===
+            this.item.system.description!.value ===
             CONFIG.COSMERE.items.types.ancestry.desc_placeholder
         ) {
             this.item.system.description!.value = game.i18n!.localize(

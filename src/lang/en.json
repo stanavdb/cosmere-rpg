@@ -280,11 +280,12 @@
                 "Ancestry": {
                     "label": "Ancestry",
                     "label_plural": "Ancestries",
-                    "desc_placeholder": "Edit this and enter a brief description of the heritage in question. Also include any special rules text for players to read."
+                    "desc_placeholder": "Edit this to define a potential heritage for a character. Also include any special rules text for players to read."
                 },
                 "Culture": {
                     "label": "Culture",
-                    "label_plural": "Cultures"
+                    "label_plural": "Cultures",
+                    "desc_placeholder": "Edit this to define one of the many cultures in the setting. Also include any special rules text for players to read."
                 },
                 "Path": {
                     "label": "Path",

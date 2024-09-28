@@ -391,6 +391,7 @@ const COSMERE: CosmereRPGConfig = {
             [ItemType.Culture]: {
                 label: 'COSMERE.Item.Type.Culture.label',
                 labelPlural: 'COSMERE.Item.Type.Culture.label_plural',
+                desc_placeholder: 'COSMERE.Item.Type.Culture.desc_placeholder',
             },
             [ItemType.Path]: {
                 label: 'COSMERE.Item.Type.Path.label',
