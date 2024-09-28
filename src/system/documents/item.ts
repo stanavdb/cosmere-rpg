@@ -618,3 +618,4 @@ export type CultureItem = CosmereItem<CultureItemDataModel>;
 export type PathItem = CosmereItem<PathItemDataModel>;
 export type ConnectionItem = CosmereItem<ConnectionItemDataModel>;
 export type InjuryItem = CosmereItem<InjuryItemDataModel>;
+export type SpecialtyItem = CosmereItem<SpecialtyItemDataModel>;

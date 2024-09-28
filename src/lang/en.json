@@ -460,13 +460,17 @@
                 },
                 "Identifier": {
                     "Label": "Identifier",
-                    "Description": "Used to uniquely identify this path. Identifier can only contain letters (a-z), numbers (0-9), dashes (-), and underscores (_)."
+                    "Description": "Used to uniquely identify this [type]. Identifier can only contain letters (a-z), numbers (0-9), dashes (-), and underscores (_)."
                 },
                 "Type": "Type",
                 "Injury": {
                     "Duration": "Duration",
                     "InitialDuration": "Initial",
                     "RemainingDuration": "Remaining"
+                },
+                "Specialty": {
+                    "PathId": "Path Identifier",
+                    "PathIdDescription": "The identifier of the path this specialty belongs to. The path identifier can only contain letters (a-z), numbers (0-9), dashes (-), and underscores (_)."
                 }
             }
         },
@@ -641,7 +645,8 @@
             "culture": "Culture",
             "path": "Path",
             "connection": "Connection",
-            "injury": "Injury"
+            "injury": "Injury",
+            "specialty": "Specialty"
         }
     }
 }

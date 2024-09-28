@@ -60,8 +60,11 @@ export function IdItemMixin<
                 if (this.id === '<id>' && options.initialFromName) {
                     this.id = this.parent.name
                         .toLowerCase()
-                        .replace(/\s/g, '-')
-                        .replace(/[^a-z0-9-_]/g, '') as Type;
+                        .replace(/[^a-z0-9-_\s]/g, '')
+                        .replace(/\s+/g, ' ')
+                        .trim()
+                        .split(' ')
+                        .join('-') as Type;
                 }
             }
         };
