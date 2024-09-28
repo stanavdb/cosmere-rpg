@@ -14,4 +14,11 @@ declare class Item<
     get effects(): Collection<ActiveEffect>;
 
     public getRollData(): D;
+
+    /**
+     * Determine default artwork based on the provided item data.
+     * @param itemData  The source item data.
+     * @returns         Candidate item image.
+     */
+    public static getDefaultArtwork(itemData: object): { img: string };
 }
