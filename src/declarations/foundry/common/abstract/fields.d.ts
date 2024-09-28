@@ -216,6 +216,8 @@ declare namespace foundry {
                     options?: DataFieldOptions,
                     context?: DataFieldContext,
                 );
+
+                fields: DataSchema;
             }
 
             class BooleanField extends DataField {}
@@ -281,7 +283,7 @@ declare namespace foundry {
                  * allowed choices for the field. A function may be provided which dynamically
                  * returns the array of choices.
                  */
-                choices?: string[] | number | function;
+                choices?: string[] | object | function;
 
                 /**
                  * Is this string field a target for text search?
@@ -295,6 +297,8 @@ declare namespace foundry {
                     options?: StringFieldOptions,
                     context?: DataFieldContext,
                 );
+
+                choices: string[] | object;
             }
 
             class ObjectField extends DataField {}

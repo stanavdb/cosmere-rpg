@@ -14,10 +14,21 @@ export interface BaseItemSheetRenderContext {
 export class BaseItemSheet extends TabsApplicationMixin(
     ComponentHandlebarsApplicationMixin(ItemSheetV2),
 )<AnyObject> {
+    /**
+     * NOTE: Unbound methods is the standard for defining actions and forms
+     * within ApplicationV2
+     */
+    /* eslint-disable @typescript-eslint/unbound-method */
     static DEFAULT_OPTIONS = foundry.utils.mergeObject(
         foundry.utils.deepClone(super.DEFAULT_OPTIONS),
-        {},
+        {
+            form: {
+                handler: this.onFormEvent,
+                submitOnChange: true,
+            } as unknown,
+        },
     );
+    /* eslint-enable @typescript-eslint/unbound-method */
 
     static TABS = foundry.utils.mergeObject(
         foundry.utils.deepClone(super.TABS),
@@ -33,6 +44,18 @@ export class BaseItemSheet extends TabsApplicationMixin(
 
     get item(): CosmereItem {
         return super.document;
+    }
+
+    /* --- Form --- */
+
+    private static onFormEvent(
+        this: BaseItemSheet,
+        event: Event,
+        form: HTMLFormElement,
+        formData: FormDataExtended,
+    ) {
+        // Update the document
+        void this.item.update(formData.object);
     }
 
     /* --- Context --- */

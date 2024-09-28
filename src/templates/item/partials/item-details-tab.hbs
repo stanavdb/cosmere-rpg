@@ -1,0 +1,8 @@
+{{#with (lookup tabsMap "details") as |tab|}}
+
+<div class="tab tab-content {{tab.cssClass}}" data-tab="details" data-group="primary">
+    {{app-item-details-id}}
+    {{app-item-details-type}}
+</div>
+
+{{/with}}

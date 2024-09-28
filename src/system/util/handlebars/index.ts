@@ -18,6 +18,8 @@ import { CharacterActor, CosmereActor } from '@system/documents/actor';
 import { CosmereItem } from '@system/documents/item';
 import { Derived } from '@system/data/fields';
 
+import { AnyObject } from '@src/system/types/utils';
+
 import { ItemContext, ItemContextOptions } from './types';
 
 Handlebars.registerHelper('add', (a: number, b: number) => a + b);
@@ -28,6 +30,30 @@ Handlebars.registerHelper('mod', (a: number, b: number) => a % b);
 
 Handlebars.registerHelper('default', (v: unknown, defaultVal: unknown) => {
     return v ? v : defaultVal;
+});
+
+Handlebars.registerHelper('hasKey', (obj: AnyObject, path: string) => {
+    // Split the path
+    const keys = path.split('.');
+
+    // Reduce the object
+    return (
+        keys.reduce(
+            (obj, key, i) => {
+                if (typeof obj === 'boolean') return obj;
+
+                const isLast = i === keys.length - 1;
+                return obj && key in obj
+                    ? isLast
+                        ? true
+                        : obj[key]
+                          ? (obj[key] as AnyObject)
+                          : null
+                    : null;
+            },
+            obj as AnyObject | boolean | null,
+        ) !== null
+    );
 });
 
 Handlebars.registerHelper(
@@ -493,6 +519,7 @@ export async function preloadHandlebarsTemplates() {
         'systems/cosmere-rpg/templates/actors/adversary/partials/adv-equipment-tab.hbs',
         'systems/cosmere-rpg/templates/item/partials/item-description-tab.hbs',
         'systems/cosmere-rpg/templates/item/partials/item-effects-tab.hbs',
+        'systems/cosmere-rpg/templates/item/partials/item-details-tab.hbs',
         'systems/cosmere-rpg/templates/combat/combatant.hbs',
     ];
     return await loadTemplates(
