@@ -462,7 +462,12 @@
                     "Label": "Identifier",
                     "Description": "Used to uniquely identify this path. Identifier can only contain letters (a-z), numbers (0-9), dashes (-), and underscores (_)."
                 },
-                "Type": "Type"
+                "Type": "Type",
+                "Injury": {
+                    "Duration": "Duration",
+                    "InitialDuration": "Initial",
+                    "RemainingDuration": "Remaining"
+                }
             }
         },
         "Attack": {
@@ -622,6 +627,9 @@
                 "Derived": "Derived",
                 "Override": "Custom"
             }
+        },
+        "Units": {
+            "Days": "Days"
         }
     },
     "TYPES": {
@@ -632,7 +640,8 @@
         "Item": {
             "culture": "Culture",
             "path": "Path",
-            "connection": "Connection"
+            "connection": "Connection",
+            "injury": "Injury"
         }
     }
 }
