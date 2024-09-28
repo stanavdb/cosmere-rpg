@@ -2,7 +2,10 @@ import { CosmereItem } from '@system/documents';
 
 interface TypedItemMixinOptions<Type extends string = string> {
     initial?: Type;
-    choices?: Type[] | (() => Type[]);
+    choices?:
+        | Type[]
+        | Record<Type, string>
+        | (() => Type[] | Record<Type, string>);
 }
 
 export interface TypedItemData<T extends string = string> {

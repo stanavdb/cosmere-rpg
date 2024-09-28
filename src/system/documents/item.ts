@@ -31,6 +31,7 @@ import { TypedItemData } from '@system/data/item/mixins/typed';
 import { TraitsItemData } from '@system/data/item/mixins/traits';
 import { EquippableItemData } from '@system/data/item/mixins/equippable';
 import { DescriptionItemData } from '@system/data/item/mixins/description';
+import { IdItemData } from '@system/data/item/mixins/id';
 
 import { Derived } from '@system/data/fields';
 
@@ -175,6 +176,13 @@ export class CosmereItem<
      */
     public hasDescription(): this is CosmereItem<DescriptionItemData> {
         return 'description' in this.system;
+    }
+
+    /**
+     * Does this item have an id in it system?
+     */
+    public hasId(): this is CosmereItem<IdItemData> {
+        return 'id' in this.system;
     }
 
     /* --- Accessors --- */
@@ -607,3 +615,4 @@ export namespace CosmereItem {
 }
 
 export type CultureItem = CosmereItem<CultureItemDataModel>;
+export type PathItem = CosmereItem<PathItemDataModel>;

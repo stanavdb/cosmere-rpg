@@ -46,38 +46,12 @@ Hooks.once('init', async () => {
     CONFIG.ActiveEffect.legacyTransferral = false;
 
     Actors.unregisterSheet('core', ActorSheet);
-    // NOTE: Must cast to `any` as registerSheet type doesn't accept ApplicationV2 (even though it's valid to pass it)
-    Actors.registerSheet(
-        'cosmere-rpg',
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        applications.actor.CharacterSheet as any,
-        {
-            types: ['character'],
-            makeDefault: true,
-            label: `${game.i18n?.localize('COSMERE.Actor.Character.Character')}`,
-        },
-    );
-    Actors.registerSheet(
-        'cosmere-rpg',
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        applications.actor.AdversarySheet as any,
-        {
-            types: ['adversary'],
-            label: `${game.i18n?.localize('COSMERE.Actor.Adversary.Adversary')}`,
-        },
-    );
+    registerActorSheet('Character', applications.actor.CharacterSheet);
+    registerActorSheet('Adversary', applications.actor.AdversarySheet);
 
     Items.unregisterSheet('core', ItemSheet);
-    Items.registerSheet(
-        'cosmere-rpg',
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        applications.item.CultureItemSheet as any,
-        {
-            types: ['culture'],
-            makeDefault: true,
-            label: `${game.i18n?.localize('COSMERE.Item.Type.Culture.label')}`,
-        },
-    );
+    registerItemSheet('Culture', applications.item.CultureItemSheet);
+    registerItemSheet('Path', applications.item.PathItemSheet);
 
     CONFIG.Dice.types.push(dice.PlotDie);
     CONFIG.Dice.terms.p = dice.PlotDie;
@@ -127,3 +101,28 @@ function registerStatusEffects() {
     // Register status effects
     CONFIG.statusEffects = statusEffects;
 }
+
+// NOTE: Must cast to `any` as registerSheet type doesn't accept ApplicationV2 (even though it's valid to pass it)
+/* eslint-disable @typescript-eslint/no-explicit-any */
+function registerActorSheet(
+    type: string,
+    sheet: typeof foundry.applications.api.ApplicationV2<any, any, any>,
+) {
+    Actors.registerSheet('cosmere-rpg', sheet as any, {
+        types: [type.toLowerCase()],
+        makeDefault: true,
+        label: game.i18n?.localize(`COSMERE.Actor.${type}.${type}`),
+    });
+}
+
+function registerItemSheet(
+    type: string,
+    sheet: typeof foundry.applications.api.ApplicationV2<any, any, any>,
+) {
+    Items.registerSheet('cosmere-rpg', sheet as any, {
+        types: [type.toLowerCase()],
+        makeDefault: true,
+        label: game.i18n?.localize(`COSMERE.Item.Type.${type}.label`),
+    });
+}
+/* eslint-enable @typescript-eslint/no-explicit-any */

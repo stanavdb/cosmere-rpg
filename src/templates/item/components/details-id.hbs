@@ -1,0 +1,15 @@
+{{#if hasId}}
+<div class="form-group">
+    <label>{{localize "COSMERE.Item.Sheet.Identifier.Label"}}</label>
+    <input type="text" 
+        name="system.id"
+        value="{{item.system.id}}" 
+        {{#if (not editable)}}
+        readonly
+        {{/if}}
+    >
+</div>
+<p class="notes">
+    {{localize "COSMERE.Item.Sheet.Identifier.Description"}}
+</p>
+{{/if}}

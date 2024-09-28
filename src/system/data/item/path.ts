@@ -19,11 +19,17 @@ export class PathItemDataModel extends DataModelMixin<
     PathItemData,
     CosmereItem
 >(
-    IdItemMixin(),
+    IdItemMixin({ initialFromName: true }),
     TypedItemMixin<CosmereItem, PathType>({
         initial: PathType.Heroic,
         choices: () => {
-            return Object.keys(CONFIG.COSMERE.paths.types) as PathType[];
+            return Object.entries(CONFIG.COSMERE.paths.types).reduce(
+                (acc, [key, value]) => ({
+                    ...acc,
+                    [key]: value.label,
+                }),
+                {} as Record<PathType, string>,
+            );
         },
     }),
     DescriptionItemMixin(),
@@ -32,5 +38,14 @@ export class PathItemDataModel extends DataModelMixin<
         return foundry.utils.mergeObject(super.defineSchema(), {
             // TODO: Advancements
         });
+    }
+
+    get typeLabel(): string {
+        return CONFIG.COSMERE.paths.types[this.type].label;
+    }
+
+    get typeSelectOptions(): Record<string, string> {
+        return (this.schema.fields.type as foundry.data.fields.StringField)
+            .choices as Record<string, string>;
     }
 }

@@ -652,12 +652,12 @@ namespace foundry {
             /**
              * The Data Schema for all instances of this DataModel.
              */
-            static readonly schema: foundry.data.fields.DataSchema;
+            static readonly schema: foundry.data.fields.SchemaField;
 
             /**
              * Define the data schema for this document instance.
              */
-            readonly schema: foundry.data.fields.DataSchema;
+            readonly schema: foundry.data.fields.SchemaField;
 
             /**
              * Is the current state of this DataModel invalid?
