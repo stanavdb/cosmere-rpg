@@ -616,3 +616,4 @@ export namespace CosmereItem {
 
 export type CultureItem = CosmereItem<CultureItemDataModel>;
 export type PathItem = CosmereItem<PathItemDataModel>;
+export type ConnectionItem = CosmereItem<ConnectionItemDataModel>;

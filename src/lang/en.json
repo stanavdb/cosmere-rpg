@@ -631,7 +631,8 @@
         },
         "Item": {
             "culture": "Culture",
-            "path": "Path"
+            "path": "Path",
+            "connection": "Connection"
         }
     }
 }
