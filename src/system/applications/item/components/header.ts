@@ -1,3 +1,4 @@
+import { CosmereItem } from '@system/documents/item';
 import { ConstructorOf } from '@system/types/utils';
 
 // Component imports
@@ -17,6 +18,7 @@ export class ItemHeaderComponent extends HandlebarsApplicationComponent<
     /* eslint-disable @typescript-eslint/unbound-method */
     static ACTIONS = {
         'edit-name': this.onEditName,
+        'edit-img': this.onEditImg,
     };
     /* eslint-enable @typescript-eslint/unbound-method */
 
@@ -51,6 +53,27 @@ export class ItemHeaderComponent extends HandlebarsApplicationComponent<
                 $(this.element!).find('.document-name span').show();
             });
         });
+    }
+
+    private static onEditImg(this: ItemHeaderComponent) {
+        if (!this.application.isEditable) return;
+
+        const { img: defaultImg } = CosmereItem.getDefaultArtwork(
+            this.application.item.toObject(),
+        );
+
+        void new FilePicker({
+            current: this.application.item.img,
+            type: 'image',
+            redirectToRoot: [defaultImg],
+            top: this.application.position.top + 40,
+            left: this.application.position.left + 10,
+            callback: (path) => {
+                void this.application.item.update({
+                    img: path,
+                });
+            },
+        }).browse();
     }
 
     /* --- Context --- */

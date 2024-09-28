@@ -52,6 +52,7 @@ Hooks.once('init', async () => {
     Items.unregisterSheet('core', ItemSheet);
     registerItemSheet('Culture', applications.item.CultureItemSheet);
     registerItemSheet('Path', applications.item.PathItemSheet);
+    registerItemSheet('Connection', applications.item.ConnectionItemSheet);
 
     CONFIG.Dice.types.push(dice.PlotDie);
     CONFIG.Dice.terms.p = dice.PlotDie;
