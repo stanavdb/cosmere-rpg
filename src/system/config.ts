@@ -496,7 +496,34 @@ const COSMERE: CosmereRPGConfig = {
         },
     },
 
-    currencies: {},
+    currencies: {
+        money: {
+            label: 'Money',
+            denominations: {
+                primary: [
+                    {
+                        id: 'gold',
+                        label: 'Gold',
+                        conversionRate: 1,
+                        unit: 'gp',
+                        base: true,
+                    },
+                    {
+                        id: 'silver',
+                        label: 'Silver',
+                        conversionRate: 0.1,
+                        unit: 'sp',
+                    },
+                    {
+                        id: 'copper',
+                        label: 'Copper',
+                        conversionRate: 0.01,
+                        unit: 'cp',
+                    },
+                ],
+            },
+        },
+    },
 
     weaponTypes: {
         [WeaponType.Light]: {
@@ -694,6 +721,10 @@ const COSMERE: CosmereRPGConfig = {
 
     cultures: {},
     ancestries: {},
+
+    units: {
+        weight: ['lb', 'kg'],
+    },
 };
 
 export default COSMERE;

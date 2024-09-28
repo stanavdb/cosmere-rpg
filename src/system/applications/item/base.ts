@@ -48,12 +48,42 @@ export class BaseItemSheet extends TabsApplicationMixin(
 
     /* --- Form --- */
 
-    private static onFormEvent(
+    protected static onFormEvent(
         this: BaseItemSheet,
         event: Event,
         form: HTMLFormElement,
         formData: FormDataExtended,
     ) {
+        if (this.item.isPhysical() && 'system.price.unit' in formData.object) {
+            // Get currency id
+            const [currencyId, denominationId] = (
+                formData.object['system.price.unit'] as string
+            ).split('.');
+
+            // Remove the unit
+            formData.delete('system.price.unit');
+
+            // Get the currency
+            const currency = CONFIG.COSMERE.currencies[currencyId];
+
+            formData.set(
+                'system.price.currency',
+                currency ? currencyId : 'none',
+            );
+
+            if (currency) {
+                // Get the primary denomination
+                const primaryDenomination = currency.denominations.primary.find(
+                    (denomination) => denomination.id === denominationId,
+                );
+
+                formData.set(
+                    'system.price.denomination.primary',
+                    primaryDenomination?.id ?? 'none',
+                );
+            }
+        }
+
         // Update the document
         void this.item.update(formData.object);
     }

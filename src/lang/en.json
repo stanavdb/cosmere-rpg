@@ -471,6 +471,15 @@
                 "Specialty": {
                     "PathId": "Path Identifier",
                     "PathIdDescription": "The identifier of the path this specialty belongs to. The path identifier can only contain letters (a-z), numbers (0-9), dashes (-), and underscores (_)."
+                },
+                "Loot": {
+                    "IsMoney": "Is Money",
+                    "IsMoneyDescription": "Is this loot item a form of currency?"
+                },
+                "Properties": {
+                    "Quantity": "Quantity",
+                    "Weight": "Weight",
+                    "Price": "Price"
                 }
             }
         },
@@ -646,7 +655,8 @@
             "path": "Path",
             "connection": "Connection",
             "injury": "Injury",
-            "specialty": "Specialty"
+            "specialty": "Specialty",
+            "loot": "Loot"
         }
     }
 }

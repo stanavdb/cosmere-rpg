@@ -53,6 +53,16 @@
             color: #efe6d8bf;
         }
     }
+
+    select option:not(:hover) {
+        color: black;
+    }
+}
+
+/* --- Tabs ---*/
+
+.tab[data-tab='description'].active {
+    display: flex;
 }
 
 /* --- Components ---*/
@@ -121,6 +131,46 @@ app-item-effects-list {
             &:last-child {
                 border-bottom-left-radius: 0.3rem;
                 border-bottom-right-radius: 0.3rem;
+            }
+        }
+    }
+}
+
+app-prose-mirror-editor {
+    flex: 1;
+}
+
+app-item-properties {
+    .properties-list {
+        height: 100%;
+        width: 10rem;
+        border-right: 1px solid;
+        padding-right: 0.5rem;
+        margin-right: 0.5rem;
+
+        .quantity,
+        .weight,
+        .price {
+            flex-wrap: unset;
+
+            label {
+                width: 3.5rem;
+                flex: unset;
+                display: block;
+                margin-right: 0.5rem;
+            }
+
+            input {
+                font-size: 0.75rem;
+                text-align: right;
+            }
+
+            select {
+                width: 3.5rem;
+                flex: 2;
+                font-size: 0.75rem;
+                padding: 0;
+                background: none;
             }
         }
     }

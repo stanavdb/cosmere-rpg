@@ -522,6 +522,7 @@ export async function preloadHandlebarsTemplates() {
         'systems/cosmere-rpg/templates/item/partials/item-details-tab.hbs',
         'systems/cosmere-rpg/templates/item/injury/partials/injury-details-tab.hbs',
         'systems/cosmere-rpg/templates/item/specialty/partials/specialty-details-tab.hbs',
+        'systems/cosmere-rpg/templates/item/loot/partials/loot-details-tab.hbs',
         'systems/cosmere-rpg/templates/combat/combatant.hbs',
     ];
     return await loadTemplates(

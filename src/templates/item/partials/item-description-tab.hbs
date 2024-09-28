@@ -1,6 +1,7 @@
 {{#with (lookup tabsMap "description") as |tab|}}
 
 <div class="tab tab-content {{tab.cssClass}}" data-tab="description" data-group="primary">
+    {{app-item-properties}}
     {{app-prose-mirror-editor
         button=true
         document=@root.item
