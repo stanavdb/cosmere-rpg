@@ -11,7 +11,6 @@ export class ActionItemSheet extends BaseItemSheet {
             classes: ['cosmere-rpg', 'sheet', 'item', 'action'],
             position: {
                 width: 550,
-                height: 500,
             },
             window: {
                 resizable: true,

@@ -414,7 +414,6 @@
                     "Death": "Death"
                 }
             },
-
             "Equip": {
                 "Types": {
                     "Wear": {
@@ -495,6 +494,10 @@
                     "Consume": "Resource Consumption",
                     "Uses": "Limited Uses",
                     "Recharge": "Recharge"
+                },
+                "Damage": {
+                    "Title": "Damage",
+                    "Formula": "Damage Formula"
                 }
             }
         },

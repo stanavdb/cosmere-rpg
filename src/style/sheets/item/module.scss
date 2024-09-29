@@ -82,6 +82,10 @@
     select option {
         background: var(--color-cool-4);
     }
+
+    &.action {
+        min-height: 500px;
+    }
 }
 
 /* --- Tabs ---*/

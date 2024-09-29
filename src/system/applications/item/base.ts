@@ -128,6 +128,33 @@ export class BaseItemSheet extends TabsApplicationMixin(
                 formData.set('system.activation.uses.recharge', null);
         }
 
+        if (this.item.hasDamage()) {
+            if (
+                'system.damage.formula' in formData.object &&
+                (formData.object['system.damage.formula'] as string).trim() ===
+                    ''
+            )
+                formData.set('system.damage.formula', null);
+
+            if (
+                'system.damage.type' in formData.object &&
+                formData.object['system.damage.type'] === 'none'
+            )
+                formData.set('system.damage.type', null);
+
+            if (
+                'system.damage.skill' in formData.object &&
+                formData.object['system.damage.skill'] === 'none'
+            )
+                formData.set('system.damage.skill', null);
+
+            if (
+                'system.damage.attribute' in formData.object &&
+                formData.object['system.damage.attribute'] === 'none'
+            )
+                formData.set('system.damage.attribute', null);
+        }
+
         // Update the document
         void this.item.update(formData.object);
     }
