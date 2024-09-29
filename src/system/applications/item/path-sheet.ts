@@ -50,21 +50,8 @@ export class PathItemSheet extends BaseItemSheet {
     public async _prepareContext(
         options: DeepPartial<foundry.applications.api.ApplicationV2.RenderOptions>,
     ) {
-        if (
-            this.item.system.description!.value ===
-            CONFIG.COSMERE.items.types.path.desc_placeholder
-        ) {
-            this.item.system.description!.value = game.i18n!.localize(
-                this.item.system.description!.value!,
-            );
-        }
-        const enrichedDescValue = await TextEditor.enrichHTML(
-            this.item.system.description!.value!,
-        );
-
         return {
             ...(await super._prepareContext(options)),
-            descHtml: enrichedDescValue,
         };
     }
 }
