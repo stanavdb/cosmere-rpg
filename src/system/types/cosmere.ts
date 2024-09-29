@@ -186,12 +186,11 @@ export const enum ActivationType {
 }
 
 export const enum ItemConsumeType {
-    ActorResource = 'actor_resource', // E.g. health, focus, investiture
-    ItemResource = 'item_resource', // E.g. uses, charges
+    Resource = 'resource', // E.g. health, focus, investiture
     Item = 'item',
 }
 
-export const enum ItemResource {
+export const enum ItemUseType {
     Use = 'use',
     Charge = 'charge',
 }

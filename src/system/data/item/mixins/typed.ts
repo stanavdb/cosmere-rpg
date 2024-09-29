@@ -1,7 +1,7 @@
 import { CosmereItem } from '@system/documents';
 
 interface TypedItemMixinOptions<Type extends string = string> {
-    initial?: Type;
+    initial?: Type | (() => Type);
     choices?:
         | Type[]
         | Record<Type, string>
@@ -19,6 +19,11 @@ export function TypedItemMixin<
     return (base: typeof foundry.abstract.TypeDataModel<TypedItemData, P>) => {
         return class extends base {
             static defineSchema() {
+                const initial =
+                    typeof options.initial === 'function'
+                        ? options.initial()
+                        : options.initial;
+
                 const choices =
                     typeof options.choices === 'function'
                         ? options.choices()
@@ -28,7 +33,7 @@ export function TypedItemMixin<
                     type: new foundry.data.fields.StringField({
                         required: true,
                         nullable: false,
-                        initial: options.initial ?? 'unknown',
+                        initial: initial ?? 'unknown',
                         label: 'Type',
                         choices,
                     }),

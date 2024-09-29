@@ -23,7 +23,7 @@ import {
     DamageType,
     ItemType,
     ItemRechargeType,
-    ItemResource,
+    ItemUseType,
     EquipType,
     HoldType,
     EquipHand,
@@ -144,7 +144,7 @@ export interface ActivationTypeConfig {
     label: string;
 }
 
-export interface ItemResourceConfig {
+export interface ItemUseTypeConfig {
     label: string;
     labelPlural: string;
 }
@@ -231,10 +231,10 @@ export interface CosmereRPGConfig {
         activation: {
             types: Record<ActivationType, ActivationTypeConfig>;
             consumeTypes: Record<ItemConsumeType, ItemConsumeTypeConfig>;
-        };
-        resources: {
-            types: Record<ItemResource, ItemResourceConfig>;
-            recharge: Record<ItemRechargeType, ItemRechargeConfig>;
+            uses: {
+                types: Record<ItemUseType, ItemUseTypeConfig>;
+                recharge: Record<ItemRechargeType, ItemRechargeConfig>;
+            };
         };
         equip: {
             types: Record<EquipType, EquipTypeConfig>;

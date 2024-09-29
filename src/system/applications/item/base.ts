@@ -114,6 +114,18 @@ export class BaseItemSheet extends TabsApplicationMixin(
                 formData.object['system.activation.attribute'] === 'none'
             )
                 formData.set('system.activation.attribute', null);
+
+            if (
+                'system.activation.uses.type' in formData.object &&
+                formData.object['system.activation.uses.type'] === 'none'
+            )
+                formData.set('system.activation.uses', null);
+
+            if (
+                'system.activation.uses.recharge' in formData.object &&
+                formData.object['system.activation.uses.recharge'] === 'none'
+            )
+                formData.set('system.activation.uses.recharge', null);
         }
 
         // Update the document

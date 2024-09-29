@@ -153,6 +153,7 @@
                     "label": "Actions",
                     "Activation": "Use",
                     "Consume": "Cost",
+                    "Uses": "Uses",
                     "Use": "Use action",
                     "Strike": "Strike"
                 },
@@ -376,17 +377,28 @@
                     "Utility": "Utility"
                 },
                 "ConsumeType": {
-                    "ActorResource": {
-                        "Label": "Actor Resource"
-                    },
-                    "ItemResource": {
-                        "Label": "Item Resource"
+                    "Resource": {
+                        "Label": "Resource"
                     },
                     "Item": {
                         "Label": "Item"
                     }
                 },
-                "Consume": {
+                "Uses": {
+                    "Types": {
+                        "Charge": {
+                            "Singular": "Charge",
+                            "Plural": "Charges"
+                        },
+                        "Use": {
+                            "Singular": "Use",
+                            "Plural": "Uses"
+                        }
+                    },
+                    "Recharge": {
+                        "Label": "Recharge",
+                        "PerScene": "Per scene"
+                    },
                     "Per": "Per"
                 }
             },
@@ -402,20 +414,7 @@
                     "Death": "Death"
                 }
             },
-            "Resources": {
-                "Charge": {
-                    "Singular": "Charge",
-                    "Plural": "Charges"
-                },
-                "Use": {
-                    "Singular": "Use",
-                    "Plural": "Uses"
-                },
-                "Recharge": {
-                    "Label": "Recharge",
-                    "PerScene": "Per scene"
-                }
-            },
+
             "Equip": {
                 "Types": {
                     "Wear": {
@@ -493,7 +492,9 @@
                     "Title": "Usage",
                     "Type": "Activation Type",
                     "Cost": "Activation Cost",
-                    "Consume": "Resource Consumption"
+                    "Consume": "Resource Consumption",
+                    "Uses": "Limited Uses",
+                    "Recharge": "Recharge"
                 }
             }
         },
@@ -649,6 +650,7 @@
             "NotImplemented": "Sorry! [action] is not implemented yet",
             "NoActor": "No selected or assigned actor found for this roll",
             "NotEnoughResource": "Cannot consume, not enough of resource",
+            "NotEnoughUses": "Cannot consume, not enough uses left",
             "ItemConsumeResourceNotConfigured": "The resource selected to be consumed is not configured on this item",
             "NoDuplicateExpertises": "Cannot create duplicate expertise"
         },
@@ -675,7 +677,8 @@
             "specialty": "Specialty",
             "loot": "Loot",
             "armor": "Armor",
-            "trait": "Trait"
+            "trait": "Trait",
+            "action": "Action"
         }
     }
 }

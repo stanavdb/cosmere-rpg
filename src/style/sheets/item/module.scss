@@ -67,6 +67,11 @@
                 flex: 1;
             }
 
+            .delim {
+                flex: unset;
+                margin: 0 0.25rem;
+            }
+
             input:has(+ select + select) {
                 width: 3rem;
                 flex: unset;
@@ -226,6 +231,13 @@ app-item-details-activation {
     .form-group.consume {
         input + select + select {
             font-size: 9pt;
+        }
+    }
+
+    .form-group.uses {
+        input {
+            flex: unset !important;
+            width: 4rem;
         }
     }
 }
