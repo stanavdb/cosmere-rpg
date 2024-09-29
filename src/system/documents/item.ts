@@ -621,3 +621,4 @@ export type ConnectionItem = CosmereItem<ConnectionItemDataModel>;
 export type InjuryItem = CosmereItem<InjuryItemDataModel>;
 export type SpecialtyItem = CosmereItem<SpecialtyItemDataModel>;
 export type LootItem = CosmereItem<LootItemDataModel>;
+export type ArmorItem = CosmereItem<ArmorItemDataModel>;

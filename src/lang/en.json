@@ -480,6 +480,14 @@
                     "Quantity": "Quantity",
                     "Weight": "Weight",
                     "Price": "Price"
+                },
+                "Equip": {
+                    "Title": "Equipment Details",
+                    "AlwaysEquipped": "Is Always Equipped?",
+                    "Traits": "Traits",
+                    "ExpertTraits": "Expert Traits",
+                    "LoseTrait": "Loses [trait]",
+                    "ModifyTraitValue": "[trait] [[value]] >"
                 }
             }
         },
@@ -656,7 +664,8 @@
             "connection": "Connection",
             "injury": "Injury",
             "specialty": "Specialty",
-            "loot": "Loot"
+            "loot": "Loot",
+            "armor": "Armor"
         }
     }
 }

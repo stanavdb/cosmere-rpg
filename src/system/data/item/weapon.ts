@@ -4,6 +4,7 @@ import {
     HoldType,
     EquipHand,
     WeaponType,
+    EquipType,
 } from '@system/types/cosmere';
 import { CosmereItem } from '@src/system/documents';
 
@@ -35,7 +36,7 @@ export interface WeaponItemData
         AttackingItemData,
         DamagingItemData,
         ExpertiseItemData,
-        TraitsItemData,
+        TraitsItemData<WeaponTraitId>,
         Partial<PhysicalItemData> {}
 
 export class WeaponItemDataModel extends DataModelMixin<
@@ -50,7 +51,12 @@ export class WeaponItemDataModel extends DataModelMixin<
         choices: () => Object.keys(CONFIG.COSMERE.weaponTypes),
     }),
     DescriptionItemMixin(),
-    EquippableItemMixin(),
+    EquippableItemMixin({
+        equipType: {
+            initial: EquipType.Hold,
+            choices: [EquipType.Hold],
+        },
+    }),
     ActivatableItemMixin(),
     AttackingItemMixin(),
     DamagingItemMixin(),
@@ -66,7 +72,7 @@ export class WeaponItemDataModel extends DataModelMixin<
         super.prepareDerivedData();
 
         // Get active traits
-        const activeTraits = this.traits.filter((trait) => trait.active);
+        const activeTraits = this.traitsArray.filter((trait) => trait.active);
 
         // Check if Two Handed is active
         const twoHandedActive = activeTraits.some(
