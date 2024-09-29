@@ -267,7 +267,8 @@
                 },
                 "Armor": {
                     "label": "Armor",
-                    "label_plural": "Armor"
+                    "label_plural": "Armor",
+                    "desc_placeholder": "Edit this to describe what this armor is & how it looks."
                 },
                 "Equipment": {
                     "label": "Equipment",
@@ -308,7 +309,8 @@
                 },
                 "Trait": {
                     "label": "Trait",
-                    "label_plural": "Traits"
+                    "label_plural": "Traits",
+                    "desc_placeholder": "Edit this to describe this trait."
                 },
                 "Injury": {
                     "label": "Injury",

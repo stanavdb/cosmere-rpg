@@ -374,6 +374,7 @@ const COSMERE: CosmereRPGConfig = {
             [ItemType.Armor]: {
                 label: 'COSMERE.Item.Type.Armor.label',
                 labelPlural: 'COSMERE.Item.Type.Armor.label_plural',
+                desc_placeholder: 'COSMERE.Item.Type.Armor.desc_placeholder',
             },
             [ItemType.Equipment]: {
                 label: 'COSMERE.Item.Type.Equipment.label',
@@ -416,6 +417,7 @@ const COSMERE: CosmereRPGConfig = {
             [ItemType.Trait]: {
                 label: 'COSMERE.Item.Type.Trait.label',
                 labelPlural: 'COSMERE.Item.Type.Trait.label_plural',
+                desc_placeholder: 'COSMERE.Item.Type.Trait.desc_placeholder',
             },
             [ItemType.Injury]: {
                 label: 'COSMERE.Item.Type.Injury.label',
