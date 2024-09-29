@@ -158,9 +158,12 @@ Handlebars.registerHelper(
                 });
 
                 if (attack.range?.value) {
-                    if (attack.type === AttackType.Melee) {
+                    if (
+                        attack.type === AttackType.Melee &&
+                        item.system.traits.reach?.active
+                    ) {
                         subtitle[0].text += ` + ${attack.range.value}`;
-                    } else {
+                    } else if (attack.type === AttackType.Ranged) {
                         subtitle[0].text += ` (${attack.range.value}${attack.range.units}${
                             attack.range.long
                                 ? `/${attack.range.long}${attack.range.units}`
@@ -238,14 +241,9 @@ Handlebars.registerHelper(
 
             if (item.hasTraits()) {
                 subtitle.push(
-                    ...Array.from(item.system.traits)
+                    ...item.system.traitsArray
                         .filter((trait) => trait.active)
                         .map((trait) => {
-                            // Get trait data
-                            const data = item.system.traits.find(
-                                (t) => t.id === trait.id,
-                            )!;
-
                             // Get the config
                             const config = isWeapon
                                 ? CONFIG.COSMERE.traits.weaponTraits[
@@ -260,12 +258,13 @@ Handlebars.registerHelper(
                                 trait.value !== trait.defaultValue;
 
                             return {
-                                text: `${game.i18n!.localize(config.label)} ${config.hasValue ? `[${data.value}]` : ''}`.trim(),
+                                text: `${game.i18n!.localize(config.label)} ${config.hasValue ? `[${trait.value}]` : ''}`.trim(),
                                 classes: modifiedByExpertise
                                     ? ['highlight']
                                     : [],
                             };
-                        }),
+                        })
+                        .sort((a, b) => a.classes.length - b.classes.length),
                 );
             }
 
@@ -523,6 +522,7 @@ export async function preloadHandlebarsTemplates() {
         'systems/cosmere-rpg/templates/item/injury/partials/injury-details-tab.hbs',
         'systems/cosmere-rpg/templates/item/specialty/partials/specialty-details-tab.hbs',
         'systems/cosmere-rpg/templates/item/loot/partials/loot-details-tab.hbs',
+        'systems/cosmere-rpg/templates/item/armor/partials/armor-details-tab.hbs',
         'systems/cosmere-rpg/templates/combat/combatant.hbs',
     ];
     return await loadTemplates(
