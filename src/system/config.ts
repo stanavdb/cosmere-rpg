@@ -382,6 +382,7 @@ const COSMERE: CosmereRPGConfig = {
             [ItemType.Loot]: {
                 label: 'COSMERE.Item.Type.Loot.label',
                 labelPlural: 'COSMERE.Item.Type.Loot.label_plural',
+                desc_placeholder: 'COSMERE.Item.Type.Loot.desc_placeholder',
             },
             [ItemType.Ancestry]: {
                 label: 'COSMERE.Item.Type.Ancestry.label',
@@ -396,10 +397,13 @@ const COSMERE: CosmereRPGConfig = {
             [ItemType.Path]: {
                 label: 'COSMERE.Item.Type.Path.label',
                 labelPlural: 'COSMERE.Item.Type.Path.label_plural',
+                desc_placeholder: 'COSMERE.Item.Type.Path.desc_placeholder',
             },
             [ItemType.Specialty]: {
                 label: 'COSMERE.Item.Type.Specialty.label',
                 labelPlural: 'COSMERE.Item.Type.Specialty.label_plural',
+                desc_placeholder:
+                    'COSMERE.Item.Type.Specialty.desc_placeholder',
             },
             [ItemType.Talent]: {
                 label: 'COSMERE.Item.Type.Talent.label',
@@ -416,10 +420,13 @@ const COSMERE: CosmereRPGConfig = {
             [ItemType.Injury]: {
                 label: 'COSMERE.Item.Type.Injury.label',
                 labelPlural: 'COSMERE.Item.Type.Injury.label_plural',
+                desc_placeholder: 'COSMERE.Item.Type.Injury.desc_placeholder',
             },
             [ItemType.Connection]: {
                 label: 'COSMERE.Item.Type.Connection.label',
                 labelPlural: 'COSMERE.Item.Type.Connection.label_plural',
+                desc_placeholder:
+                    'COSMERE.Item.Type.Connection.desc_placeholder',
             },
         },
         activation: {

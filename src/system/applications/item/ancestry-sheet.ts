@@ -4,23 +4,21 @@ import { DeepPartial } from '@system/types/utils';
 import { BaseItemSheet } from './base';
 
 export class AncestrySheet extends BaseItemSheet {
-    static DEFAULT_OPTIONS = {
-        classes: ['cosmere-rpg', 'sheet', 'item', 'ancestry'],
-        position: {
-            width: 600,
-            height: 550,
+    static DEFAULT_OPTIONS = foundry.utils.mergeObject(
+        foundry.utils.deepClone(super.DEFAULT_OPTIONS),
+        {
+            classes: ['cosmere-rpg', 'sheet', 'item', 'ancestry'],
+            position: {
+                width: 600,
+                height: 550,
+            },
+            window: {
+                resizable: true,
+                positioned: true,
+                title: '<i class="fas fa-timeline"></i> ' + this.name,
+            },
         },
-        form: {
-            // eslint-disable-next-line @typescript-eslint/unbound-method
-            handler: this.onFormEvent,
-            submitOnChange: true,
-        },
-        window: {
-            resizable: true,
-            positioned: true,
-            title: '<i class="fas fa-timeline"></i> ' + this.name,
-        },
-    };
+    );
 
     static PARTS = foundry.utils.mergeObject(
         foundry.utils.deepClone(super.PARTS),
@@ -34,17 +32,6 @@ export class AncestrySheet extends BaseItemSheet {
 
     get item(): AncestryItem {
         return super.document;
-    }
-
-    /* --- Form --- */
-
-    public static onFormEvent(
-        this: AncestrySheet,
-        event: Event,
-        form: HTMLFormElement,
-        formData: FormDataExtended,
-    ) {
-        super.onFormEvent(event, form, formData);
     }
 
     /* --- Context --- */

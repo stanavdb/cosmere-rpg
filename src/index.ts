@@ -53,6 +53,7 @@ Hooks.once('init', async () => {
 
     Items.unregisterSheet('core', ItemSheet);
     registerItemSheet(ItemType.Culture, applications.item.CultureItemSheet);
+    registerItemSheet(ItemType.Ancestry, applications.item.AncestrySheet);
     registerItemSheet(ItemType.Path, applications.item.PathItemSheet);
     registerItemSheet(
         ItemType.Connection,
@@ -61,17 +62,6 @@ Hooks.once('init', async () => {
     registerItemSheet(ItemType.Injury, applications.item.InjuryItemSheet);
     registerItemSheet(ItemType.Specialty, applications.item.SpecialtyItemSheet);
     registerItemSheet(ItemType.Loot, applications.item.LootItemSheet);
-
-    Items.registerSheet(
-        'cosmere-rpg',
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        applications.item.AncestrySheet as any,
-        {
-            types: ['ancestry'],
-            label: `${game.i18n?.localize('COSMERE.Item.Type.Ancestry.label')}`,
-            makeDefault: true,
-        },
-    );
 
     CONFIG.Dice.types.push(dice.PlotDie);
     CONFIG.Dice.terms.p = dice.PlotDie;

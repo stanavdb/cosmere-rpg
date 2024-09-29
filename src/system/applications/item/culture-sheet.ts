@@ -5,22 +5,20 @@ import { DeepPartial } from '@system/types/utils';
 import { BaseItemSheet } from './base';
 
 export class CultureItemSheet extends BaseItemSheet {
-    static DEFAULT_OPTIONS = {
-        classes: ['cosmere-rpg', 'sheet', 'item', 'culture'],
-        position: {
-            width: 550,
-            height: 500,
+    static DEFAULT_OPTIONS = foundry.utils.mergeObject(
+        foundry.utils.deepClone(super.DEFAULT_OPTIONS),
+        {
+            classes: ['cosmere-rpg', 'sheet', 'item', 'culture'],
+            position: {
+                width: 550,
+                height: 500,
+            },
+            window: {
+                resizable: true,
+                positioned: true,
+            },
         },
-        form: {
-            // eslint-disable-next-line @typescript-eslint/unbound-method
-            handler: this.onFormEvent,
-            submitOnChange: true,
-        },
-        window: {
-            resizable: true,
-            positioned: true,
-        },
-    };
+    );
 
     static PARTS = foundry.utils.mergeObject(
         foundry.utils.deepClone(super.PARTS),
@@ -34,17 +32,6 @@ export class CultureItemSheet extends BaseItemSheet {
 
     get item(): CultureItem {
         return super.document;
-    }
-
-    /* --- Form --- */
-
-    public static onFormEvent(
-        this: CultureItemSheet,
-        event: Event,
-        form: HTMLFormElement,
-        formData: FormDataExtended,
-    ) {
-        super.onFormEvent(event, form, formData);
     }
 
     /* --- Context --- */

@@ -275,7 +275,8 @@
                 },
                 "Loot": {
                     "label": "Loot",
-                    "label_plural": "Loot"
+                    "label_plural": "Loot",
+                    "desc_placeholder": "Edit this to describe the item."
                 },
                 "Ancestry": {
                     "label": "Ancestry",
@@ -289,11 +290,13 @@
                 },
                 "Path": {
                     "label": "Path",
-                    "label_plural": "Paths"
+                    "label_plural": "Paths",
+                    "desc_placeholder": "Edit this to describe this the sorts of characters this progression path represents."
                 },
                 "Specialty": {
                     "label": "Specialty",
-                    "label_plural": "Specialties"
+                    "label_plural": "Specialties",
+                    "desc_placeholder": "Edit this to describe the unique subset of characters this specialty represents."
                 },
                 "Talent": {
                     "label": "Talent",
@@ -309,11 +312,13 @@
                 },
                 "Injury": {
                     "label": "Injury",
-                    "label_plural": "Injuries"
+                    "label_plural": "Injuries",
+                    "desc_placeholder": "Edit this to describe how this injury affects a character."
                 },
                 "Connection": {
                     "label": "Connection",
-                    "label_plural": "Connections"
+                    "label_plural": "Connections",
+                    "desc_placeholder": "Edit this to create a description of the NPC and how they are connected to the character."
                 }
             },
             "Weapon": {
