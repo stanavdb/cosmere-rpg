@@ -39,7 +39,7 @@ export class BaseItemSheet extends TabsApplicationMixin(
             },
             effects: {
                 label: 'COSMERE.Item.Sheet.Tabs.Effects',
-                icon: '<i class="fa-solid fa-gear"></i>',
+                icon: '<i class="fa-solid fa-bolt"></i>',
             },
         },
     );
