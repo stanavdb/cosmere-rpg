@@ -488,6 +488,12 @@
                     "ExpertTraits": "Expert Traits",
                     "LoseTrait": "Loses [trait]",
                     "ModifyTraitValue": "[trait] [[value]] >"
+                },
+                "Activation": {
+                    "Title": "Usage",
+                    "Type": "Activation Type",
+                    "Cost": "Activation Cost",
+                    "Consume": "Resource Consumption"
                 }
             }
         },
@@ -615,8 +621,11 @@
     "GENERIC": {
         "Unknown": "Unknown",
         "None": "None",
+        "Default": "Default",
         "Formula": "Formula",
         "Value": "Value",
+        "Skill": "Skill",
+        "Attribute": "Attribute",
         "SkillTest": "Skill Test",
         "Cost": "Cost",
         "Configure": "Configure",
@@ -665,7 +674,8 @@
             "injury": "Injury",
             "specialty": "Specialty",
             "loot": "Loot",
-            "armor": "Armor"
+            "armor": "Armor",
+            "trait": "Trait"
         }
     }
 }

@@ -84,6 +84,38 @@ export class BaseItemSheet extends TabsApplicationMixin(
             }
         }
 
+        if (this.item.hasActivation()) {
+            if (
+                'system.activation.cost.type' in formData.object &&
+                formData.object['system.activation.cost.type'] === 'none'
+            )
+                formData.set('system.activation.cost.type', null);
+
+            if (
+                'system.activation.consume.type' in formData.object &&
+                formData.object['system.activation.consume.type'] === 'none'
+            )
+                formData.set('system.activation.consume', null);
+
+            if (
+                'system.activation.consume.resource' in formData.object &&
+                formData.object['system.activation.consume.resource'] === 'none'
+            )
+                formData.set('system.activation.consume.resource', null);
+
+            if (
+                'system.activation.skill' in formData.object &&
+                formData.object['system.activation.skill'] === 'none'
+            )
+                formData.set('system.activation.skill', null);
+
+            if (
+                'system.activation.attribute' in formData.object &&
+                formData.object['system.activation.attribute'] === 'none'
+            )
+                formData.set('system.activation.attribute', null);
+        }
+
         // Update the document
         void this.item.update(formData.object);
     }

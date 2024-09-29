@@ -181,7 +181,6 @@ export const enum DeflectSource {
 }
 
 export const enum ActivationType {
-    Action = 'action',
     Utility = 'utility',
     SkillTest = 'skill_test',
 }
