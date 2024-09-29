@@ -615,6 +615,7 @@ app-actor-equipment-list {
 
             .activation,
             .consume,
+            .uses,
             .weight,
             .quantity,
             .duration,
@@ -636,6 +637,14 @@ app-actor-equipment-list {
 
             .consume {
                 width: 6.5rem;
+            }
+
+            .uses {
+                width: 6.5rem;
+
+                .inactive {
+                    opacity: 0.3;
+                }
             }
 
             .quantity {

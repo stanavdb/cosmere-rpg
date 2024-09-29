@@ -29,6 +29,7 @@ export class DetailsActivationComponent extends HandlebarsApplicationComponent<
         return {
             hasActivationCost: !!activation.cost.type,
             hasConsume: !!activation.consume,
+            hasUses: !!activation.uses,
             hasSkill: !!activation.skill,
 
             typeSelectOptions: Object.entries(
@@ -62,7 +63,7 @@ export class DetailsActivationComponent extends HandlebarsApplicationComponent<
                     {},
                 ),
             },
-            actorResourceSelectOptions: {
+            resourceSelectOptions: {
                 none: 'GENERIC.None',
                 ...Object.entries(CONFIG.COSMERE.resources).reduce(
                     (acc, [key, config]) => ({
@@ -72,9 +73,23 @@ export class DetailsActivationComponent extends HandlebarsApplicationComponent<
                     {},
                 ),
             },
-            itemResourceSelectOptions: {
+            usesTypeSelectOptions: {
                 none: 'GENERIC.None',
-                ...Object.entries(CONFIG.COSMERE.items.resources.types).reduce(
+                ...Object.entries(
+                    CONFIG.COSMERE.items.activation.uses.types,
+                ).reduce(
+                    (acc, [key, config]) => ({
+                        ...acc,
+                        [key]: config.labelPlural,
+                    }),
+                    {},
+                ),
+            },
+            rechargeSelectOptions: {
+                none: 'GENERIC.None',
+                ...Object.entries(
+                    CONFIG.COSMERE.items.activation.uses.recharge,
+                ).reduce(
                     (acc, [key, config]) => ({
                         ...acc,
                         [key]: config.label,
