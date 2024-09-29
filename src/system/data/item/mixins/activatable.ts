@@ -18,8 +18,8 @@ interface ItemResourceData {
 
 export interface ActivatableItemData {
     activation: {
-        type?: ActivationType;
-        cost?: {
+        type: ActivationType;
+        cost: {
             value?: number;
             type?: ActionCostType;
         };
@@ -50,6 +50,7 @@ export function ActivatableItemMixin<P extends CosmereItem>() {
                 return foundry.utils.mergeObject(super.defineSchema(), {
                     activation: new foundry.data.fields.SchemaField({
                         type: new foundry.data.fields.StringField({
+                            required: true,
                             blank: false,
                             choices: Object.keys(
                                 CONFIG.COSMERE.items.activation.types,
@@ -58,19 +59,20 @@ export function ActivatableItemMixin<P extends CosmereItem>() {
                         cost: new foundry.data.fields.SchemaField(
                             {
                                 value: new foundry.data.fields.NumberField({
+                                    nullable: true,
                                     min: 0,
                                     integer: true,
                                 }),
                                 type: new foundry.data.fields.StringField({
+                                    nullable: true,
+                                    blank: false,
                                     choices: Object.keys(
                                         CONFIG.COSMERE.action.costs,
                                     ),
                                 }),
                             },
                             {
-                                required: false,
-                                nullable: true,
-                                initial: null,
+                                required: true,
                             },
                         ),
                         consume: new foundry.data.fields.SchemaField(
@@ -114,6 +116,7 @@ export function ActivatableItemMixin<P extends CosmereItem>() {
                         ),
                         flavor: new foundry.data.fields.HTMLField(),
                         skill: new foundry.data.fields.StringField({
+                            nullable: true,
                             blank: false,
                             choices: Object.keys(CONFIG.COSMERE.skills),
                         }),

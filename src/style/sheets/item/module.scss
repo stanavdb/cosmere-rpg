@@ -52,6 +52,26 @@
         span.units {
             color: #efe6d8bf;
         }
+
+        input + select,
+        select + select {
+            margin-left: 0.5rem;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            padding: 0 0.5rem;
+
+            > * {
+                flex: 1;
+            }
+
+            input:has(+ select + select) {
+                width: 3rem;
+                flex: unset;
+            }
+        }
     }
 
     select option {
@@ -63,6 +83,13 @@
 
 .tab[data-tab='description'].active {
     display: flex;
+}
+
+.tab[data-tab='details'].active {
+    h5 {
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+    }
 }
 
 /* --- Components ---*/
@@ -191,6 +218,14 @@ app-item-details-equip {
                 text-align: center;
                 margin-left: 0.3rem;
             }
+        }
+    }
+}
+
+app-item-details-activation {
+    .form-group.consume {
+        input + select + select {
+            font-size: 9pt;
         }
     }
 }

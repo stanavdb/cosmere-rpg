@@ -7,3 +7,4 @@ export * from './injury-sheet';
 export * from './specialty-sheet';
 export * from './loot-sheet';
 export * from './armor-sheet';
+export * from './trait-sheet';
