@@ -431,9 +431,6 @@ const COSMERE: CosmereRPGConfig = {
         },
         activation: {
             types: {
-                [ActivationType.Action]: {
-                    label: 'COSMERE.Item.Activation.Type.Action',
-                },
                 [ActivationType.SkillTest]: {
                     label: 'COSMERE.Item.Activation.Type.SkillTest',
                 },

@@ -62,6 +62,8 @@ Hooks.once('init', async () => {
     registerItemSheet(ItemType.Injury, applications.item.InjuryItemSheet);
     registerItemSheet(ItemType.Specialty, applications.item.SpecialtyItemSheet);
     registerItemSheet(ItemType.Loot, applications.item.LootItemSheet);
+    registerItemSheet(ItemType.Armor, applications.item.ArmorItemSheet);
+    registerItemSheet(ItemType.Trait, applications.item.TraitItemSheet);
 
     CONFIG.Dice.types.push(dice.PlotDie);
     CONFIG.Dice.terms.p = dice.PlotDie;
@@ -79,13 +81,6 @@ Hooks.once('init', async () => {
 
     // Register status effects
     registerStatusEffects();
-
-    /* ------------------- */
-
-    // TEMP: This resembles a system module
-    (CONFIG.COSMERE.paths.types as Record<string, unknown>).radiant = {
-        label: 'Radiant',
-    };
 });
 
 /**

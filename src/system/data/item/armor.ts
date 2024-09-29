@@ -1,3 +1,4 @@
+import { EquipType, ArmorTraitId } from '@system/types/cosmere';
 import { CosmereItem } from '@src/system/documents';
 
 // Mixins
@@ -17,9 +18,9 @@ export interface ArmorItemData
         DescriptionItemData,
         EquippableItemData,
         ExpertiseItemData,
-        TraitsItemData,
+        TraitsItemData<ArmorTraitId>,
         PhysicalItemData {
-    deflect?: number;
+    deflect: number;
 }
 
 export class ArmorItemDataModel extends DataModelMixin<
@@ -30,14 +31,24 @@ export class ArmorItemDataModel extends DataModelMixin<
         initial: 'none',
     }),
     DescriptionItemMixin(),
-    EquippableItemMixin(),
+    EquippableItemMixin({
+        equipType: {
+            initial: EquipType.Wear,
+            choices: [EquipType.Wear],
+        },
+    }),
     ExpertiseItemMixin(),
     TraitsItemMixin(),
     PhysicalItemMixin(),
 ) {
     static defineSchema() {
         return foundry.utils.mergeObject(super.defineSchema(), {
-            deflect: new foundry.data.fields.NumberField({ min: 0 }),
+            deflect: new foundry.data.fields.NumberField({
+                required: true,
+                initial: 0,
+                min: 0,
+                integer: true,
+            }),
         });
     }
 }

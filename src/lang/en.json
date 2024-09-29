@@ -487,6 +487,20 @@
                     "Quantity": "Quantity",
                     "Weight": "Weight",
                     "Price": "Price"
+                },
+                "Equip": {
+                    "Title": "Equipment Details",
+                    "AlwaysEquipped": "Is Always Equipped?",
+                    "Traits": "Traits",
+                    "ExpertTraits": "Expert Traits",
+                    "LoseTrait": "Loses [trait]",
+                    "ModifyTraitValue": "[trait] [[value]] >"
+                },
+                "Activation": {
+                    "Title": "Usage",
+                    "Type": "Activation Type",
+                    "Cost": "Activation Cost",
+                    "Consume": "Resource Consumption"
                 }
             }
         },
@@ -614,8 +628,11 @@
     "GENERIC": {
         "Unknown": "Unknown",
         "None": "None",
+        "Default": "Default",
         "Formula": "Formula",
         "Value": "Value",
+        "Skill": "Skill",
+        "Attribute": "Attribute",
         "SkillTest": "Skill Test",
         "Cost": "Cost",
         "Configure": "Configure",
@@ -664,7 +681,9 @@
             "connection": "Connection",
             "injury": "Injury",
             "specialty": "Specialty",
-            "loot": "Loot"
+            "loot": "Loot",
+            "armor": "Armor",
+            "trait": "Trait"
         }
     }
 }
