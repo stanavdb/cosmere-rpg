@@ -59,7 +59,7 @@ export class AncestryItemDataModel extends DataModelMixin<
                     restrictions: new foundry.data.fields.ObjectField(),
                     // ^ how to define a rule object?... e.g. "only attaches to owned talent in singer tree"
                 }),
-                extraTalentTrees: new foundry.data.fields.StringField(),
+                extraTalentTree: new foundry.data.fields.StringField(),
                 extraTalents: new foundry.data.fields.ArrayField(
                     new foundry.data.fields.SchemaField({
                         name: new foundry.data.fields.StringField(),
@@ -68,5 +68,15 @@ export class AncestryItemDataModel extends DataModelMixin<
                 ),
             }),
         });
+    }
+
+    get typeFieldId(): foundry.data.fields.StringField {
+        return this.schema.fields.type._getField([
+            'id',
+        ]) as foundry.data.fields.StringField;
+    }
+
+    get sizeField(): foundry.data.fields.StringField {
+        return this.schema.fields.size as foundry.data.fields.StringField;
     }
 }

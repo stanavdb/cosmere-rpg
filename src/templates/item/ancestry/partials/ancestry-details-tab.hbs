@@ -1,0 +1,51 @@
+{{#with (lookup tabsMap "details") as |tab|}}
+
+<div class="tab tab-content {{tab.cssClass}}" data-tab="details" data-group="primary">
+    <fieldset>
+        <legend>Basics</legend>
+        <div class="form-group">
+            <label>Type</label>
+            {{!-- This can be improved I think (initially selected value is off, needs capitalisation) --}}
+            {{formInput @root.item.system.typeFieldId}}
+        </div>
+        <div class="form-group">
+            <label>Size</label>
+            {{formInput @root.item.system.sizeField}}
+        </div>
+    </fieldset>
+    <fieldset name="system.advancement">
+        <legend>
+            <i class="fa-solid fa-arrow-up"></i> Advancement
+        </legend>
+        <div class="form-group">
+            <label>Free {{localize "COSMERE.Item.Type.Path.label"}}</label>
+            {{app-id-input
+                name="extraTalentTree"
+                value=@root.item.system.advancement.extraTalentTree
+            }}
+        </div>
+        <p class="notes">
+            {{localize "COSMERE.Item.Sheet.Ancestry.PathIdDescription"}}
+        </p>
+        <div class="form-group">
+            <label>Free {{localize "COSMERE.Item.Type.Talent.label_plural"}}</label>
+            {{!-- <input name="extraTalentTree" type="text" value="{{@root.item.system.advancement.extraTalentTree}}" /> --}}
+            List of talent names to go here...
+        </div>
+        <label>Extra {{localize "COSMERE.Item.Type.Talent.label"}} Picks</label>
+        <table>
+            <tr>
+                <th>Level</th>
+                <th>Amount</th>
+                <th>Restrictions</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>1</td>
+                <td>...</td>
+            </tr>
+        </table>
+    </fieldset>
+</div>
+
+{{/with}}

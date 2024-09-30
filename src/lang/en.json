@@ -477,6 +477,9 @@
                     "InitialDuration": "Initial",
                     "RemainingDuration": "Remaining"
                 },
+                "Ancestry": {
+                    "PathIdDescription": "The identifier of the path item you want characters with this Ancestry to have access to. The path identifier can only contain letters (a-z), numbers (0-9), dashes (-), and underscores (_)."
+                },
                 "Specialty": {
                     "PathId": "Path Identifier",
                     "PathIdDescription": "The identifier of the path this specialty belongs to. The path identifier can only contain letters (a-z), numbers (0-9), dashes (-), and underscores (_)."
