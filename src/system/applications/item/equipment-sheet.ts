@@ -1,21 +1,31 @@
-import { ConnectionItem } from '@system/documents/item';
+import { EquipmentItem } from '@system/documents/item';
 import { DeepPartial } from '@system/types/utils';
 
 // Base
 import { BaseItemSheet } from './base';
 
-export class ConnectionItemSheet extends BaseItemSheet {
+export class EquipmentItemSheet extends BaseItemSheet {
     static DEFAULT_OPTIONS = foundry.utils.mergeObject(
         foundry.utils.deepClone(super.DEFAULT_OPTIONS),
         {
-            classes: ['cosmere-rpg', 'sheet', 'item', 'connection'],
+            classes: ['cosmere-rpg', 'sheet', 'item', 'equipment'],
             position: {
-                width: 550,
+                width: 730,
                 height: 500,
             },
             window: {
                 resizable: true,
                 positioned: true,
+            },
+        },
+    );
+
+    static TABS = foundry.utils.mergeObject(
+        foundry.utils.deepClone(super.TABS),
+        {
+            details: {
+                label: 'COSMERE.Item.Sheet.Tabs.Details',
+                sortIndex: 15,
             },
         },
     );
@@ -30,7 +40,7 @@ export class ConnectionItemSheet extends BaseItemSheet {
         },
     );
 
-    get item(): ConnectionItem {
+    get item(): EquipmentItem {
         return super.document;
     }
 

@@ -26,7 +26,14 @@ export class EquipmentItemDataModel extends DataModelMixin<
 >(
     TypedItemMixin({
         initial: EquipmentType.Basic,
-        choices: () => Object.keys(CONFIG.COSMERE.items.equipment.types),
+        choices: () =>
+            Object.entries(CONFIG.COSMERE.items.equipment.types).reduce(
+                (acc, [key, config]) => ({
+                    ...acc,
+                    [key]: config.label,
+                }),
+                {} as Record<EquipmentType, string>,
+            ),
     }),
     DescriptionItemMixin(),
     PhysicalItemMixin(),

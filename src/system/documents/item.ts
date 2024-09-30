@@ -21,6 +21,7 @@ import {
     ActionItemDataModel,
     TraitItemDataModel,
     LootItemDataModel,
+    EquipmentItemDataModel,
 } from '@system/data/item';
 
 import { ActivatableItemData } from '@system/data/item/mixins/activatable';
@@ -583,3 +584,4 @@ export type ArmorItem = CosmereItem<ArmorItemDataModel>;
 export type TraitItem = CosmereItem<TraitItemDataModel>;
 export type ActionItem = CosmereItem<ActionItemDataModel>;
 export type TalentItem = CosmereItem<TalentItemDataModel>;
+export type EquipmentItem = CosmereItem<EquipmentItemDataModel>;

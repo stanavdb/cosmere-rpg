@@ -35,7 +35,7 @@ export class PathItemSheet extends BaseItemSheet {
         {
             'sheet-content': {
                 template:
-                    'systems/cosmere-rpg/templates/item/path/parts/sheet-content.hbs',
+                    'systems/cosmere-rpg/templates/item/parts/sheet-content.hbs',
             },
         },
     );

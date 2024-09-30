@@ -757,7 +757,8 @@
             "armor": "Armor",
             "trait": "Trait",
             "action": "Action",
-            "talent": "Talent"
+            "talent": "Talent",
+            "equipment": "Equipment"
         }
     }
 }
