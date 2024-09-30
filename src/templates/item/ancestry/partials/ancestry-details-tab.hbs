@@ -4,12 +4,12 @@
     <fieldset>
         <legend>Basics</legend>
         <div class="form-group">
-            <label>Type</label>
-            {{!-- This can be improved I think (initially selected value is off, needs capitalisation) --}}
+            <label>{{localize "COSMERE.Item.Sheet.Type"}}</label>
+            {{!-- This can be improved I think (initially selected value is off, needs capitalisation & localisation) --}}
             {{formInput @root.item.system.typeFieldId}}
         </div>
         <div class="form-group">
-            <label>Size</label>
+            <label>{{localize "COSMERE.Item.Sheet.Ancestry.Size"}}</label>
             {{formInput @root.item.system.sizeField}}
         </div>
     </fieldset>
