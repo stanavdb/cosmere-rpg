@@ -11,3 +11,4 @@ export * from './trait-sheet';
 export * from './action-sheet';
 export * from './talent-sheet';
 export * from './equipment-sheet';
+export * from './weapon-sheet';

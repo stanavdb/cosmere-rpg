@@ -84,7 +84,8 @@
     }
 
     &.action,
-    &.talent {
+    &.talent,
+    &.weapon {
         min-height: 500px;
     }
 }
@@ -96,9 +97,22 @@
 }
 
 .tab[data-tab='details'].active {
+    font-size: 10pt;
+
     h5 {
         margin-top: 1rem;
         margin-bottom: 0.5rem;
+    }
+
+    input,
+    select {
+        font-size: 10pt;
+        height: 1.75rem;
+    }
+
+    input[type='checkbox'] {
+        width: 20px;
+        height: 20px;
     }
 }
 
@@ -214,6 +228,27 @@ app-item-properties {
 }
 
 app-item-details-equip {
+    .form-group-stacked {
+        .header {
+            display: flex;
+            align-items: center;
+
+            label {
+                font-weight: bold;
+                flex: 2;
+            }
+
+            span {
+                flex: 3;
+                font-style: italic;
+            }
+
+            .controls {
+                margin-right: 0.5rem;
+            }
+        }
+    }
+
     .traits-list {
         display: flex;
         flex-wrap: wrap;
@@ -222,11 +257,13 @@ app-item-details-equip {
             flex: 0 1 33.33%;
             display: flex;
             align-items: center;
+            height: 1.5;
 
             input.trait-value {
-                width: 2rem;
+                width: 1.5rem;
                 text-align: center;
                 margin-left: 0.3rem;
+                height: 1.5rem;
             }
         }
     }

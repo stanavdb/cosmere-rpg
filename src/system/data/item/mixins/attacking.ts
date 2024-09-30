@@ -7,7 +7,7 @@ export interface AttackingItemData {
         range?: {
             value?: number;
             long?: number;
-            units?: string;
+            unit?: string;
         };
     };
 }
@@ -24,7 +24,15 @@ export function AttackingItemMixin<P extends CosmereItem>() {
                             required: true,
                             nullable: false,
                             initial: AttackType.Melee,
-                            choices: Object.keys(CONFIG.COSMERE.attack.types),
+                            choices: Object.entries(
+                                CONFIG.COSMERE.attack.types,
+                            ).reduce(
+                                (acc, [key, config]) => ({
+                                    ...acc,
+                                    [key]: config.label,
+                                }),
+                                {} as Record<AttackType, string>,
+                            ),
                         }),
                         range: new foundry.data.fields.SchemaField(
                             {
@@ -34,7 +42,7 @@ export function AttackingItemMixin<P extends CosmereItem>() {
                                 long: new foundry.data.fields.NumberField({
                                     min: 0,
                                 }),
-                                units: new foundry.data.fields.StringField(),
+                                unit: new foundry.data.fields.StringField(),
                             },
                             { required: false, nullable: true },
                         ),
