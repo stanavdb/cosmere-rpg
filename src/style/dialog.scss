@@ -3,6 +3,10 @@ dialog.application {
         opacity: 0.5;
     }
 
+    .form-group input::placeholder {
+        opacity: 0.5 !important;
+    }
+
     form {
         height: 100%;
         overflow: auto;

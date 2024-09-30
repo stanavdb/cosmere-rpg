@@ -6,3 +6,4 @@ import './details-equip';
 import './details-activation';
 import './details-damage';
 import './properties';
+import './talent-prerequisites';

@@ -181,6 +181,7 @@ export const enum DeflectSource {
 }
 
 export const enum ActivationType {
+    None = 'none',
     Utility = 'utility',
     SkillTest = 'skill_test',
 }
@@ -241,6 +242,11 @@ export const enum DamageType {
     Spirit = 'spirit',
     Vital = 'vital',
     Healing = 'heal',
+}
+
+export const enum TalentType {
+    Ancestry = 'ancestry',
+    Path = 'path',
 }
 
 /* --- System --- */

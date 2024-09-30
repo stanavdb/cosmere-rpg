@@ -1,3 +1,4 @@
+import { ActivationType } from '@system/types/cosmere';
 import { ConstructorOf } from '@system/types/utils';
 
 // Component imports
@@ -27,6 +28,7 @@ export class DetailsActivationComponent extends HandlebarsApplicationComponent<
         const { activation } = this.application.item.system;
 
         return {
+            hasActivationType: activation.type !== ActivationType.None,
             hasActivationCost: !!activation.cost.type,
             hasConsume: !!activation.consume,
             hasUses: !!activation.uses,

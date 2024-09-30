@@ -54,7 +54,7 @@ export function ActivatableItemMixin<P extends CosmereItem>() {
                         type: new foundry.data.fields.StringField({
                             required: true,
                             blank: false,
-                            initial: ActivationType.SkillTest,
+                            initial: ActivationType.None,
                             choices: Object.keys(
                                 CONFIG.COSMERE.items.activation.types,
                             ),
