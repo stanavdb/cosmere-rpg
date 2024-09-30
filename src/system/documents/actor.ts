@@ -140,39 +140,6 @@ export class CosmereActor<
                     });
                 }
             }
-
-            // Get all talent items
-            const talentItems = itemData.filter(
-                (d) => d.type === ItemType.Talent,
-            ) as CosmereItemData<TalentItemData>[];
-
-            // Get all unique granted expertises that are not present on the actor
-            const grantedExpertises = talentItems
-                .filter((item) => item.system?.grantsExpertises?.length)
-                .map((item) => item.system!.grantsExpertises!)
-                .flat()
-                .filter(
-                    (v, i, self) => self.findIndex((o) => o.id === v.id) === i,
-                )
-                .filter(
-                    (expertise) =>
-                        !this.system.expertises?.some(
-                            (o) => o.id === expertise.id,
-                        ),
-                )
-                .map((expertise) => ({ ...expertise, locked: true }));
-
-            // Add expertise after create
-            if (grantedExpertises.length > 0) {
-                postCreateActions.push(() => {
-                    void this.update({
-                        'system.expertises': [
-                            ...(this.system.expertises ?? []),
-                            ...grantedExpertises,
-                        ],
-                    });
-                });
-            }
         }
 
         // Perform create
@@ -184,55 +151,6 @@ export class CosmereActor<
 
         // Post create actions
         postCreateActions.forEach((func) => func());
-
-        // Return result
-        return result;
-    }
-
-    public override async deleteEmbeddedDocuments(
-        embeddedName: string,
-        ids: string[],
-        operation?: Partial<foundry.abstract.DatabaseDeleteOperation>,
-    ): Promise<foundry.abstract.Document[]> {
-        const postDeleteActions = new Array<() => void>();
-
-        if (embeddedName === 'Item') {
-            // Get items that will be deleted
-            const deleteItems = this.items.filter((i) => ids.includes(i.id));
-
-            // Get talent items
-            const talentItems = deleteItems.filter((item) => item.isTalent());
-
-            // Get all unique granted expertises
-            const grantedExpertiseIds = talentItems
-                .filter((talent) => talent.system.grantsExpertises?.length)
-                .map((talent) => talent.system.grantsExpertises!)
-                .flat()
-                .map((expertise) => expertise.id)
-                .filter((v, i, self) => self.indexOf(v) === i);
-
-            // Remove granted expertises after delete
-            if (grantedExpertiseIds.length > 0) {
-                postDeleteActions.push(() => {
-                    void this.update({
-                        'system.expertises': this.system.expertises?.filter(
-                            (expertise) =>
-                                !grantedExpertiseIds.includes(expertise.id),
-                        ),
-                    });
-                });
-            }
-        }
-
-        // Perform delete
-        const result = await super.deleteEmbeddedDocuments(
-            embeddedName,
-            ids,
-            operation,
-        );
-
-        // Post delete actions
-        postDeleteActions.forEach((func) => func());
 
         // Return result
         return result;

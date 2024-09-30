@@ -1,12 +1,5 @@
-import {
-    TalentType,
-    Attribute,
-    Skill,
-    ExpertiseType,
-} from '@system/types/cosmere';
+import { TalentType, Attribute, Skill } from '@system/types/cosmere';
 import { CosmereItem } from '@system/documents';
-
-import { ExpertiseData } from '../actor/common';
 
 import { MappingField } from '@system/data/fields';
 
@@ -118,13 +111,6 @@ export interface TalentItemData
      * they're just plain strings.
      */
     prerequisitesMet: boolean;
-
-    /**
-     * Expertises to grant to the Actor upon gaining this
-     * Talent. Granted expertises are automatically removed
-     * along with its source Talent.
-     */
-    grantsExpertises?: Omit<ExpertiseData, 'locked'>[];
 }
 
 export class TalentItemDataModel extends DataModelMixin<
@@ -267,29 +253,6 @@ export class TalentItemDataModel extends DataModelMixin<
                 ),
             ),
             prerequisitesMet: new foundry.data.fields.BooleanField(),
-
-            grantsExpertises: new foundry.data.fields.ArrayField(
-                new foundry.data.fields.SchemaField({
-                    type: new foundry.data.fields.StringField({
-                        required: true,
-                        nullable: false,
-                        blank: false,
-                        initial: ExpertiseType.Cultural,
-                        choices: Object.keys(CONFIG.COSMERE.expertiseTypes),
-                    }),
-                    id: new foundry.data.fields.StringField({
-                        required: true,
-                        nullable: false,
-                        blank: false,
-                    }),
-                    label: new foundry.data.fields.StringField({
-                        required: true,
-                        nullable: false,
-                        blank: false,
-                    }),
-                    custom: new foundry.data.fields.BooleanField(),
-                }),
-            ),
         });
     }
 
