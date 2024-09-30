@@ -9,6 +9,7 @@ type Params = {
     value: string;
     name: string;
     editable?: boolean;
+    placeholder?: string;
 };
 
 // Constants

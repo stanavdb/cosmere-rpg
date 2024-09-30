@@ -210,6 +210,10 @@ export interface EquipmentTypeConfig {
     label: string;
 }
 
+export interface TalentTypeConfig {
+    label: string;
+}
+
 export interface CosmereRPGConfig {
     sizes: Record<Size, SizeConfig>;
     creatureTypes: Record<CreatureType, CreatureTypeConfig>;
@@ -275,6 +279,8 @@ export interface CosmereRPGConfig {
     };
 
     damageTypes: Record<DamageType, DamageTypeConfig>;
+
+    talentTypes: Record<string, TalentTypeConfig>;
 
     cultures: Record<string, CultureConfig>;
     ancestries: Record<string, AncestriesConfig>;

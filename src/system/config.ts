@@ -30,6 +30,7 @@ import {
     PathType,
     EquipHand,
     EquipmentType,
+    TalentType,
 } from './types/cosmere';
 
 const COSMERE: CosmereRPGConfig = {
@@ -422,6 +423,9 @@ const COSMERE: CosmereRPGConfig = {
         },
         activation: {
             types: {
+                [ActivationType.None]: {
+                    label: 'GENERIC.None',
+                },
                 [ActivationType.SkillTest]: {
                     label: 'COSMERE.Item.Activation.Type.SkillTest',
                 },
@@ -685,6 +689,15 @@ const COSMERE: CosmereRPGConfig = {
         },
         [DamageType.Healing]: {
             label: 'COSMERE.DamageTypes.Healing',
+        },
+    },
+
+    talentTypes: {
+        [TalentType.Ancestry]: {
+            label: 'COSMERE.Talent.Type.Ancestry',
+        },
+        [TalentType.Path]: {
+            label: 'COSMERE.Talent.Type.Path',
         },
     },
 

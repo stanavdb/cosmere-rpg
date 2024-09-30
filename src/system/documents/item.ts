@@ -582,3 +582,4 @@ export type LootItem = CosmereItem<LootItemDataModel>;
 export type ArmorItem = CosmereItem<ArmorItemDataModel>;
 export type TraitItem = CosmereItem<TraitItemDataModel>;
 export type ActionItem = CosmereItem<ActionItemDataModel>;
+export type TalentItem = CosmereItem<TalentItemDataModel>;
