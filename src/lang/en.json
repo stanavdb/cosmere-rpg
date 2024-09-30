@@ -485,7 +485,12 @@
                     "Traits": "Traits",
                     "ExpertTraits": "Expert Traits",
                     "LoseTrait": "Loses [trait]",
-                    "ModifyTraitValue": "[trait] [[value]] >"
+                    "ModifyTraitValue": "[trait] [[value]] >",
+                    "ModifyTraitValueFull": "[trait] [[value]] > [[newValue]]",
+                    "TraitsShow": "Show All Traits",
+                    "TraitsHide": "Hide Traits",
+                    "ExpertTraitsShow": "Show All Expert Traits",
+                    "ExpertTraitsHide": "Hide Expert Traits"
                 },
                 "Activation": {
                     "Title": "Usage",
@@ -494,6 +499,13 @@
                     "Consume": "Resource Consumption",
                     "Uses": "Limited Uses",
                     "Recharge": "Recharge"
+                },
+                "Attack": {
+                    "Title": "Attack",
+                    "Type": "Attack Type",
+                    "Range": "Range",
+                    "RangeShort": "Short",
+                    "RangeLong": "Long"
                 },
                 "Damage": {
                     "Title": "Damage",
@@ -758,7 +770,13 @@
             "trait": "Trait",
             "action": "Action",
             "talent": "Talent",
-            "equipment": "Equipment"
+            "equipment": "Equipment",
+            "weapon": "Weapon"
+        }
+    },
+    "UNITS": {
+        "Distance": {
+            "Feet": "Feet"
         }
     }
 }

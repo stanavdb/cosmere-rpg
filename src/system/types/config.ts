@@ -287,5 +287,6 @@ export interface CosmereRPGConfig {
 
     units: {
         weight: string[];
+        distance: Record<string, string>;
     };
 }

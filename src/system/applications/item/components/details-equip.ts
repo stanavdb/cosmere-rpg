@@ -11,6 +11,34 @@ export class DetailsEquipComponent extends HandlebarsApplicationComponent<
     static TEMPLATE =
         'systems/cosmere-rpg/templates/item/components/details-equip.hbs';
 
+    /**
+     * NOTE: Unbound methods is the standard for defining actions and forms
+     * within ApplicationV2
+     */
+    /* eslint-disable @typescript-eslint/unbound-method */
+    static ACTIONS = {
+        'toggle-traits-collapsed':
+            DetailsEquipComponent.onToggleTraitsCollapsed,
+        'toggle-expert-traits-collapsed':
+            DetailsEquipComponent.onToggleExpertTraitsCollapsed,
+    };
+    /* eslint-enable @typescript-eslint/unbound-method */
+
+    private traitsCollapsed = true;
+    private expertTraitsCollapsed = true;
+
+    /* --- Actions --- */
+
+    private static onToggleTraitsCollapsed(this: DetailsEquipComponent) {
+        this.traitsCollapsed = !this.traitsCollapsed;
+        void this.render();
+    }
+
+    private static onToggleExpertTraitsCollapsed(this: DetailsEquipComponent) {
+        this.expertTraitsCollapsed = !this.expertTraitsCollapsed;
+        void this.render();
+    }
+
     /* --- Context --- */
 
     public _prepareContext(params: never, context: BaseItemSheetRenderContext) {
@@ -38,8 +66,12 @@ export class DetailsEquipComponent extends HandlebarsApplicationComponent<
                       this.application.item.system.equip.hold
                   ].label
                 : '—',
+            traitsCollapsed: this.traitsCollapsed,
+            expertTraitsCollapsed: this.expertTraitsCollapsed,
             traits: this.prepareTraitsData(),
             expertTraits: this.prepareExpertTraitsData(),
+            traitsString: this.prepareTraitsString(),
+            expertTraitsString: this.prepareExpertTraitsString(),
         });
     }
 
@@ -90,7 +122,7 @@ export class DetailsEquipComponent extends HandlebarsApplicationComponent<
 
                 if (traitData?.defaultActive) {
                     return [
-                        ...(traitData?.defaultValue
+                        ...(config.hasValue
                             ? [
                                   {
                                       id,
@@ -105,7 +137,9 @@ export class DetailsEquipComponent extends HandlebarsApplicationComponent<
                                           )
                                           .replace(
                                               '[value]',
-                                              traitData.defaultValue.toString(),
+                                              (
+                                                  traitData.defaultValue ?? 0
+                                              ).toString(),
                                           ),
                                       value:
                                           traitData.expertise.value ??
@@ -142,6 +176,77 @@ export class DetailsEquipComponent extends HandlebarsApplicationComponent<
                 }
             })
             .flat();
+    }
+
+    private prepareTraitsString() {
+        const item = this.application.item;
+        if (!item.hasTraits()) return null;
+
+        const isArmor = item.isArmor();
+
+        return item.system.traitsArray
+            .filter((trait) => trait.defaultActive)
+            .map((trait) => {
+                const config = isArmor
+                    ? CONFIG.COSMERE.traits.armorTraits[
+                          trait.id as ArmorTraitId
+                      ]
+                    : CONFIG.COSMERE.traits.weaponTraits[
+                          trait.id as WeaponTraitId
+                      ];
+
+                return game.i18n!.localize(config.label);
+            })
+            .join(', ');
+    }
+
+    private prepareExpertTraitsString() {
+        const item = this.application.item;
+        if (!item.hasTraits()) return null;
+
+        const isArmor = item.isArmor();
+
+        return item.system.traitsArray
+            .filter(
+                (trait) =>
+                    !!trait.expertise.toggleActive ||
+                    trait.expertise.value !== null,
+            )
+            .map((trait) => {
+                const config = isArmor
+                    ? CONFIG.COSMERE.traits.armorTraits[
+                          trait.id as ArmorTraitId
+                      ]
+                    : CONFIG.COSMERE.traits.weaponTraits[
+                          trait.id as WeaponTraitId
+                      ];
+
+                if (trait.defaultActive && trait.expertise.toggleActive) {
+                    return game
+                        .i18n!.localize('COSMERE.Item.Sheet.Equip.LoseTrait')
+                        .replace('[trait]', game.i18n!.localize(config.label));
+                } else if (
+                    !trait.defaultActive &&
+                    trait.expertise.toggleActive
+                ) {
+                    return game.i18n!.localize(config.label);
+                } else if (
+                    trait.defaultValue !== null &&
+                    trait.expertise.value !== null
+                ) {
+                    return game
+                        .i18n!.localize(
+                            'COSMERE.Item.Sheet.Equip.ModifyTraitValue',
+                        )
+                        .replace('[trait]', game.i18n!.localize(config.label))
+                        .replace('[value]', trait.defaultValue!.toString())
+                        .replace(
+                            '[newValue]',
+                            trait.expertise.value!.toString(),
+                        );
+                }
+            })
+            .join(', ');
     }
 }
 

@@ -706,6 +706,9 @@ const COSMERE: CosmereRPGConfig = {
 
     units: {
         weight: ['lb'],
+        distance: {
+            ft: 'UNITS.Distance.Feet',
+        },
     },
 };
 

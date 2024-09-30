@@ -162,9 +162,9 @@ Handlebars.registerHelper(
                     ) {
                         subtitle[0].text += ` + ${attack.range.value}`;
                     } else if (attack.type === AttackType.Ranged) {
-                        subtitle[0].text += ` (${attack.range.value}${attack.range.units}${
+                        subtitle[0].text += ` (${attack.range.value}${attack.range.unit}${
                             attack.range.long
-                                ? `/${attack.range.long}${attack.range.units}`
+                                ? `/${attack.range.long}${attack.range.unit}`
                                 : ''
                         })`;
                     }

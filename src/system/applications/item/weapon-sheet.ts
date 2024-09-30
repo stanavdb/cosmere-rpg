@@ -1,22 +1,16 @@
-import { ArmorItem } from '@system/documents/item';
+import { WeaponItem } from '@system/documents/item';
 import { DeepPartial } from '@system/types/utils';
 
 // Base
 import { BaseItemSheet } from './base';
 
-export class ArmorItemSheet extends BaseItemSheet {
-    /**
-     * NOTE: Unbound methods is the standard for defining actions and forms
-     * within ApplicationV2
-     */
-
+export class WeaponItemSheet extends BaseItemSheet {
     static DEFAULT_OPTIONS = foundry.utils.mergeObject(
         foundry.utils.deepClone(super.DEFAULT_OPTIONS),
         {
-            classes: ['cosmere-rpg', 'sheet', 'item', 'armor'],
+            classes: ['cosmere-rpg', 'sheet', 'item', 'weapon'],
             position: {
                 width: 730,
-                height: 500,
             },
             window: {
                 resizable: true,
@@ -40,12 +34,12 @@ export class ArmorItemSheet extends BaseItemSheet {
         {
             'sheet-content': {
                 template:
-                    'systems/cosmere-rpg/templates/item/armor/parts/sheet-content.hbs',
+                    'systems/cosmere-rpg/templates/item/parts/sheet-content.hbs',
             },
         },
     );
 
-    get item(): ArmorItem {
+    get item(): WeaponItem {
         return super.document;
     }
 

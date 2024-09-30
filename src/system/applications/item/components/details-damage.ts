@@ -1,9 +1,9 @@
+import { ActivationType } from '@system/types/cosmere';
 import { ConstructorOf } from '@system/types/utils';
 
 // Component imports
 import { HandlebarsApplicationComponent } from '@system/applications/component-system';
 import { BaseItemSheet, BaseItemSheetRenderContext } from '../base';
-import { ActivationType } from '@src/system/types/cosmere';
 
 export class DetailsDamageComponent extends HandlebarsApplicationComponent<
     ConstructorOf<BaseItemSheet>
