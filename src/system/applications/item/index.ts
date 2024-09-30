@@ -10,3 +10,4 @@ export * from './armor-sheet';
 export * from './trait-sheet';
 export * from './action-sheet';
 export * from './talent-sheet';
+export * from './equipment-sheet';
