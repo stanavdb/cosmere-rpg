@@ -1,3 +1,14 @@
+.sheet .window-content {
+    display: flex;
+    min-height: 0;
+    overflow: hidden;
+
+    .sheet-content {
+        min-height: 0;
+        flex: 1;
+    }
+}
+
 .window-content .sheet > * {
     flex: unset;
 }
@@ -23,189 +34,17 @@
         font-weight: bold;
         margin: 0.25ch;
     }
-}
 
-.rollable {
-    cursor: pointer;
-}
-
-.sheet {  
-    .tabs {
-        nav {
-            align-items: center;
-
-            a {
-                font-weight: bold;
-                text-align: center;
-
-                &.active {
-                    text-decoration: underline;
-                }
-            }
-        }
-
-        .tab-body {
-            position: relative;
-
-            .scroll-container {
-                position: absolute;
-                top: 0;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                overflow-y: scroll;
-            }
-        }
+    .form-group input::placeholder {
+        opacity: 0.5 !important;
     }
+}
 
-    .actions-list,
-    .inventory-list {
-        margin: 0;
-        padding: 0;
+.sheet .tab-body {
+    min-height: 0;
+    overflow-y: auto;
 
-        .item-image {
-            width: 2rem;
-            height: 2rem;
-        }
-
-        .item-header {
-            display: flex;
-            flex-direction: row;
-            padding-right: 1rem;
-            margin-top: .2rem;
-            height: 2rem;
-            align-items: center;
-
-            &:not(:first-of-type) {
-                margin-top: 1rem;
-            }
-
-            .name {
-                font-weight: bold;
-                font-size: 13pt;
-            }
-
-            .subtitle {
-                font-size: 8pt;
-                margin-bottom: 0.3rem;
-                opacity: .75;
-            }
-
-            .col {
-                font-size: 9pt;
-            }
-        }
-        
-        .item {
-            display: flex;
-            flex-direction: row;
-            padding-right: 1rem;
-            margin-top: .2rem;
-
-            .item-name {
-                .name {
-                    margin-left: .75rem;
-                }
-            }
-
-            &:hover {
-                background: rgba(0, 0, 0, 0.15);
-            }
-        }
-
-        .item-name {
-            flex: 1;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-    
-            .name {
-                display: flex;
-                flex-direction: column;
-    
-                .title {
-                    font-weight: bold;
-
-                    i {
-                        margin-left: .5rem;
-                    }
-                }
-    
-                .subtitle {
-                    font-size: 8pt;
-                    opacity: .75;
-                }   
-            }
-        }
-
-        .col {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin-right: 2rem;
-            width: 5rem;
-    
-            .val {
-                font-weight: bold;
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                justify-content: center;
-                margin-top: .1rem;
-            }
-    
-            .sub {
-                font-size: 8pt;
-                opacity: .75;
-            }
-
-            &.equip {
-                width: 1.5rem;
-                position: relative;
-
-                .value {
-                    font-size: 14pt;
-                    color: rgba(0, 0, 0, 0.3);
-
-                    &.equipped {
-                        color: #232323;
-                    }
-                }
-            }
-        }
-
-        .item-controls {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            width: 2.5rem;
-
-            > a {
-                margin: .2rem;
-            }
-        }
-
-        .dropdown {
-            display: none;
-            position: absolute;
-            top: 100%;
-            margin: 0;
-            background: #fffbf2;
-            list-style: none;
-            padding: 0.2rem;
-            font-size: 12pt;
-            z-index: 10;
-            box-shadow: 0 0.1rem 0.3rem 0 rgba(0, 0, 0, .3);
-            border: 1px solid gray;
-
-            &.active {
-                display: block;
-            }
-
-            .option-select:not(.selected) {
-                opacity: .5;
-            }
-        }
+    .tab-content {
+        position: relative;
     }
 }

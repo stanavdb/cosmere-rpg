@@ -1,0 +1,25 @@
+<div class="search-bar">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="text" 
+        id="actions-search"
+        placeholder="{{placeholder}}"
+        value="{{text}}"
+    >
+    <div class="controls flexrow">
+        <a data-action="clear-actions-search"
+            data-tooltip="COSMERE.Actor.Sheet.Search.Clear"
+        >
+            <i class="fa-solid fa-xmark" style="font-size: 1rem"></i>
+        </a>
+        <a class="active" 
+            data-action="toggle-actions-search-sort-direction"
+            data-tooltip="COSMERE.Actor.Sheet.Search.ChangeSortDirection"
+        >
+            {{#if (eq sort 'desc')}}
+            <i class="fa-solid fa-arrow-down-short-wide"></i>
+            {{else}}
+            <i class="fa-solid fa-arrow-up-wide-short"></i>
+            {{/if}}
+        </a>
+    </div>
+</div>

@@ -233,10 +233,29 @@ namespace foundry {
             _result: (string | object)[];
         }
 
+        interface DocumentMetadata {
+            name: string;
+            collection: string;
+            indexed: boolean;
+            compendiumIndexFields: string[];
+            label: string;
+            coreTypes: string[];
+            embedded: Record<string, string>;
+            permissions: {
+                create: string;
+                update: string;
+                delete: string;
+            };
+            preserveOnImport: string[];
+            schemaVersion: string;
+        }
+
         abstract class Document<
             Schema extends DataSchema = DataSchema,
             Parent extends Document | null = Document | null,
         > extends DataModel<DataSchema, Parent> {
+            static metadata: DocumentMetadata;
+
             readonly system: Schema;
 
             get flags(): Record<string, any>;
@@ -602,8 +621,6 @@ namespace foundry {
             Schema extends DataSchema = DataSchema,
             Parent extends Document | null = Document | null,
         > extends _InternalDataModel<Schema> {
-            public readonly parent: Parent;
-
             /**
              * Configure the data model instance before validation and initialization workflows are performed.
              */
@@ -623,7 +640,7 @@ namespace foundry {
             /**
              * An immutable reverse-reference to a parent DataModel to which this model belongs.
              */
-            parent: DataModel | null;
+            readonly parent: Parent;
 
             /**
              * Define the data schema for documents of this type.
@@ -635,12 +652,12 @@ namespace foundry {
             /**
              * The Data Schema for all instances of this DataModel.
              */
-            static readonly schema: foundry.data.fields.DataSchema;
+            static readonly schema: foundry.data.fields.SchemaField;
 
             /**
              * Define the data schema for this document instance.
              */
-            readonly schema: foundry.data.fields.DataSchema;
+            readonly schema: foundry.data.fields.SchemaField;
 
             /**
              * Is the current state of this DataModel invalid?

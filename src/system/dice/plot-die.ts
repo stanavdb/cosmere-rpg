@@ -9,7 +9,8 @@ const SIDES: Record<number, string> = {
     6: `<img class="die-result plot" src="${IMPORTED_RESOURCES.PLOT_DICE_OP_IN_CHAT}" />`,
 };
 
-export interface PlotDieData {
+export interface PlotDieData
+    extends Partial<foundry.dice.terms.DiceTerm.TermData> {
     /**
      * The number of dice of this term to roll
      * @default 1

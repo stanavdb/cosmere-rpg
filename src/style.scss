@@ -1,12 +1,147 @@
 @import './style/sheets/module.scss';
 @import './style/chat/module.scss';
+@import './style/sidebar/combat.scss';
+@import './style/dialog.scss';
+
+// @import './style/chat/module.scss';
+/* ----------------------------------------- */
+/*  Globals                                  */
+/* ----------------------------------------- */
+:root {
+    --plotweaver-color-black: black;
+    --plotweaver-color-grey-1: #111;
+    --plotweaver-color-grey-2: #222;
+    --plotweaver-color-grey-3: #333;
+    --plotweaver-color-grey-4: #444;
+    --plotweaver-color-grey-5: #555;
+    --plotweaver-color-white: white;
+    --plotweaver-color-off-white: #f0f0e0;
+
+    --plotweaver-color-health-front: #286f3e;
+    --plotweaver-color-health-back: #6b1b2a;
+    --plotweaver-color-focus-front: #6e45e4;
+    --plotweaver-color-focus-back: #281c4a;
+    --plotweaver-color-invest-front: #3e6abb;
+    --plotweaver-color-invest-back: #182845;
+
+    /* ----------------------------------------- */
+    /*  Default Generic Theme                    */
+    /* ----------------------------------------- */
+    &.theme-plotweaver {
+        //TO-DO: Replace with Plotweaver colours
+        --plotweaver-color-accent: #c9a760;
+        --plotweaver-color-faded: #5e6c7e;
+        --plotweaver-color-sheet: #132137;
+
+        --plotweaver-color-base-1: #010e2d;
+        --plotweaver-color-base-2: #10213e;
+        --plotweaver-color-base-3: #1b2d49;
+        --plotweaver-color-base-4: #263c5e;
+        --plotweaver-color-base-5: #456a95;
+        --plotweaver-color-base-6: #506684;
+    }
+
+    /* ----------------------------------------- */
+    /*  Stormlight Archive Theme                 */
+    /* ----------------------------------------- */
+    &.theme-stormlight {
+        //TO-DO: Move to Stormlight Archive module
+        --plotweaver-color-accent: #c9a760;
+        --plotweaver-color-faded: #5e6c7e;
+        --plotweaver-color-sheet: #132137;
+
+        --plotweaver-color-base-1: #010e2d;
+        --plotweaver-color-base-2: #10213e;
+        --plotweaver-color-base-3: #1b2d49;
+        --plotweaver-color-base-4: #263c5e;
+        --plotweaver-color-base-5: #456a95;
+        --plotweaver-color-base-6: #506684;
+    }
+}
+
+/* ----------------------------------------- */
+/*  Fonts                                    */
+/* ----------------------------------------- */
+@font-face {
+    font-family: 'Penumbra Web Pro';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../../fonts/penumbra-web-pro/PenumbraWebPro-Serif.woff2')
+        format('woff2');
+}
+
+@font-face {
+    font-family: 'Laski Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../../fonts/laski-sans/Laski-Sans-Regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Laski Sans';
+    font-style: normal;
+    font-weight: 600;
+    src: url('../../fonts/laski-sans/Laski-Sans-SemiBold.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Laski Sans';
+    font-style: normal;
+    font-weight: 700;
+    src: url('../../fonts/laski-sans/Laski-Sans-Bold.woff2') format('woff2');
+}
 
 @font-face {
     font-family: 'cosmere-dingbats';
-    src: url("https://dl.dropboxusercontent.com/scl/fi/9909gen4fd0oveyzfposx/CosmereDingbats-Regular.otf?rlkey=ig6odq9hxyo1st8kt3ujp1czz&st=72qrads3&raw=1")
+    src: url('https://dl.dropboxusercontent.com/scl/fi/9909gen4fd0oveyzfposx/CosmereDingbats-Regular.otf?rlkey=ig6odq9hxyo1st8kt3ujp1czz&st=72qrads3&raw=1');
 }
 
+em.cosmere-icon,
 i.cosmere-icon {
     font-family: 'cosmere-dingbats';
     font-style: normal;
+
+    &.complication {
+        color: red;
+
+        &::after {
+            content: 'C';
+        }
+    }
+
+    &.opportunity {
+        color: #98a4f5;
+
+        &::after {
+            content: 'O';
+        }
+    }
+
+    &.action1::after {
+        content: '1';
+    }
+
+    &.action2::after {
+        content: '2';
+    }
+
+    &.action3::after {
+        content: '3';
+    }
+
+    &.reaction::after {
+        content: 'r';
+    }
+
+    &.free::after {
+        content: '0';
+    }
+
+    &.special::after {
+        content: '*';
+    }
+
+    &.passive::after {
+        content: '8';
+    }
 }

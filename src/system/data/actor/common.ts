@@ -1,4 +1,6 @@
 import {
+    Size,
+    CreatureType,
     Attribute,
     Resource,
     AttributeGroup,
@@ -21,16 +23,40 @@ interface DeflectData {
     source?: DeflectSource;
 }
 
-interface ExpertiseData {
+export interface ExpertiseData {
     type: ExpertiseType;
     id: string;
     label: string;
+    custom?: boolean;
+    locked?: boolean;
+}
+
+interface CurrencyDenominationData {
+    id: string;
+    secondaryId?: string; // Optional secondary id for doubly-denominated currencies, like spheres
+    amount: number;
+
+    /*
+     * Conversion rate is a comparison to the "base" denomination of a currency.
+     * This value is derived from either the primary denomination's conversion rate,
+     * or the product of the primary and secondary denominations' rates, if the secondary is present.
+     *
+     * Converted value is simply (amount * conversionRate).
+     * We want the total value expressed in the base denomination.
+     */
+    conversionRate: Derived<number>;
+    convertedValue: Derived<number>;
 }
 
 export interface CommonActorData {
+    size: Size;
+    type: {
+        id: CreatureType;
+        custom?: string | null;
+        subtype?: string | null;
+    };
     senses: {
         range: Derived<number>;
-        obscuredAffected: Derived<boolean>;
     };
     immunities: {
         damage: DamageType[];
@@ -52,6 +78,13 @@ export interface CommonActorData {
         { attribute: Attribute; rank: number; mod: Derived<number> }
     >;
     injuries: Derived<number>;
+    currency: Record<
+        string,
+        {
+            denominations: CurrencyDenominationData[];
+            total: Derived<number>;
+        }
+    >;
     movement: {
         rate: Derived<number>;
     };
@@ -68,6 +101,26 @@ export class CommonActorDataModel<
 > extends foundry.abstract.TypeDataModel<Schema, CosmereActor> {
     static defineSchema() {
         return {
+            size: new foundry.data.fields.StringField({
+                required: true,
+                nullable: false,
+                blank: false,
+                initial: Size.Medium,
+                choices: Object.keys(CONFIG.COSMERE.sizes),
+            }),
+            type: new foundry.data.fields.SchemaField({
+                id: new foundry.data.fields.StringField({
+                    required: true,
+                    nullable: false,
+                    blank: false,
+                    initial: CreatureType.Humanoid,
+                    choices: Object.keys(CONFIG.COSMERE.creatureTypes),
+                }),
+                custom: new foundry.data.fields.StringField({ nullable: true }),
+                subtype: new foundry.data.fields.StringField({
+                    nullable: true,
+                }),
+            }),
             senses: new foundry.data.fields.SchemaField({
                 range: new DerivedValueField(
                     new foundry.data.fields.NumberField({
@@ -78,13 +131,11 @@ export class CommonActorDataModel<
                         initial: 5,
                     }),
                 ),
-                obscuredAffected: new DerivedValueField(
-                    new foundry.data.fields.BooleanField({
-                        required: true,
-                        nullable: false,
-                        initial: true,
-                    }),
-                ),
+                obscuredAffected: new foundry.data.fields.BooleanField({
+                    required: true,
+                    nullable: false,
+                    initial: true,
+                }),
             }),
             immunities: new foundry.data.fields.SchemaField({
                 damage: new foundry.data.fields.ArrayField(
@@ -106,6 +157,7 @@ export class CommonActorDataModel<
             defenses: this.getDefensesSchema(),
             resources: this.getResourcesSchema(),
             skills: this.getSkillsSchema(),
+            currency: this.getCurrencySchema(),
             movement: new foundry.data.fields.SchemaField({
                 rate: new DerivedValueField(
                     new foundry.data.fields.NumberField({
@@ -165,6 +217,8 @@ export class CommonActorDataModel<
                         nullable: false,
                         blank: false,
                     }),
+                    custom: new foundry.data.fields.BooleanField(),
+                    locked: new foundry.data.fields.BooleanField(),
                 }),
             ),
             languages: new foundry.data.fields.ArrayField(
@@ -185,7 +239,7 @@ export class CommonActorDataModel<
                             nullable: false,
                             integer: true,
                             min: 0,
-                            max: 5,
+                            max: 10,
                             initial: 0,
                         }),
                     });
@@ -210,7 +264,6 @@ export class CommonActorDataModel<
                                 nullable: false,
                                 integer: true,
                                 min: 0,
-                                max: 5,
                                 initial: 0,
                             }),
                         ),
@@ -333,13 +386,82 @@ export class CommonActorDataModel<
         );
     }
 
+    private static getCurrencySchema() {
+        const currencies = CONFIG.COSMERE.currencies;
+
+        return new foundry.data.fields.SchemaField(
+            Object.keys(currencies).reduce(
+                (schemas, key) => {
+                    schemas[key] = new foundry.data.fields.SchemaField({
+                        denominations: new foundry.data.fields.ArrayField(
+                            this.getCurrencyDenominationSchema(key),
+                        ),
+                        total: new DerivedValueField(
+                            new foundry.data.fields.NumberField({
+                                required: true,
+                                nullable: false,
+                                integer: false,
+                                min: 0,
+                                initial: 0,
+                            }),
+                        ),
+                    });
+
+                    return schemas;
+                },
+                {} as Record<string, foundry.data.fields.SchemaField>,
+            ),
+        );
+    }
+
+    private static getCurrencyDenominationSchema(currency: string) {
+        const denominations = CONFIG.COSMERE.currencies[currency].denominations;
+
+        return new foundry.data.fields.SchemaField({
+            id: new foundry.data.fields.StringField({
+                required: true,
+                nullable: false,
+                choices: denominations.primary.map((d) => d.id),
+            }),
+            secondaryId: new foundry.data.fields.StringField({
+                required: false,
+                nullable: false,
+                choices: denominations.secondary?.map((d) => d.id) ?? [],
+            }),
+            amount: new foundry.data.fields.NumberField({
+                required: true,
+                nullable: false,
+                integer: true,
+                min: 0,
+                initial: 0,
+            }),
+            conversionRate: new DerivedValueField(
+                new foundry.data.fields.NumberField({
+                    required: true,
+                    nullable: false,
+                    integer: false, // Support subdenominations of the "base", e.g. 1 chip = 0.2 marks
+                    min: 0,
+                    initial: 0,
+                }),
+            ),
+            convertedValue: new DerivedValueField(
+                new foundry.data.fields.NumberField({
+                    required: true,
+                    nullable: false,
+                    integer: false,
+                    min: 0,
+                    initial: 0,
+                }),
+            ),
+        });
+    }
+
     public prepareDerivedData(): void {
         super.prepareDerivedData();
 
         this.senses.range.value = awarenessToSensesRange(
             this.attributes.awa.value,
         );
-        this.senses.obscuredAffected.value = this.attributes.awa.value < 9;
 
         // Derive defenses
         (Object.keys(this.defenses) as AttributeGroup[]).forEach((group) => {
@@ -431,6 +553,49 @@ export class CommonActorDataModel<
         this.injuries.value = this.parent.items.filter(
             (item) => item.type === ItemType.Injury,
         ).length;
+
+        // Derive currency conversion values
+        Object.keys(this.currency).forEach((currency) => {
+            // Get currency config
+            const currencyConfig = CONFIG.COSMERE.currencies[currency];
+
+            // Get currency data
+            const currencyData = this.currency[currency];
+
+            let total = 0;
+
+            // Determine denomination derived values
+            currencyData.denominations.forEach((denom) => {
+                // Get denomination configs
+                const denominations = currencyConfig.denominations;
+                const primaryConfig = denominations.primary.find(
+                    (d) => d.id === denom.id,
+                );
+
+                if (!primaryConfig) return;
+
+                // Set conversion rate
+                denom.conversionRate.value = primaryConfig.conversionRate;
+
+                if (denom.secondaryId && !!denominations.secondary) {
+                    const secondaryConfig = denominations.secondary.find(
+                        (d) => d.id === denom.secondaryId,
+                    );
+                    denom.conversionRate.value *=
+                        secondaryConfig?.conversionRate ?? 1;
+                }
+
+                // Get converted value
+                denom.convertedValue.value =
+                    denom.amount * denom.conversionRate.value;
+
+                // Adjust derived total for this currency accordingly
+                total += denom.convertedValue.value;
+            });
+
+            // Update derived total
+            currencyData.total.value = total;
+        });
 
         // Lifting & Carrying
         this.encumbrance.lift.value = strengthToLiftingCapacity(

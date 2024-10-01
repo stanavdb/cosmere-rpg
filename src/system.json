@@ -23,15 +23,19 @@
             "weapon": {},
             "armor": {},
             "equipment": {},
+            "loot": {},
 
             "ancestry": {},
+            "culture": {},
             "path": {},
+            "specialty": {},
             "talent": {},
             "trait": {},
 
             "action": {},
 
-            "injury": {}
+            "injury": {},
+            "connection": {}
         }
     },
     "languages": [

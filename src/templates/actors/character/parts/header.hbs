@@ -1,0 +1,50 @@
+<header class="sheet-header">
+    <div class="title">
+        <h1 class="document-name">
+            {{#if isEditMode}}
+            <input class="value" type="text" name="name" value="{{actor.name}}">
+            {{else}}
+            {{actor.name}}
+            {{/if}}
+        </h1>
+        <div class="details">
+            <span class="ancestry">{{ localize ancestryLabel }}</span>
+            
+            {{#with pathTypes as |pathTypes|}}
+            {{#if (gt pathTypes.length 0)}}
+
+            <i class="cosmere-icon delim">o</i>
+
+            {{#each pathTypes as |pathType ti|}}
+
+            {{#with pathType.paths as |paths|}}
+            {{#each paths as |path pi|}}
+
+            <span class="path">{{path.name}}</span>
+
+            {{#if (lt pi (sub paths.length 1))}}
+            <span class="path">/</span>
+            {{/if}}
+
+            {{/each}}
+            {{/with}}
+
+            {{#if (lt ti (sub pathTypes.length 1))}}
+            <i class="cosmere-icon delim">o</i>
+            {{/if}}
+
+            {{/each}}
+
+            {{/if}}
+            {{/with}}
+        </div>
+    </div>
+    <div class="level-details">
+        <div class="level">
+            <span class="label">{{localize "COSMERE.Actor.Sheet.Level"}}</span>
+            <div class="container">
+                <span class="value">{{derived actor.system.level.total}}</span>
+            </div>
+        </div>
+    </div>
+</header>

@@ -1,0 +1,19 @@
+{{#with (lookup tabsMap "details") as |tab|}}
+
+<div class="tab tab-content {{tab.cssClass}}" data-tab="details" data-group="primary">
+    {{app-item-details-id}}
+
+    {{!-- Specialty specific fields --}}
+    <div class="form-group">
+        <label>{{localize "COSMERE.Item.Sheet.Specialty.PathId"}}</label>
+        {{app-id-input
+            name="system.path"
+            value=@root.item.system.path
+        }}
+    </div>
+    <p class="notes">
+        {{localize "COSMERE.Item.Sheet.Specialty.PathIdDescription"}}
+    </p>
+</div>
+
+{{/with}}

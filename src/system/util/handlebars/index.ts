@@ -1,12 +1,11 @@
+import './application';
+
 import {
     ArmorTraitId,
     WeaponTraitId,
     Skill,
     Attribute,
     ItemConsumeType,
-    Resource,
-    ItemResource,
-    ItemType,
     ActionCostType,
     DamageType,
     HoldType,
@@ -17,15 +16,53 @@ import { CharacterActor, CosmereActor } from '@system/documents/actor';
 import { CosmereItem } from '@system/documents/item';
 import { Derived } from '@system/data/fields';
 
+import { AnyObject } from '@src/system/types/utils';
+
 import { ItemContext, ItemContextOptions } from './types';
 
 Handlebars.registerHelper('add', (a: number, b: number) => a + b);
 Handlebars.registerHelper('sub', (a: number, b: number) => a - b);
 Handlebars.registerHelper('multi', (a: number, b: number) => a * b);
 Handlebars.registerHelper('divide', (a: number, b: number) => a / b);
+Handlebars.registerHelper('mod', (a: number, b: number) => a % b);
 
 Handlebars.registerHelper('default', (v: unknown, defaultVal: unknown) => {
     return v ? v : defaultVal;
+});
+
+Handlebars.registerHelper('hasKey', (obj: AnyObject, path: string) => {
+    // Split the path
+    const keys = path.split('.');
+
+    // Reduce the object
+    return (
+        keys.reduce(
+            (obj, key, i) => {
+                if (typeof obj === 'boolean') return obj;
+
+                const isLast = i === keys.length - 1;
+                return obj && key in obj
+                    ? isLast
+                        ? true
+                        : obj[key]
+                          ? (obj[key] as AnyObject)
+                          : null
+                    : null;
+            },
+            obj as AnyObject | boolean | null,
+        ) !== null
+    );
+});
+
+Handlebars.registerHelper(
+    'replace',
+    (from: string, searchValue: string, replaceValue: string) => {
+        return from.replaceAll(searchValue, replaceValue);
+    },
+);
+
+Handlebars.registerHelper('perc', (value: number, max: number) => {
+    return `${Math.floor((value / max) * 100)}%`;
 });
 
 Handlebars.registerHelper(
@@ -41,6 +78,11 @@ Handlebars.registerHelper(
             .join(''),
 );
 
+Handlebars.registerHelper(
+    'isNumMax',
+    (value: number) => value === Number.MAX_VALUE,
+);
+
 Handlebars.registerHelper('cosmereDingbat', (type: ActionCostType) => {
     switch (type) {
         case ActionCostType.FreeAction:
@@ -54,27 +96,8 @@ Handlebars.registerHelper('cosmereDingbat', (type: ActionCostType) => {
     }
 });
 
-Handlebars.registerHelper(
-    'greaterThan',
-    (a: number, b: number, equal?: boolean) => (equal ? a >= b : a > b),
-);
-
-Handlebars.registerHelper(
-    'expertisesList',
-    (actor: CharacterActor, defaultValue = '-'): string => {
-        if (!actor.system.expertises?.length) return defaultValue;
-        return actor.system.expertises
-            .map(
-                (expertise) =>
-                    `${expertise.label} (${game.i18n!.localize(
-                        CONFIG.COSMERE.expertiseTypes[expertise.type].label,
-                    )})`,
-            )
-            .join(', ');
-    },
-);
-
-Handlebars.registerHelper('derived', (derived: Derived<string | number>) => {
+Handlebars.registerHelper('derived', (derived?: Derived<string | number>) => {
+    if (!derived) return;
     return Derived.getValue(derived);
 });
 
@@ -92,36 +115,24 @@ Handlebars.registerHelper(
     },
 );
 
-Handlebars.registerHelper('itemHoldSelect', (selected?: HoldType) => {
-    const holdTypes = Object.keys(
-        CONFIG.COSMERE.items.equip.hold,
-    ) as HoldType[];
+Handlebars.registerHelper('effect-duration', (effect: ActiveEffect) => {
+    if (!effect.isTemporary) return '—';
 
-    return `
-        <ul class="dropdown">
-        ${holdTypes
-            .map((hold) => {
-                // Get the config
-                const config = CONFIG.COSMERE.items.equip.hold[hold];
+    const seconds = effect.duration.seconds;
+    const turns = effect.duration.turns;
+    const rounds = effect.duration.rounds;
 
-                const isSelected = hold === selected;
-
-                return `
-            <li class="option">
-                <a role="button" 
-                    data-type="${hold}"
-                    data-action="equip-hold" 
-                    class="option-select ${isSelected ? 'selected' : ''}" 
-                    title="${game.i18n!.localize(config.label)}"
-                >
-                    ${config.icon}
-                </a>
-            </li>    
-        `;
-            })
-            .join('\n')}
-        </ul>
-    `;
+    if (seconds) return `${seconds}s`;
+    else {
+        return [
+            rounds
+                ? `${rounds} ${game.i18n!.localize('GENERIC.Rounds')}`
+                : null,
+            turns ? `${turns} ${game.i18n!.localize('GENERIC.Turns')}` : null,
+        ]
+            .filter((v) => !!v)
+            .join(', ');
+    }
 });
 
 Handlebars.registerHelper(
@@ -129,38 +140,56 @@ Handlebars.registerHelper(
     (item: CosmereItem, options?: { hash?: ItemContextOptions }) => {
         try {
             const context = {} as Partial<ItemContext>;
-            const subtitle = [] as string[];
+            const subtitle = [] as { text: string; classes?: string[] }[];
 
             const isWeapon = item.isWeapon();
 
             if (isWeapon) {
+                context.isWeapon = true;
+
                 const attack = item.system.attack;
 
-                subtitle.push(
-                    game.i18n!.localize(
+                subtitle.push({
+                    text: game.i18n!.localize(
                         CONFIG.COSMERE.attack.types[attack.type].label,
                     ),
-                );
+                });
 
                 if (attack.range?.value) {
-                    if (attack.type === AttackType.Melee) {
-                        subtitle[0] += ` + ${attack.range.value}`;
-                    } else {
-                        subtitle[0] += ` (${attack.range.value}${attack.range.units}${
+                    if (
+                        attack.type === AttackType.Melee &&
+                        item.system.traits.reach?.active
+                    ) {
+                        subtitle[0].text += ` + ${attack.range.value}`;
+                    } else if (attack.type === AttackType.Ranged) {
+                        subtitle[0].text += ` (${attack.range.value}${attack.range.unit}${
                             attack.range.long
-                                ? `/${attack.range.long}${attack.range.units}`
+                                ? `/${attack.range.long}${attack.range.unit}`
                                 : ''
                         })`;
                     }
                 }
             }
 
+            if (item.isArmor() && item.system.deflect) {
+                subtitle.push({
+                    text: `${game.i18n!.localize(
+                        'COSMERE.Item.Armor.Deflect',
+                    )} [${item.system.deflect}]`,
+                });
+            }
+
             if (item.isPhysical()) {
                 context.isPhysical = true;
+                context.hasQuantity = item.system.quantity !== null;
+                context.hasWeight = item.system.weight.value !== null;
                 context.quantity = item.system.quantity;
                 context.weight = {
                     value: item.system.weight.value,
                     unit: item.system.weight.unit,
+                    total:
+                        (item.system.quantity ?? 0) *
+                        (item.system.weight.value ?? 0),
                 };
                 context.price = {
                     value: item.system.price.value,
@@ -174,49 +203,66 @@ Handlebars.registerHelper(
 
                 const type = item.system.equip.type;
                 const hold = item.system.equip.hold;
+                const hand = item.system.equip.hand;
 
                 context.equip = {
                     type,
                     typeLabel: CONFIG.COSMERE.items.equip.types[type].label,
-                    typeIcon: CONFIG.COSMERE.items.equip.types[type].icon,
 
                     hold,
                     ...(hold
                         ? {
                               holdLabel:
                                   CONFIG.COSMERE.items.equip.hold[hold].label,
-                              holdIcon:
-                                  CONFIG.COSMERE.items.equip.hold[hold].icon,
+                          }
+                        : {}),
+
+                    hand,
+                    ...(hand
+                        ? {
+                              handLabel:
+                                  CONFIG.COSMERE.items.equip.hand[hand].label,
                           }
                         : {}),
                 };
 
                 if (options?.hash?.showEquippedHand !== false) {
                     if (hold && hold !== HoldType.TwoHanded) {
-                        subtitle.push(
-                            game.i18n!.localize(
+                        subtitle.push({
+                            text: game.i18n!.localize(
                                 CONFIG.COSMERE.items.equip.hold[hold].label,
                             ),
-                        );
+                        });
                     }
                 }
             }
 
             if (item.hasTraits()) {
                 subtitle.push(
-                    ...Array.from(item.system.traits)
+                    ...item.system.traitsArray
                         .filter((trait) => trait.active)
-                        .map((trait) => trait.id)
-                        .map((traitId) =>
-                            isWeapon
+                        .map((trait) => {
+                            // Get the config
+                            const config = isWeapon
                                 ? CONFIG.COSMERE.traits.weaponTraits[
-                                      traitId as WeaponTraitId
-                                  ].label
+                                      trait.id as WeaponTraitId
+                                  ]
                                 : CONFIG.COSMERE.traits.armorTraits[
-                                      traitId as ArmorTraitId
-                                  ].label,
-                        )
-                        .map((label) => game.i18n!.localize(label)),
+                                      trait.id as ArmorTraitId
+                                  ];
+
+                            const modifiedByExpertise =
+                                trait.active !== trait.defaultActive ||
+                                trait.value !== trait.defaultValue;
+
+                            return {
+                                text: `${game.i18n!.localize(config.label)} ${config.hasValue ? `[${trait.value}]` : ''}`.trim(),
+                                classes: modifiedByExpertise
+                                    ? ['highlight']
+                                    : [],
+                            };
+                        })
+                        .sort((a, b) => a.classes.length - b.classes.length),
                 );
             }
 
@@ -266,86 +312,63 @@ Handlebars.registerHelper(
 
                 // Check if the activation consumes some resource
                 if (item.system.activation.consume) {
-                    // Get the actor resource consumed
+                    const consumesResource =
+                        item.system.activation.consume.type ===
+                        ItemConsumeType.Resource;
+                    const consumesItem =
+                        item.system.activation.consume.type ===
+                        ItemConsumeType.Item;
+
+                    // Get resource
                     const resource = item.system.activation.consume.resource;
-                    const consumesActorResource =
-                        item.system.activation.consume.type ===
-                        ItemConsumeType.ActorResource;
-                    const consumesItemResource =
-                        item.system.activation.consume.type ===
-                        ItemConsumeType.ItemResource;
 
                     context.hasConsume = true;
                     context.consume = {
                         type: item.system.activation.consume.type,
                         value: item.system.activation.consume.value,
-                        consumesActorResource,
-                        consumesItemResource,
-                        consumesItem:
-                            item.system.activation.consume.type ===
-                            ItemConsumeType.Item,
+                        consumesResource,
+                        consumesItem,
 
                         ...(resource
                             ? {
-                                  resource,
-                                  resourceLabel: consumesActorResource
-                                      ? CONFIG.COSMERE.resources[
-                                            resource as Resource
-                                        ].label
-                                      : CONFIG.COSMERE.items.resources.types[
-                                            resource as ItemResource
-                                        ].label,
+                                  resource:
+                                      item.system.activation.consume.resource,
+                                  resourceLabel:
+                                      CONFIG.COSMERE.resources[resource].label,
                               }
                             : {}),
                     };
                 }
 
-                // Check if item has resources
-                if (item.system.resources) {
-                    context.hasResources = true;
+                if (item.system.activation.uses) {
+                    const type = item.system.activation.uses.type;
+                    const value = item.system.activation.uses.value;
+                    const max = item.system.activation.uses.max;
+                    const recharge = item.system.activation.uses.recharge;
 
-                    // Assign resources
-                    context.resources = (
-                        Object.keys(item.system.resources) as ItemResource[]
-                    )
-                        .map((resourceType) => {
-                            // Get resource
-                            const resource =
-                                item.system.resources![resourceType];
-                            if (!resource) return null;
+                    const hasRecharge = recharge != null;
 
-                            // Get resource config
-                            const resourceConfig =
-                                CONFIG.COSMERE.items.resources.types[
-                                    resourceType
-                                ];
+                    // Get config
+                    const config =
+                        CONFIG.COSMERE.items.activation.uses.types[type];
 
-                            const hasMax = resource.max != null;
-                            const hasRecharge = resource.recharge != null;
-
-                            return {
-                                id: resourceType,
-                                label:
-                                    resource.value > 1
-                                        ? resourceConfig.labelPlural
-                                        : resourceConfig.label,
-                                value: resource.value,
-                                hasMax,
-                                max: hasMax ? resource.max : resource.value,
-
-                                hasRecharge,
-                                ...(hasRecharge
-                                    ? {
-                                          recharge: resource.recharge,
-                                          rechargeLabel:
-                                              CONFIG.COSMERE.items.resources
-                                                  .recharge[resource.recharge!]
-                                                  .label,
-                                      }
-                                    : {}),
-                            };
-                        })
-                        .filter((v) => !!v);
+                    context.hasUses = true;
+                    context.uses = {
+                        type,
+                        value,
+                        label:
+                            (max ?? value) > 1
+                                ? config.labelPlural
+                                : config.label,
+                        max,
+                        hasRecharge,
+                        recharge,
+                        rechargeLabel: hasRecharge
+                            ? CONFIG.COSMERE.items.activation.uses.recharge[
+                                  recharge
+                              ].label
+                            : '',
+                    };
                 }
             }
 
@@ -399,22 +422,22 @@ Handlebars.registerHelper(
                 };
             }
 
-            if (item.hasDescription()) {
-                if (
-                    item.system.description?.short &&
-                    item.type === ItemType.Action
-                ) {
-                    subtitle.splice(
-                        0,
-                        subtitle.length,
-                        item.system.description.short,
-                    );
-                }
+            if (item.isAction()) {
+                subtitle.push({
+                    text: game.i18n!.localize(
+                        CONFIG.COSMERE.action.types[item.system.type].label,
+                    ),
+                });
             }
 
             return {
                 ...context,
-                subtitle: subtitle.join(', '),
+                subtitle: subtitle
+                    .map(
+                        ({ text, classes }) =>
+                            `<span class=${(classes ?? []).join(' ')}>${text}</span>`,
+                    )
+                    .join('<span>, </span>'),
             };
         } catch (err) {
             console.error(err);
@@ -429,11 +452,25 @@ Handlebars.registerHelper('damageTypeConfig', (type: DamageType) => {
 
 export async function preloadHandlebarsTemplates() {
     const partials = [
-        'systems/cosmere-rpg/templates/actors/parts/actions.hbs',
-        'systems/cosmere-rpg/templates/actors/parts/inventory.hbs',
-        'systems/cosmere-rpg/templates/chat/parts/roll-details.hbs',
+        'systems/cosmere-rpg/templates/general/tabs.hbs',
+        'systems/cosmere-rpg/templates/actors/character/partials/char-details-tab.hbs',
+        'systems/cosmere-rpg/templates/actors/character/partials/char-actions-tab.hbs',
+        'systems/cosmere-rpg/templates/actors/character/partials/char-equipment-tab.hbs',
+        'systems/cosmere-rpg/templates/actors/character/partials/char-goals-tab.hbs',
+        'systems/cosmere-rpg/templates/actors/character/partials/char-effects-tab.hbs',
+        'systems/cosmere-rpg/templates/actors/adversary/partials/adv-actions-tab.hbs',
+        'systems/cosmere-rpg/templates/actors/adversary/partials/adv-effects-tab.hbs',
+        'systems/cosmere-rpg/templates/actors/adversary/partials/adv-equipment-tab.hbs',
+        'systems/cosmere-rpg/templates/item/partials/item-description-tab.hbs',
+        'systems/cosmere-rpg/templates/item/partials/item-effects-tab.hbs',
+        'systems/cosmere-rpg/templates/item/partials/item-details-tab.hbs',
+        'systems/cosmere-rpg/templates/item/injury/partials/injury-details-tab.hbs',
+        'systems/cosmere-rpg/templates/item/specialty/partials/specialty-details-tab.hbs',
+        'systems/cosmere-rpg/templates/item/loot/partials/loot-details-tab.hbs',
+        'systems/cosmere-rpg/templates/item/armor/partials/armor-details-tab.hbs',
+        'systems/cosmere-rpg/templates/item/talent/partials/talent-details-tab.hbs',
+        'systems/cosmere-rpg/templates/combat/combatant.hbs',
     ];
-
     return await loadTemplates(
         partials.reduce(
             (partials, path) => {

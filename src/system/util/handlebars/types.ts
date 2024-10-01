@@ -5,16 +5,24 @@ export interface ItemContextOptions {
 export interface ItemContext {
     subtitle: string;
 
+    hasDescription: boolean;
+    descriptionHTML?: string;
+
     isPhysical: boolean;
+    hasQuantity: boolean;
+    hasWeight: boolean;
     quantity: number;
     weight: Partial<{
         value: number;
         unit: string;
+        total: number;
     }>;
     price: Partial<{
         value: number;
         unit: string;
     }>;
+
+    isWeapon: boolean;
 
     isEquippable: boolean;
     equipped: boolean;
@@ -25,6 +33,9 @@ export interface ItemContext {
         hold: string;
         holdLabel: string;
         holdIcon: string;
+        hand: string;
+        handLabel: string;
+        handIcon: string;
     }>;
 
     hasSkillTest: boolean;
@@ -52,27 +63,21 @@ export interface ItemContext {
     consume: Partial<{
         type: string;
         value: number;
-        consumesActorResource: boolean;
-        consumesItemResource: boolean;
+        consumesResource: boolean;
         consumesItem: boolean;
-
         resource: string;
-        resourceLabel: string;
     }>;
 
-    hasResources: boolean;
-    resources: Partial<{
-        id: string;
+    hasUses: boolean;
+    uses: Partial<{
+        type: string;
         label: string;
-        labelPlural: string;
         value: number;
-        hasMax: boolean;
         max: number;
-
         hasRecharge: boolean;
-        recharge?: string;
-        rechargeLabel?: string;
-    }>[];
+        recharge: string;
+        rechargeLabel: string;
+    }>;
 
     hasDamage: boolean;
     damage: Partial<{

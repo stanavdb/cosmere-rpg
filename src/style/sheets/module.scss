@@ -1,1 +1,9 @@
-@import './actor/character.scss';
+@import './sheet.scss';
+@import './input.scss';
+
+@import './actor/module.scss';
+@import './item/module.scss';
+
+.prosemirror menu .pm-dropdown {
+    color: black;
+}

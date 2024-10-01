@@ -1,11 +1,34 @@
-import { ConstructorOf } from '@system/util/types';
+import { ConstructorOf } from '@system/types/utils';
 
 // NOTE: Specifically use a namespace here to merge with interface declaration
 export namespace Derived {
+    export enum Mode {
+        Derived = 'derived',
+        Override = 'override',
+    }
+
+    export const Modes = {
+        [Mode.Derived]: 'GENERIC.DerivedValue.Mode.Derived',
+        [Mode.Override]: 'GENERIC.DerivedValue.Mode.Override',
+    };
+
     export function getValue<T extends number | string | boolean>(
         derived: Derived<T>,
     ) {
         return derived.useOverride ? derived.override : derived.value;
+    }
+
+    export function getMode<T extends number | string | boolean>(
+        derived: Derived<T>,
+    ) {
+        return derived.useOverride ? Mode.Override : Mode.Derived;
+    }
+
+    export function setMode<T extends number | string | boolean>(
+        derived: Derived<T>,
+        mode: Mode,
+    ) {
+        derived.useOverride = mode === Mode.Override;
     }
 }
 
@@ -49,6 +72,7 @@ export class DerivedValueField<
                 override: new ((Object.getPrototypeOf(element) as object)
                     .constructor as ConstructorOf<ElementField>)({
                     ...element.options,
+                    initial: null,
                     required: false,
                     nullable: true,
                 }),

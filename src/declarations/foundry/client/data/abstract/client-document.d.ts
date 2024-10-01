@@ -11,6 +11,16 @@ declare function _ClientDocumentMixin<
 
 declare class _ClientDocument {
     /**
+     * A collection of Application instances which should be re-rendered whenever this document is updated.
+     * The keys of this object are the application ids and the values are Application instances. Each
+     * Application in this object will have its render method called by {@link Document#render}.
+     */
+    get apps(): Record<
+        string,
+        Application | foundry.applications.api.ApplicationV2<any, any, any>
+    >;
+
+    /**
      * Lazily obtain a FormApplication instance used to configure this Document, or null if no sheet is available.
      */
     get sheet(): Application | foundry.applications.api.ApplicationV2 | null;

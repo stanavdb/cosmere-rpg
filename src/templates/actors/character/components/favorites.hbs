@@ -1,0 +1,60 @@
+<div class="header">
+    <i class="icon fa-solid fa-star"></i>
+    <span class="title">{{localize "COSMERE.Actor.Sheet.Favorites"}}</span>
+</div>
+<ul class="favorites-list">
+    {{#each favorites as |item|}}
+    {{#with (itemContext item) as |ctx|}}
+
+    <li class="favorite item usable" data-item-id="{{item.id}}" 
+        {{#if @root.editable}}
+        data-drag="true"
+        {{/if}}
+    >
+        {{!-- Image --}}
+        <div class="col img" data-action="use-item">
+            <img class="roll-icon" src="/systems/cosmere-rpg/assets/icons/dice/d20white.svg">
+            <img src="{{item.img}}">
+        </div>
+
+        {{!-- Name --}}
+        <div class="col name" data-action="use-item">
+            <span class="title">{{item.name}}</span>
+            <span class="subtitle">{{{ctx.subtitle}}}</span>
+        </div>
+
+        {{!-- Activation --}}
+        <div class="col activation">
+            {{#if ctx.hasActivation}}
+            {{#if ctx.activation.hasCost}}
+            <i class="cosmere-icon">
+                {{#if (eq ctx.activation.cost.type "act")}}
+                {{ ctx.activation.cost.value }}
+                {{else}}
+                {{cosmereDingbat ctx.activation.cost.type}}
+                {{/if}}
+            </i>
+            {{/if}}
+            {{/if}}
+        </div>
+
+        {{!-- Controls --}}
+        <div class="col controls flexrow {{#if @root.isEditMode}}edit{{/if}}">
+            {{#if @root.isEditMode}}
+            <a role="button"
+                data-action="remove-favorite"
+                data-tooltip="COSMERE.Actor.Sheet.Item.Remove"
+            >
+                <i class="fa-solid fa-trash"></i>
+            </a>
+            {{/if}}
+        </div>
+    </li>
+    {{/with}}
+    {{/each}}
+</ul>
+{{#if editable}}
+<div class="drop-area">
+    <span>{{localize "COSMERE.Actor.Sheet.DropFavorite"}}</span>
+</div>
+{{/if}}

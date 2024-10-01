@@ -1,0 +1,16 @@
+{{#each paths as |path|}}
+<div class="path">
+    <div class="name">
+        <span class="label">{{path.name}}</span>
+        <span class="item-type">{{localize path.typeLabel}} Path</span>
+    </div>
+    <div class="level">
+        {{path.level}}
+    </div>
+</div>
+{{/each}}
+{{#if (eq paths.length 0)}}
+<div class="path placeholder">
+    <span>{{localize "COSMERE.Actor.Sheet.PathPlaceholder"}}</span>
+</div>
+{{/if}}

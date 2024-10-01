@@ -1,45 +1,92 @@
-import { ItemType } from '@src/system/types/cosmere';
-import { BaseSheet } from './base-sheet';
-import { CosmereActor } from '@system/documents/actor';
-import { CharacterActorDataModel } from '@system/data/actor/character';
+import './components';
 
-const DEFAULT_ANCESTRY_LABEL = '[Ancestry]';
-const DEFAULT_PATH_LABEL = '[Path]';
+import { ItemType } from '@system/types/cosmere';
+import { CharacterActor } from '@system/documents';
 
-export class CharacterSheet extends BaseSheet {
-    static get defaultOptions() {
-        return foundry.utils.mergeObject(super.defaultOptions, {
+// Base
+import { BaseActorSheet } from './base';
+
+const enum CharacterSheetTab {
+    Details = 'details',
+    Goals = 'goals',
+}
+
+export class CharacterSheet extends BaseActorSheet {
+    static DEFAULT_OPTIONS = foundry.utils.mergeObject(
+        foundry.utils.deepClone(super.DEFAULT_OPTIONS),
+        {
             classes: ['cosmere-rpg', 'sheet', 'actor', 'character'],
-            width: 950,
-            height: 1000,
-            resizeable: true,
-        });
+            position: {
+                width: 850,
+                height: 1000,
+            },
+        },
+    );
+
+    static PARTS = foundry.utils.mergeObject(
+        foundry.utils.deepClone(super.PARTS),
+        {
+            header: {
+                template:
+                    'systems/cosmere-rpg/templates/actors/character/parts/header.hbs',
+            },
+            'sheet-content': {
+                template:
+                    'systems/cosmere-rpg/templates/actors/character/parts/sheet-content.hbs',
+            },
+        },
+    );
+
+    static TABS = foundry.utils.mergeObject(
+        foundry.utils.deepClone(super.TABS),
+        {
+            [CharacterSheetTab.Details]: {
+                label: 'COSMERE.Actor.Sheet.Tabs.Details',
+                icon: '<i class="fa-solid fa-feather-pointed"></i>',
+                sortIndex: 0,
+            },
+
+            [CharacterSheetTab.Goals]: {
+                label: 'COSMERE.Actor.Sheet.Tabs.Goals',
+                icon: '<i class="fa-solid fa-list"></i>',
+                sortIndex: 25,
+            },
+        },
+    );
+
+    get actor(): CharacterActor {
+        return super.document;
     }
 
-    get actor() {
-        return super.actor as CosmereActor<CharacterActorDataModel>;
-    }
+    /* --- Context --- */
 
-    getData(options?: Partial<ActorSheet.Options>) {
+    public async _prepareContext(
+        options: Partial<foundry.applications.api.ApplicationV2.RenderOptions>,
+    ) {
         // Find the ancestry
         const ancestryItem = this.actor.items.find(
             (item) => item.type === ItemType.Ancestry,
         );
 
-        // Find the path
-        const pathItem = this.actor.items.find(
-            (item) => item.type === ItemType.Path,
-        );
+        // Find all paths
+        const pathItems = this.actor.items.filter((item) => item.isPath());
+
+        // Split paths by type
+        const pathTypes = pathItems
+            .map((item) => item.system.type)
+            .filter((v, i, self) => self.indexOf(v) === i); // Filter out duplicates
 
         return {
-            ...super.getData(options),
+            ...(await super._prepareContext(options)),
 
-            ancestryLabel: ancestryItem?.name ?? DEFAULT_ANCESTRY_LABEL,
-            pathsLabel: pathItem?.name ?? DEFAULT_PATH_LABEL,
+            pathTypes: pathTypes.map((type) => ({
+                type,
+                typeLabel: CONFIG.COSMERE.paths.types[type].label,
+                paths: pathItems.filter((i) => i.system.type === type),
+            })),
 
-            recovery: {
-                die: this.actor.system.recovery.die,
-            },
+            // TODO: Default localization
+            ancestryLabel: ancestryItem?.name ?? 'DEFAULT_ANCESTRY_LABEL',
         };
     }
 }
