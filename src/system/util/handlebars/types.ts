@@ -63,33 +63,21 @@ export interface ItemContext {
     consume: Partial<{
         type: string;
         value: number;
-        consumesActorResource: boolean;
-        consumesItemResource: boolean;
+        consumesResource: boolean;
         consumesItem: boolean;
-
         resource: string;
-        resourceLabel: string;
-        resourceHasRecharge: boolean;
-        resourceRecharge: string;
-        resourceRechargeLabel: string;
     }>;
 
-    hasResources: boolean;
-    resources: Record<
-        string,
-        Partial<{
-            id: string;
-            label: string;
-            labelPlural: string;
-            value: number;
-            hasMax: boolean;
-            max: number;
-
-            hasRecharge: boolean;
-            recharge?: string;
-            rechargeLabel?: string;
-        }>
-    >;
+    hasUses: boolean;
+    uses: Partial<{
+        type: string;
+        label: string;
+        value: number;
+        max: number;
+        hasRecharge: boolean;
+        recharge: string;
+        rechargeLabel: string;
+    }>;
 
     hasDamage: boolean;
     damage: Partial<{

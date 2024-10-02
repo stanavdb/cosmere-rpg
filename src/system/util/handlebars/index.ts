@@ -6,8 +6,6 @@ import {
     Skill,
     Attribute,
     ItemConsumeType,
-    Resource,
-    ItemResource,
     ActionCostType,
     DamageType,
     HoldType,
@@ -164,9 +162,9 @@ Handlebars.registerHelper(
                     ) {
                         subtitle[0].text += ` + ${attack.range.value}`;
                     } else if (attack.type === AttackType.Ranged) {
-                        subtitle[0].text += ` (${attack.range.value}${attack.range.units}${
+                        subtitle[0].text += ` (${attack.range.value}${attack.range.unit}${
                             attack.range.long
-                                ? `/${attack.range.long}${attack.range.units}`
+                                ? `/${attack.range.long}${attack.range.unit}`
                                 : ''
                         })`;
                     }
@@ -314,116 +312,63 @@ Handlebars.registerHelper(
 
                 // Check if the activation consumes some resource
                 if (item.system.activation.consume) {
-                    // Get the actor resource consumed
+                    const consumesResource =
+                        item.system.activation.consume.type ===
+                        ItemConsumeType.Resource;
+                    const consumesItem =
+                        item.system.activation.consume.type ===
+                        ItemConsumeType.Item;
+
+                    // Get resource
                     const resource = item.system.activation.consume.resource;
-                    const consumesActorResource =
-                        item.system.activation.consume.type ===
-                        ItemConsumeType.ActorResource;
-                    const consumesItemResource =
-                        item.system.activation.consume.type ===
-                        ItemConsumeType.ItemResource;
 
                     context.hasConsume = true;
                     context.consume = {
                         type: item.system.activation.consume.type,
                         value: item.system.activation.consume.value,
-                        consumesActorResource,
-                        consumesItemResource,
-                        consumesItem:
-                            item.system.activation.consume.type ===
-                            ItemConsumeType.Item,
+                        consumesResource,
+                        consumesItem,
 
                         ...(resource
                             ? {
-                                  resource,
-                                  resourceLabel: consumesActorResource
-                                      ? CONFIG.COSMERE.resources[
-                                            resource as Resource
-                                        ].label
-                                      : CONFIG.COSMERE.items.resources.types[
-                                            resource as ItemResource
-                                        ].label,
+                                  resource:
+                                      item.system.activation.consume.resource,
+                                  resourceLabel:
+                                      CONFIG.COSMERE.resources[resource].label,
                               }
                             : {}),
                     };
-
-                    if (consumesItemResource && item.system.resources) {
-                        // Get the resource
-                        const resource =
-                            item.system.resources[
-                                context.consume.resource as ItemResource
-                            ];
-
-                        const resourceHasRecharge = !!resource?.recharge;
-                        const resourceRecharge = resource?.recharge;
-                        const resourceRechargeLabel = resourceHasRecharge
-                            ? CONFIG.COSMERE.items.resources.recharge[
-                                  resource.recharge!
-                              ].label
-                            : undefined;
-
-                        context.consume = {
-                            ...context.consume,
-                            resourceHasRecharge,
-                            resourceRecharge,
-                            resourceRechargeLabel,
-                        };
-                    }
                 }
 
-                // Check if item has resources
-                if (item.system.resources) {
-                    context.hasResources = true;
+                if (item.system.activation.uses) {
+                    const type = item.system.activation.uses.type;
+                    const value = item.system.activation.uses.value;
+                    const max = item.system.activation.uses.max;
+                    const recharge = item.system.activation.uses.recharge;
 
-                    // Assign resources
-                    context.resources = (
-                        Object.keys(item.system.resources) as ItemResource[]
-                    )
-                        .map((resourceType) => {
-                            // Get resource
-                            const resource =
-                                item.system.resources![resourceType];
-                            if (!resource) return null;
+                    const hasRecharge = recharge != null;
 
-                            // Get resource config
-                            const resourceConfig =
-                                CONFIG.COSMERE.items.resources.types[
-                                    resourceType
-                                ];
+                    // Get config
+                    const config =
+                        CONFIG.COSMERE.items.activation.uses.types[type];
 
-                            const hasMax = resource.max != null;
-                            const hasRecharge = resource.recharge != null;
-
-                            return {
-                                id: resourceType,
-                                label:
-                                    resource.value > 1
-                                        ? resourceConfig.labelPlural
-                                        : resourceConfig.label,
-                                value: resource.value,
-                                hasMax,
-                                max: hasMax ? resource.max : resource.value,
-
-                                hasRecharge,
-                                ...(hasRecharge
-                                    ? {
-                                          recharge: resource.recharge,
-                                          rechargeLabel:
-                                              CONFIG.COSMERE.items.resources
-                                                  .recharge[resource.recharge!]
-                                                  .label,
-                                      }
-                                    : {}),
-                            };
-                        })
-                        .filter((v) => !!v)
-                        .reduce(
-                            (resources, resource) => ({
-                                ...resources,
-                                [resource.id]: resource,
-                            }),
-                            {},
-                        );
+                    context.hasUses = true;
+                    context.uses = {
+                        type,
+                        value,
+                        label:
+                            (max ?? value) > 1
+                                ? config.labelPlural
+                                : config.label,
+                        max,
+                        hasRecharge,
+                        recharge,
+                        rechargeLabel: hasRecharge
+                            ? CONFIG.COSMERE.items.activation.uses.recharge[
+                                  recharge
+                              ].label
+                            : '',
+                    };
                 }
             }
 
@@ -524,6 +469,7 @@ export async function preloadHandlebarsTemplates() {
         'systems/cosmere-rpg/templates/item/loot/partials/loot-details-tab.hbs',
         'systems/cosmere-rpg/templates/item/armor/partials/armor-details-tab.hbs',
         'systems/cosmere-rpg/templates/item/ancestry/partials/ancestry-details-tab.hbs',
+        'systems/cosmere-rpg/templates/item/talent/partials/talent-details-tab.hbs',
         'systems/cosmere-rpg/templates/combat/combatant.hbs',
     ];
     return await loadTemplates(

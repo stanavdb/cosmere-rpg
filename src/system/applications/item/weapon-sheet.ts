@@ -1,17 +1,16 @@
-import { PathItem } from '@system/documents/item';
+import { WeaponItem } from '@system/documents/item';
 import { DeepPartial } from '@system/types/utils';
 
 // Base
 import { BaseItemSheet } from './base';
 
-export class PathItemSheet extends BaseItemSheet {
+export class WeaponItemSheet extends BaseItemSheet {
     static DEFAULT_OPTIONS = foundry.utils.mergeObject(
         foundry.utils.deepClone(super.DEFAULT_OPTIONS),
         {
-            classes: ['cosmere-rpg', 'sheet', 'item', 'path'],
+            classes: ['cosmere-rpg', 'sheet', 'item', 'weapon'],
             position: {
-                width: 550,
-                height: 500,
+                width: 730,
             },
             window: {
                 resizable: true,
@@ -25,7 +24,6 @@ export class PathItemSheet extends BaseItemSheet {
         {
             details: {
                 label: 'COSMERE.Item.Sheet.Tabs.Details',
-                icon: '<i class="fa-solid fa-circle-info"></i>',
                 sortIndex: 15,
             },
         },
@@ -41,7 +39,7 @@ export class PathItemSheet extends BaseItemSheet {
         },
     );
 
-    get item(): PathItem {
+    get item(): WeaponItem {
         return super.document;
     }
 

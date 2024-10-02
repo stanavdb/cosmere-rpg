@@ -64,6 +64,10 @@ Hooks.once('init', async () => {
     registerItemSheet(ItemType.Loot, applications.item.LootItemSheet);
     registerItemSheet(ItemType.Armor, applications.item.ArmorItemSheet);
     registerItemSheet(ItemType.Trait, applications.item.TraitItemSheet);
+    registerItemSheet(ItemType.Action, applications.item.ActionItemSheet);
+    registerItemSheet(ItemType.Talent, applications.item.TalentItemSheet);
+    registerItemSheet(ItemType.Equipment, applications.item.EquipmentItemSheet);
+    registerItemSheet(ItemType.Weapon, applications.item.WeaponItemSheet);
 
     CONFIG.Dice.types.push(dice.PlotDie);
     CONFIG.Dice.terms.p = dice.PlotDie;

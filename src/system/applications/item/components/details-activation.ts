@@ -1,3 +1,4 @@
+import { ActivationType } from '@system/types/cosmere';
 import { ConstructorOf } from '@system/types/utils';
 
 // Component imports
@@ -27,8 +28,10 @@ export class DetailsActivationComponent extends HandlebarsApplicationComponent<
         const { activation } = this.application.item.system;
 
         return {
+            hasActivationType: activation.type !== ActivationType.None,
             hasActivationCost: !!activation.cost.type,
             hasConsume: !!activation.consume,
+            hasUses: !!activation.uses,
             hasSkill: !!activation.skill,
 
             typeSelectOptions: Object.entries(
@@ -62,7 +65,7 @@ export class DetailsActivationComponent extends HandlebarsApplicationComponent<
                     {},
                 ),
             },
-            actorResourceSelectOptions: {
+            resourceSelectOptions: {
                 none: 'GENERIC.None',
                 ...Object.entries(CONFIG.COSMERE.resources).reduce(
                     (acc, [key, config]) => ({
@@ -72,9 +75,23 @@ export class DetailsActivationComponent extends HandlebarsApplicationComponent<
                     {},
                 ),
             },
-            itemResourceSelectOptions: {
+            usesTypeSelectOptions: {
                 none: 'GENERIC.None',
-                ...Object.entries(CONFIG.COSMERE.items.resources.types).reduce(
+                ...Object.entries(
+                    CONFIG.COSMERE.items.activation.uses.types,
+                ).reduce(
+                    (acc, [key, config]) => ({
+                        ...acc,
+                        [key]: config.labelPlural,
+                    }),
+                    {},
+                ),
+            },
+            rechargeSelectOptions: {
+                none: 'GENERIC.None',
+                ...Object.entries(
+                    CONFIG.COSMERE.items.activation.uses.recharge,
+                ).reduce(
                     (acc, [key, config]) => ({
                         ...acc,
                         [key]: config.label,

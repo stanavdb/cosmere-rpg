@@ -44,11 +44,18 @@ export class WeaponItemDataModel extends DataModelMixin<
     CosmereItem
 >(
     IdItemMixin({
-        initial: 'none',
+        initialFromName: true,
     }),
     TypedItemMixin({
         initial: WeaponType.Light,
-        choices: () => Object.keys(CONFIG.COSMERE.weaponTypes),
+        choices: () =>
+            Object.entries(CONFIG.COSMERE.weaponTypes).reduce(
+                (acc, [key, config]) => ({
+                    ...acc,
+                    [key]: config.label,
+                }),
+                {} as Record<WeaponType, string>,
+            ),
     }),
     DescriptionItemMixin(),
     EquippableItemMixin({

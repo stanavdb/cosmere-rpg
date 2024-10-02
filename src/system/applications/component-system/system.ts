@@ -34,6 +34,7 @@ const componentRegistry: Record<
         parentRef?: string;
         params?: Record<string, unknown>;
         element?: HTMLElement;
+        dirty?: boolean;
     }
 > = {};
 
@@ -130,6 +131,8 @@ export function registerComponent(
                     detail: { params: getComponentParams(componentRef) },
                 }),
             );
+        } else {
+            componentRegistry[componentRef].dirty = false;
         }
 
         // Return result
@@ -207,7 +210,12 @@ function initComponent(selector: string, componentRef: string): boolean {
     );
 
     // Assign
-    componentRegistry[componentRef] = { selector, instance, parentRef };
+    componentRegistry[componentRef] = {
+        selector,
+        instance,
+        parentRef,
+        dirty: false,
+    };
     return true;
 }
 
@@ -255,7 +263,10 @@ export async function renderComponent(
 ) {
     // Get component instance
     const instance = getComponentInstance(componentRef);
-    if (!instance) throw new Error(`Invalid component ref "${componentRef}"`);
+    if (!instance)
+        throw new Error(
+            `Failed to render component. Invalid component ref "${componentRef}"`,
+        );
 
     // Get params
     const params = componentRegistry[componentRef].params ?? {};
@@ -307,7 +318,9 @@ export function getComponentState(componentRef: string) {
     // Get component instance
     const instance = getComponentInstance(componentRef);
     if (!instance?.element)
-        throw new Error(`Invalid component ref "${componentRef}"`);
+        throw new Error(
+            `Failed to get component state. Invalid component ref "${componentRef}"`,
+        );
 
     // Get the component class
     const ComponentClass =
@@ -348,7 +361,10 @@ export function getComponentStatesRecursive(
 ): Record<string, ComponentState> {
     // Get component instance
     const instance = getComponentInstance(rootRef);
-    if (!instance) throw new Error(`Invalid component ref "${rootRef}"`);
+    if (!instance)
+        throw new Error(
+            `Failed to get component state. Invalid component ref "${rootRef}"`,
+        );
 
     // Ensure instance has element
     if (!instance.element) return states;
@@ -371,7 +387,10 @@ export function replaceComponent(
 ) {
     // Get component instance
     const instance = getComponentInstance(componentRef);
-    if (!instance) throw new Error(`Invalid component ref "${componentRef}"`);
+    if (!instance)
+        throw new Error(
+            `Failed to replace component. Invalid component ref "${componentRef}"`,
+        );
 
     // Get application
     const app = instance.application;
@@ -396,7 +415,9 @@ export function applyComponentState(
     // Get component instance
     const instance = getComponentInstance(componentRef);
     if (!instance?.element)
-        throw new Error(`Invalid component ref "${componentRef}"`);
+        throw new Error(
+            `Failed to apply component state. Invalid component ref "${componentRef}"`,
+        );
 
     if (state.focus) {
         const el = instance.element.querySelector(state.focus) as
@@ -419,7 +440,10 @@ export function applyComponentState(
 export function attachComponentListeners(componentRef: string) {
     // Get component instance
     const instance = getComponentInstance(componentRef);
-    if (!instance) throw new Error(`Invalid component ref "${componentRef}"`);
+    if (!instance)
+        throw new Error(
+            `Failed to attach component listeners. Invalid component ref "${componentRef}"`,
+        );
 
     // Get the element
     const htmlElement = getComponentElement(componentRef);
@@ -470,6 +494,29 @@ export function attachComponentListeners(componentRef: string) {
 
     // Attach child component listeners
     childRefs.forEach((childRef) => attachComponentListeners(childRef));
+}
+
+export function preRenderApplication(applicationId: string) {
+    // Mark all components as dirty
+    Object.entries(componentRegistry)
+        .filter(([ref]) => ref.startsWith(applicationId))
+        .forEach(([ref]) => {
+            componentRegistry[ref].dirty = true;
+        });
+}
+
+export function removeOrphanedComponents(applicationId: string) {
+    // Get all components
+    const components = Object.entries(componentRegistry).filter(([ref]) =>
+        ref.startsWith(applicationId),
+    );
+
+    // Remove orphaned components
+    components.forEach(([ref, { dirty }]) => {
+        if (dirty) {
+            delete componentRegistry[ref];
+        }
+    });
 }
 
 export function getComponentElement(componentRef: string) {
@@ -533,6 +580,8 @@ export default {
     getComponentState,
     getComponentStatesRecursive,
     replaceComponent,
+    preRenderApplication,
+    removeOrphanedComponents,
     applyComponentState,
     attachComponentListeners,
     getComponentElement,

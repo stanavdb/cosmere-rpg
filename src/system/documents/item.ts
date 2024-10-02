@@ -5,7 +5,6 @@ import {
     ItemConsumeType,
     ActivationType,
     Resource,
-    ItemResource,
 } from '@system/types/cosmere';
 import { CosmereActor } from './actor';
 
@@ -22,6 +21,7 @@ import {
     ActionItemDataModel,
     TraitItemDataModel,
     LootItemDataModel,
+    EquipmentItemDataModel,
 } from '@system/data/item';
 
 import { ActivatableItemData } from '@system/data/item/mixins/activatable';
@@ -309,26 +309,6 @@ export class CosmereItem<
         const consumptionAvailable =
             options.shouldConsume !== false && !!this.system.activation.consume;
 
-        if (consumptionAvailable) {
-            if (
-                this.system.activation.consume!.type ===
-                ItemConsumeType.ItemResource
-            ) {
-                const resource = this.system.activation.consume!
-                    .resource as ItemResource;
-
-                // Ensure item resource is configured
-                if (!this.system.resources?.[resource]) {
-                    ui.notifications.warn(
-                        game.i18n!.localize(
-                            'GENERIC.Warning.ItemConsumeResourceNotConfigured',
-                        ),
-                    );
-                    return null;
-                }
-            }
-        }
-
         // Determine if we should handle resource consumption
         const shouldConsume =
             consumptionAvailable &&
@@ -345,18 +325,13 @@ export class CosmereItem<
 
             // The the current amount
             const currentAmount =
-                consumeType === ItemConsumeType.ItemResource
-                    ? this.system.resources![
-                          this.system.activation.consume!
-                              .resource as ItemResource
-                      ]!.value
-                    : consumeType === ItemConsumeType.ActorResource
-                      ? actor.system.resources[
-                            this.system.activation.consume!.resource as Resource
-                        ].value
-                      : consumeType === ItemConsumeType.Item
-                        ? 0 // TODO: Figure out how to handle item consumption
-                        : 0;
+                consumeType === ItemConsumeType.Resource
+                    ? actor.system.resources[
+                          this.system.activation.consume!.resource!
+                      ].value
+                    : consumeType === ItemConsumeType.Item
+                      ? 0 // TODO: Figure out how to handle item consumption
+                      : 0;
 
             // Validate we can consume the amount
             const newAmount = currentAmount - consumeAmount;
@@ -369,20 +344,7 @@ export class CosmereItem<
 
             // Add post roll action to consume the resource
             postRoll.push(() => {
-                if (consumeType === ItemConsumeType.ItemResource) {
-                    // Handle charge consumption
-                    // Consume the charges
-                    void this.update({
-                        system: {
-                            resources: {
-                                [this.system.activation.consume!
-                                    .resource as string]: {
-                                    value: newAmount,
-                                },
-                            },
-                        },
-                    });
-                } else if (consumeType === ItemConsumeType.ActorResource) {
+                if (consumeType === ItemConsumeType.Resource) {
                     // Handle actor resource consumption
                     void actor.update({
                         system: {
@@ -404,6 +366,28 @@ export class CosmereItem<
                             .replace('[action]', 'Item consumption'),
                     );
                 }
+            });
+        }
+
+        // Handle item uses
+        if (this.system.activation.uses) {
+            // Get the current uses
+            const currentUses = this.system.activation.uses.value;
+
+            // Validate we can use the item
+            if (currentUses < 1) {
+                ui.notifications.warn(
+                    game.i18n!.localize('GENERIC.Warning.NotEnoughUses'),
+                );
+                return null;
+            }
+
+            // Add post roll action to consume a use
+            postRoll.push(() => {
+                // Handle use consumption
+                void this.update({
+                    'system.activation.uses.value': currentUses - 1,
+                });
             });
         }
 
@@ -452,7 +436,7 @@ export class CosmereItem<
         }
     }
 
-    private async showConsumeDialog(
+    protected async showConsumeDialog(
         options: ShowConsumeDialogOptions = {},
     ): Promise<boolean | null> {
         if (!this.hasActivation()) return false;
@@ -467,22 +451,15 @@ export class CosmereItem<
 
         // Determine consumed resource label
         const consumedResourceLabel =
-            consumeType === ItemConsumeType.ItemResource
+            consumeType === ItemConsumeType.Resource
                 ? game.i18n!.localize(
-                      CONFIG.COSMERE.items.resources.types[
-                          this.system.activation.consume
-                              .resource as ItemResource
-                      ][amount > 1 ? 'labelPlural' : 'label'],
+                      CONFIG.COSMERE.resources[
+                          this.system.activation.consume.resource!
+                      ].label,
                   )
-                : consumeType === ItemConsumeType.ActorResource
-                  ? game.i18n!.localize(
-                        CONFIG.COSMERE.resources[
-                            this.system.activation.consume.resource as Resource
-                        ].label,
-                    )
-                  : consumeType === ItemConsumeType.Item
-                    ? '[TODO ITEM]'
-                    : game.i18n!.localize('GENERIC.Unknown');
+                : consumeType === ItemConsumeType.Item
+                  ? '[TODO ITEM]'
+                  : game.i18n!.localize('GENERIC.Unknown');
 
         // Render the dialog inner HTML
         const content = await renderTemplate(
@@ -522,29 +499,11 @@ export class CosmereItem<
     /* --- Functions --- */
 
     public async recharge() {
-        if (!this.hasActivation() || !this.system.resources) return;
-
-        // Get resources
-        const resourceIds = (
-            Object.keys(this.system.resources) as ItemResource[]
-        ).filter(
-            (resourceId) =>
-                this.system.resources![resourceId]?.max != undefined,
-        );
+        if (!this.hasActivation() || !this.system.activation.uses) return;
 
         // Recharge resource
         await this.update({
-            system: {
-                resources: resourceIds.reduce(
-                    (updates, resourceId) => ({
-                        ...updates,
-                        [resourceId]: {
-                            value: this.system.resources![resourceId]!.max,
-                        },
-                    }),
-                    {},
-                ),
-            },
+            'system.activation.uses.value': this.system.activation.uses.max,
         });
     }
 
@@ -624,3 +583,7 @@ export type SpecialtyItem = CosmereItem<SpecialtyItemDataModel>;
 export type LootItem = CosmereItem<LootItemDataModel>;
 export type ArmorItem = CosmereItem<ArmorItemDataModel>;
 export type TraitItem = CosmereItem<TraitItemDataModel>;
+export type ActionItem = CosmereItem<ActionItemDataModel>;
+export type TalentItem = CosmereItem<TalentItemDataModel>;
+export type EquipmentItem = CosmereItem<EquipmentItemDataModel>;
+export type WeaponItem = CosmereItem<WeaponItemDataModel>;

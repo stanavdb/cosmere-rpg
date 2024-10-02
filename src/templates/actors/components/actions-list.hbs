@@ -8,6 +8,9 @@
         <span class="col consume">
             {{localize "COSMERE.Actor.Sheet.Actions.Consume"}}
         </span>
+        <span class="col uses">
+            {{localize "COSMERE.Actor.Sheet.Actions.Uses"}}
+        </span>
         <div class="col controls flexrow">
             <div></div>
             {{#if @root.editable}}
@@ -57,28 +60,40 @@
 
         {{!-- Consume --}}
         <div class="col consume">
+            {{!-- Consume --}}
             {{#if ctx.hasConsume}}
 
-            {{#if ctx.consume.consumesActorResource}}
+            {{#if ctx.consume.consumesResource}}
             <span>{{ ctx.consume.value }} {{localize ctx.consume.resourceLabel }}</span>
             {{/if}}
 
-            {{#if ctx.consume.consumesItemResource}}
-            {{#if (and (eq ctx.consume.resource 'use') ctx.consume.resourceHasRecharge)}}
+            {{!-- TODO: Item consume --}}
+            {{#if ctx.consume.consumesItem}}
+            <span>—</span>
+            {{/if}}
+
+            {{else}}
+            <span>—</span>
+            {{/if}}
+        </div>
+
+        {{!-- Uses --}}
+        <div class="col uses">
+            {{#if ctx.hasUses}}
+
+            {{#if (or (gt ctx.uses.max 1) (not ctx.uses.hasRecharge))}}
             <span>
-                {{#if (gt ctx.consume.value 1)}}
-                    {{ ctx.consume.value }}
-                    {{localize "COSMERE.Item.Activation.Consume.Per"}} 
+                {{ ctx.uses.value }} / {{ctx.uses.max}}
+                {{#if ctx.uses.hasRecharge}}
+                {{localize ctx.uses.rechargeLabel }}
                 {{/if}}
-                {{localize ctx.consume.resourceRechargeLabel }}
             </span>
             {{else}}
-            {{#if (eq ctx.consume.resource 'charge')}}
-                <span>{{ ctx.consume.value }} ({{ctx.resources.charge.value}}/{{ctx.resources.charge.max}})</span>
-            {{else}}
-            <span>{{ ctx.consume.value }} {{localize ctx.consume.resourceLabel }}</span>
-            {{/if}}
-            {{/if}}
+            <span {{#if (eq ctx.uses.value 0)}}class="inactive"{{/if}}>
+                {{#if ctx.uses.hasRecharge}}
+                {{localize ctx.uses.rechargeLabel }}
+                {{/if}}
+            </span>
             {{/if}}
 
             {{else}}

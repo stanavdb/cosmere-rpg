@@ -24,7 +24,17 @@ export class ActionItemDataModel extends DataModelMixin<
     ActionItemData,
     CosmereItem
 >(
-    TypedItemMixin(),
+    TypedItemMixin({
+        initial: ActionType.Basic,
+        choices: () =>
+            Object.entries(CONFIG.COSMERE.action.types).reduce(
+                (acc, [key, config]) => ({
+                    ...acc,
+                    [key]: config.label,
+                }),
+                {} as Record<ActionType, string>,
+            ),
+    }),
     DescriptionItemMixin(),
     ActivatableItemMixin(),
     DamagingItemMixin(),

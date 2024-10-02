@@ -1,4 +1,6 @@
 {{#if isEquippable}}
+    <h5>{{localize "COSMERE.Item.Sheet.Equip.Title"}}</h5>
+
     {{!-- Is always equipped --}}
     <div class="form-group">
         <label>{{localize "COSMERE.Item.Sheet.Equip.AlwaysEquipped"}}</label>
@@ -15,7 +17,28 @@
 
     {{!-- Traits --}}
     <div class="form-group-stacked">
-        <label>{{localize "COSMERE.Item.Sheet.Equip.Traits"}}</label>
+        <div class="header">
+            <label>{{localize "COSMERE.Item.Sheet.Equip.Traits"}}</label>
+            {{#if traitsCollapsed}}
+            <span>{{traitsString}}</span>
+            {{/if}}
+            <div class="controls">
+                {{#if traitsCollapsed}}
+                <a data-action="toggle-traits-collapsed"
+                    data-tooltip="COSMERE.Item.Sheet.Equip.TraitsShow"
+                >
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+                {{else}}
+                <a data-action="toggle-traits-collapsed"
+                    data-tooltip="COSMERE.Item.Sheet.Equip.TraitsHide"
+                >
+                    <i class="fa-solid fa-chevron-down"></i>
+                </a>
+                {{/if}}
+            </div>
+        </div>
+        {{#if (not traitsCollapsed)}}
         <div class="traits-list">
             {{#each traits as |trait|}}
             <div class="trait">
@@ -39,7 +62,7 @@
                     value="{{trait.value}}"
                     {{else}}
                     type="text"
-                    value="—"
+                    placeholder="—"
                     {{/if}}
                     {{#if (or (not @root.editable) (not trait.active))}}
                     readonly
@@ -49,11 +72,34 @@
             </div>
             {{/each}}
         </div>
+        {{/if}}
     </div>
 
     {{!-- Expert Traits --}}
     <div class="form-group-stacked">
-        <label>{{localize "COSMERE.Item.Sheet.Equip.ExpertTraits"}}</label>
+        <div class="header">
+            <label>{{localize "COSMERE.Item.Sheet.Equip.ExpertTraits"}}</label>
+            {{#if expertTraitsCollapsed}}
+            <span>{{expertTraitsString}}</span>
+            {{/if}}
+            <div class="controls">
+                {{#if expertTraitsCollapsed}}
+                <a data-action="toggle-expert-traits-collapsed"
+                    data-tooltip="COSMERE.Item.Sheet.Equip.ExpertTraitsShow"
+                >
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+                {{else}}
+                <a data-action="toggle-expert-traits-collapsed"
+                    data-tooltip="COSMERE.Item.Sheet.Equip.ExpertTraitsHide"
+                >
+                    <i class="fa-solid fa-chevron-down"></i>
+                </a>
+                {{/if}}
+            </div>
+        </div>
+
+        {{#if (not expertTraitsCollapsed)}}
         <div class="traits-list">
             {{#each expertTraits as |trait|}}
             <div class="trait">
@@ -91,5 +137,6 @@
             </div>
             {{/each}}
         </div>
+        {{/if}}
     </div>
 {{/if}}

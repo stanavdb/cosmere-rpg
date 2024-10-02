@@ -1,29 +1,33 @@
-import { ArmorItem } from '@system/documents/item';
+import { TalentType } from '@system/types/cosmere';
+import { TalentItem } from '@system/documents/item';
 import { DeepPartial } from '@system/types/utils';
 
 // Base
 import { BaseItemSheet } from './base';
 
-export class ArmorItemSheet extends BaseItemSheet {
+export class TalentItemSheet extends BaseItemSheet {
     /**
      * NOTE: Unbound methods is the standard for defining actions and forms
      * within ApplicationV2
      */
-
+    /* eslint-disable @typescript-eslint/unbound-method */
     static DEFAULT_OPTIONS = foundry.utils.mergeObject(
         foundry.utils.deepClone(super.DEFAULT_OPTIONS),
         {
-            classes: ['cosmere-rpg', 'sheet', 'item', 'armor'],
+            classes: ['cosmere-rpg', 'sheet', 'item', 'talent'],
             position: {
-                width: 730,
-                height: 500,
+                width: 550,
             },
             window: {
                 resizable: true,
                 positioned: true,
             },
+            form: {
+                handler: this.onFormEvent,
+            } as unknown,
         },
     );
+    /* eslint-enable @typescript-eslint/unbound-method */
 
     static TABS = foundry.utils.mergeObject(
         foundry.utils.deepClone(super.TABS),
@@ -40,13 +44,31 @@ export class ArmorItemSheet extends BaseItemSheet {
         {
             'sheet-content': {
                 template:
-                    'systems/cosmere-rpg/templates/item/armor/parts/sheet-content.hbs',
+                    'systems/cosmere-rpg/templates/item/talent/parts/sheet-content.hbs',
             },
         },
     );
 
-    get item(): ArmorItem {
+    get item(): TalentItem {
         return super.document;
+    }
+
+    /* --- Form --- */
+
+    protected static onFormEvent(
+        this: TalentItemSheet,
+        event: Event,
+        form: HTMLFormElement,
+        formData: FormDataExtended,
+    ) {
+        if (
+            'system.path' in formData.object &&
+            formData.object['system.path'] === ''
+        )
+            formData.set('system.path', null);
+
+        // Invoke super
+        super.onFormEvent(event, form, formData);
     }
 
     /* --- Context --- */
@@ -56,6 +78,8 @@ export class ArmorItemSheet extends BaseItemSheet {
     ) {
         return {
             ...(await super._prepareContext(options)),
+            isPathTalent: this.item.system.type === TalentType.Path,
+            isAncestryTalent: this.item.system.type === TalentType.Ancestry,
         };
     }
 }

@@ -70,6 +70,9 @@ export function ComponentHandlebarsApplicationMixin<
             let renderedParts: Record<string, HTMLElement> = {};
             const renderedComponents: Record<string, HTMLCollection> = {};
 
+            // Pre-render application
+            ComponentSystem.preRenderApplication(this.id);
+
             if (options.components) {
                 options.componentRefs.push(
                     ...Object.values(this.components)
@@ -86,6 +89,9 @@ export function ComponentHandlebarsApplicationMixin<
                     { ...context, __application: this },
                     options,
                 )) as Record<string, HTMLElement>;
+
+                // Remove components that were deleted
+                ComponentSystem.removeOrphanedComponents(this.id);
 
                 // Get all rendered part ids
                 const renderedPartIds = Object.keys(renderedParts);

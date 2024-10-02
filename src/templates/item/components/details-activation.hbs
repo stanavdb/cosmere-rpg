@@ -1,5 +1,6 @@
 {{#if hasActivation}}
 {{!-- Type --}}
+<h5>{{localize "COSMERE.Item.Sheet.Activation.Title"}}</h5>
 <div class="form-group">
     <label>{{localize "COSMERE.Item.Sheet.Activation.Type"}}</label>
     <div class="input-group">
@@ -12,6 +13,8 @@
         </select>
     </div>
 </div>
+
+{{#if hasActivationType}}
 
 {{!-- Cost --}}
 <div class="form-group">
@@ -39,6 +42,8 @@
     </div>
 </div>
 
+{{!-- Resources --}}
+
 {{!-- Consume --}}
 <div class="form-group consume">
     <label>{{localize "COSMERE.Item.Sheet.Activation.Consume"}}</label>
@@ -55,25 +60,17 @@
         >
         {{/if}}
 
-        {{#if (eq item.system.activation.consume.type "actor_resource")}}
+        {{#if (eq item.system.activation.consume.type "resource")}}
         <select name="system.activation.consume.resource"
             {{#if (not editable)}}
             disabled
             {{/if}}
         >
-            {{selectOptions actorResourceSelectOptions selected=item.system.activation.consume.resource localize=true}}
+            {{selectOptions resourceSelectOptions selected=item.system.activation.consume.resource localize=true}}
         </select>
         {{/if}}
 
-        {{#if (eq item.system.activation.consume.type "item_resource")}}
-        <select name="system.activation.consume.resource"
-            {{#if (not editable)}}
-            disabled
-            {{/if}}
-        >
-            {{selectOptions itemResourceSelectOptions selected=item.system.activation.consume.resource localize=true}}
-        </select>
-        {{/if}}
+        {{!-- TODO: Consume type = item --}}
 
         <select name="system.activation.consume.type"
             {{#if (not editable)}}
@@ -84,6 +81,58 @@
         </select>
     </div>
 </div>
+
+{{!-- Uses --}}
+<div class="form-group uses">
+    <label>{{localize "COSMERE.Item.Sheet.Activation.Uses"}}</label>
+    <div class="input-group">
+        {{#if hasUses}}
+        <input name="system.activation.uses.value"
+            type="number"
+            min="0"
+            step="1"
+            value="{{item.system.activation.uses.value}}"
+            {{#if (not editable)}}
+            readonly
+            {{/if}}
+        >
+        <span class="delim">/</span>
+        <input name="system.activation.uses.max"
+            type="number"
+            min="1"
+            step="1"
+            value="{{item.system.activation.uses.max}}"
+            {{#if (not editable)}}
+            readonly
+            {{/if}}
+        >
+        {{/if}}
+
+        <select name="system.activation.uses.type"
+            {{#if (not editable)}}
+            disabled
+            {{/if}}
+        >
+            {{selectOptions usesTypeSelectOptions selected=item.system.activation.uses.type localize=true}}
+        </select>
+    </div>
+</div>
+
+{{!-- Uses recharge --}}
+{{#if hasUses}}
+<div class="form-group">
+    <label>{{localize "COSMERE.Item.Sheet.Activation.Recharge"}}</label>
+    <div class="input-group">
+        <select name="system.activation.uses.recharge"
+            {{#if (not editable)}}
+            disabled
+            {{/if}}
+        >
+            {{selectOptions rechargeSelectOptions selected=item.system.activation.uses.recharge localize=true}}
+        </select>
+    </div>
+</div>
+{{/if}}
 
 {{!-- Skill test --}}
 {{#if (eq item.system.activation.type "skill_test")}}
@@ -120,5 +169,6 @@
         {{/if}}
     </div>
 </div>
+{{/if}}
 {{/if}}
 {{/if}}

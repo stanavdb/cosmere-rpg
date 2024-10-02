@@ -24,12 +24,13 @@ import {
     ItemType,
     AttackType,
     ItemRechargeType,
-    ItemResource,
+    ItemUseType,
     EquipType,
     HoldType,
     PathType,
     EquipHand,
     EquipmentType,
+    TalentType,
 } from './types/cosmere';
 
 const COSMERE: CosmereRPGConfig = {
@@ -433,6 +434,9 @@ const COSMERE: CosmereRPGConfig = {
         },
         activation: {
             types: {
+                [ActivationType.None]: {
+                    label: 'GENERIC.None',
+                },
                 [ActivationType.SkillTest]: {
                     label: 'COSMERE.Item.Activation.Type.SkillTest',
                 },
@@ -441,31 +445,30 @@ const COSMERE: CosmereRPGConfig = {
                 },
             },
             consumeTypes: {
-                [ItemConsumeType.ActorResource]: {
-                    label: 'COSMERE.Item.Activation.ConsumeType.ActorResource.Label',
-                },
-                [ItemConsumeType.ItemResource]: {
-                    label: 'COSMERE.Item.Activation.ConsumeType.ItemResource.Label',
+                [ItemConsumeType.Resource]: {
+                    label: 'COSMERE.Item.Activation.ConsumeType.Resource.Label',
                 },
                 [ItemConsumeType.Item]: {
                     label: 'COSMERE.Item.Activation.ConsumeType.Item.Label',
                 },
             },
-        },
-        resources: {
-            types: {
-                [ItemResource.Use]: {
-                    label: 'COSMERE.Item.Resources.Use.Singular',
-                    labelPlural: 'COSMERE.Item.Resources.Use.Plural',
+            uses: {
+                types: {
+                    [ItemUseType.Use]: {
+                        label: 'COSMERE.Item.Activation.Uses.Types.Use.Singular',
+                        labelPlural:
+                            'COSMERE.Item.Activation.Uses.Types.Use.Plural',
+                    },
+                    [ItemUseType.Charge]: {
+                        label: 'COSMERE.Item.Activation.Uses.Types.Charge.Singular',
+                        labelPlural:
+                            'COSMERE.Item.Activation.Uses.Types.Charge.Plural',
+                    },
                 },
-                [ItemResource.Charge]: {
-                    label: 'COSMERE.Item.Resources.Charge.Singular',
-                    labelPlural: 'COSMERE.Item.Resources.Charge.Plural',
-                },
-            },
-            recharge: {
-                [ItemRechargeType.PerScene]: {
-                    label: 'COSMERE.Item.Resources.Recharge.PerScene',
+                recharge: {
+                    [ItemRechargeType.PerScene]: {
+                        label: 'COSMERE.Item.Activation.Uses.Recharge.PerScene',
+                    },
                 },
             },
         },
@@ -700,11 +703,23 @@ const COSMERE: CosmereRPGConfig = {
         },
     },
 
+    talentTypes: {
+        [TalentType.Ancestry]: {
+            label: 'COSMERE.Talent.Type.Ancestry',
+        },
+        [TalentType.Path]: {
+            label: 'COSMERE.Talent.Type.Path',
+        },
+    },
+
     cultures: {},
     ancestries: {},
 
     units: {
         weight: ['lb'],
+        distance: {
+            ft: 'UNITS.Distance.Feet',
+        },
     },
 };
 

@@ -181,17 +181,17 @@ export const enum DeflectSource {
 }
 
 export const enum ActivationType {
+    None = 'none',
     Utility = 'utility',
     SkillTest = 'skill_test',
 }
 
 export const enum ItemConsumeType {
-    ActorResource = 'actor_resource', // E.g. health, focus, investiture
-    ItemResource = 'item_resource', // E.g. uses, charges
+    Resource = 'resource', // E.g. health, focus, investiture
     Item = 'item',
 }
 
-export const enum ItemResource {
+export const enum ItemUseType {
     Use = 'use',
     Charge = 'charge',
 }
@@ -242,6 +242,11 @@ export const enum DamageType {
     Spirit = 'spirit',
     Vital = 'vital',
     Healing = 'heal',
+}
+
+export const enum TalentType {
+    Ancestry = 'ancestry',
+    Path = 'path',
 }
 
 /* --- System --- */

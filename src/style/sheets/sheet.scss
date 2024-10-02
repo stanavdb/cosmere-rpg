@@ -34,6 +34,10 @@
         font-weight: bold;
         margin: 0.25ch;
     }
+
+    .form-group input::placeholder {
+        opacity: 0.5 !important;
+    }
 }
 
 .sheet .tab-body {

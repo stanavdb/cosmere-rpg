@@ -25,7 +25,7 @@ export class CultureItemSheet extends BaseItemSheet {
         {
             'sheet-content': {
                 template:
-                    'systems/cosmere-rpg/templates/item/culture/parts/sheet-content.hbs',
+                    'systems/cosmere-rpg/templates/item/parts/sheet-content.hbs',
             },
         },
     );

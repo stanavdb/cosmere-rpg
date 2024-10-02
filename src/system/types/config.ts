@@ -23,7 +23,7 @@ import {
     DamageType,
     ItemType,
     ItemRechargeType,
-    ItemResource,
+    ItemUseType,
     EquipType,
     HoldType,
     EquipHand,
@@ -144,7 +144,7 @@ export interface ActivationTypeConfig {
     label: string;
 }
 
-export interface ItemResourceConfig {
+export interface ItemUseTypeConfig {
     label: string;
     labelPlural: string;
 }
@@ -211,6 +211,10 @@ export interface EquipmentTypeConfig {
     label: string;
 }
 
+export interface TalentTypeConfig {
+    label: string;
+}
+
 export interface CosmereRPGConfig {
     sizes: Record<Size, SizeConfig>;
     creatureTypes: Record<CreatureType, CreatureTypeConfig>;
@@ -232,10 +236,10 @@ export interface CosmereRPGConfig {
         activation: {
             types: Record<ActivationType, ActivationTypeConfig>;
             consumeTypes: Record<ItemConsumeType, ItemConsumeTypeConfig>;
-        };
-        resources: {
-            types: Record<ItemResource, ItemResourceConfig>;
-            recharge: Record<ItemRechargeType, ItemRechargeConfig>;
+            uses: {
+                types: Record<ItemUseType, ItemUseTypeConfig>;
+                recharge: Record<ItemRechargeType, ItemRechargeConfig>;
+            };
         };
         equip: {
             types: Record<EquipType, EquipTypeConfig>;
@@ -277,10 +281,13 @@ export interface CosmereRPGConfig {
 
     damageTypes: Record<DamageType, DamageTypeConfig>;
 
+    talentTypes: Record<string, TalentTypeConfig>;
+
     cultures: Record<string, CultureConfig>;
     ancestries: Record<string, AncestriesConfig>;
 
     units: {
         weight: string[];
+        distance: Record<string, string>;
     };
 }

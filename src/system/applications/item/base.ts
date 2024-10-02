@@ -1,3 +1,4 @@
+import { ArmorTraitId, WeaponTraitId } from '@system/types/cosmere';
 import { CosmereItem } from '@system/documents/item';
 import { DeepPartial, AnyObject } from '@system/types/utils';
 
@@ -127,6 +128,124 @@ export class BaseItemSheet extends TabsApplicationMixin(
                 formData.object['system.activation.attribute'] === 'none'
             )
                 formData.set('system.activation.attribute', null);
+
+            if (
+                'system.activation.uses.type' in formData.object &&
+                formData.object['system.activation.uses.type'] === 'none'
+            )
+                formData.set('system.activation.uses', null);
+
+            if (
+                'system.activation.uses.recharge' in formData.object &&
+                formData.object['system.activation.uses.recharge'] === 'none'
+            )
+                formData.set('system.activation.uses.recharge', null);
+        }
+
+        if (this.item.hasDamage()) {
+            if (
+                'system.damage.formula' in formData.object &&
+                (formData.object['system.damage.formula'] as string).trim() ===
+                    ''
+            )
+                formData.set('system.damage.formula', null);
+
+            if (
+                'system.damage.type' in formData.object &&
+                formData.object['system.damage.type'] === 'none'
+            )
+                formData.set('system.damage.type', null);
+
+            if (
+                'system.damage.skill' in formData.object &&
+                formData.object['system.damage.skill'] === 'none'
+            )
+                formData.set('system.damage.skill', null);
+
+            if (
+                'system.damage.attribute' in formData.object &&
+                formData.object['system.damage.attribute'] === 'none'
+            )
+                formData.set('system.damage.attribute', null);
+        }
+
+        if (this.item.hasAttack()) {
+            if (
+                'system.attack.range.unit' in formData.object &&
+                formData.object['system.attack.range.unit'] === 'none'
+            )
+                formData.set('system.attack.range', null);
+        }
+
+        if (this.item.hasTraits()) {
+            const item = this.item;
+            const object = formData.object as Record<
+                string,
+                string | number | boolean
+            >;
+
+            const traitsData = Object.entries(object).filter(([key]) =>
+                key.startsWith('system.traits'),
+            );
+
+            const defaultValueTraitsData = traitsData.filter(([key]) =>
+                key.endsWith('.defaultValue'),
+            ) as [string, number][];
+
+            defaultValueTraitsData.forEach(([key, defaultValue]) => {
+                if (!defaultValue) {
+                    formData.set(key, 0);
+                }
+            });
+
+            const expertModifyValueTraitsData = traitsData.filter(([key]) =>
+                key.endsWith('.expertise.modifyValue'),
+            ) as [string, boolean][];
+
+            expertModifyValueTraitsData.forEach(([key, modifiesValue]) => {
+                // Get trait id
+                const traitId = key
+                    .replace('system.traits.', '')
+                    .replace('.expertise.modifyValue', '') as
+                    | ArmorTraitId
+                    | WeaponTraitId;
+
+                // Get the trait
+                const trait = item.system.traits[traitId];
+
+                if (modifiesValue) {
+                    if (!trait.expertise?.value) {
+                        // Get value
+                        const value = trait.defaultValue!;
+                        formData.set(
+                            `system.traits.${traitId}.expertise.value`,
+                            value,
+                        );
+                        formData.set(
+                            `system.traits.${traitId}.expertise.toggleActive`,
+                            false,
+                        );
+                    } else if (
+                        object[
+                            `system.traits.${traitId}.expertise.toggleActive`
+                        ]
+                    ) {
+                        // Remove value
+                        formData.set(
+                            `system.traits.${traitId}.expertise.value`,
+                            null,
+                        );
+                    }
+                } else {
+                    formData.set(
+                        `system.traits.${traitId}.expertise.value`,
+                        null,
+                    );
+                }
+
+                // Remove modifyValue
+                formData.delete(key);
+            });
         }
 
         // Update the document
