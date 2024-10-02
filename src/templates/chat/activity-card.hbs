@@ -21,7 +21,7 @@
                     {{/if}}
                 </span>
                 {{#if subtitle}}
-                <span class="subtitle">{{ctx.subtitle}}</span>
+                <span class="subtitle">{{{ctx.subtitle}}}</span>
                 {{/if}}
             </div>
         </header>
@@ -31,19 +31,3 @@
 {{/with}}
 {{/with}}
 
-{{#if rolls}}
-<div class="card-rolls">
-    {{#each rolls as |roll|}}
-    {{> roll-details roll}}
-    {{/each}}
-</div>
-{{/if}}
-
-{{#if damageRolls}}
-<div class="card-rolls damage">
-    <span class="title">{{localize "DICE.Damage.Label"}}</span>
-    {{#each damageRolls as |roll|}}
-    {{> roll-details roll}}
-    {{/each}}
-</div>
-{{/if}}

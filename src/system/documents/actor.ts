@@ -5,6 +5,8 @@ import {
     Condition,
     ItemType,
     ExpertiseType,
+    DamageType,
+    Resource,
 } from '@system/types/cosmere';
 import { CosmereItem, CosmereItemData } from '@system/documents/item';
 import { CommonActorDataModel } from '@system/data/actor/common';
@@ -62,6 +64,11 @@ interface ShortRestOptions extends LongRestOptions {
      * to the recovery die roll.
      */
     tendedBy?: CharacterActor;
+}
+
+interface DamageInstance {
+    amount: number;
+    type?: DamageType;
 }
 
 export class CosmereActor<
@@ -161,6 +168,76 @@ export class CosmereActor<
 
     /* --- Functions --- */
 
+    public async applyDamage(...instances: DamageInstance[]) {
+        // Get health resource
+        const health = this.system.resources[Resource.Health];
+
+        let damage = 0;
+        let deflected = 0;
+        instances.forEach((instance) => {
+            // Get damage config
+            const damageConfig = instance.type
+                ? CONFIG.COSMERE.damageTypes[instance.type]
+                : { ignoreDeflect: false };
+
+            let amount = instance.amount;
+            if (!damageConfig.ignoreDeflect && health.deflect?.value) {
+                // Get deflect
+                const deflect = health.deflect.value;
+
+                // Apply deflect
+                amount = Math.max(0, amount - deflect);
+                deflected += deflect;
+            }
+
+            if (instance.type === DamageType.Healing) {
+                amount = -amount;
+            }
+
+            // Add to running total
+            damage += amount;
+        });
+
+        // Get total damage
+        const totalDamage = damage + deflected;
+
+        // Whether or not the damage is actually healing
+        const isHealing = totalDamage < 0;
+
+        // Apply damage
+        const newHealth = Math.max(0, health.value - damage);
+
+        // Update health
+        await this.update({
+            'system.resources.hea.value': newHealth,
+        });
+
+        // Chat message
+        let flavor = game
+            .i18n!.localize(
+                isHealing
+                    ? 'COSMERE.ChatMessage.ApplyHealing'
+                    : 'COSMERE.ChatMessage.ApplyDamage',
+            )
+            .replace('[actor]', this.name)
+            .replace('[amount]', Math.abs(damage).toString());
+
+        if (!isHealing && deflected > 0) {
+            flavor += ` (${totalDamage} - <i class="deflect fa-solid fa-shield"></i>${deflected})`;
+        }
+
+        // Chat message
+        await ChatMessage.create({
+            user: game.user!.id,
+            speaker: ChatMessage.getSpeaker({ actor: this }) as ChatSpeakerData,
+            content: `${flavor}.`,
+        });
+    }
+
+    public async applyHealing(amount: number) {
+        return this.applyDamage({ amount, type: DamageType.Healing });
+    }
+
     public *allApplicableEffects() {
         for (const effect of super.allApplicableEffects()) {
             if (
@@ -202,7 +279,7 @@ export class CosmereActor<
         const skill = this.system.skills[skillId];
         const attribute =
             this.system.attributes[options.attribute ?? skill.attribute];
-        const data = this.getRollData() as D20RollData;
+        const data = this.getRollData() as Partial<D20RollData>;
 
         // Add attribute mod
         data.mod = Derived.getValue(skill.mod)!;
@@ -217,7 +294,7 @@ export class CosmereActor<
         )} ${game.i18n!.localize('GENERIC.SkillTest')}`;
         const rollData = foundry.utils.mergeObject(
             {
-                data,
+                data: data as D20RollData,
                 title: `${flavor}: ${this.name}`,
                 chatMessage: false,
                 // flavor,
@@ -410,6 +487,29 @@ export class CosmereActor<
     public getRollData() {
         return {
             ...super.getRollData(),
+
+            // Attributes shorthand
+            attr: (
+                Object.keys(CONFIG.COSMERE.attributes) as Attribute[]
+            ).reduce(
+                (data, attrId) => ({
+                    ...data,
+                    [attrId]: this.system.attributes[attrId].value,
+                }),
+                {} as Record<string, number>,
+            ),
+
+            // Skills
+            skills: (Object.keys(CONFIG.COSMERE.skills) as Skill[]).reduce(
+                (data, skillId) => ({
+                    ...data,
+                    [skillId]: {
+                        rank: this.system.skills[skillId].rank,
+                        mod: Derived.getValue(this.system.skills[skillId].mod),
+                    },
+                }),
+                {},
+            ),
         };
     }
 

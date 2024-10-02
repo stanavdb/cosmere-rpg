@@ -689,6 +689,7 @@ const COSMERE: CosmereRPGConfig = {
         },
         [DamageType.Healing]: {
             label: 'COSMERE.DamageTypes.Healing',
+            ignoreDeflect: true,
         },
     },
 

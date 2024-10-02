@@ -81,7 +81,7 @@ interface RollDialogConfigurationData {
     defaultRollMode?: RollMode;
 }
 
-export class D20Roll extends Roll<D20RollData> {
+export class D20Roll extends foundry.dice.Roll<D20RollData> {
     declare options: D20RollOptions & { configured: boolean };
 
     public constructor(
@@ -318,8 +318,6 @@ export class D20Roll extends Roll<D20RollData> {
         if (
             (form.attribute.value as Attribute) !== this.data.defaultAttribute
         ) {
-            console.log('processDialogSubmit', form.attribute.value);
-
             const skill = this.data.skill;
             const attribute =
                 this.data.attributes[form.attribute.value as Attribute];

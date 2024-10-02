@@ -1,3 +1,35 @@
+.chat-message .message-header {
+    margin-bottom: 0.5rem;
+
+    .message-sender {
+        display: flex;
+        align-items: center;
+
+        img {
+            width: 2.75rem;
+            box-shadow: 0 0 0.35rem 0 black;
+            border-radius: 50%;
+            border: none;
+        }
+
+        .name {
+            display: flex;
+            flex-direction: column;
+            padding-left: 1rem;
+
+            .title {
+                font-weight: bold;
+                font-size: 12pt;
+            }
+
+            .subtitle {
+                font-size: 9pt;
+                margin-top: -0.2rem;
+            }
+        }
+    }
+}
+
 .roll {
     .die-result.plot {
         width: 2.5rem;
@@ -43,14 +75,15 @@
 
                     .subtitle {
                         font-size: 8pt;
-                        opacity: .75;
+                        opacity: 0.75;
                     }
                 }
             }
         }
     }
 
-    &.skill {}
+    &.skill {
+    }
 }
 
 .card-rolls {
@@ -78,14 +111,12 @@
     }
 
     .dice-total {
-        position: relative;
-
         .mod {
-            opacity: .5;
+            opacity: 0.5;
         }
 
         .damage-type {
-            opacity: .5;
+            opacity: 0.5;
             position: absolute;
             right: 0.5rem;
             font-size: 10pt;
@@ -96,6 +127,7 @@
         }
 
         .total-value {
+            position: relative;
             background: rgba(0, 0, 0, 0.1);
             padding: 0.3rem;
             border-radius: 0.2rem;
@@ -138,14 +170,14 @@
     }
 
     .buttons-container {
-        margin-top: .5rem;
+        margin-top: 0.5rem;
 
-        a[role="button"] {
+        a[role='button'] {
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 0.3rem;
-            background: rgba(255, 255, 255, .4);
+            background: rgba(255, 255, 255, 0.4);
             font-weight: bold;
             font-size: 10pt;
             border-radius: 0.3rem;
@@ -153,4 +185,36 @@
             border: 1px solid gray;
         }
     }
+}
+
+.card-actions {
+    display: flex;
+    align-items: center;
+
+    .action {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.3rem;
+        background: rgba(255, 255, 255, 0.4);
+        font-weight: bold;
+        font-size: 10pt;
+        border-radius: 0.3rem;
+        margin: 0 0.2rem;
+        border: 1px solid gray;
+        width: 2rem;
+    }
+
+    .delim {
+        height: 1.25rem;
+        margin: 0 0.2rem;
+        border-left: 1px solid var(--color-border-light-primary);
+        border-right: 1px solid var(--color-border-light-highlight);
+    }
+}
+
+.message-content i.deflect {
+    font-size: 9pt;
+    margin-right: 0.1rem;
+    opacity: 0.75;
 }

@@ -1,14 +1,20 @@
 import { DamageType } from '@system/types/cosmere';
 import { AdvantageMode } from '@system/types/roll';
 
-// NOTE: Need to use type instead of interface here,
-// as the generic of Roll doesn't handle interfaces properly
-// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-export type DamageRollData = {
-    mod: number;
-};
+import { EmptyObject } from '@system/types/utils';
 
-export interface DamageRollOptions extends Partial<RollTerm.EvaluationOptions> {
+export interface DamageRollOptions
+    extends Partial<foundry.dice.terms.RollTerm.EvaluationOptions> {
+    /**
+     * The type of damage being rolled
+     */
+    damageType?: DamageType;
+
+    /**
+     * The damage modifier to apply on hit
+     */
+    mod: number;
+
     /**
      * What advantage modifier to apply to the damage roll
      * @default AdvantageMode.None
@@ -16,15 +22,20 @@ export interface DamageRollOptions extends Partial<RollTerm.EvaluationOptions> {
     advantageMode?: AdvantageMode;
 }
 
-export class DamageRoll extends Roll<DamageRollData> {
+export class DamageRoll extends foundry.dice.Roll<EmptyObject> {
     public readonly isDamage = true;
 
-    public constructor(
-        formula: string,
-        public readonly damageType: DamageType | undefined,
-        data: DamageRollData,
-        options: DamageRollOptions = {},
-    ) {
-        super(formula, data, options);
+    declare options: DamageRollOptions;
+
+    public constructor(formula: string, options: DamageRollOptions) {
+        super(formula, {}, options);
+    }
+
+    get damageType(): DamageType | undefined {
+        return this.options.damageType;
+    }
+
+    get mod(): number {
+        return this.options.mod;
     }
 }

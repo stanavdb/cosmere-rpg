@@ -35,6 +35,8 @@ Hooks.once('init', async () => {
 
     CONFIG.COSMERE = COSMERE;
 
+    CONFIG.ChatMessage.documentClass = documents.CosmereChatMessage;
+
     CONFIG.Actor.dataModels = dataModels.actor.config;
     CONFIG.Actor.documentClass = documents.CosmereActor;
 

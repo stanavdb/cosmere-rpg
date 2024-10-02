@@ -427,12 +427,10 @@ export class CosmereItem<
                         await damageRoll({
                             formula: this.system.damage.formula,
                             damageType: this.system.damage.type,
-                            data: {
-                                mod:
-                                    this.actor!.system.skills[skill].rank +
-                                    this.actor!.system.attributes[attribute]
-                                        .value,
-                            },
+                            mod:
+                                this.actor!.system.skills[skill].rank +
+                                this.actor!.system.attributes[attribute].value,
+                            data: actor.getRollData(),
                         }),
                     );
                 }

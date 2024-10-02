@@ -648,6 +648,16 @@
             "prc": "Perception",
             "prs": "Persuasion",
             "sur": "Survival"
+        },
+        "ChatMessage": {
+            "Action": {
+                "Graze": "Graze: Reduce Focus",
+                "ApplyDamage": "Apply Damage",
+                "ApplyGraze": "Apply Graze Damage",
+                "ApplyHealing": "Apply Healing"
+            },
+            "ApplyDamage": "[actor] takes [amount] damage",
+            "ApplyHealing": "[actor] recovers [amount] health"
         }
     },
     "DICE": {
@@ -736,13 +746,17 @@
             "Cancel": "Cancel",
             "Update": "Update"
         },
+        "Notification": {
+            "GrazeFocusSpent": "Reduced focus by 1"
+        },
         "Warning": {
             "NotImplemented": "Sorry! [action] is not implemented yet",
             "NoActor": "No selected or assigned actor found for this roll",
             "NotEnoughResource": "Cannot consume, not enough of resource",
             "NotEnoughUses": "Cannot consume, not enough uses left",
             "ItemConsumeResourceNotConfigured": "The resource selected to be consumed is not configured on this item",
-            "NoDuplicateExpertises": "Cannot create duplicate expertise"
+            "NoDuplicateExpertises": "Cannot create duplicate expertise",
+            "NoFocus": "Not enough focus to perform this action"
         },
         "DerivedValue": {
             "Mode": {

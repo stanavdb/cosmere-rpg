@@ -58,11 +58,6 @@ export interface DamageRollConfiguration extends DamageRollOptions {
     formula: string;
 
     /**
-     * The damage type to apply to the damage
-     */
-    damageType?: DamageType;
-
-    /**
      * Data that will be used when parsing this roll
      */
     data: DamageRollData;
@@ -105,12 +100,14 @@ export async function damageRoll(
     config: DamageRollConfiguration,
 ): Promise<Roll> {
     // Construct roll
-    const roll = new DamageRoll(
-        config.formula,
-        config.damageType,
-        config.data,
-        config,
-    );
+    const roll = new DamageRoll(config.formula, config.data, {
+        damageType: config.damageType,
+        mod: config.mod,
+        advantageMode: config.advantageMode,
+        allowStrings: config.allowStrings,
+        maximize: config.maximize,
+        minimize: config.minimize,
+    });
 
     // Evaluate the roll
     await roll.evaluate();
