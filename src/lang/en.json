@@ -264,7 +264,8 @@
             "Type": {
                 "Weapon": {
                     "label": "Weapon",
-                    "label_plural": "Weapons"
+                    "label_plural": "Weapons",
+                    "desc_placeholder": "Edit this to describe what this weapon is & how it looks."
                 },
                 "Armor": {
                     "label": "Armor",
@@ -273,7 +274,8 @@
                 },
                 "Equipment": {
                     "label": "Equipment",
-                    "label_plural": "Equipment"
+                    "label_plural": "Equipment",
+                    "desc_placeholder": "Edit this to describe what this piece of equipment is & how it looks."
                 },
                 "Loot": {
                     "label": "Loot",
@@ -302,11 +304,13 @@
                 },
                 "Talent": {
                     "label": "Talent",
-                    "label_plural": "Talents"
+                    "label_plural": "Talents",
+                    "desc_placeholder": "Edit this to describe what this Talent does."
                 },
                 "Action": {
                     "label": "Action",
-                    "label_plural": "Actions"
+                    "label_plural": "Actions",
+                    "desc_placeholder": "Edit this to describe what this action is and does."
                 },
                 "Trait": {
                     "label": "Trait",
