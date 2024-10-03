@@ -93,6 +93,16 @@ export class CosmereChatMessage extends ChatMessage {
 
         // Append rolls
         html.find('.message-content').append(rollsHtml);
+
+        // Attach listeners
+        html.find('.dice-total').on('click', (event) => {
+            // Get element
+            const element = $(event.target).closest('.dice-total');
+
+            // Check if dice total has collapsed class
+            if (element.hasClass('collapsed')) element.removeClass('collapsed');
+            else element.addClass('collapsed');
+        });
     }
 
     protected async renderActions(html: JQuery) {

@@ -24,6 +24,8 @@ export interface PlotDieData
 }
 
 export class PlotDie extends foundry.dice.terms.DiceTerm {
+    public readonly isPlotDie = true;
+
     constructor(data: PlotDieData = {}) {
         super({
             ...data,
@@ -43,6 +45,18 @@ export class PlotDie extends foundry.dice.terms.DiceTerm {
         dh: foundry.dice.terms.Die.prototype.drop.bind(this),
         dl: foundry.dice.terms.Die.prototype.drop.bind(this),
     };
+
+    /* --- Accessors --- */
+
+    get rolledComplication(): boolean {
+        return this.results[0]?.failure ?? false;
+    }
+
+    get rolledOpportunity(): boolean {
+        return this.results[0]?.success ?? false;
+    }
+
+    /* --- Functions --- */
 
     async roll({ minimize = false, maximize = false, ...options } = {}) {
         const roll = {

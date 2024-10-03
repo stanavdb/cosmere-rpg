@@ -111,11 +111,24 @@
     }
 
     .dice-total {
+        cursor: pointer;
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 0.2rem;
+        border: 1px solid gray;
+        margin-top: 0.5rem;
+
+        hr {
+            border: none;
+            border-bottom: 1px solid currentColor;
+            opacity: 0.2;
+            margin: 0 0.25rem;
+        }
+
         .mod {
             opacity: 0.5;
         }
 
-        .damage-type {
+        .controls {
             opacity: 0.5;
             position: absolute;
             right: 0.5rem;
@@ -124,20 +137,31 @@
             top: 0;
             display: flex;
             align-items: center;
+
+            .delim {
+                border-right: 1px solid currentColor;
+                height: 1rem;
+                margin: 0 0.2rem;
+            }
+
+            i {
+                width: 1rem;
+                transition: 0.3s;
+            }
+
+            .damage-type {
+                margin-right: 0.5rem;
+            }
         }
 
         .total-value {
             position: relative;
-            background: rgba(0, 0, 0, 0.1);
-            padding: 0.3rem;
-            border-radius: 0.2rem;
-            border: 1px solid gray;
-            margin-top: 0.5rem;
             color: #1f1f1f;
             text-align: center;
-
             font-size: 15pt;
             font-weight: bold;
+            padding: 0.3rem;
+            border-radius: 0.2rem;
 
             .cosmere-icon {
                 &.opportunity {
@@ -167,6 +191,36 @@
                 color: #1f1f1f;
             }
         }
+
+        .roll-breakdown {
+            transition: 0.3s;
+            overflow: hidden;
+            height: 2.3rem;
+
+            ul {
+                display: flex;
+                padding: 0.3rem 0.25rem;
+                margin: 0;
+            }
+        }
+
+        &.collapsed {
+            .roll-breakdown {
+                height: 0;
+            }
+
+            > hr {
+                display: none;
+            }
+        }
+
+        &:not(.collapsed) {
+            .controls {
+                i {
+                    transform: rotate(-90deg);
+                }
+            }
+        }
     }
 
     .buttons-container {
@@ -183,6 +237,88 @@
             border-radius: 0.3rem;
             margin: 0 0.2rem;
             border: 1px solid gray;
+        }
+    }
+
+    .die.roll {
+        position: relative;
+        width: 1.5rem;
+        height: 1.7rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:not(:first-child) {
+            margin-left: 0.25rem;
+        }
+
+        > span {
+            z-index: 1;
+            color: white;
+            font-weight: bold;
+            font-size: 15pt;
+            text-shadow: 0 0 0.2rem black;
+
+            .cosmere-icon {
+                color: white;
+                display: flex;
+                margin-top: 0.2rem;
+            }
+        }
+
+        &.p:has(i.complication) {
+            > span {
+                display: flex;
+                font-size: 8pt;
+                align-items: center;
+
+                > span {
+                    font-size: 10pt;
+                    margin-right: 0.1rem;
+                }
+            }
+        }
+
+        &::after {
+            content: '';
+            background-size: 1.5rem;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            opacity: 0.6;
+            z-index: 0;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        &.d4::after {
+            background-image: url(/systems/cosmere-rpg/assets/icons/svg/dice/d4.svg);
+        }
+
+        &.d6::after {
+            background-image: url(/systems/cosmere-rpg/assets/icons/svg/dice/d6.svg);
+        }
+
+        &.d8::after {
+            background-image: url(/systems/cosmere-rpg/assets/icons/svg/dice/d8.svg);
+        }
+
+        &.d10::after {
+            background-image: url(/systems/cosmere-rpg/assets/icons/svg/dice/d10.svg);
+        }
+
+        &.d12::after {
+            background-image: url(/systems/cosmere-rpg/assets/icons/svg/dice/d12.svg);
+        }
+
+        &.d20::after {
+            background-image: url(/systems/cosmere-rpg/assets/icons/svg/dice/d20.svg);
+        }
+
+        &.p::after {
+            background-image: url(/systems/cosmere-rpg/assets/icons/svg/dice/d6.svg);
         }
     }
 }

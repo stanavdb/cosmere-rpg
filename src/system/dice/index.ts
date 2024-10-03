@@ -1,6 +1,8 @@
 import { Attribute, DamageType } from '@system/types/cosmere';
+import { AnyObject } from '@system/types/utils';
+
 import { D20Roll, D20RollOptions, D20RollData } from './d20-roll';
-import { DamageRoll, DamageRollOptions, DamageRollData } from './damage-roll';
+import { DamageRoll, DamageRollOptions } from './damage-roll';
 import { RollMode } from './types';
 
 export * from './d20-roll';
@@ -60,7 +62,7 @@ export interface DamageRollConfiguration extends DamageRollOptions {
     /**
      * Data that will be used when parsing this roll
      */
-    data: DamageRollData;
+    data: AnyObject;
 }
 
 export async function d20Roll(

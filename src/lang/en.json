@@ -657,7 +657,8 @@
                 "ApplyHealing": "Apply Healing"
             },
             "ApplyDamage": "[actor] takes [amount] damage",
-            "ApplyHealing": "[actor] recovers [amount] health"
+            "ApplyHealing": "[actor] recovers [amount] health",
+            "ViewRollsDetails": "Roll Details"
         }
     },
     "DICE": {
