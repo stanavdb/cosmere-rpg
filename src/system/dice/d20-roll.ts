@@ -250,8 +250,6 @@ export class D20Roll extends foundry.dice.Roll<D20RollData> {
         // Deconstruct data
         const { title, defaultRollMode, defaultAttribute, plotDie } = data;
 
-        console.log('configureDialog', defaultAttribute);
-
         // Render the dialog inner HTML
         const content = await renderTemplate(CONFIGURATION_DIALOG_TEMPLATE, {
             formulas: [{ formula: this.formula }],

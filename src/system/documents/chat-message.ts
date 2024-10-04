@@ -143,6 +143,8 @@ export class CosmereChatMessage extends ChatMessage {
     }
 
     protected async renderRolls(html: JQuery) {
+        if (!this.isContentVisible) return;
+
         const d20Rolls = this.rolls.filter((r) => r instanceof D20Roll);
         const damageRolls = this.rolls.filter((r) => r instanceof DamageRoll);
 
@@ -167,6 +169,8 @@ export class CosmereChatMessage extends ChatMessage {
     }
 
     protected async renderActions(html: JQuery) {
+        if (!this.isContentVisible) return;
+
         const hasActions = this.hasDamage;
         if (!hasActions) return;
 
