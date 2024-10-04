@@ -1,8 +1,10 @@
 import { DamageType } from '@system/types/cosmere';
-import { CosmereActor } from './actor';
-
 import { D20Roll } from '@system/dice/d20-roll';
 import { DamageRoll } from '@system/dice/damage-roll';
+import { AnyObject } from '@system/types/utils';
+
+import { CosmereActor } from './actor';
+import { CosmereItem } from './item';
 
 // Constants
 const CHAT_CARD_HEADER_TEMPLATE =
@@ -11,6 +13,11 @@ const CHAT_CARD_ROLLS_TEMPLATE =
     'systems/cosmere-rpg/templates/chat/parts/chat-card-rolls.hbs';
 const CHAT_CARD_ACTIONS_TEMPLATE =
     'systems/cosmere-rpg/templates/chat/parts/chat-card-actions.hbs';
+
+const ACTIVITY_CARD_TEMPLATE =
+    'systems/cosmere-rpg/templates/chat/activity-card.hbs';
+const ACTIVITY_CARD_MAX_HEIGHT = 1040;
+const ACTIVITY_CARD_TOTAL_TRANSITION_DURATION = 0.9;
 
 interface ChatMessageAction {
     name: string;
@@ -79,6 +86,60 @@ export class CosmereChatMessage extends ChatMessage {
 
         // Render actions
         await this.renderActions(html);
+
+        // Attach activity card listeners
+        html.find('.chat-card.activity .header.description').on(
+            'click',
+            (event) => {
+                // Get element
+                const element = $(event.target).closest('.header.description');
+
+                // Check if the description is collapsed
+                const isCollapsed = element.hasClass('collapsed');
+
+                // Toggle collapsed
+                if (isCollapsed) {
+                    element.removeClass('collapsed');
+                } else {
+                    // Get the description element
+                    const descriptionEl = element.find('.description');
+
+                    // Get the height
+                    const height = descriptionEl.height();
+
+                    // Calculate transition duration
+                    const duration =
+                        (ACTIVITY_CARD_TOTAL_TRANSITION_DURATION /
+                            ACTIVITY_CARD_MAX_HEIGHT) *
+                        height! *
+                        2;
+
+                    // Set max height to height and transition to duration
+                    descriptionEl
+                        .css('margin-top', `.3rem`)
+                        .css('max-height', `${height}px`)
+                        .css('transition', `0s`);
+
+                    setTimeout(() => {
+                        // Change transition
+                        descriptionEl
+                            .css('margin-top', '')
+                            .css('max-height', `0`)
+                            .css('transition', `${duration}s`);
+
+                        // Add collapsed class
+                        element.addClass('collapsed');
+
+                        setTimeout(() => {
+                            // Remove max height and transition
+                            descriptionEl
+                                .css('max-height', '')
+                                .css('transition', '');
+                        }, duration * 1000);
+                    });
+                }
+            },
+        );
     }
 
     protected async renderRolls(html: JQuery) {

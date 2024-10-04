@@ -406,6 +406,8 @@ export class CosmereItem<
             options.speaker ??
             (ChatMessage.getSpeaker({ actor }) as ChatSpeakerData);
 
+        const descriptionHTML = await this.getEnrichedDescription();
+
         if (rollRequired) {
             // Perform roll
             const roll = await this.roll(options);
@@ -441,15 +443,14 @@ export class CosmereItem<
                     speaker,
                     content: await renderTemplate(ACTIVITY_CARD_TEMPLATE, {
                         item: this,
+                        hasDescription: !!descriptionHTML,
+                        descriptionHTML,
                         skill: this.system.activation.skill,
                         rolls: [roll],
                         damageRolls,
                     }),
                     rolls: [roll, ...damageRolls],
                 });
-
-                // Add listeners
-                this.attachDamageRollListeners(message as ChatMessage);
 
                 // Perform post roll actions
                 postRoll.forEach((action) => action());
@@ -474,6 +475,9 @@ export class CosmereItem<
                 speaker,
                 content: await renderTemplate(ACTIVITY_CARD_TEMPLATE, {
                     item: this,
+                    hasDescription: !!descriptionHTML,
+                    descriptionHTML,
+                    expanded: true,
                     flavor,
                 }),
             });
@@ -545,15 +549,6 @@ export class CosmereItem<
         });
     }
 
-    private attachDamageRollListeners(message: ChatMessage) {
-        console.log(message);
-
-        const buttons = $(
-            `.chat-message[data-message-id="${message.id}"] a.damage-button`,
-        );
-        console.log('BUTTONS', buttons);
-    }
-
     /* --- Functions --- */
 
     public async recharge() {
@@ -586,6 +581,22 @@ export class CosmereItem<
             this.unsetFlag('cosmere-rpg', 'favorites.isFavorite'),
             this.unsetFlag('cosmere-rpg', 'favorites.sort'),
         ]);
+    }
+
+    /* --- Helpers --- */
+
+    protected async getEnrichedDescription(): Promise<string | undefined> {
+        if (!this.hasDescription()) return;
+        if (
+            !(this as CosmereItem<DescriptionItemData>).system.description
+                ?.value
+        )
+            return;
+
+        return await TextEditor.enrichHTML(
+            (this as CosmereItem<DescriptionItemData>).system.description!
+                .value!,
+        );
     }
 }
 
