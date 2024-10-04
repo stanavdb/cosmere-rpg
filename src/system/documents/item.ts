@@ -470,7 +470,7 @@ export class CosmereItem<
                     .replace('[item]', this.name);
 
             // Create chat message
-            await ChatMessage.create({
+            const message = (await ChatMessage.create({
                 user: game.user!.id,
                 speaker,
                 content: await renderTemplate(ACTIVITY_CARD_TEMPLATE, {
@@ -480,7 +480,8 @@ export class CosmereItem<
                     expanded: true,
                     flavor,
                 }),
-            });
+            })) as ChatMessage;
+            message.applyRollMode('roll');
 
             // Perform post roll actions
             postRoll.forEach((action) => action());
