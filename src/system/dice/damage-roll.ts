@@ -1,7 +1,6 @@
 import { DamageType } from '@system/types/cosmere';
+import { CosmereActorRollData } from '@system/documents/actor';
 import { AdvantageMode } from '@system/types/roll';
-
-import { AnyObject, EmptyObject } from '@system/types/utils';
 
 export interface DamageRollOptions
     extends Partial<foundry.dice.terms.RollTerm.EvaluationOptions> {
@@ -22,14 +21,14 @@ export interface DamageRollOptions
     advantageMode?: AdvantageMode;
 }
 
-export class DamageRoll extends foundry.dice.Roll<AnyObject> {
+export class DamageRoll extends foundry.dice.Roll<CosmereActorRollData> {
     public readonly isDamage = true;
 
     declare options: DamageRollOptions;
 
     public constructor(
         formula: string,
-        data: AnyObject,
+        data: CosmereActorRollData,
         options: DamageRollOptions,
     ) {
         super(formula, data, options);

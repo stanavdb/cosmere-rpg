@@ -252,7 +252,6 @@ export class CosmereItem<
             mod: Derived.getValue(skill.mod)!,
             skill,
             attribute,
-            attributes: actor.system.attributes,
             defaultAttribute: attributeId,
             ...actor.getRollData(),
         };

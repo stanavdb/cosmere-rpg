@@ -9,7 +9,10 @@ import {
     Resource,
 } from '@system/types/cosmere';
 import { CosmereItem, CosmereItemData } from '@system/documents/item';
-import { CommonActorDataModel } from '@system/data/actor/common';
+import {
+    CommonActorData,
+    CommonActorDataModel,
+} from '@system/data/actor/common';
 import { CharacterActorDataModel } from '@system/data/actor/character';
 import { AdversaryActorDataModel } from '@system/data/actor/adversary';
 import { Derived } from '@system/data/fields';
@@ -71,8 +74,19 @@ interface DamageInstance {
     type?: DamageType;
 }
 
+export type CosmereActorRollData<T extends CommonActorData = CommonActorData> =
+    {
+        [K in keyof T]: T[K];
+    } & {
+        attr: Record<string, number>;
+        skills: Record<string, { rank: number; mod: number }>;
+    };
+
 export class CosmereActor<
     T extends CommonActorDataModel = CommonActorDataModel,
+    SystemType extends CommonActorData = T extends CommonActorDataModel<infer S>
+        ? S
+        : never,
 > extends Actor<T, CosmereItem> {
     // Redeclare `actor.type` to specifically be of `ActorType`.
     // This way we avoid casting everytime we want to check/use its type
@@ -309,7 +323,7 @@ export class CosmereActor<
             },
             options,
         );
-        rollData.parts = ['@mod'].concat(options.parts ?? []);
+        rollData.parts = [`@mod`].concat(options.parts ?? []);
 
         // Perform roll
         const roll = await d20Roll(rollData);
@@ -484,9 +498,9 @@ export class CosmereActor<
         });
     }
 
-    public getRollData() {
+    public getRollData(): CosmereActorRollData<SystemType> {
         return {
-            ...super.getRollData(),
+            ...(super.getRollData() as SystemType),
 
             // Attributes shorthand
             attr: (
@@ -496,7 +510,7 @@ export class CosmereActor<
                     ...data,
                     [attrId]: this.system.attributes[attrId].value,
                 }),
-                {} as Record<string, number>,
+                {} as Record<Attribute, number>,
             ),
 
             // Skills
@@ -505,10 +519,12 @@ export class CosmereActor<
                     ...data,
                     [skillId]: {
                         rank: this.system.skills[skillId].rank,
-                        mod: Derived.getValue(this.system.skills[skillId].mod),
+                        mod:
+                            Derived.getValue(this.system.skills[skillId].mod) ??
+                            0,
                     },
                 }),
-                {},
+                {} as Record<Skill, { rank: number; mod: number }>,
             ),
         };
     }

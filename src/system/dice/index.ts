@@ -1,4 +1,5 @@
-import { Attribute, DamageType } from '@system/types/cosmere';
+import { Attribute } from '@system/types/cosmere';
+import { CosmereActorRollData } from '@system/documents/actor';
 import { AnyObject } from '@system/types/utils';
 
 import { D20Roll, D20RollOptions, D20RollData } from './d20-roll';
@@ -62,19 +63,18 @@ export interface DamageRollConfiguration extends DamageRollOptions {
     /**
      * Data that will be used when parsing this roll
      */
-    data: AnyObject;
+    data: CosmereActorRollData;
 }
 
 export async function d20Roll(
     config: D20RollConfigration,
 ): Promise<D20Roll | null> {
     // Roll parameters
-    const formula = ['1d20'].concat(config.parts ?? []).join(' + ');
     const defaultRollMode =
         config.rollMode ?? game.settings!.get('core', 'rollMode');
 
     // Construct the roll
-    const roll = new D20Roll(formula, config.data, {
+    const roll = new D20Roll(config.parts ?? [], config.data, {
         ...config,
     });
 
@@ -85,6 +85,7 @@ export async function d20Roll(
         defaultRollMode,
         defaultAttribute:
             config.defaultAttribute ?? config.data.skill.attribute,
+        data: config.data,
     });
     if (configured === null) return null;
 
