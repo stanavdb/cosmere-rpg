@@ -47,6 +47,8 @@ Hooks.once('init', async () => {
     CONFIG.Combatant.documentClass = documents.CosmereCombatant;
     CONFIG.ui.combat = applications.combat.CosmereCombatTracker;
 
+    CONFIG.Token.documentClass = documents.CosmereTokenDocument;
+
     CONFIG.ActiveEffect.legacyTransferral = false;
 
     Actors.unregisterSheet('core', ActorSheet);
