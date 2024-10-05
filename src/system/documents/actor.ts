@@ -17,7 +17,7 @@ import { CharacterActorDataModel } from '@system/data/actor/character';
 import { AdversaryActorDataModel } from '@system/data/actor/adversary';
 import { Derived } from '@system/data/fields';
 
-import { d20Roll, D20Roll, D20RollData } from '@system/dice';
+import { d20Roll, D20Roll, D20RollData, DamageRoll } from '@system/dice';
 
 import { TalentItemData } from '@system/data/item/talent';
 
@@ -297,10 +297,14 @@ export class CosmereActor<
 
         // Add attribute mod
         data.mod = Derived.getValue(skill.mod)!;
-        data.skill = skill;
-        data.attribute = attribute;
+        data.skill = {
+            id: skillId,
+            rank: skill.rank,
+            mod: data.mod,
+            attribute: skill.attribute,
+        };
+        data.attribute = attribute.value;
         data.attributes = this.system.attributes;
-        data.defaultAttribute = options.attribute ?? skill.attribute;
 
         // Prepare roll data
         const flavor = `${game.i18n!.localize(
@@ -311,6 +315,7 @@ export class CosmereActor<
                 data: data as D20RollData,
                 title: `${flavor}: ${this.name}`,
                 chatMessage: false,
+                defaultAttribute: options.attribute ?? skill.attribute,
             },
             options,
         );
@@ -343,7 +348,7 @@ export class CosmereActor<
      */
     public async rollItem(
         item: CosmereItem,
-        options?: Omit<CosmereItem.RollItemOptions, 'actor'>,
+        options?: Omit<CosmereItem.RollOptions, 'actor'>,
     ): Promise<D20Roll | null> {
         return item.roll({ ...options, actor: this });
     }
@@ -376,8 +381,8 @@ export class CosmereActor<
      */
     public async useItem(
         item: CosmereItem,
-        options?: Omit<CosmereItem.UseItemOptions, 'actor'>,
-    ): Promise<D20Roll | null> {
+        options?: Omit<CosmereItem.UseOptions, 'actor'>,
+    ): Promise<D20Roll | [D20Roll, DamageRoll] | null> {
         return item.use({ ...options, actor: this });
     }
 

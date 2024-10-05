@@ -4,10 +4,15 @@ import {
     Attribute,
     ItemConsumeType,
     ActivationType,
-    Resource,
 } from '@system/types/cosmere';
 import { CosmereActor } from './actor';
 
+import { Derived } from '@system/data/fields';
+
+// Dialogs
+import { AttackConfigurationDialog } from '@system/applications/dialogs/attack-configuration';
+
+// Data model
 import {
     WeaponItemDataModel,
     ArmorItemDataModel,
@@ -34,9 +39,17 @@ import { EquippableItemData } from '@system/data/item/mixins/equippable';
 import { DescriptionItemData } from '@system/data/item/mixins/description';
 import { IdItemData } from '@system/data/item/mixins/id';
 
-import { Derived } from '@system/data/fields';
-
-import { d20Roll, damageRoll, D20Roll, D20RollData } from '@system/dice';
+// Rolls
+import {
+    d20Roll,
+    damageRoll,
+    D20Roll,
+    D20RollData,
+    DamageRoll,
+    DamageRollData,
+} from '@system/dice';
+import { AdvantageMode } from '@system/types/roll';
+import { RollMode } from '@system/dice/types';
 
 // Constants
 const CONSUME_CONFIGURATION_DIALOG_TEMPLATE =
@@ -202,13 +215,9 @@ export class CosmereItem<
      * For item usages with resource consumtion use `item.use` instead.
      */
     public async roll(
-        options: CosmereItem.RollItemOptions = {},
+        options: CosmereItem.RollOptions = {},
     ): Promise<D20Roll | null> {
         if (!this.hasActivation()) return null;
-
-        // Get skill to use
-        const skillId = options.skill ?? this.system.activation.skill;
-        if (!skillId) return null;
 
         // Get the actor to roll for (either assigned through option, the parent of this item, or the first controlled actor)
         const actor =
@@ -226,6 +235,9 @@ export class CosmereItem<
             return null;
         }
 
+        // Get skill to use
+        const skillId = options.skill ?? this.system.activation.skill;
+        if (!skillId) return null;
         const skill = actor.system.skills[skillId];
 
         // Get the attribute id
@@ -234,52 +246,239 @@ export class CosmereItem<
             this.system.activation.attribute ??
             skill.attribute;
 
-        const attribute = actor.system.attributes[attributeId];
-
-        // NOTE: Use boolean or operator (`||`) here instead of nullish coalescing (`??`),
-        // as flavor can also be an empty string, which we'd like to replace with the default flavor too
-        // const flavor =
-        //     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-        //     this.system.activation.flavor ||
-        //     game
-        //         .i18n!.localize('COSMERE.Item.DefaultFlavor')
-        //         .replace('[actor]', actor.name)
-        //         .replace('[item]', this.name);
-        // Flavor currently unused
-
         // Set up actor data
-        const data: D20RollData = {
-            mod: Derived.getValue(skill.mod)!,
-            skill,
-            attribute,
-            defaultAttribute: attributeId,
-            ...actor.getRollData(),
-        };
+        const data: D20RollData = this.getSkillTestRollData(
+            skillId,
+            attributeId,
+            actor,
+        );
 
-        // Prepare roll data
-        const rollData = foundry.utils.mergeObject(
-            {
+        // Perform the roll
+        const roll = await d20Roll(
+            foundry.utils.mergeObject(options, {
                 data,
                 chatMessage: false,
                 title: `${this.name} (${game.i18n!.localize(
                     CONFIG.COSMERE.skills[skillId].label,
                 )})`,
-                // flavor,
                 defaultAttribute: skill.attribute,
-                // messageData: {
-                //     speaker:
-                //         options.speaker ??
-                //         (ChatMessage.getSpeaker({ actor }) as ChatSpeakerData),
-                // },
-            },
-            options,
+                parts: ['@mod'].concat(options.parts ?? []),
+            }),
         );
-        rollData.parts = ['@mod'].concat(options.parts ?? []);
+
+        if (roll && options.chatMessage !== false) {
+            // Get the speaker
+            const speaker =
+                options.speaker ??
+                (ChatMessage.getSpeaker({ actor }) as ChatSpeakerData);
+
+            // Create chat message
+            await roll.toMessage({
+                speaker,
+            });
+        }
+
+        return roll;
+    }
+
+    /**
+     * Utility for rolling damage.
+     * Only works for items that have damage configured.
+     */
+    public async rollDamage(
+        options: CosmereItem.RollDamageOptions = {},
+    ): Promise<DamageRoll | null> {
+        if (!this.hasDamage() || !this.system.damage.formula) return null;
+
+        // Get the actor to roll for (either assigned through option, the parent of this item, or the first controlled actor)
+        const actor =
+            options.actor ??
+            this.actor ??
+            (game.canvas?.tokens?.controlled?.[0]?.actor as
+                | CosmereActor
+                | undefined);
+
+        // Ensure an actor was found
+        if (!actor) {
+            ui.notifications.warn(
+                game.i18n!.localize('GENERIC.Warning.NoActor'),
+            );
+            return null;
+        }
+
+        const activatable = this.hasActivation();
+
+        // Get the skill id
+        const skillId =
+            options.skill ??
+            (activatable ? this.system.activation.skill : undefined);
+
+        // Get the skill
+        const skill = skillId ? actor.system.skills[skillId] : undefined;
+
+        // Get the attribute id
+        const attributeId =
+            options.attribute ??
+            (activatable ? this.system.activation.attribute : undefined) ??
+            (skill ? skill.attribute : undefined);
+
+        // Set up data
+        const rollData: DamageRollData = this.getDamageRollData(
+            skillId,
+            attributeId,
+            actor,
+        );
 
         // Perform the roll
-        return await d20Roll({
-            ...rollData,
-        });
+        const roll = await damageRoll(
+            foundry.utils.mergeObject(options, {
+                formula: this.system.damage.formula,
+                damageType: this.system.damage.type,
+                mod: rollData.mod,
+                data: rollData,
+            }),
+        );
+
+        if (roll && options.chatMessage !== false) {
+            // Get the speaker
+            const speaker =
+                options.speaker ??
+                (ChatMessage.getSpeaker({ actor }) as ChatSpeakerData);
+
+            // Create chat message
+            await roll.toMessage({
+                speaker,
+            });
+        }
+
+        // Return the roll
+        return roll;
+    }
+
+    /**
+     * Utility for rolling attacks with this item.
+     * This function rolls both the skill test and the damage.
+     */
+    public async rollAttack(
+        options: CosmereItem.RollAttackOptions = {},
+    ): Promise<[D20Roll, DamageRoll] | null> {
+        if (!this.hasActivation()) return null;
+        if (!this.hasDamage() || !this.system.damage.formula) return null;
+
+        // Get the actor to roll for (either assigned through option, the parent of this item, or the first controlled actor)
+        const actor =
+            options.actor ??
+            this.actor ??
+            (game.canvas?.tokens?.controlled?.[0]?.actor as
+                | CosmereActor
+                | undefined);
+
+        // Ensure an actor was found
+        if (!actor) {
+            ui.notifications.warn(
+                game.i18n!.localize('GENERIC.Warning.NoActor'),
+            );
+            return null;
+        }
+
+        // Get skill to use
+        const skillId = options.skill ?? this.system.activation.skill;
+        if (!skillId) return null;
+        const skill = actor.system.skills[skillId];
+
+        // Get the attribute
+        let attributeId =
+            options.attribute ??
+            this.system.activation.attribute ??
+            skill.attribute;
+
+        // Perform configuration
+        if (options.configurable !== false) {
+            const attackConfig = await AttackConfigurationDialog.show({
+                title: `${this.name} (${game.i18n!.localize(
+                    CONFIG.COSMERE.skills[skillId].label,
+                )})`,
+                skillTest: {
+                    ...options.skillTest,
+                    parts: ['@mod'].concat(options.skillTest?.parts ?? []),
+                    data: this.getSkillTestRollData(
+                        skillId,
+                        attributeId,
+                        actor,
+                    ),
+                },
+                damageRoll: {
+                    ...options.damage,
+                    parts: this.system.damage.formula.split(' + '),
+                    data: this.getDamageRollData(skillId, attributeId, actor),
+                },
+                defaultAttribute: attributeId,
+                defaultRollMode: options.rollMode,
+            });
+
+            // If the dialog was closed, exit out of rolls
+            if (!attackConfig) return null;
+
+            attributeId = attackConfig.attribute;
+            options.rollMode = attackConfig.rollMode;
+
+            options.skillTest ??= {};
+            options.skillTest.plotDie = attackConfig.skillTest.plotDie;
+            options.skillTest.advantageMode =
+                attackConfig.skillTest.advantageMode;
+            options.skillTest.advantageModePlot =
+                attackConfig.skillTest.advantageModePlot;
+
+            options.damage ??= {};
+            options.damage.advantageMode =
+                attackConfig.damageRoll.advantageMode;
+        }
+
+        // Roll the skill test
+        const skillRoll = (await this.roll({
+            ...options.skillTest,
+            actor,
+            skill: skillId,
+            attribute: attributeId,
+            rollMode: options.rollMode,
+            speaker: options.speaker,
+            configurable: false,
+            chatMessage: false,
+        }))!;
+
+        // Roll the damage
+        const damageRoll = (await this.rollDamage({
+            ...options.damage,
+            actor,
+            skill: skillId,
+            attribute: attributeId,
+            rollMode: options.rollMode,
+            speaker: options.speaker,
+            chatMessage: false,
+        }))!;
+
+        if (options.chatMessage !== false) {
+            // Get the speaker
+            const speaker =
+                options.speaker ??
+                (ChatMessage.getSpeaker({ actor }) as ChatSpeakerData);
+
+            const flavor = game
+                .i18n!.localize('COSMERE.Item.AttackFlavor')
+                .replace('[actor]', actor.name)
+                .replace('[item]', this.name);
+
+            // Create chat message
+            const message = (await ChatMessage.create({
+                user: game.user!.id,
+                speaker,
+                content: `<p>${flavor}</p>`,
+                rolls: [skillRoll, damageRoll],
+            })) as ChatMessage;
+        }
+
+        // Return the rolls
+        return [skillRoll, damageRoll];
     }
 
     /**
@@ -287,8 +486,8 @@ export class CosmereItem<
      * This function handles resource validation/consumption and dice rolling.
      */
     public async use(
-        options: CosmereItem.UseItemOptions = {},
-    ): Promise<D20Roll | null> {
+        options: CosmereItem.UseOptions = {},
+    ): Promise<D20Roll | [D20Roll, DamageRoll] | null> {
         if (!this.hasActivation()) return null;
 
         // Set up post roll actions
@@ -408,55 +607,58 @@ export class CosmereItem<
         const descriptionHTML = await this.getEnrichedDescription();
 
         if (rollRequired) {
-            // Perform roll
-            const roll = await this.roll(options);
+            const hasDamage = this.hasDamage() && this.system.damage.formula;
 
-            const damageRolls = [] as Roll[];
+            const rolls: foundry.dice.Roll[] = [];
 
-            // Ensure roll wasn't cancelled
-            if (roll !== null) {
-                if (this.hasDamage() && this.system.damage.formula) {
-                    const skill =
-                        this.system.damage.skill ??
-                        this.system.activation.skill!;
-                    const attribute =
-                        this.system.damage.attribute ??
-                        this.system.activation.attribute ??
-                        CONFIG.COSMERE.skills[skill].attribute;
-
-                    damageRolls.push(
-                        await damageRoll({
-                            formula: this.system.damage.formula,
-                            damageType: this.system.damage.type,
-                            mod:
-                                this.actor!.system.skills[skill].rank +
-                                this.actor!.system.attributes[attribute].value,
-                            data: actor.getRollData(),
-                        }),
-                    );
-                }
-
-                // Create chat message
-                const message = await ChatMessage.create({
-                    user: game.user!.id,
-                    speaker,
-                    content: await renderTemplate(ACTIVITY_CARD_TEMPLATE, {
-                        item: this,
-                        hasDescription: !!descriptionHTML,
-                        descriptionHTML,
-                        skill: this.system.activation.skill,
-                        rolls: [roll],
-                        damageRolls,
-                    }),
-                    rolls: [roll, ...damageRolls],
+            if (hasDamage) {
+                const attackResult = await this.rollAttack({
+                    ...options,
+                    actor,
+                    skillTest: {
+                        parts: options.parts,
+                        plotDie: options.plotDie,
+                        advantageMode: options.advantageMode,
+                        advantageModePlot: options.advantageModePlot,
+                    },
+                    damage: {
+                        advantageMode: options.advantageModeDamage,
+                    },
+                    chatMessage: false,
                 });
+                if (!attackResult) return null;
 
-                // Perform post roll actions
-                postRoll.forEach((action) => action());
+                rolls.push(...attackResult);
+            } else {
+                const roll = await this.roll({
+                    ...options,
+                    actor,
+                    chatMessage: false,
+                });
+                if (!roll) return null;
+
+                rolls.push(roll);
             }
 
+            // Create chat message
+            const message = await ChatMessage.create({
+                user: game.user!.id,
+                speaker,
+                content: await renderTemplate(ACTIVITY_CARD_TEMPLATE, {
+                    item: this,
+                    hasDescription: !!descriptionHTML,
+                    descriptionHTML,
+                }),
+                rolls: rolls,
+            });
+
+            // Perform post roll actions
+            postRoll.forEach((action) => action());
+
             // Return the result
-            return roll;
+            return hasDamage
+                ? (rolls as [D20Roll, DamageRoll])
+                : (rolls[0] as D20Roll);
         } else {
             // NOTE: Use boolean or operator (`||`) here instead of nullish coalescing (`??`),
             // as flavor can also be an empty string, which we'd like to replace with the default flavor too
@@ -598,10 +800,58 @@ export class CosmereItem<
                 .value!,
         );
     }
+
+    protected getSkillTestRollData(
+        skillId: Skill,
+        attributeId: Attribute,
+        actor: CosmereActor,
+    ): D20RollData {
+        const skill = actor.system.skills[skillId];
+        const attribute = actor.system.attributes[attributeId];
+        const mod = skill.rank + attribute.value;
+
+        return {
+            ...actor.getRollData(),
+            mod,
+            skill: {
+                id: skillId,
+                rank: skill.rank,
+                mod: Derived.getValue(skill.mod) ?? 0,
+                attribute: attributeId,
+            },
+            attribute: attribute.value,
+        };
+    }
+
+    protected getDamageRollData(
+        skillId: Skill | undefined,
+        attributeId: Attribute | undefined,
+        actor: CosmereActor,
+    ): DamageRollData {
+        const skill = skillId ? actor.system.skills[skillId] : undefined;
+        const attribute = attributeId
+            ? actor.system.attributes[attributeId]
+            : undefined;
+        const mod = (skill?.rank ?? 0) + (attribute?.value ?? 0);
+
+        return {
+            ...actor.getRollData(),
+            mod,
+            skill: skill
+                ? {
+                      id: skillId!,
+                      rank: skill.rank,
+                      mod: Derived.getValue(skill.mod) ?? 0,
+                      attribute: attributeId!,
+                  }
+                : undefined,
+            attribute: attribute?.value,
+        };
+    }
 }
 
 export namespace CosmereItem {
-    export interface RollItemOptions {
+    export interface RollOptions {
         /**
          * The actor for which to roll this item.
          * Used to determine the modifier for the roll.
@@ -621,10 +871,11 @@ export namespace CosmereItem {
         attribute?: Attribute;
 
         /**
-         * The dice roll component parts, excluding the initial d20
-         * @default []
+         * Whether or not to generate a chat message for this roll.
+         *
+         * @default true
          */
-        parts?: string[];
+        chatMessage?: boolean;
 
         /**
          * Who is sending the chat message for this roll?
@@ -632,14 +883,69 @@ export namespace CosmereItem {
          * @default - ChatMessage.getSpeaker({ actor })`
          */
         speaker?: ChatSpeakerData;
+
+        /**
+         * Whether or not the roll is configurable.
+         * If true, the roll configuration dialog will be shown before the roll.
+         */
+        configurable?: boolean;
+
+        rollMode?: RollMode;
+
+        /**
+         * Whether or not to include a plot die in the roll
+         */
+        plotDie?: boolean;
+
+        /**
+         * The dice roll component parts, excluding the initial d20
+         *
+         * @default []
+         */
+        parts?: string[];
+
+        /**
+         * What advantage modifier to apply to the roll
+         *
+         * @default AdvantageMode.None
+         */
+        advantageMode?: AdvantageMode;
+
+        /**
+         * What advantage modifer to apply to the plot die roll
+         */
+        advantageModePlot?: AdvantageMode;
     }
 
-    export interface UseItemOptions extends RollItemOptions {
+    export type RollDamageOptions = Omit<
+        RollOptions,
+        'parts' | 'plotDie' | 'configurable' | 'advantageModePlot'
+    >;
+
+    export interface RollAttackOptions
+        extends Omit<
+            RollOptions,
+            'parts' | 'plotDie' | 'advantageMode' | 'advantageModePlot'
+        > {
+        skillTest?: Pick<
+            RollOptions,
+            'parts' | 'plotDie' | 'advantageMode' | 'advantageModePlot'
+        >;
+        damage?: Pick<RollOptions, 'advantageMode'>;
+    }
+
+    export interface UseOptions extends RollOptions {
         /**
          * Whether or not the item usage should consume.
          * Only used if the item has consumption configured.
          */
         shouldConsume?: boolean;
+
+        /**
+         * What advantage modifier to apply to the damage roll.
+         * Only used if the item has damage configured.
+         */
+        advantageModeDamage?: AdvantageMode;
     }
 }
 

@@ -4,6 +4,7 @@ import { AdvantageMode } from '@system/types/roll';
 import { AnyObject } from '@system/types/utils';
 
 import { D20RollData } from '@system/dice/d20-roll';
+import { DamageRollData } from '@system/dice/damage-roll';
 
 // Mixins
 import { ComponentHandlebarsApplicationMixin } from '@system/applications/component-system';
@@ -17,7 +18,7 @@ const ADVANTAGE_MODE_COLORS = {
     [AdvantageMode.None]: null,
 };
 
-export namespace RollConfigurationDialog {
+export namespace AttackConfigurationDialog {
     export interface Data {
         /**
          * The title of the dialog window
@@ -25,19 +26,54 @@ export namespace RollConfigurationDialog {
         title: string;
 
         /**
-         * The formulas of the roll
+         * Data about the skill test
          */
-        parts: string[];
+        skillTest: {
+            /**
+             * The formulas of the roll
+             */
+            parts: string[];
+
+            /**
+             * The data to be used when parsing the skill test roll
+             */
+            data: D20RollData;
+
+            /**
+             * What advantage modifier to apply to the d20 roll
+             */
+            advantageMode?: AdvantageMode;
+
+            /**
+             * What advantage modifer to apply to the plot die roll
+             */
+            advantageModePlot?: AdvantageMode;
+
+            /**
+             * Whether or not to include a plot die in the roll
+             */
+            plotDie?: boolean;
+        };
 
         /**
-         * The data to be used when parsing the roll
+         * Data about the damage roll
          */
-        data: D20RollData;
+        damageRoll: {
+            /**
+             * The formulas of the roll
+             */
+            parts: string[];
 
-        /**
-         * Whether or not to include a plot die in the roll
-         */
-        plotDie?: boolean;
+            /**
+             * The data to be used when parsing the damage roll
+             */
+            data: DamageRollData;
+
+            /**
+             * What advantage modifier to apply to the damage roll
+             */
+            advantageMode?: AdvantageMode;
+        };
 
         /**
          * The attribute that is used for the roll by default
@@ -48,28 +84,23 @@ export namespace RollConfigurationDialog {
          * The roll mode that should be selected by default
          */
         defaultRollMode?: RollMode;
-
-        /**
-         * What advantage modifier to apply to the d20 roll
-         */
-        advantageMode?: AdvantageMode;
-
-        /**
-         * What advantage modifer to apply to the plot die roll
-         */
-        advantageModePlot?: AdvantageMode;
     }
 
     export interface Result {
         attribute: Attribute;
         rollMode: RollMode;
-        plotDie: boolean;
-        advantageMode: AdvantageMode;
-        advantageModePlot: AdvantageMode;
+        skillTest: {
+            plotDie: boolean;
+            advantageMode: AdvantageMode;
+            advantageModePlot: AdvantageMode;
+        };
+        damageRoll: {
+            advantageMode: AdvantageMode;
+        };
     }
 }
 
-export class RollConfigurationDialog extends ComponentHandlebarsApplicationMixin(
+export class AttackConfigurationDialog extends ComponentHandlebarsApplicationMixin(
     ApplicationV2<AnyObject>,
 ) {
     /**
@@ -82,9 +113,10 @@ export class RollConfigurationDialog extends ComponentHandlebarsApplicationMixin
         {
             window: {
                 minimizable: false,
-                positioned: true,
+                resizable: true,
+                title: 'Attack Configuration',
             },
-            classes: ['dialog', 'roll-configuration'],
+            classes: ['dialog', 'attack-configuration'],
             tag: 'dialog',
             position: {
                 width: 500,
@@ -100,7 +132,7 @@ export class RollConfigurationDialog extends ComponentHandlebarsApplicationMixin
         {
             form: {
                 template:
-                    'systems/cosmere-rpg/templates/roll/dialogs/d20-config.hbs',
+                    'systems/cosmere-rpg/templates/roll/dialogs/attack-config.hbs',
                 forms: {
                     form: {
                         handler: this.onFormEvent,
@@ -115,8 +147,10 @@ export class RollConfigurationDialog extends ComponentHandlebarsApplicationMixin
     private submitted = false;
 
     private constructor(
-        private data: RollConfigurationDialog.Data,
-        private resolve: (value: RollConfigurationDialog.Result | null) => void,
+        private data: AttackConfigurationDialog.Data,
+        private resolve: (
+            value: AttackConfigurationDialog.Result | null,
+        ) => void,
     ) {
         super({
             window: {
@@ -124,22 +158,26 @@ export class RollConfigurationDialog extends ComponentHandlebarsApplicationMixin
             },
         });
 
-        this.data.advantageMode ??= AdvantageMode.None;
-        this.data.advantageModePlot ??= AdvantageMode.None;
+        this.data.skillTest.parts.unshift('1d20');
+        this.data.skillTest.advantageMode ??= AdvantageMode.None;
+        this.data.skillTest.advantageModePlot ??= AdvantageMode.None;
+        this.data.damageRoll.advantageMode ??= AdvantageMode.None;
     }
 
     /* --- Statics --- */
 
-    public static show(data: RollConfigurationDialog.Data) {
-        return new Promise<RollConfigurationDialog.Result | null>((resolve) => {
-            void new this(data, resolve).render(true);
-        });
+    public static show(data: AttackConfigurationDialog.Data) {
+        return new Promise<AttackConfigurationDialog.Result | null>(
+            (resolve) => {
+                void new this(data, resolve).render(true);
+            },
+        );
     }
 
     /* --- Form --- */
 
     private static onFormEvent(
-        this: RollConfigurationDialog,
+        this: AttackConfigurationDialog,
         event: Event,
         form: HTMLFormElement,
         formData: FormDataExtended,
@@ -150,22 +188,23 @@ export class RollConfigurationDialog extends ComponentHandlebarsApplicationMixin
         const rollMode = formData.get('rollMode') as RollMode;
         const plotDie = formData.get('plotDie') === 'true';
 
-        const skill = this.data.data.skill;
-        const attributeData = this.data.data.attributes[attribute];
+        const skill = this.data.skillTest.data.skill;
+        const attributeData = this.data.skillTest.data.attributes[attribute];
         const rank = skill.rank;
         const value = attributeData.value;
 
-        this.data.data.mod = rank + value;
+        this.data.skillTest.data.mod = rank + value;
+        this.data.skillTest.plotDie = plotDie;
+
         this.data.defaultAttribute = attribute;
         this.data.defaultRollMode = rollMode;
-        this.data.plotDie = plotDie;
 
         void this.render();
     }
 
     /* --- Actions --- */
 
-    protected static onSubmit(this: RollConfigurationDialog) {
+    protected static onSubmit(this: AttackConfigurationDialog) {
         const form = this.element.querySelector('form')! as HTMLFormElement & {
             attribute: HTMLSelectElement;
             rollMode: HTMLSelectElement;
@@ -174,18 +213,26 @@ export class RollConfigurationDialog extends ComponentHandlebarsApplicationMixin
 
         const attribute = form.attribute.value as Attribute;
         const rollMode = form.rollMode.value as RollMode;
-        const plotDie = form.plotDie.checked;
 
-        const advantageMode = this.data.advantageMode ?? AdvantageMode.None;
-        const advantageModePlot =
-            this.data.advantageModePlot ?? AdvantageMode.None;
+        const plotDie = form.plotDie.checked;
+        const skillTestAdvantageMode =
+            this.data.skillTest.advantageMode ?? AdvantageMode.None;
+        const skillTestAdvantageModePlot =
+            this.data.skillTest.advantageModePlot ?? AdvantageMode.None;
+        const damageRollAdvantageMode =
+            this.data.damageRoll.advantageMode ?? AdvantageMode.None;
 
         this.resolve({
             attribute,
             rollMode,
-            plotDie,
-            advantageMode,
-            advantageModePlot,
+            skillTest: {
+                plotDie,
+                advantageMode: skillTestAdvantageMode,
+                advantageModePlot: skillTestAdvantageModePlot,
+            },
+            damageRoll: {
+                advantageMode: damageRollAdvantageMode,
+            },
         });
         this.submitted = true;
         void this.close();
@@ -221,22 +268,42 @@ export class RollConfigurationDialog extends ComponentHandlebarsApplicationMixin
     /* --- Context --- */
 
     protected _prepareContext() {
-        const formula = foundry.dice.Roll.replaceFormulaData(
-            this.data.parts.join(' + '),
-            this.data.data,
+        const skillTestFormula = foundry.dice.Roll.replaceFormulaData(
+            this.data.skillTest.parts.join(' + '),
+            this.data.skillTest.data,
+            {
+                missing: '0',
+            },
+        );
+
+        const damageRollFormula = foundry.dice.Roll.replaceFormulaData(
+            this.data.damageRoll.parts.join(' + '),
+            this.data.damageRoll.data,
             {
                 missing: '0',
             },
         );
 
         return Promise.resolve({
-            formula,
-            dice: this.data.parts.find((part) => DICE_PART_REGEX.test(part))!,
+            skillTest: {
+                dice: this.data.skillTest.parts.find((part) =>
+                    DICE_PART_REGEX.test(part),
+                )!,
+                formula: skillTestFormula,
+                plotDie: this.data.skillTest.plotDie,
+                advantageMode: this.data.skillTest.advantageMode,
+                advantageModePlot: this.data.skillTest.advantageModePlot,
+            },
+            damageRoll: {
+                dice: this.data.damageRoll.parts.find((part) =>
+                    DICE_PART_REGEX.test(part),
+                ),
+                formula: damageRollFormula,
+                advantageMode: this.data.damageRoll.advantageMode,
+            },
+
             defaultRollMode: this.data.defaultRollMode,
             defaultAttribute: this.data.defaultAttribute,
-            plotDie: this.data.plotDie,
-            advantageMode: this.data.advantageMode,
-            advantageModePlot: this.data.advantageModePlot,
 
             rollModes: CONFIG.Dice.rollModes,
             advantageModes: Object.entries(

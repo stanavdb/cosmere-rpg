@@ -23,9 +23,13 @@ export type D20RollData<
     [K in keyof ActorRollData]: ActorRollData[K];
 } & {
     mod: number;
-    skill: CosmereActorRollData['skills'][Skill];
-    attribute: CosmereActorRollData['attributes'][Attribute];
-    defaultAttribute: Attribute;
+    skill: {
+        id: Skill;
+        rank: number;
+        mod: number;
+        attribute: Attribute;
+    };
+    attribute: number;
 };
 
 export interface D20RollOptions
@@ -64,6 +68,11 @@ export interface D20RollOptions
      * What advantage modifer to apply to the plot die roll
      */
     advantageModePlot?: AdvantageMode;
+
+    /**
+     * The attribute that is used for the roll by default
+     */
+    defaultAttribute?: Attribute;
 }
 
 export class D20Roll extends foundry.dice.Roll<D20RollData> {
@@ -240,7 +249,7 @@ export class D20Roll extends foundry.dice.Roll<D20RollData> {
         });
         if (!result) return null;
 
-        if (result.attribute !== this.data.defaultAttribute) {
+        if (result.attribute !== this.options.defaultAttribute) {
             const skill = this.data.skill;
             const attribute = this.data.attributes[result.attribute];
             this.terms[2] = new foundry.dice.terms.NumericTerm({
@@ -250,6 +259,8 @@ export class D20Roll extends foundry.dice.Roll<D20RollData> {
 
         this.options.rollMode = result.rollMode;
         this.options.plotDie = result.plotDie;
+        this.options.advantageMode = result.advantageMode;
+        this.options.advantageModePlot = result.advantageModePlot;
 
         this.configureModifiers();
         return this;
@@ -309,15 +320,15 @@ export class D20Roll extends foundry.dice.Roll<D20RollData> {
                 );
             }
 
-            const plotDieTerm = this.terms.find((t) => t instanceof PlotDie)!;
-
-            if (this.hasPlotAdvantage) {
-                plotDieTerm.number = 2;
-                plotDieTerm.modifiers.push('kh');
-            } else if (this.hasPlotDisadvantage) {
-                plotDieTerm.number = 2;
-                plotDieTerm.modifiers.push('kl');
-            }
+            // TODO: Figure out how to handle plot die advantage/disadvantage
+            // const plotDieTerm = this.terms.find((t) => t instanceof PlotDie)!;
+            // if (this.hasPlotAdvantage) {
+            //     plotDieTerm.number = 2;
+            //     plotDieTerm.modifiers.push('kh');
+            // } else if (this.hasPlotDisadvantage) {
+            //     plotDieTerm.number = 2;
+            //     plotDieTerm.modifiers.push('kl');
+            // }
         }
 
         // NOTE: Unused right now

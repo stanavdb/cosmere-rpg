@@ -32,6 +32,7 @@ import {
     EquipmentType,
     TalentType,
 } from './types/cosmere';
+import { AdvantageMode } from './types/roll';
 
 const COSMERE: CosmereRPGConfig = {
     sizes: {
@@ -709,6 +710,14 @@ const COSMERE: CosmereRPGConfig = {
         weight: ['lb'],
         distance: {
             ft: 'UNITS.Distance.Feet',
+        },
+    },
+
+    dice: {
+        advantageModes: {
+            [AdvantageMode.Disadvantage]: 'DICE.AdvantageMode.Disadvantage',
+            [AdvantageMode.None]: 'DICE.AdvantageMode.None',
+            [AdvantageMode.Advantage]: 'DICE.AdvantageMode.Advantage',
         },
     },
 };

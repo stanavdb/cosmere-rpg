@@ -115,7 +115,9 @@ export class ConfigureRecoveryDieDialog extends HandlebarsApplicationMixin(
 
     /* --- Lifecycle --- */
 
-    protected _onRender(): void {
+    protected _onRender(context: AnyObject, options: AnyObject): void {
+        super._onRender(context, options);
+
         $(this.element).prop('open', true);
     }
 

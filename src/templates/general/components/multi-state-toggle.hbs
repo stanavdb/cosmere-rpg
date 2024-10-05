@@ -1,0 +1,10 @@
+{{#each states as |state index|}}
+    <input type="radio" 
+        id="{{@root.id}}.State.{{state.key}}"
+        name="toggle-state" 
+        data-id="{{state.key}}"
+        {{#if state.selected}}checked{{/if}}
+    >
+    <label for="{{@root.id}}.State.{{state.key}}">{{state.label}}</label>
+{{/each}}
+<div class="selected" style="width: {{stateWidth}}; left: {{selectedOffset}};{{#if selectedColor}}background-color: {{selectedColor}};{{/if}}"></div>

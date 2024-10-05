@@ -449,7 +449,7 @@
                     "Label": "Unequipped"
                 }
             },
-            "DefaultFlavor": "[actor] uses [item]",
+            "AttackFlavor": "[actor] attacks with their [item].",
             "Sheet": {
                 "Tabs": {
                     "Description": "Description",
@@ -664,11 +664,12 @@
     "DICE": {
         "RollMode": "Roll Mode",
         "Plot": {
+            "Die": "Plot Die",
             "RaiseTheStakes": "Raise the Stakes",
             "Complication": "Complication",
             "Opportunity": "Opportunity"
         },
-        "Roll": {
+        "AdvantageMode": {
             "None": "None",
             "Advantage": "Advantage",
             "Disadvantage": "Disadvantage"
@@ -718,6 +719,15 @@
         },
         "EditTalentPrerequisite": {
             "Title": "Edit Prerequisite"
+        },
+        "ConfigureAttack": {
+            "AdvantageMode": {
+                "Title": "Advantage Mode",
+                "Field": {
+                    "Type": "Type",
+                    "Dice": "Dice"
+                }
+            }
         }
     },
     "GENERIC": {
@@ -729,6 +739,8 @@
         "Skill": "Skill",
         "Attribute": "Attribute",
         "SkillTest": "Skill Test",
+        "Plot": "Plot",
+        "Damage": "Damage",
         "Cost": "Cost",
         "Configure": "Configure",
         "DistanceUnit": "ft.",

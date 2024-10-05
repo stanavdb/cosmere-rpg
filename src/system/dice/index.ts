@@ -1,9 +1,7 @@
 import { Attribute } from '@system/types/cosmere';
-import { CosmereActorRollData } from '@system/documents/actor';
-import { AnyObject } from '@system/types/utils';
 
 import { D20Roll, D20RollOptions, D20RollData } from './d20-roll';
-import { DamageRoll, DamageRollOptions } from './damage-roll';
+import { DamageRoll, DamageRollOptions, DamageRollData } from './damage-roll';
 import { RollMode } from './types';
 
 export * from './d20-roll';
@@ -22,6 +20,12 @@ export interface D20RollConfigration extends D20RollOptions {
      * @default {}
      */
     data: D20RollData;
+
+    /**
+     * Whether or not to show the roll configuration dialog
+     * @default true
+     */
+    configurable?: boolean;
 
     /* -- Chat message -- */
 
@@ -63,7 +67,7 @@ export interface DamageRollConfiguration extends DamageRollOptions {
     /**
      * Data that will be used when parsing this roll
      */
-    data: CosmereActorRollData;
+    data: DamageRollData;
 }
 
 export async function d20Roll(
@@ -79,14 +83,17 @@ export async function d20Roll(
     });
 
     // Prompt dialog to configure the d20 roll
-    const configured = await roll.configureDialog({
-        title: config.title,
-        plotDie: config.plotDie,
-        defaultRollMode,
-        defaultAttribute:
-            config.defaultAttribute ?? config.data.skill.attribute,
-        data: config.data,
-    });
+    const configured =
+        config.configurable !== false
+            ? await roll.configureDialog({
+                  title: config.title,
+                  plotDie: config.plotDie,
+                  defaultRollMode,
+                  defaultAttribute:
+                      config.defaultAttribute ?? config.data.skill.attribute,
+                  data: config.data,
+              })
+            : roll;
     if (configured === null) return null;
 
     // Evaluate the configure roll
@@ -101,7 +108,7 @@ export async function d20Roll(
 
 export async function damageRoll(
     config: DamageRollConfiguration,
-): Promise<Roll> {
+): Promise<DamageRoll> {
     // Construct roll
     const roll = new DamageRoll(config.formula, config.data, {
         damageType: config.damageType,
