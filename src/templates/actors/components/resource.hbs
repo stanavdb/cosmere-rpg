@@ -9,6 +9,13 @@
             >
                 <i class="fa-solid fa-gear"></i>
             </a>
+            {{else if (eq resource.id "hea")}}
+            <a role="button"
+                data-action="roll-injury"
+                data-tooltip="COSMERE.Actor.Sheet.RollInjury"
+            >
+                <i class="fa-solid fa-heart-crack"></i>
+            </a>
             {{/if}}
         </div>
     </div>

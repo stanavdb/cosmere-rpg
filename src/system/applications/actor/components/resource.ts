@@ -31,6 +31,7 @@ export class ActorResourceComponent extends HandlebarsApplicationComponent<
     static readonly ACTIONS = {
         'edit-value': this.onEditValue,
         'configure-resource': this.onConfigureResource,
+        'roll-injury': this.onRollInjury,
     };
     /* eslint-enable @typescript-eslint/unbound-method */
 
@@ -73,6 +74,16 @@ export class ActorResourceComponent extends HandlebarsApplicationComponent<
 
         // Show dialog
         await ConfigureResourceDialog.show(this.application.actor, resourceId);
+    }
+
+    private static onRollInjury(this: ActorResourceComponent) {
+        if (this.params!.resource !== Resource.Health) return;
+
+        // Get actor
+        const actor = this.application.actor;
+
+        // Roll injury
+        void actor.rollInjuryDuration();
     }
 
     /* --- Context --- */

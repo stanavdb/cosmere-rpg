@@ -38,6 +38,16 @@
             "connection": {}
         }
     },
+    "packs": [
+        {
+            "name": "tables",
+            "label": "Roll Tables",
+            "system": "cosmere-rpg",
+            "path": "packs/tables",
+            "type": "RollTable",
+            "private": false
+        }
+    ],
     "languages": [
         {
             "lang": "en",

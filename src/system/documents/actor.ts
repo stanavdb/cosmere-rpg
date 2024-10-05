@@ -7,6 +7,7 @@ import {
     ExpertiseType,
     DamageType,
     Resource,
+    InjuryType,
 } from '@system/types/cosmere';
 import { CosmereItem, CosmereItemData } from '@system/documents/item';
 import {
@@ -19,16 +20,11 @@ import { Derived } from '@system/data/fields';
 
 import { d20Roll, D20Roll, D20RollData, DamageRoll } from '@system/dice';
 
-import { TalentItemData } from '@system/data/item/talent';
-
 // Dialogs
 import { ShortRestDialog } from '@system/applications/actor/dialogs/short-rest';
 
 export type CharacterActor = CosmereActor<CharacterActorDataModel>;
 export type AdversaryActor = CosmereActor<AdversaryActorDataModel>;
-
-// Constants
-const SKILL_CARD_TEMPLATE = 'systems/cosmere-rpg/templates/chat/skill-card.hbs';
 
 interface RollSkillOptions {
     /**
@@ -182,6 +178,70 @@ export class CosmereActor<
 
     /* --- Functions --- */
 
+    public async rollInjuryDuration() {
+        // Get roll table
+        const table = (await fromUuid(
+            CONFIG.COSMERE.injury.durationTable,
+        )) as unknown as RollTable;
+
+        // Get armor deflect
+        const deflect =
+            this.system.resources[Resource.Health].deflect?.value ?? 0;
+
+        // Get injury roll bonus
+        const bonus = this.system.injuryRollBonus;
+
+        // Get injuries modifier
+        const injuriesModifier =
+            (Derived.getValue(this.system.injuries) ?? 0) * -5;
+
+        // Build formula
+        const formula = ['1d20', deflect, bonus, injuriesModifier].join(' + ');
+
+        // Roll
+        const roll = new foundry.dice.Roll(formula);
+
+        // NOTE: Draw function type definition is wrong, must use `any` type as a workaround
+        /* eslint-disable @typescript-eslint/no-explicit-any */
+        const results = (
+            await table.draw({
+                roll,
+            } as any)
+        ).results as TableResult[];
+        /* eslint-Enable @typescript-eslint/no-explicit-any */
+
+        // Get result
+        const result = results[0];
+
+        // Get injury data
+        const data: { type: InjuryType; durationFormula: string } =
+            result.getFlag('cosmere-rpg', 'injury-data');
+
+        if (
+            data.type !== InjuryType.Death &&
+            data.type !== InjuryType.PermanentInjury
+        ) {
+            // Roll duration
+            const durationRoll = new foundry.dice.Roll(data.durationFormula);
+            await durationRoll.evaluate();
+
+            // Get speaker
+            const speaker = ChatMessage.getSpeaker({
+                actor: this,
+            }) as ChatSpeakerData;
+
+            // Chat message
+            await ChatMessage.create({
+                user: game.user!.id,
+                speaker,
+                content: `<p>${game.i18n!.localize(
+                    'COSMERE.ChatMessage.InjuryDuration',
+                )} (${game.i18n!.localize('GENERIC.Units.Days')})</p>`,
+                rolls: [durationRoll],
+            });
+        }
+    }
+
     public async applyDamage(...instances: DamageInstance[]) {
         // Get health resource
         const health = this.system.resources[Resource.Health];
@@ -250,18 +310,6 @@ export class CosmereActor<
 
     public async applyHealing(amount: number) {
         return this.applyDamage({ amount, type: DamageType.Healing });
-    }
-
-    public *allApplicableEffects() {
-        for (const effect of super.allApplicableEffects()) {
-            if (
-                !(effect.parent instanceof CosmereItem) ||
-                !effect.parent.isEquippable() ||
-                effect.parent.system.equipped
-            ) {
-                yield effect;
-            }
-        }
     }
 
     /**
@@ -520,6 +568,18 @@ export class CosmereActor<
                 {} as Record<Skill, { rank: number; mod: number }>,
             ),
         };
+    }
+
+    public *allApplicableEffects() {
+        for (const effect of super.allApplicableEffects()) {
+            if (
+                !(effect.parent instanceof CosmereItem) ||
+                !effect.parent.isEquippable() ||
+                effect.parent.system.equipped
+            ) {
+                yield effect;
+            }
+        }
     }
 
     /**
