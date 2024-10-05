@@ -35,6 +35,8 @@ Hooks.once('init', async () => {
 
     CONFIG.COSMERE = COSMERE;
 
+    CONFIG.ChatMessage.documentClass = documents.CosmereChatMessage;
+
     CONFIG.Actor.dataModels = dataModels.actor.config;
     CONFIG.Actor.documentClass = documents.CosmereActor;
 
@@ -78,6 +80,8 @@ Hooks.once('init', async () => {
     // @league-of-foundry-developers/foundry-vtt-types/src/foundry/client-esm/dice/terms/term.d.mts
     // @ts-expect-error see note
     CONFIG.Dice.rolls.push(dice.D20Roll);
+    // @ts-expect-error see note
+    CONFIG.Dice.rolls.push(dice.DamageRoll);
 
     // Load templates
     await preloadHandlebarsTemplates();

@@ -61,9 +61,14 @@ Handlebars.registerHelper(
     },
 );
 
-Handlebars.registerHelper('perc', (value: number, max: number) => {
-    return `${Math.floor((value / max) * 100)}%`;
-});
+Handlebars.registerHelper(
+    'perc',
+    (value: number, max: number, floor = true) => {
+        const perc = (value / max) * 100;
+        const str = floor ? Math.floor(perc).toFixed() : perc.toFixed(3);
+        return `${str}%`;
+    },
+);
 
 Handlebars.registerHelper(
     'times',
@@ -470,6 +475,8 @@ export async function preloadHandlebarsTemplates() {
         'systems/cosmere-rpg/templates/item/armor/partials/armor-details-tab.hbs',
         'systems/cosmere-rpg/templates/item/talent/partials/talent-details-tab.hbs',
         'systems/cosmere-rpg/templates/combat/combatant.hbs',
+        'systems/cosmere-rpg/templates/chat/parts/roll-details.hbs',
+        'systems/cosmere-rpg/templates/chat/parts/chat-card-header.hbs',
     ];
     return await loadTemplates(
         partials.reduce(

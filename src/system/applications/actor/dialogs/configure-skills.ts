@@ -3,6 +3,7 @@ import { AnyObject, DeepPartial } from '@system/types/utils';
 
 // Mixins
 import { ComponentHandlebarsApplicationMixin } from '@system/applications/component-system';
+import HandlebarsApplicationMixin from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/client-esm/applications/api/handlebars-application.mjs';
 
 const { ApplicationV2, DocumentSheetV2 } = foundry.applications.api;
 
@@ -55,6 +56,12 @@ export class ConfigureSkillsDialog extends ComponentHandlebarsApplicationMixin(
 
     protected _onFirstRender() {
         this.actor.apps[this.id] = this;
+    }
+
+    protected _onClose() {
+        if (this.id in this.actor.apps) {
+            delete this.actor.apps[this.id];
+        }
     }
 
     /* --- Context --- */

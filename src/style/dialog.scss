@@ -36,3 +36,24 @@ dialog.application .edit-expertises {
         height: 2rem;
     }
 }
+
+dialog.application.attack-configuration,
+dialog.application.roll-configuration {
+    .dice-config {
+        .dice {
+            display: flex;
+
+            .col {
+                flex: 1;
+            }
+
+            .col.mode {
+                flex: 3;
+            }
+
+            &.header {
+                font-weight: bold;
+            }
+        }
+    }
+}
