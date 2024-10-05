@@ -311,15 +311,6 @@ export class CosmereActor<
                 data: data as D20RollData,
                 title: `${flavor}: ${this.name}`,
                 chatMessage: false,
-                // flavor,
-                // defaultAttribute: skill.attribute,
-                // messageData: {
-                //     speaker:
-                //         options.speaker ??
-                //         (ChatMessage.getSpeaker({
-                //             actor: this,
-                //         }) as ChatSpeakerData),
-                // },
             },
             options,
         );
@@ -338,10 +329,7 @@ export class CosmereActor<
             await ChatMessage.create({
                 user: game.user!.id,
                 speaker,
-                content: await renderTemplate(SKILL_CARD_TEMPLATE, {
-                    name: flavor,
-                    rolls: [roll],
-                }),
+                content: `<p>${flavor}</p>`,
                 rolls: [roll],
             });
         }
