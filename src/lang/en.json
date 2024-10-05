@@ -449,7 +449,7 @@
                     "Label": "Unequipped"
                 }
             },
-            "DefaultFlavor": "[actor] uses [item]",
+            "AttackFlavor": "[actor] attacks with their [item].",
             "Sheet": {
                 "Tabs": {
                     "Description": "Description",
@@ -648,16 +648,28 @@
             "prc": "Perception",
             "prs": "Persuasion",
             "sur": "Survival"
+        },
+        "ChatMessage": {
+            "Action": {
+                "Graze": "Graze: Reduce Focus",
+                "ApplyDamage": "Apply Damage",
+                "ApplyGraze": "Apply Graze Damage",
+                "ApplyHealing": "Apply Healing"
+            },
+            "ApplyDamage": "[actor] takes [amount] damage",
+            "ApplyHealing": "[actor] recovers [amount] health",
+            "ViewRollsDetails": "Roll Details"
         }
     },
     "DICE": {
         "RollMode": "Roll Mode",
         "Plot": {
+            "Die": "Plot Die",
             "RaiseTheStakes": "Raise the Stakes",
             "Complication": "Complication",
             "Opportunity": "Opportunity"
         },
-        "Roll": {
+        "AdvantageMode": {
             "None": "None",
             "Advantage": "Advantage",
             "Disadvantage": "Disadvantage"
@@ -707,6 +719,15 @@
         },
         "EditTalentPrerequisite": {
             "Title": "Edit Prerequisite"
+        },
+        "ConfigureAttack": {
+            "AdvantageMode": {
+                "Title": "Advantage Mode",
+                "Field": {
+                    "Type": "Type",
+                    "Dice": "Dice"
+                }
+            }
         }
     },
     "GENERIC": {
@@ -718,6 +739,8 @@
         "Skill": "Skill",
         "Attribute": "Attribute",
         "SkillTest": "Skill Test",
+        "Plot": "Plot",
+        "Damage": "Damage",
         "Cost": "Cost",
         "Configure": "Configure",
         "DistanceUnit": "ft.",
@@ -736,13 +759,17 @@
             "Cancel": "Cancel",
             "Update": "Update"
         },
+        "Notification": {
+            "GrazeFocusSpent": "Reduced focus by 1"
+        },
         "Warning": {
             "NotImplemented": "Sorry! [action] is not implemented yet",
             "NoActor": "No selected or assigned actor found for this roll",
             "NotEnoughResource": "Cannot consume, not enough of resource",
             "NotEnoughUses": "Cannot consume, not enough uses left",
             "ItemConsumeResourceNotConfigured": "The resource selected to be consumed is not configured on this item",
-            "NoDuplicateExpertises": "Cannot create duplicate expertise"
+            "NoDuplicateExpertises": "Cannot create duplicate expertise",
+            "NoFocus": "Not enough focus to perform this action"
         },
         "DerivedValue": {
             "Mode": {

@@ -30,6 +30,7 @@ import {
     PathType,
     EquipmentType,
 } from './cosmere';
+import { AdvantageMode } from './roll';
 
 export interface SizeConfig {
     label: string;
@@ -288,5 +289,9 @@ export interface CosmereRPGConfig {
     units: {
         weight: string[];
         distance: Record<string, string>;
+    };
+
+    dice: {
+        advantageModes: Record<AdvantageMode, string>;
     };
 }

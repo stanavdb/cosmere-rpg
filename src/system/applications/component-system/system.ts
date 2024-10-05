@@ -247,6 +247,14 @@ export function registerApplicationInstance(
     applicationInstances[application.id] = application;
 }
 
+export function deregisterApplicationInstance(
+    application: InstanceType<
+        ComponentHandlebarsApplication<ApplicationV2Constructor<AnyObject>>
+    >,
+) {
+    delete applicationInstances[application.id];
+}
+
 export function getComponentInstance(componentRef: string) {
     // Check if component already exists in the registry
     if (!(componentRef in componentRegistry)) {
@@ -592,4 +600,5 @@ export default {
     getComponentParent,
     getApplicationComponents,
     registerApplicationInstance,
+    deregisterApplicationInstance,
 };

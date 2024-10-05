@@ -51,8 +51,13 @@ export function ComponentHandlebarsApplicationMixin<
 
             // Register instance
             ComponentSystem.registerApplicationInstance(this);
+        }
 
-            // TODO: Add de-register
+        protected override _onClose(options: RenderOptions) {
+            super._onClose(options);
+
+            // Deregister instance
+            ComponentSystem.deregisterApplicationInstance(this);
         }
 
         protected override _configureRenderOptions(

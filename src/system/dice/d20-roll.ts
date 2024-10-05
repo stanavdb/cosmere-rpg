@@ -1,6 +1,10 @@
 import { Attribute, Skill } from '@system/types/cosmere';
-import { CommonActorData } from '@system/data/actor/common';
+import { CosmereActorRollData } from '@system/documents/actor';
 import { AdvantageMode } from '@system/types/roll';
+
+// Dialogs
+import { RollConfigurationDialog } from '@system/applications/dialogs/roll-configuration';
+
 import { PlotDie } from './plot-die';
 import { RollMode } from './types';
 
@@ -12,13 +16,20 @@ const DEFAULT_COMPLICATION_VALUE = 1;
 
 // NOTE: Need to use type instead of interface here,
 // as the generic of Roll doesn't handle interfaces properly
-// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-export type D20RollData = {
+
+export type D20RollData<
+    ActorRollData extends CosmereActorRollData = CosmereActorRollData,
+> = {
+    [K in keyof ActorRollData]: ActorRollData[K];
+} & {
     mod: number;
-    skill: CommonActorData['skills'][Skill];
-    attribute: CommonActorData['attributes'][Attribute];
-    attributes: CommonActorData['attributes'];
-    defaultAttribute: Attribute;
+    skill: {
+        id: Skill;
+        rank: number;
+        mod: number;
+        attribute: Attribute;
+    };
+    attribute: number;
 };
 
 export interface D20RollOptions
@@ -57,38 +68,22 @@ export interface D20RollOptions
      * What advantage modifer to apply to the plot die roll
      */
     advantageModePlot?: AdvantageMode;
-}
-
-interface RollDialogConfigurationData {
-    /**
-     * The title of the dialog window
-     */
-    title: string;
-
-    /**
-     * Whether or not to include a plot die in the roll
-     */
-    plotDie?: boolean;
 
     /**
      * The attribute that is used for the roll by default
      */
     defaultAttribute?: Attribute;
-
-    /**
-     * The roll mode that should be selected by default
-     */
-    defaultRollMode?: RollMode;
 }
 
-export class D20Roll extends Roll<D20RollData> {
+export class D20Roll extends foundry.dice.Roll<D20RollData> {
     declare options: D20RollOptions & { configured: boolean };
 
     public constructor(
-        formula: string,
+        protected parts: string[],
         data: D20RollData,
         options: D20RollOptions = {},
     ) {
+        const formula = ['1d20'].concat(parts).join(' + ');
         super(formula, data, options);
 
         if (!this.options.configured) {
@@ -144,6 +139,76 @@ export class D20Roll extends Roll<D20RollData> {
     }
 
     /**
+     * How many complications were rolled?
+     */
+    public get complicationsCount() {
+        if (!this._evaluated) {
+            throw new Error('Roll not evaluated');
+        }
+
+        // Get d20s
+        const d20s = this.dice.filter((die) => die.faces === 20);
+
+        // Get plot dice
+        const plotDice = this.dice.filter((die) => die instanceof PlotDie);
+
+        // Get all dice that rolled a complication
+        const d20Complications = d20s.filter(
+            (die) =>
+                die.results[0].result <=
+                (this.options.complication ?? DEFAULT_COMPLICATION_VALUE),
+        );
+        const plotDiceComplications = plotDice.filter(
+            (die) => die.results[0].failure === true,
+        );
+
+        // Return the count
+        return d20Complications.length + plotDiceComplications.length;
+    }
+
+    /**
+     * How many opportunities were rolled?
+     */
+    public get opportunitiesCount() {
+        if (!this._evaluated) {
+            throw new Error('Roll not evaluated');
+        }
+
+        // Get d20s
+        const d20s = this.dice.filter((die) => die.faces === 20);
+
+        // Get plot dice
+        const plotDice = this.dice.filter((die) => die instanceof PlotDie);
+
+        // Get all dice that rolled an opportunity
+        const d20Opportunities = d20s.filter(
+            (die) =>
+                die.results[0].result >=
+                (this.options.opportunity ?? DEFAULT_OPPORUNITY_VALUE),
+        );
+        const plotDiceOpportunities = plotDice.filter(
+            (die) => die.results[0].success === true,
+        );
+
+        // Return the count
+        return d20Opportunities.length + plotDiceOpportunities.length;
+    }
+
+    /**
+     * Whether a complication was rolled (either on the plot die, or on the d20)
+     */
+    public get rolledComplication() {
+        return this.complicationsCount > 0;
+    }
+
+    /**
+     * Whether an opporunity was rolled (either on the plot die, or on the d20)
+     */
+    public get rolledOpportunity() {
+        return this.opportunitiesCount > 0;
+    }
+
+    /**
      * Was an opporunity rolled on the d20?
      * Returns undefined if the roll isn't yet evaluated
      */
@@ -175,37 +240,30 @@ export class D20Roll extends Roll<D20RollData> {
     /* --- Public Functions --- */
 
     public async configureDialog(
-        data: RollDialogConfigurationData,
+        data: Omit<RollConfigurationDialog.Data, 'parts'>,
     ): Promise<D20Roll | null> {
-        // Deconstruct data
-        const { title, defaultRollMode, defaultAttribute, plotDie } = data;
-
-        // Render the dialog inner HTML
-        const content = await renderTemplate(CONFIGURATION_DIALOG_TEMPLATE, {
-            formulas: [{ formula: this.formula }],
-            defaultRollMode,
-            defaultAttribute,
-            rollModes: CONFIG.Dice.rollModes,
-            attributes: CONFIG.COSMERE.attributes,
-            plotDie,
+        // Show the dialog
+        const result = await RollConfigurationDialog.show({
+            ...data,
+            parts: ['1d20', ...this.parts],
         });
+        if (!result) return null;
 
-        // Create promise that resolves when the dialog completes
-        return new Promise((resolve) => {
-            new Dialog({
-                title,
-                content,
-                buttons: {
-                    roll: {
-                        label: game.i18n!.localize('GENERIC.Button.Roll'),
-                        callback: (html) =>
-                            resolve(this.processDialogSubmit($(html))),
-                    },
-                },
-                default: 'roll',
-                close: () => resolve(null),
-            }).render(true);
-        });
+        if (result.attribute !== this.options.defaultAttribute) {
+            const skill = this.data.skill;
+            const attribute = this.data.attributes[result.attribute];
+            this.terms[2] = new foundry.dice.terms.NumericTerm({
+                number: skill.rank + attribute.value,
+            });
+        }
+
+        this.options.rollMode = result.rollMode;
+        this.options.plotDie = result.plotDie;
+        this.options.advantageMode = result.advantageMode;
+        this.options.advantageModePlot = result.advantageModePlot;
+
+        this.configureModifiers();
+        return this;
     }
 
     public toMessage<
@@ -236,36 +294,10 @@ export class D20Roll extends Roll<D20RollData> {
 
     /* --- Internal Functions --- */
 
-    private processDialogSubmit(html: JQuery): D20Roll {
-        const form = html[0].querySelector('form')! as HTMLFormElement & {
-            attribute: HTMLSelectElement;
-            rollMode: HTMLSelectElement;
-            plotDie: HTMLInputElement;
-        };
-
-        if (
-            (form.attribute.value as Attribute) !== this.data.defaultAttribute
-        ) {
-            const skill = this.data.skill;
-            const attribute =
-                this.data.attributes[form.attribute.value as Attribute];
-            this.terms[2] = new foundry.dice.terms.NumericTerm({
-                number: skill.rank + attribute.value,
-            });
-        }
-
-        this.options.rollMode = form.rollMode.value as RollMode;
-        this.options.plotDie = form.plotDie.checked;
-
-        this.configureModifiers();
-
-        return this;
-    }
-
     private configureModifiers() {
         if (!this.validD20Roll) return;
 
-        const d20 = this.terms[0] as unknown as foundry.dice.terms.Die;
+        const d20 = this.terms[0] as foundry.dice.terms.Die;
         d20.modifiers = [];
 
         if (this.hasAdvantage) {
@@ -283,20 +315,20 @@ export class D20Roll extends Roll<D20RollData> {
                 this.terms.push(
                     new foundry.dice.terms.OperatorTerm({
                         operator: '+',
-                    }) as unknown as foundry.dice.terms.RollTerm,
-                    new PlotDie() as unknown as foundry.dice.terms.RollTerm,
+                    }) as foundry.dice.terms.RollTerm,
+                    new PlotDie() as foundry.dice.terms.RollTerm,
                 );
             }
 
-            const plotDieTerm = this.terms.find((t) => t instanceof PlotDie)!;
-
-            if (this.hasPlotAdvantage) {
-                plotDieTerm.number = 2;
-                plotDieTerm.modifiers.push('kh');
-            } else if (this.hasPlotDisadvantage) {
-                plotDieTerm.number = 2;
-                plotDieTerm.modifiers.push('kl');
-            }
+            // TODO: Figure out how to handle plot die advantage/disadvantage
+            // const plotDieTerm = this.terms.find((t) => t instanceof PlotDie)!;
+            // if (this.hasPlotAdvantage) {
+            //     plotDieTerm.number = 2;
+            //     plotDieTerm.modifiers.push('kh');
+            // } else if (this.hasPlotDisadvantage) {
+            //     plotDieTerm.number = 2;
+            //     plotDieTerm.modifiers.push('kl');
+            // }
         }
 
         // NOTE: Unused right now
