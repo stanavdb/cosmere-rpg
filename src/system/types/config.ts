@@ -219,7 +219,10 @@ export interface CosmereRPGConfig {
     sizes: Record<Size, SizeConfig>;
     creatureTypes: Record<CreatureType, CreatureTypeConfig>;
     conditions: Record<Condition, ConditionConfig>;
-    injuries: Record<InjuryType, InjuryConfig>;
+    injury: {
+        types: Record<InjuryType, InjuryConfig>;
+        durationTable: string;
+    };
 
     attributeGroups: Record<AttributeGroup, AttributeGroupConfig>;
     attributes: Record<Attribute, AttributeConfig>;

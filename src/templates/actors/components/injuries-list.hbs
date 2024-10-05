@@ -8,7 +8,15 @@
         </div>
         <div class="col action"></div>
         <div class="col controls flexrow">
+            {{#if editable}}
+            <a data-action="create-injury"
+                data-tooltip="COSMERE.Actor.Sheet.Injuries.CreateInjury"
+            >
+                <i class="fa-solid fa-plus"></i>
+            </a>
+            {{else}}
             <div></div>
+            {{/if}}
         </div>
     </li>
 

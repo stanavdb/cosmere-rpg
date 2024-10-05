@@ -78,6 +78,7 @@ export interface CommonActorData {
         { attribute: Attribute; rank: number; mod: Derived<number> }
     >;
     injuries: Derived<number>;
+    injuryRollBonus: number;
     currency: Record<
         string,
         {
@@ -178,6 +179,12 @@ export class CommonActorDataModel<
                     initial: 0,
                 }),
             ),
+            injuryRollBonus: new foundry.data.fields.NumberField({
+                required: true,
+                nullable: false,
+                integer: true,
+                initial: 0,
+            }),
             encumbrance: new foundry.data.fields.SchemaField({
                 lift: new DerivedValueField(
                     new foundry.data.fields.NumberField({

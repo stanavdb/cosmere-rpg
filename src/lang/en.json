@@ -177,7 +177,9 @@
                     "Days": "days",
                     "Permanent": "Permanent",
                     "DecreaseDuration": "Decrease Injury Duration",
-                    "IncreaseDuration": "Increase Injury Duration"
+                    "IncreaseDuration": "Increase Injury Duration",
+                    "CreateInjury": "New Injury",
+                    "NewInjury": "New Injury"
                 },
                 "Level": "Level",
                 "Tier": "Tier",
@@ -204,6 +206,7 @@
                 "ConfigureMovement": "Configure Movement Rate",
                 "ConfigureSensesRange": "Configure Senses Range",
                 "ConfigureRecovery": "Configure Recovery Die",
+                "RollInjury": "Roll Injury",
                 "Tabs": {
                     "Details": "Details",
                     "Actions": "Actions",
@@ -658,7 +661,8 @@
             },
             "ApplyDamage": "[actor] takes [amount] damage",
             "ApplyHealing": "[actor] recovers [amount] health",
-            "ViewRollsDetails": "Roll Details"
+            "ViewRollsDetails": "Roll Details",
+            "InjuryDuration": "Injury Duration."
         }
     },
     "DICE": {

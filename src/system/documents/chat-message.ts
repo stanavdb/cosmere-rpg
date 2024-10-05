@@ -81,8 +81,13 @@ export class CosmereChatMessage extends ChatMessage {
         // Replace header
         html.find('.message-header').replaceWith(header);
 
+        // Get flags
+        const rolltable = this.getFlag('core', 'RollTable') as
+            | string
+            | undefined;
+
         // Render rolls
-        await this.renderRolls(html);
+        if (!rolltable) await this.renderRolls(html);
 
         // Render actions
         await this.renderActions(html);
@@ -147,10 +152,13 @@ export class CosmereChatMessage extends ChatMessage {
 
         const d20Rolls = this.rolls.filter((r) => r instanceof D20Roll);
         const damageRolls = this.rolls.filter((r) => r instanceof DamageRoll);
+        const remainingRolls = this.rolls.filter(
+            (r) => !(r instanceof D20Roll) && !(r instanceof DamageRoll),
+        );
 
         // Render d20 rolls
         const rollsHtml = await renderTemplate(CHAT_CARD_ROLLS_TEMPLATE, {
-            rolls: d20Rolls,
+            rolls: [...d20Rolls, ...remainingRolls],
             damageRolls,
         });
 
