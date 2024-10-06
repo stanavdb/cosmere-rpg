@@ -1,0 +1,74 @@
+<div class="talent-picks-list {{#if editable}}editable{{/if}}">
+    <div class="talent-picks level header">
+        Level
+    </div>
+    <div class="talent-picks quantity header">
+        #
+    </div>
+    <div class="talent-picks controls header flexrow"></div>
+    {{#each list as |pick|}}
+    <div class="talent-picks level" id="level-{{pick.level}}">
+        <span {{#if @root.editable}} {{#if pick.edit}}contenteditable="true"{{/if}}{{/if}}>
+            {{pick.level}}
+        </span>
+    </div>
+    <div class="talent-picks quantity" id="quantity-{{pick.level}}">
+        <span {{#if @root.editable}} {{#if pick.edit}}contenteditable="true"{{/if}}{{/if}}>
+            {{pick.quantity}}
+        </span>
+    </div>
+    <div class="talent-picks controls flexrow">
+        {{#if @root.editable}}
+            {{#if pick.edit}}
+            <a data-action="edit-submit" id="submit-{{pick.level}}"
+                data-tooltip="COSMERE.Sheet.TalentPicks.Submit"
+            >
+                <i class="fa-solid fa-check"></i>
+            </a>
+            <a data-action="edit-cancel" id="cancel-{{pick.level}}"
+                data-tooltip="COSMERE.Sheet.TalentPicks.Cancel"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </a>
+            {{else}}
+            <a data-action="edit-pick" id="edit-{{pick.level}}"
+                data-tooltip="COSMERE.Sheet.TalentPicks.Edit"
+            >
+                <i class="fa-solid fa-pen-to-square"></i>
+            </a>
+            {{/if}}
+        <a data-action="delete-pick" id="delete-{{pick.level}}"
+            data-tooltip="COSMERE.Sheet.TalentPicks.Delete"
+        >
+            <i class="fa-solid fa-trash"></i>
+        </a>
+        {{/if}}
+    </div>
+    {{/each}}
+    {{#if addMode}}
+    <div class="talent-picks level" id="new-level">
+        <span contenteditable="true" />
+    </div>
+    <div class="talent-picks quantity" id="new-quantity">
+        <span contenteditable="true" />
+    </div>
+    <div class="talent-picks controls flexrow">
+        <a data-action="edit-submit" id="submit-new"
+            data-tooltip="COSMERE.Sheet.TalentPicks.Submit"
+        >
+            <i class="fa-solid fa-check"></i>
+        </a>
+        <a data-action="edit-cancel" id="cancel-new"
+            data-tooltip="COSMERE.Sheet.TalentPicks.Cancel"
+        >
+            <i class="fa-solid fa-xmark"></i>
+        </a>
+    </div>
+    {{else}}
+    <div class="talent-picks new">
+        <a data-action="add-pick">
+            <i class="fa-solid fa-plus"></i>
+        </a>
+    </div>
+    {{/if}}
+</div>

@@ -51,6 +51,10 @@
             }
         }
 
+        img {
+            cursor: pointer;
+        }
+
         .document-type {
             position: absolute;
             top: 0;
@@ -86,6 +90,10 @@
 
     p.notes {
         color: #efe6d8bf;
+    }
+
+    fieldset:not(:first-child) {
+        margin-top: 0.5rem;
     }
 
     .form-group {
@@ -217,6 +225,155 @@ app-item-effects-list {
 
             &:not(.header):not(:last-child) {
                 border-bottom: 1px solid #463a47;
+            }
+
+            &:last-child {
+                border-bottom-left-radius: 0.3rem;
+                border-bottom-right-radius: 0.3rem;
+            }
+        }
+    }
+}
+
+app-item-talent-picks-list {
+
+    .talent-picks-list {
+        display: grid;
+        grid-template-columns: [level-start] 8ch [level-end quantity-start] 8ch [quantity-end controls-start] 10ch [controls-end];
+        justify-content: center;
+        padding: 0;
+        margin-top: 0.5rem;
+
+        .talent-picks {
+            align-self: center;
+            text-align: center;
+            background: #302831;
+            height: 2rem;
+            padding: 0 0.5rem;
+            margin: 0;
+
+            span {
+                display: block;
+                height: 100%;
+            }
+
+            .controls {
+                margin-left: 1rem;
+
+                > * {
+                    width: 1rem;
+                    text-align: center;
+                }
+            }
+
+            &.header {
+                background: #0f0610;
+                border-top-left-radius: 0.3rem;
+                border-top-right-radius: 0.3rem;
+                font-weight: bold;
+            }
+
+            &:not(.header):not(:last-child) {
+                border-bottom: 1px solid #463a47;
+            }
+
+            &.new {
+                grid-column: level-start / controls-end;
+                background: #251d26;
+                justify-self: center;
+                width: 100%;
+
+                a {
+                    display: inline-flex;
+                    gap: 5px;
+                    align-items: center;
+                    opacity: 0.6;
+
+                    &:hover {
+                        opacity: 1;
+                    }
+                }
+            }
+
+            &:last-child {
+                border-bottom-left-radius: 0.3rem;
+                border-bottom-right-radius: 0.3rem;
+            }
+        }
+    }
+}
+
+app-item-talents-list {
+    margin-top: 0.5rem;
+
+    .talents-list {
+        width: fit-content;
+        display: grid;
+        grid-template-columns: [id-start] 16ch [id-end name-start] minmax(20ch, 1fr) [name-end level-start] 10ch [level-end controls-start] 10ch [controls-end];
+        // align-items: center;
+        padding: 0;
+        margin-top: 0;
+        margin-bottom: 0;
+        margin-left: auto;
+        margin-right: auto;
+
+        .talent {
+            align-self: center;
+            text-align: center;
+            background: #302831;
+            height: 2rem;
+            padding: 0 0.5rem;
+            margin: 0;
+
+            span {
+                display: block;
+                height: 100%;
+            }
+
+            .id {
+                margin-right: 1rem;
+            }
+
+            .name {
+                text-align: start;
+            }
+
+            .controls {
+                margin-left: 1rem;
+
+                > * {
+                    width: 1rem;
+                    text-align: center;
+                }
+            }
+
+            &.header {
+                background: #0f0610;
+                border-top-left-radius: 0.3rem;
+                border-top-right-radius: 0.3rem;
+                font-weight: bold;
+            }
+
+            &:not(.header):not(:last-child) {
+                border-bottom: 1px solid #463a47;
+            }
+
+            &.new {
+                grid-column: id-start / controls-end;
+                background: #251d26;
+                justify-self: center;
+                width: 100%;
+
+                a {
+                    display: inline-flex;
+                    gap: 5px;
+                    align-items: center;
+                    opacity: 0.6;
+
+                    &:hover {
+                        opacity: 1;
+                    }
+                }
             }
 
             &:last-child {

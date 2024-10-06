@@ -3,48 +3,45 @@
 <div class="tab tab-content {{tab.cssClass}}" data-tab="details" data-group="primary">
     <fieldset>
         <legend>Basics</legend>
+        {{app-item-details-id}}
         <div class="form-group">
             <label>{{localize "COSMERE.Item.Sheet.Type"}}</label>
-            {{!-- This can be improved I think (initially selected value is off, needs capitalisation & localisation) --}}
-            {{formInput @root.item.system.typeFieldId}}
+            {{formInput @root.item.system.typeFieldId value=@root.item.system.type.id localize=true}}
         </div>
         <div class="form-group">
             <label>{{localize "COSMERE.Item.Sheet.Ancestry.Size"}}</label>
-            {{formInput @root.item.system.sizeField}}
+            {{formInput @root.item.system.sizeField value=@root.item.system.size localize=true}}
         </div>
     </fieldset>
-    <fieldset name="system.advancement">
+    <fieldset>
         <legend>
             <i class="fa-solid fa-arrow-up"></i> Advancement
         </legend>
         <div class="form-group">
             <label>Free {{localize "COSMERE.Item.Type.Path.label"}}</label>
             {{app-id-input
-                name="extraTalentTree"
-                value=@root.item.system.advancement.extraTalentTree
+                name="system.advancement.extraPath"
+                value=@root.item.system.advancement.extraPath
             }}
         </div>
         <p class="notes">
             {{localize "COSMERE.Item.Sheet.Ancestry.PathIdDescription"}}
         </p>
-        <div class="form-group">
+        <div class="form-group-stacked">
             <label>Free {{localize "COSMERE.Item.Type.Talent.label_plural"}}</label>
-            {{!-- <input name="extraTalentTree" type="text" value="{{@root.item.system.advancement.extraTalentTree}}" /> --}}
-            List of talent names to go here...
+            {{app-item-talents-list}}
         </div>
-        <label>Extra {{localize "COSMERE.Item.Type.Talent.label"}} Picks</label>
-        <table>
-            <tr>
-                <th>Level</th>
-                <th>Amount</th>
-                <th>Restrictions</th>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>1</td>
-                <td>...</td>
-            </tr>
-        </table>
+        <p class="notes">
+            {{localize "COSMERE.Item.Sheet.Ancestry.TalentIdDescription"}}
+        </p>
+        <div class="form-group-stacked">
+            <h5>Extra {{localize "COSMERE.Item.Type.Talent.label"}} Picks</h5>
+            <div class="form-group">
+                <label>Restrictions</label>
+                <input name="system.advancement.extraTalentPicks.restrictions" type="text" value="{{@root.item.system.advancement.extraTalentPicks.restrictions}}" />
+            </div>
+            {{app-item-talent-picks-list}}
+        </div>
     </fieldset>
 </div>
 
