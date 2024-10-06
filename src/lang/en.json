@@ -177,7 +177,9 @@
                     "Days": "days",
                     "Permanent": "Permanent",
                     "DecreaseDuration": "Decrease Injury Duration",
-                    "IncreaseDuration": "Increase Injury Duration"
+                    "IncreaseDuration": "Increase Injury Duration",
+                    "CreateInjury": "New Injury",
+                    "NewInjury": "New Injury"
                 },
                 "Level": "Level",
                 "Tier": "Tier",
@@ -204,6 +206,7 @@
                 "ConfigureMovement": "Configure Movement Rate",
                 "ConfigureSensesRange": "Configure Senses Range",
                 "ConfigureRecovery": "Configure Recovery Die",
+                "RollInjury": "Roll Injury",
                 "Tabs": {
                     "Details": "Details",
                     "Actions": "Actions",
@@ -462,7 +465,7 @@
                     "Label": "Unequipped"
                 }
             },
-            "DefaultFlavor": "[actor] uses [item]",
+            "AttackFlavor": "[actor] attacks with their [item].",
             "Sheet": {
                 "Tabs": {
                     "Description": "Description",
@@ -682,16 +685,30 @@
             "prc": "Perception",
             "prs": "Persuasion",
             "sur": "Survival"
+        },
+        "ChatMessage": {
+            "Action": {
+                "Graze": "Graze: Reduce Focus",
+                "ApplyDamage": "Apply Damage",
+                "ApplyGraze": "Apply Graze Damage",
+                "ApplyHealing": "Apply Healing"
+            },
+            "ApplyDamage": "[actor] takes [amount] damage",
+            "ApplyHealing": "[actor] recovers [amount] health",
+            "ViewRollsDetails": "Roll Details",
+            "InjuryDuration": "Injury Duration.",
+            "Welcome": "<h2>Welcome to the Cosmere RPG System!</h2> <p>Thank you for trying out the community-developed Cosmere Roleplaying Game system! You’re currently using version <strong>[version]</strong>. As this is an early release, some bugs or missing features are to be expected, but your feedback will help us improve the system.</p> <p>If you encounter any issues or have suggestions, we’d love to hear from you! Please report them on our <a href=\"https://github.com/stanavdb/cosmere-rpg/issues\">GitHub Issues page</a>, and be sure to review the <a href=\"https://github.com/stanavdb/cosmere-rpg/blob/main/CONTRIBUTING.md\">contribution guidelines</a> if you’d like to get involved in development. </p> <p>For discussions, updates, and support, join us on the <a href=\"https://discord.gg/B9Zam3qdZt\">Official Cosmere RPG Discord</a> server. You can find us in <em>vtt-discussion > Foundry VTT System Development</em>.</p> <p>We’re excited to have you on board and hope you enjoy playing in the Cosmere!</p>"
         }
     },
     "DICE": {
         "RollMode": "Roll Mode",
         "Plot": {
+            "Die": "Plot Die",
             "RaiseTheStakes": "Raise the Stakes",
             "Complication": "Complication",
             "Opportunity": "Opportunity"
         },
-        "Roll": {
+        "AdvantageMode": {
             "None": "None",
             "Advantage": "Advantage",
             "Disadvantage": "Disadvantage"
@@ -741,6 +758,15 @@
         },
         "EditTalentPrerequisite": {
             "Title": "Edit Prerequisite"
+        },
+        "ConfigureAttack": {
+            "AdvantageMode": {
+                "Title": "Advantage Mode",
+                "Field": {
+                    "Type": "Type",
+                    "Dice": "Dice"
+                }
+            }
         }
     },
     "GENERIC": {
@@ -752,6 +778,8 @@
         "Skill": "Skill",
         "Attribute": "Attribute",
         "SkillTest": "Skill Test",
+        "Plot": "Plot",
+        "Damage": "Damage",
         "Cost": "Cost",
         "Configure": "Configure",
         "DistanceUnit": "ft.",
@@ -770,13 +798,17 @@
             "Cancel": "Cancel",
             "Update": "Update"
         },
+        "Notification": {
+            "GrazeFocusSpent": "Reduced focus by 1"
+        },
         "Warning": {
             "NotImplemented": "Sorry! [action] is not implemented yet",
             "NoActor": "No selected or assigned actor found for this roll",
             "NotEnoughResource": "Cannot consume, not enough of resource",
             "NotEnoughUses": "Cannot consume, not enough uses left",
             "ItemConsumeResourceNotConfigured": "The resource selected to be consumed is not configured on this item",
-            "NoDuplicateExpertises": "Cannot create duplicate expertise"
+            "NoDuplicateExpertises": "Cannot create duplicate expertise",
+            "NoFocus": "Not enough focus to perform this action"
         },
         "DerivedValue": {
             "Mode": {

@@ -1,6 +1,6 @@
-# Foundry VTT - Cosmere RPG System
+# Foundry VTT - Cosmere Roleplaying Game System
 
-Welcome to the Foundry VTT Cosmere RPG System! This community project provides the core system for running the Cosmere RPG in Foundry VTT.
+Welcome to the Foundry VTT Cosmere Roleplaying Game System! This community project provides the core system for running the Cosmere Roleplaying Game in Foundry VTT.
 
 ## Feature requests and bug reports
 

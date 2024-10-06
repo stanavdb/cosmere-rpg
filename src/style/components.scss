@@ -1,0 +1,31 @@
+app-multi-state-toggle {
+    position: relative;
+    display: flex;
+    font-size: 9pt;
+    align-items: center;
+    justify-content: space-around;
+    background: #302831;
+    height: 1.25rem;
+    border-radius: 0.75rem;
+    overflow: hidden;
+
+    input[type='radio'] {
+        display: none;
+    }
+
+    label {
+        flex: 1;
+        text-align: center;
+        z-index: 1;
+        cursor: pointer;
+        text-shadow: 0 0 0.2rem black;
+    }
+
+    .selected {
+        position: absolute;
+        height: 100%;
+        transition: 0.3s;
+        background: grey;
+        z-index: 0;
+    }
+}

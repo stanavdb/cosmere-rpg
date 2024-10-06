@@ -35,7 +35,7 @@ export class InjuryItemDataModel extends DataModelMixin<
         // Default to flesh wound data as the least impactful injury type
         initial: InjuryType.FleshWound,
         choices: () =>
-            Object.entries(CONFIG.COSMERE.injuries).reduce(
+            Object.entries(CONFIG.COSMERE.injury.types).reduce(
                 (acc, [key, { label }]) => ({
                     ...acc,
                     [key]: label,
@@ -67,6 +67,6 @@ export class InjuryItemDataModel extends DataModelMixin<
     }
 
     get typeLabel(): string {
-        return CONFIG.COSMERE.injuries[this.type].label;
+        return CONFIG.COSMERE.injury.types[this.type].label;
     }
 }

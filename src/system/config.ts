@@ -32,6 +32,7 @@ import {
     EquipmentType,
     TalentType,
 } from './types/cosmere';
+import { AdvantageMode } from './types/roll';
 
 const COSMERE: CosmereRPGConfig = {
     sizes: {
@@ -136,25 +137,29 @@ const COSMERE: CosmereRPGConfig = {
         },
     },
 
-    injuries: {
-        [InjuryType.FleshWound]: {
-            label: 'COSMERE.Item.Injuries.Duration.FleshWound',
-            durationFormula: '1',
+    injury: {
+        types: {
+            [InjuryType.FleshWound]: {
+                label: 'COSMERE.Item.Injuries.Duration.FleshWound',
+                durationFormula: '1',
+            },
+            [InjuryType.ShallowInjury]: {
+                label: 'COSMERE.Item.Injuries.Duration.ShallowInjury',
+                durationFormula: '1d6',
+            },
+            [InjuryType.ViciousInjury]: {
+                label: 'COSMERE.Item.Injuries.Duration.ViciousInjury',
+                durationFormula: '6d6',
+            },
+            [InjuryType.PermanentInjury]: {
+                label: 'COSMERE.Item.Injuries.Duration.PermanentInjury',
+            },
+            [InjuryType.Death]: {
+                label: 'COSMERE.Item.Injuries.Duration.Death',
+            },
         },
-        [InjuryType.ShallowInjury]: {
-            label: 'COSMERE.Item.Injuries.Duration.ShallowInjury',
-            durationFormula: '1d6',
-        },
-        [InjuryType.ViciousInjury]: {
-            label: 'COSMERE.Item.Injuries.Duration.ViciousInjury',
-            durationFormula: '6d6',
-        },
-        [InjuryType.PermanentInjury]: {
-            label: 'COSMERE.Item.Injuries.Duration.PermanentInjury',
-        },
-        [InjuryType.Death]: {
-            label: 'COSMERE.Item.Injuries.Duration.Death',
-        },
+        durationTable:
+            'Compendium.cosmere-rpg.tables.RollTable.qOXZSTYaP6jhnvBV',
     },
 
     attributeGroups: {
@@ -705,6 +710,7 @@ const COSMERE: CosmereRPGConfig = {
         },
         [DamageType.Healing]: {
             label: 'COSMERE.DamageTypes.Healing',
+            ignoreDeflect: true,
         },
     },
 
@@ -724,6 +730,14 @@ const COSMERE: CosmereRPGConfig = {
         weight: ['lb'],
         distance: {
             ft: 'UNITS.Distance.Feet',
+        },
+    },
+
+    dice: {
+        advantageModes: {
+            [AdvantageMode.Disadvantage]: 'DICE.AdvantageMode.Disadvantage',
+            [AdvantageMode.None]: 'DICE.AdvantageMode.None',
+            [AdvantageMode.Advantage]: 'DICE.AdvantageMode.Advantage',
         },
     },
 };

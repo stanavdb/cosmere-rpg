@@ -6,6 +6,7 @@ import './style.scss';
 import './system/hooks';
 
 import { preloadHandlebarsTemplates } from './system/util/handlebars';
+import { registerSettings } from './system/settings';
 
 import * as applications from './system/applications';
 import * as dataModels from './system/data';
@@ -35,6 +36,8 @@ Hooks.once('init', async () => {
 
     CONFIG.COSMERE = COSMERE;
 
+    CONFIG.ChatMessage.documentClass = documents.CosmereChatMessage;
+
     CONFIG.Actor.dataModels = dataModels.actor.config;
     CONFIG.Actor.documentClass = documents.CosmereActor;
 
@@ -44,6 +47,8 @@ Hooks.once('init', async () => {
     CONFIG.Combat.documentClass = documents.CosmereCombat;
     CONFIG.Combatant.documentClass = documents.CosmereCombatant;
     CONFIG.ui.combat = applications.combat.CosmereCombatTracker;
+
+    CONFIG.Token.documentClass = documents.CosmereTokenDocument;
 
     CONFIG.ActiveEffect.legacyTransferral = false;
 
@@ -79,12 +84,17 @@ Hooks.once('init', async () => {
     // @league-of-foundry-developers/foundry-vtt-types/src/foundry/client-esm/dice/terms/term.d.mts
     // @ts-expect-error see note
     CONFIG.Dice.rolls.push(dice.D20Roll);
+    // @ts-expect-error see note
+    CONFIG.Dice.rolls.push(dice.DamageRoll);
 
     // Load templates
     await preloadHandlebarsTemplates();
 
     // Register status effects
     registerStatusEffects();
+
+    // Register settings
+    registerSettings();
 });
 
 /**

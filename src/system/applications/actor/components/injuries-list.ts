@@ -1,4 +1,4 @@
-import { InjuryType } from '@system/types/cosmere';
+import { InjuryType, ItemType } from '@system/types/cosmere';
 import { ConstructorOf } from '@system/types/utils';
 import { CosmereItem } from '@system/documents';
 import { InjuryItemDataModel } from '@system/data/item';
@@ -26,6 +26,7 @@ export class ActorInjuriesListComponent extends HandlebarsApplicationComponent<
         'increase-injury-duration': this.onIncreaseInjuryDuration,
         'edit-injury': this.onEditInjury,
         'remove-injury': this.onRemoveInjury,
+        'create-injury': this.onCreateInjury,
     };
     /* eslint-enable @typescript-eslint/unbound-method */
 
@@ -137,6 +138,24 @@ export class ActorInjuriesListComponent extends HandlebarsApplicationComponent<
         void this.render();
     }
 
+    protected static async onCreateInjury(this: ActorInjuriesListComponent) {
+        this.controlsDropdownExpanded = false;
+
+        // Create new injury
+        const item = (await Item.create(
+            {
+                type: ItemType.Injury,
+                name: game.i18n!.localize(
+                    'COSMERE.Actor.Sheet.Injuries.NewInjury',
+                ),
+            },
+            { parent: this.application.actor },
+        )) as CosmereItem;
+
+        // Show sheet
+        void item.sheet?.render(true);
+    }
+
     /* --- Context --- */
 
     public _prepareContext(
@@ -159,7 +178,7 @@ export class ActorInjuriesListComponent extends HandlebarsApplicationComponent<
                         ...item,
                         id: item.id,
                         type,
-                        typeLabel: CONFIG.COSMERE.injuries[type].label,
+                        typeLabel: CONFIG.COSMERE.injury.types[type].label,
                         duration: item.system.duration,
 
                         isPermanent:
