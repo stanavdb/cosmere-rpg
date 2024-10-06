@@ -257,15 +257,6 @@ app-item-talent-picks-list {
                 height: 100%;
             }
 
-            .controls {
-                margin-left: 1rem;
-
-                > * {
-                    width: 1rem;
-                    text-align: center;
-                }
-            }
-
             &.header {
                 background: #0f0610;
                 border-top-left-radius: 0.3rem;
@@ -310,7 +301,6 @@ app-item-talents-list {
         width: fit-content;
         display: grid;
         grid-template-columns: [id-start] 16ch [id-end name-start] minmax(20ch, 1fr) [name-end level-start] 10ch [level-end controls-start] 10ch [controls-end];
-        // align-items: center;
         padding: 0;
         margin-top: 0;
         margin-bottom: 0;
@@ -330,21 +320,8 @@ app-item-talents-list {
                 height: 100%;
             }
 
-            .id {
-                margin-right: 1rem;
-            }
-
-            .name {
+            &.name {
                 text-align: start;
-            }
-
-            .controls {
-                margin-left: 1rem;
-
-                > * {
-                    width: 1rem;
-                    text-align: center;
-                }
             }
 
             &.header {
