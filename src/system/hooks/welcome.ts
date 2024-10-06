@@ -19,3 +19,20 @@ Hooks.on('ready', async () => {
     // Mark the setting so the message doesn't appear again
     await game.settings!.set('cosmere-rpg', 'firstTimeWorldCreation', false);
 });
+
+Hooks.on('ready', async () => {
+    const currentVersion = game.system!.version;
+    const latestVersion = game.settings!.get(
+        'cosmere-rpg',
+        'latestVersion',
+    ) as string;
+
+    if (currentVersion > latestVersion) {
+        // Record the latest version of the system
+        await game.settings!.set(
+            'cosmere-rpg',
+            'latestVersion',
+            currentVersion,
+        );
+    }
+});
