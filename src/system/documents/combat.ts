@@ -1,5 +1,12 @@
+import { CosmereCombatant } from './combatant';
+
 export class CosmereCombat extends Combat {
-    //sets all defeated combatants activation status to true (already activated), and all others to false(hasn't activated yet)
+    declare turns: CosmereCombatant[];
+
+    /**
+     * Sets all defeated combatants activation status to true (already activated),
+     * and all others to false (hasn't activated yet)
+     */
     resetActivations() {
         for (const combatant of this.turns) {
             void combatant.setFlag(
@@ -15,7 +22,7 @@ export class CosmereCombat extends Combat {
         return super.startCombat();
     }
 
-    override async nextRound(): Promise<this | undefined> {
+    override async nextRound(): Promise<this> {
         this.resetActivations();
         return super.nextRound();
     }

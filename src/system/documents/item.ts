@@ -641,7 +641,7 @@ export class CosmereItem<
             }
 
             // Create chat message
-            const message = await ChatMessage.create({
+            await ChatMessage.create({
                 user: game.user!.id,
                 speaker,
                 content: await renderTemplate(ACTIVITY_CARD_TEMPLATE, {

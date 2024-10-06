@@ -279,9 +279,7 @@ export class D20Roll extends foundry.dice.Roll<D20RollData> {
             create: Create;
         }>,
     ): Promise<
-        | (true extends Create
-              ? ChatMessage.ConfiguredInstance | undefined
-              : never)
+        | (true extends Create ? ChatMessage | undefined : never)
         | (false extends Create ? foundry.dice.Roll.MessageData<T> : never)
     > {
         options ??= {};
