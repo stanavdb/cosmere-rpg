@@ -1,6 +1,7 @@
 {
     "id": "cosmere-rpg",
-    "title": "Cosmere RPG",
+    "title": "Cosmere Roleplaying Game",
+    "description": "A community-developed system for playing the Cosmere Roleplaying Game, by Dragonsteel Entertainment and Brotherwise Games.",
     "version": "0.1.0",
     "compatibility": {
         "minimum": "12",
