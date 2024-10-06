@@ -7,30 +7,33 @@ assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+**Describe the bug**  
+_A clear and concise description of what the bug is._
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+**To Reproduce**  
+_Steps to reproduce the behavior:_
+1. _Go to '...'_
+2. _Click on '....'_
+3. _Scroll down to '....'_
+4. _See error_
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+**Expected behavior**  
+_A clear and concise description of what you expected to happen._
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+**Screenshots**  
+_If applicable, add screenshots to help explain your problem._
 
-**Foundry VTT Version**
-Please specify the version of Foundry you are using.
+**Foundry VTT Version**  
+_Please specify the version of Foundry you are using._
 
-**Cosmere RPG System Version**
-Please specify the version of the Cosmere RPG system.
+**Cosmere RPG System Version**  
+_Please specify the version of the Cosmere RPG system._
 
-**Browser**
-If applicable, include the browser you're using (Chrome, Firefox, etc.).
+**Browser**  
+_If applicable, include the browser you're using (Chrome, Firefox, etc.)._
 
-**Additional context**
-Add any other context about the problem here.
+**Additional context**  
+_Add any other context about the problem here._
+
+**Checklist:**
+- [ ] I have searched the existing issues to ensure this bug has not already been reported
