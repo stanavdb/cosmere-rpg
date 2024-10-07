@@ -276,6 +276,7 @@ export class BaseItemSheet extends TabsApplicationMixin(
             item: this.item,
             editable: this.isEditable,
             descHtml: enrichedDescValue,
+            sideTabs: game.settings!.get('cosmere-rpg', 'itemSheetSideTabs'),
         };
     }
 }
