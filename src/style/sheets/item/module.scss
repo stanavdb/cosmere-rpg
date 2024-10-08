@@ -6,6 +6,10 @@
             overflow: visible;
         }
 
+        .sheet-header {
+            border-bottom: 1px solid var(--plotweaver-color-grey-5);
+        }
+
         nav {
             border: none;
             flex-direction: column;
@@ -38,11 +42,9 @@
 
     .sheet-header {
         position: relative;
-        border-bottom: 1px solid var(--plotweaver-color-grey-5);
         padding-bottom: 0.5rem;
 
         .document-name {
-            font-weight: bold;
             font-size: 20pt;
             cursor: pointer;
             margin-right: 4rem;
@@ -255,7 +257,7 @@ app-item-talent-picks-list {
         margin-top: 0.5rem;
 
         .talent-picks {
-            align-self: center;
+            align-content: center;
             text-align: center;
             background: #302831;
             height: 2rem;
@@ -264,7 +266,6 @@ app-item-talent-picks-list {
 
             span {
                 display: block;
-                height: 100%;
             }
 
             &.header {
@@ -318,7 +319,7 @@ app-item-talents-list {
         margin-right: auto;
 
         .talent {
-            align-self: center;
+            align-content: center;
             text-align: center;
             background: #302831;
             height: 2rem;
@@ -327,7 +328,6 @@ app-item-talents-list {
 
             span {
                 display: block;
-                height: 100%;
             }
 
             &.name {
