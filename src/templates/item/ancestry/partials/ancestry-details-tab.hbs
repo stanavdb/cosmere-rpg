@@ -1,0 +1,48 @@
+{{#with (lookup tabsMap "details") as |tab|}}
+
+<div class="tab tab-content {{tab.cssClass}}" data-tab="details" data-group="primary">
+    <fieldset>
+        <legend>Basics</legend>
+        {{app-item-details-id}}
+        <div class="form-group">
+            <label>{{localize "COSMERE.Item.Sheet.Type"}}</label>
+            {{formInput @root.item.system.typeFieldId value=@root.item.system.type.id localize=true}}
+        </div>
+        <div class="form-group">
+            <label>{{localize "COSMERE.Item.Sheet.Ancestry.Size"}}</label>
+            {{formInput @root.item.system.sizeField value=@root.item.system.size localize=true}}
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>
+            <i class="fa-solid fa-arrow-up"></i> Advancement
+        </legend>
+        <div class="form-group">
+            <label>Free {{localize "COSMERE.Item.Type.Path.label"}}</label>
+            {{app-id-input
+                name="system.advancement.extraPath"
+                value=@root.item.system.advancement.extraPath
+            }}
+        </div>
+        <p class="notes">
+            {{localize "COSMERE.Item.Sheet.Ancestry.PathIdDescription"}}
+        </p>
+        <div class="form-group-stacked">
+            <label>Free {{localize "COSMERE.Item.Type.Talent.label_plural"}}</label>
+            {{app-item-talents-list}}
+        </div>
+        <p class="notes">
+            {{localize "COSMERE.Item.Sheet.Ancestry.TalentIdDescription"}}
+        </p>
+        <div class="form-group-stacked">
+            <h5>Extra {{localize "COSMERE.Item.Type.Talent.label"}} Picks</h5>
+            <div class="form-group">
+                <label>Restrictions</label>
+                <input name="system.advancement.extraTalentPicks.restrictions" type="text" value="{{@root.item.system.advancement.extraTalentPicks.restrictions}}" />
+            </div>
+            {{app-item-talent-picks-list}}
+        </div>
+    </fieldset>
+</div>
+
+{{/with}}

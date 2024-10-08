@@ -1,21 +1,21 @@
-import { PathItem } from '@system/documents/item';
+import { AncestryItem } from '@system/documents/item';
 import { DeepPartial } from '@system/types/utils';
 
-// Base
 import { BaseItemSheet } from './base';
 
-export class PathItemSheet extends BaseItemSheet {
+export class AncestrySheet extends BaseItemSheet {
     static DEFAULT_OPTIONS = foundry.utils.mergeObject(
         foundry.utils.deepClone(super.DEFAULT_OPTIONS),
         {
-            classes: ['cosmere-rpg', 'sheet', 'item', 'path'],
+            classes: ['cosmere-rpg', 'sheet', 'item', 'ancestry'],
             position: {
-                width: 550,
-                height: 500,
+                width: 600,
+                height: 550,
             },
             window: {
                 resizable: true,
                 positioned: true,
+                title: '<i class="fas fa-timeline"></i> ' + this.name,
             },
         },
     );
@@ -36,12 +36,12 @@ export class PathItemSheet extends BaseItemSheet {
         {
             'sheet-content': {
                 template:
-                    'systems/cosmere-rpg/templates/item/parts/sheet-content.hbs',
+                    'systems/cosmere-rpg/templates/item/ancestry/parts/sheet-content.hbs',
             },
         },
     );
 
-    get item(): PathItem {
+    get item(): AncestryItem {
         return super.document;
     }
 

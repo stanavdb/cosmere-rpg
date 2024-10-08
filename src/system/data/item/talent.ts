@@ -117,7 +117,9 @@ export class TalentItemDataModel extends DataModelMixin<
     TalentItemData,
     CosmereItem
 >(
-    IdItemMixin(),
+    IdItemMixin({
+        initial: 'none',
+    }),
     TypedItemMixin({
         initial: TalentType.Path,
         choices: () =>
@@ -129,7 +131,9 @@ export class TalentItemDataModel extends DataModelMixin<
                 {} as Record<TalentType, string>,
             ),
     }),
-    DescriptionItemMixin(),
+    DescriptionItemMixin({
+        value: 'COSMERE.Item.Type.Talent.desc_placeholder',
+    }),
     ActivatableItemMixin(),
 ) {
     static defineSchema() {

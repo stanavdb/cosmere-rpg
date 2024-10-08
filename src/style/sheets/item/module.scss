@@ -1,4 +1,40 @@
 .sheet.item {
+    &.side-tabs {
+        overflow: visible;
+
+        .window-content {
+            overflow: visible;
+        }
+
+        .sheet-header {
+            border-bottom: 1px solid var(--plotweaver-color-grey-5);
+        }
+
+        nav {
+            border: none;
+            flex-direction: column;
+            position: absolute;
+            left: 100%;
+            top: 15%;
+
+            > a {
+                background: rgba(11, 10, 19, 0.9);
+                width: 2.88867rem;
+                height: 2.5rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 1px solid #302831;
+                border-top-right-radius: 0.3rem;
+                border-bottom-right-radius: 0.3rem;
+
+                &.active {
+                    background-color: rgb(45 41 77 / 90%);
+                }
+            }
+        }
+    }
+
     .sheet-content {
         display: flex;
         flex-direction: column;
@@ -6,9 +42,9 @@
 
     .sheet-header {
         position: relative;
+        padding-bottom: 0.5rem;
 
         .document-name {
-            font-weight: bold;
             font-size: 20pt;
             cursor: pointer;
             margin-right: 4rem;
@@ -17,6 +53,10 @@
                 font-weight: inherit;
                 font-size: inherit;
             }
+        }
+
+        img {
+            cursor: pointer;
         }
 
         .document-type {
@@ -29,13 +69,29 @@
         }
     }
 
+    nav {
+        a {
+            label {
+                margin-left: 0.3rem;
+            }
+        }
+    }
+
     .tab-body {
         flex: 1;
         display: flex;
+        margin-top: 0.5rem;
 
         .tab {
             height: 100%;
             width: 100%;
+            max-width: max(80ch, 80%);
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        table {
+            margin: 0;
         }
     }
 
@@ -46,6 +102,10 @@
 
     p.notes {
         color: #efe6d8bf;
+    }
+
+    fieldset:not(:first-child) {
+        margin-top: 0.5rem;
     }
 
     .form-group {
@@ -177,6 +237,130 @@ app-item-effects-list {
 
             &:not(.header):not(:last-child) {
                 border-bottom: 1px solid #463a47;
+            }
+
+            &:last-child {
+                border-bottom-left-radius: 0.3rem;
+                border-bottom-right-radius: 0.3rem;
+            }
+        }
+    }
+}
+
+app-item-talent-picks-list {
+
+    .talent-picks-list {
+        display: grid;
+        grid-template-columns: [level-start] 8ch [level-end quantity-start] 8ch [quantity-end controls-start] 10ch [controls-end];
+        justify-content: center;
+        padding: 0;
+        margin-top: 0.5rem;
+
+        .talent-picks {
+            align-content: center;
+            text-align: center;
+            background: #302831;
+            height: 2rem;
+            padding: 0 0.5rem;
+            margin: 0;
+
+            span {
+                display: block;
+            }
+
+            &.header {
+                background: #0f0610;
+                border-top-left-radius: 0.3rem;
+                border-top-right-radius: 0.3rem;
+                font-weight: bold;
+            }
+
+            &:not(.header):not(:last-child) {
+                border-bottom: 1px solid #463a47;
+            }
+
+            &.new {
+                grid-column: level-start / controls-end;
+                background: #251d26;
+                justify-self: center;
+                width: 100%;
+
+                a {
+                    display: inline-flex;
+                    gap: 5px;
+                    align-items: center;
+                    opacity: 0.6;
+
+                    &:hover {
+                        opacity: 1;
+                    }
+                }
+            }
+
+            &:last-child {
+                border-bottom-left-radius: 0.3rem;
+                border-bottom-right-radius: 0.3rem;
+            }
+        }
+    }
+}
+
+app-item-talents-list {
+    margin-top: 0.5rem;
+
+    .talents-list {
+        width: fit-content;
+        display: grid;
+        grid-template-columns: [id-start] 16ch [id-end name-start] minmax(20ch, 1fr) [name-end level-start] 10ch [level-end controls-start] 10ch [controls-end];
+        padding: 0;
+        margin-top: 0;
+        margin-bottom: 0;
+        margin-left: auto;
+        margin-right: auto;
+
+        .talent {
+            align-content: center;
+            text-align: center;
+            background: #302831;
+            height: 2rem;
+            padding: 0 0.5rem;
+            margin: 0;
+
+            span {
+                display: block;
+            }
+
+            &.name {
+                text-align: start;
+            }
+
+            &.header {
+                background: #0f0610;
+                border-top-left-radius: 0.3rem;
+                border-top-right-radius: 0.3rem;
+                font-weight: bold;
+            }
+
+            &:not(.header):not(:last-child) {
+                border-bottom: 1px solid #463a47;
+            }
+
+            &.new {
+                grid-column: id-start / controls-end;
+                background: #251d26;
+                justify-self: center;
+                width: 100%;
+
+                a {
+                    display: inline-flex;
+                    gap: 5px;
+                    align-items: center;
+                    opacity: 0.6;
+
+                    &:hover {
+                        opacity: 1;
+                    }
+                }
             }
 
             &:last-child {

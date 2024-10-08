@@ -950,6 +950,7 @@ export namespace CosmereItem {
 }
 
 export type CultureItem = CosmereItem<CultureItemDataModel>;
+export type AncestryItem = CosmereItem<AncestryItemDataModel>;
 export type PathItem = CosmereItem<PathItemDataModel>;
 export type ConnectionItem = CosmereItem<ConnectionItemDataModel>;
 export type InjuryItem = CosmereItem<InjuryItemDataModel>;

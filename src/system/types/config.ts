@@ -183,6 +183,7 @@ export interface DamageTypeConfig {
 export interface ItemTypeConfig {
     label: string;
     labelPlural: string;
+    desc_placeholder?: string;
 }
 
 export interface EquipTypeConfig {
