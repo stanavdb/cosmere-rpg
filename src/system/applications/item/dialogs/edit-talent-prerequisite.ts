@@ -1,10 +1,8 @@
 import { Attribute, Skill } from '@system/types/cosmere';
 import { TalentItem } from '@system/documents/item';
+import { Talent } from '@system/types/item';
 import { AnyObject } from '@system/types/utils';
-import {
-    TalentItemData,
-    TalentPrerequisiteType,
-} from '@system/data/item/talent';
+import { TalentItemData } from '@system/data/item/talent';
 
 const { ApplicationV2 } = foundry.applications.api;
 
@@ -71,7 +69,7 @@ export class EditTalentPrerequisiteDialog extends ComponentHandlebarsApplication
     /* --- Statics --- */
 
     public static async show(talent: TalentItem, data: PrerequisiteData) {
-        const dialog = new this(talent, data);
+        const dialog = new this(talent, foundry.utils.deepClone(data));
         await dialog.render(true);
     }
 
@@ -79,12 +77,12 @@ export class EditTalentPrerequisiteDialog extends ComponentHandlebarsApplication
 
     private static onUpdatePrerequisite(this: EditTalentPrerequisiteDialog) {
         if (
-            this.data.type === TalentPrerequisiteType.Attribute &&
+            this.data.type === Talent.Prerequisite.Type.Attribute &&
             isNaN(this.data.value)
         ) {
             this.data.value = 1;
         } else if (
-            this.data.type === TalentPrerequisiteType.Skill &&
+            this.data.type === Talent.Prerequisite.Type.Skill &&
             isNaN(this.data.rank)
         ) {
             this.data.rank = 1;
@@ -107,20 +105,20 @@ export class EditTalentPrerequisiteDialog extends ComponentHandlebarsApplication
         if (event instanceof SubmitEvent) return;
 
         // Get type
-        const type = formData.get('type') as TalentPrerequisiteType;
+        const type = formData.get('type') as Talent.Prerequisite.Type;
         this.data.type = type;
 
-        if (this.data.type === TalentPrerequisiteType.Attribute) {
+        if (this.data.type === Talent.Prerequisite.Type.Attribute) {
             this.data.attribute = (formData.get('attribute') ??
                 Object.keys(CONFIG.COSMERE.attributes)[0]) as Attribute;
             this.data.value = parseInt(formData.get('value') as string, 10);
-        } else if (this.data.type === TalentPrerequisiteType.Skill) {
+        } else if (this.data.type === Talent.Prerequisite.Type.Skill) {
             this.data.skill = (formData.get('skill') ??
                 Object.keys(CONFIG.COSMERE.skills)[0]) as Skill;
             this.data.rank = parseInt(formData.get('rank') as string, 10);
-        } else if (this.data.type === TalentPrerequisiteType.Talent) {
-            this.data.talent = formData.get('talent') as string;
-        } else if (this.data.type === TalentPrerequisiteType.Connection) {
+        } else if (this.data.type === Talent.Prerequisite.Type.Talent) {
+            this.data.mode = formData.get('mode') as Talent.Prerequisite.Mode;
+        } else if (this.data.type === Talent.Prerequisite.Type.Connection) {
             this.data.description = formData.get('description') as string;
         }
 
@@ -132,6 +130,10 @@ export class EditTalentPrerequisiteDialog extends ComponentHandlebarsApplication
 
     protected _onRender(): void {
         $(this.element).prop('open', true);
+
+        $(this.element)
+            .find('app-talent-prerequisite-talent-list')
+            .on('change', () => this.render(true));
     }
 
     /* --- Context --- */
@@ -139,7 +141,9 @@ export class EditTalentPrerequisiteDialog extends ComponentHandlebarsApplication
     public _prepareContext(): Promise<AnyObject> {
         return Promise.resolve({
             editable: true,
+            rootTalent: this.talent,
             ...this.data,
+
             typeSelectOptions: this.talent.system.prerequisiteTypeSelectOptions,
             attributeSelectOptions: Object.entries(
                 CONFIG.COSMERE.attributes,
@@ -157,6 +161,8 @@ export class EditTalentPrerequisiteDialog extends ComponentHandlebarsApplication
                 }),
                 {},
             ),
+            prerequisiteModeSelectOptions:
+                CONFIG.COSMERE.items.talent.prerequisite.modes,
         });
     }
 }

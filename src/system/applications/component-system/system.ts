@@ -253,6 +253,13 @@ export function deregisterApplicationInstance(
     >,
 ) {
     delete applicationInstances[application.id];
+
+    // Remove all components that belonged to this application
+    Object.keys(componentRegistry).forEach((componentRef) => {
+        if (componentRef.startsWith(application.id)) {
+            delete componentRegistry[componentRef];
+        }
+    });
 }
 
 export function getComponentInstance(componentRef: string) {

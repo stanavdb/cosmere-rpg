@@ -541,7 +541,8 @@
                         "SkillRankPlaceholder": "Minimum Skill Rank",
                         "Connection": "Connection",
                         "ConnectionDescription": "Description",
-                        "ConnectionDescriptionPlaceholder": "Connection Description"
+                        "ConnectionDescriptionPlaceholder": "Connection Description",
+                        "DropTalents": "Drop Talents here to add them to the list."
                     }
                 }
             }
@@ -578,6 +579,10 @@
                     "Attribute": "Attribute",
                     "Skill": "Skill",
                     "Connection": "Connection"
+                },
+                "Mode": {
+                    "AnyOf": "Any of",
+                    "AllOf": "All of"
                 }
             }
         },
@@ -774,7 +779,9 @@
             "NotEnoughUses": "Cannot consume, not enough uses left",
             "ItemConsumeResourceNotConfigured": "The resource selected to be consumed is not configured on this item",
             "NoDuplicateExpertises": "Cannot create duplicate expertise",
-            "NoFocus": "Not enough focus to perform this action"
+            "NoFocus": "Not enough focus to perform this action",
+            "TalentCannotBePrerequisiteOfItself": "A talent cannot be a prerequisite of itself",
+            "DuplicatePrerequisiteTalentRef": "A talent with id {talentId} already exists ({talentName})"
         },
         "DerivedValue": {
             "Mode": {

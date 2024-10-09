@@ -32,6 +32,8 @@ import {
 } from './cosmere';
 import { AdvantageMode } from './roll';
 
+import { Talent } from './item';
+
 export interface SizeConfig {
     label: string;
     size?: number;
@@ -253,6 +255,14 @@ export interface CosmereRPGConfig {
         equipment: {
             types: Record<EquipmentType, EquipmentTypeConfig>;
         };
+
+        talent: {
+            types: Record<Talent.Type, TalentTypeConfig>;
+            prerequisite: {
+                types: Record<Talent.Prerequisite.Type, string>;
+                modes: Record<Talent.Prerequisite.Mode, string>;
+            };
+        };
     };
 
     weaponTypes: Record<WeaponType, WeaponTypeConfig>;
@@ -283,8 +293,6 @@ export interface CosmereRPGConfig {
     };
 
     damageTypes: Record<DamageType, DamageTypeConfig>;
-
-    talentTypes: Record<string, TalentTypeConfig>;
 
     cultures: Record<string, CultureConfig>;
     ancestries: Record<string, AncestriesConfig>;

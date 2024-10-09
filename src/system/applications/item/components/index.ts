@@ -8,3 +8,4 @@ import './details-attack';
 import './details-damage';
 import './properties';
 import './talent-prerequisites';
+import './talent-prerequisite-talent-list';
