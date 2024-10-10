@@ -1,5 +1,5 @@
 import { Size, CreatureType } from '@system/types/cosmere';
-import { CosmereItem } from '@system/documents';
+import { CosmereItem, PathItem, TalentItem } from '@system/documents/item';
 
 // Mixins
 import { DataModelMixin } from '../mixins';
@@ -10,8 +10,7 @@ import {
 } from './mixins/description';
 
 interface TalentGrant {
-    id: string;
-    name: string;
+    uuid: string;
     level: number;
 }
 
@@ -30,7 +29,7 @@ export interface AncestryItemData extends IdItemData, DescriptionItemData {
         subtype?: string | null;
     };
     advancement: {
-        extraPath: string;
+        extraPath: string; // UUID of the PathItem
         extraTalents: TalentGrant[];
         extraTalentPicks: ExtraTalentPicks;
     };
@@ -84,6 +83,9 @@ export class AncestryItemDataModel extends DataModelMixin<
                 }),
             }),
             advancement: new foundry.data.fields.SchemaField({
+                extraPath: new foundry.data.fields.DocumentUUIDField({
+                    type: 'Item',
+                }),
                 extraTalentPicks: new foundry.data.fields.SchemaField({
                     levels: new foundry.data.fields.ArrayField(
                         new foundry.data.fields.SchemaField({
@@ -93,7 +95,6 @@ export class AncestryItemDataModel extends DataModelMixin<
                     ),
                     restrictions: new foundry.data.fields.StringField(),
                 }),
-                extraPath: new foundry.data.fields.StringField(),
                 extraTalents: new foundry.data.fields.ArrayField(
                     new foundry.data.fields.SchemaField({
                         id: new foundry.data.fields.StringField(),

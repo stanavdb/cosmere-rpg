@@ -19,9 +19,16 @@
         </legend>
         <div class="form-group">
             <label>Free {{localize "COSMERE.Item.Type.Path.label"}}</label>
-            {{app-id-input
+            {{!-- {{app-id-input
                 name="system.advancement.extraPath"
                 value=@root.item.system.advancement.extraPath
+            }} --}}
+            {{app-document-reference-input
+                name="system.advancement.extraPath"
+                value=@root.item.system.advancement.extraPath
+                type="Item"
+                subtype="path"
+                readonly=(not @root.editable)
             }}
         </div>
         <p class="notes">

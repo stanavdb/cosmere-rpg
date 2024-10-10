@@ -248,7 +248,6 @@ app-item-effects-list {
 }
 
 app-item-talent-picks-list {
-
     .talent-picks-list {
         display: grid;
         grid-template-columns: [level-start] 8ch [level-end quantity-start] 8ch [quantity-end controls-start] 10ch [controls-end];
@@ -311,7 +310,10 @@ app-item-talents-list {
     .talents-list {
         width: fit-content;
         display: grid;
-        grid-template-columns: [id-start] 16ch [id-end name-start] minmax(20ch, 1fr) [name-end level-start] 10ch [level-end controls-start] 10ch [controls-end];
+        grid-template-columns: [id-start] 16ch [id-end name-start] minmax(
+                20ch,
+                1fr
+            ) [name-end level-start] 10ch [level-end controls-start] 10ch [controls-end];
         padding: 0;
         margin-top: 0;
         margin-bottom: 0;

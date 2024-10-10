@@ -18,11 +18,11 @@ export class ItemTalentsListComponent extends HandlebarsApplicationComponent<
     // state toggle
     protected addMode = false;
 
-    private talentList: TalentListItem[] = (
+    private talentList: TalentListItem[] = /*(
         this.application.item as AncestryItem
     ).system.advancement.extraTalents.map((talent) => {
         return { ...talent, edit: false };
-    });
+    });*/ [];
 
     static TEMPLATE =
         'systems/cosmere-rpg/templates/item/components/talents-list.hbs';

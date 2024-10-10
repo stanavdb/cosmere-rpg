@@ -22,6 +22,14 @@ declare global {
 
     interface CONFIG {
         COSMERE: typeof COSMERE;
+
+        // NOTE: Missing from foundry-vtt-types
+        Region: {
+            typeLabels: Record<string, string>;
+        };
+        RegionBehavior: {
+            typeLabels: Record<string, string>;
+        };
     }
 
     // NOTE: Must use var to affect globalThis
