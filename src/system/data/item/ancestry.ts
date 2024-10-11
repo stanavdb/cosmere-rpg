@@ -86,6 +86,15 @@ export class AncestryItemDataModel extends DataModelMixin<
                 extraPath: new foundry.data.fields.DocumentUUIDField({
                     type: 'Item',
                 }),
+                extraTalents: new foundry.data.fields.ArrayField(
+                    new foundry.data.fields.SchemaField({
+                        uuid: new foundry.data.fields.DocumentUUIDField({
+                            type: 'Item',
+                        }),
+                        level: new foundry.data.fields.NumberField(),
+                    }),
+                ),
+
                 extraTalentPicks: new foundry.data.fields.SchemaField({
                     levels: new foundry.data.fields.ArrayField(
                         new foundry.data.fields.SchemaField({
@@ -95,13 +104,6 @@ export class AncestryItemDataModel extends DataModelMixin<
                     ),
                     restrictions: new foundry.data.fields.StringField(),
                 }),
-                extraTalents: new foundry.data.fields.ArrayField(
-                    new foundry.data.fields.SchemaField({
-                        id: new foundry.data.fields.StringField(),
-                        name: new foundry.data.fields.StringField(),
-                        level: new foundry.data.fields.NumberField(),
-                    }),
-                ),
             }),
         });
     }

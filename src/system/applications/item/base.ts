@@ -57,18 +57,7 @@ export class BaseItemSheet extends TabsApplicationMixin(
         form: HTMLFormElement,
         formData: FormDataExtended,
     ) {
-        console.log('onFormEvent', formData.object);
-
-        if (
-            // !(event.target instanceof HTMLInputElement) &&
-            // !(event.target instanceof HTMLTextAreaElement) &&
-            // !(
-            //     event.target instanceof
-            //     foundry.applications.elements.HTMLProseMirrorElement
-            // )
-            event instanceof SubmitEvent
-        )
-            return;
+        if (event instanceof SubmitEvent) return;
         if (!('name' in event.target!)) return;
 
         if (this.item.isPhysical() && 'system.price.unit' in formData.object) {

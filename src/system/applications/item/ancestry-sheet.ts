@@ -37,6 +37,7 @@ export class AncestrySheet extends BaseItemSheet {
             'sheet-content': {
                 template:
                     'systems/cosmere-rpg/templates/item/ancestry/parts/sheet-content.hbs',
+                scrollable: ['.tab-body'],
             },
         },
     );

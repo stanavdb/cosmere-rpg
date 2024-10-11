@@ -2,7 +2,7 @@
 
 <div class="tab tab-content {{tab.cssClass}}" data-tab="details" data-group="primary">
     <fieldset>
-        <legend>Basics</legend>
+        <legend>{{localize "COSMERE.Item.Sheet.Basics"}}</legend>
         {{app-item-details-id}}
         <div class="form-group">
             <label>{{localize "COSMERE.Item.Sheet.Type"}}</label>
@@ -15,36 +15,28 @@
     </fieldset>
     <fieldset>
         <legend>
-            <i class="fa-solid fa-arrow-up"></i> Advancement
+            <i class="fa-solid fa-arrow-up"></i> 
+            {{localize "COSMERE.Item.Sheet.Ancestry.Advancement"}}
         </legend>
         <div class="form-group">
-            <label>Free {{localize "COSMERE.Item.Type.Path.label"}}</label>
-            {{!-- {{app-id-input
-                name="system.advancement.extraPath"
-                value=@root.item.system.advancement.extraPath
-            }} --}}
+            <label>{{localize "COSMERE.Item.Sheet.Ancestry.FreePath"}}</label>
             {{app-document-reference-input
                 name="system.advancement.extraPath"
                 value=@root.item.system.advancement.extraPath
                 type="Item"
                 subtype="path"
+                placeholder="COSMERE.Item.Sheet.Ancestry.PathReferencePlaceholder"
                 readonly=(not @root.editable)
             }}
         </div>
-        <p class="notes">
-            {{localize "COSMERE.Item.Sheet.Ancestry.PathIdDescription"}}
-        </p>
         <div class="form-group-stacked">
-            <label>Free {{localize "COSMERE.Item.Type.Talent.label_plural"}}</label>
-            {{app-item-talents-list}}
+            <h5>{{localize "COSMERE.Item.Sheet.Ancestry.FreeTalents"}}</h5>
+            {{app-ancestry-advancement-talent-list}}
         </div>
-        <p class="notes">
-            {{localize "COSMERE.Item.Sheet.Ancestry.TalentIdDescription"}}
-        </p>
         <div class="form-group-stacked">
-            <h5>Extra {{localize "COSMERE.Item.Type.Talent.label"}} Picks</h5>
+            <h5>{{localize "COSMERE.Item.Sheet.Ancestry.ExtraTalentPicks"}}</h5>
             <div class="form-group">
-                <label>Restrictions</label>
+                <label>{{localize "COSMERE.Item.Sheet.Ancestry.Restrictions"}}</label>
                 <input name="system.advancement.extraTalentPicks.restrictions" type="text" value="{{@root.item.system.advancement.extraTalentPicks.restrictions}}" />
             </div>
             {{app-item-talent-picks-list}}
