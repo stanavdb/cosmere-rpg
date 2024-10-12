@@ -8,5 +8,5 @@ import './details-attack';
 import './details-damage';
 import './properties';
 import './talent-prerequisites';
-import './talent-picks-list';
 import './advancement-talent-list';
+import './ancestry-bonus-talents';

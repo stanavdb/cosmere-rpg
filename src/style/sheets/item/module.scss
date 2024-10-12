@@ -529,18 +529,7 @@ app-ancestry-advancement-talent-list {
     transition: outline-color 0.5s;
 
     ul.talent-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-
         li {
-            display: flex;
-            align-items: center;
-            background: #302831;
-            height: 2rem;
-            padding: 0 0.5rem;
-            margin: 0;
-
             .col.name {
                 flex: 1;
             }
@@ -550,35 +539,10 @@ app-ancestry-advancement-talent-list {
                 text-align: center;
             }
 
-            .col.controls {
-                margin-left: 1rem;
-
-                > * {
-                    width: 1rem;
-                    text-align: center;
-                }
-            }
-
-            &.header {
-                background: #0f0610;
-                border-top-left-radius: 0.3rem;
-                border-top-right-radius: 0.3rem;
-                font-weight: bold;
-            }
-
             &.drop .col {
                 text-align: center;
                 font-style: italic;
                 opacity: 0.5;
-            }
-
-            &:not(.header):not(:last-child) {
-                border-bottom: 1px solid #463a47;
-            }
-
-            &:last-child {
-                border-bottom-left-radius: 0.3rem;
-                border-bottom-right-radius: 0.3rem;
             }
         }
     }
@@ -589,6 +553,20 @@ app-ancestry-advancement-talent-list {
 
         ul.talent-list li.drop .col {
             opacity: 1;
+        }
+    }
+}
+
+app-ancestry-bonus-talents {
+    .list-table {
+        .col.quantity,
+        .col.level {
+            flex: 1;
+            text-align: center;
+        }
+
+        .col.restrictions {
+            flex: 3;
         }
     }
 }

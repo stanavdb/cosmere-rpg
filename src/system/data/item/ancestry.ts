@@ -14,13 +14,12 @@ interface TalentGrant {
     level: number;
 }
 
-interface ExtraTalentPicks {
-    restrictions: string; // TODO: link up with the Talent Pre-reqs?;
-    levels: {
-        level: number;
-        quantity: number;
-    }[];
+export interface BonusTalentsRule {
+    level: number;
+    quantity: number;
+    restrictions: string;
 }
+
 export interface AncestryItemData extends IdItemData, DescriptionItemData {
     size: Size;
     type: {
@@ -30,8 +29,18 @@ export interface AncestryItemData extends IdItemData, DescriptionItemData {
     };
     advancement: {
         extraPath: string; // UUID of the PathItem
+
+        /**
+         * This is a list of talents that are granted to the character
+         * at specific levels.
+         */
         extraTalents: TalentGrant[];
-        extraTalentPicks: ExtraTalentPicks;
+
+        /**
+         * This is the number of bonus talents a character
+         * with this ancestry can pick at each level.
+         */
+        bonusTalents: BonusTalentsRule[];
     };
 }
 
@@ -95,15 +104,21 @@ export class AncestryItemDataModel extends DataModelMixin<
                     }),
                 ),
 
-                extraTalentPicks: new foundry.data.fields.SchemaField({
-                    levels: new foundry.data.fields.ArrayField(
-                        new foundry.data.fields.SchemaField({
-                            level: new foundry.data.fields.NumberField(),
-                            quantity: new foundry.data.fields.NumberField(),
+                bonusTalents: new foundry.data.fields.ArrayField(
+                    new foundry.data.fields.SchemaField({
+                        level: new foundry.data.fields.NumberField({
+                            required: true,
+                            min: 0,
+                            initial: 0,
                         }),
-                    ),
-                    restrictions: new foundry.data.fields.StringField(),
-                }),
+                        quantity: new foundry.data.fields.NumberField({
+                            required: true,
+                            min: 0,
+                            initial: 0,
+                        }),
+                        restrictions: new foundry.data.fields.StringField(),
+                    }),
+                ),
             }),
         });
     }
@@ -120,9 +135,5 @@ export class AncestryItemDataModel extends DataModelMixin<
 
     get extraTalents(): TalentGrant[] {
         return this.advancement.extraTalents;
-    }
-
-    get extraTalentPicks(): ExtraTalentPicks {
-        return this.advancement.extraTalentPicks;
     }
 }

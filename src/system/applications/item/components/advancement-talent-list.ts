@@ -1,10 +1,7 @@
-import { AnyObject, ConstructorOf, DeepPartial } from '@system/types/utils';
+import { AnyObject, ConstructorOf } from '@system/types/utils';
 
 // Component imports
-import {
-    ComponentHandlebarsRenderOptions,
-    HandlebarsApplicationComponent,
-} from '@system/applications/component-system';
+import { HandlebarsApplicationComponent } from '@system/applications/component-system';
 import { AncestrySheet } from '../ancestry-sheet';
 
 // Mixins
@@ -45,9 +42,15 @@ export class AdvancementTalentListComponent extends DragDropComponentMixin(
         // Get the index
         const index = Number(el.data('item'));
 
+        // Get the extra talents from the item
+        const { extraTalents } = this.application.item.system.advancement;
+
+        // Remove the talent
+        extraTalents.splice(index, 1);
+
         // Remove the talent
         void this.application.item.update({
-            [`system.advancement.extraTalents.-=${index}`]: null,
+            'system.advancement.extraTalents': extraTalents,
         });
     }
 
@@ -110,20 +113,28 @@ export class AdvancementTalentListComponent extends DragDropComponentMixin(
             );
         }
 
-        // Get the new index
-        const newIndex =
-            this.application.item.system.advancement.extraTalents.length;
+        // Get the talents list
+        let talents = this.application.item.system.advancement.extraTalents;
+
+        // Append
+        talents.push({
+            uuid: data.uuid,
+            level: 1,
+        });
+
+        // Sort
+        talents = talents.sort((a, b) => a.level - b.level);
 
         // Add the talent
         await this.application.item.update({
-            [`system.advancement.extraTalents.${newIndex}`]: {
-                uuid: data.uuid,
-                level: 1,
-            },
+            [`system.advancement.extraTalents`]: talents,
         });
 
+        // Find the index
+        const index = talents.findIndex((talent) => talent.uuid === data.uuid);
+
         setTimeout(() => {
-            this.editTalent(newIndex);
+            this.editTalent(index);
         });
     }
 
@@ -139,12 +150,12 @@ export class AdvancementTalentListComponent extends DragDropComponentMixin(
 
     /* --- Context --- */
 
-    public async _prepareContext(
-        params: Record<string, unknown>,
-        context: AnyObject,
-    ) {
+    public async _prepareContext(params: never, context: AnyObject) {
         // Get the extra talents from the item
         let { extraTalents } = this.application.item.system.advancement;
+
+        // Sort
+        extraTalents = extraTalents.sort((a, b) => a.level - b.level);
 
         // Process uuids to content links
         extraTalents = await Promise.all(
@@ -175,9 +186,11 @@ export class AdvancementTalentListComponent extends DragDropComponentMixin(
     /* --- Helpers --- */
 
     protected editTalent(index: number) {
+        const extraTalents =
+            this.application.item.system.advancement.extraTalents;
+
         // Get talent
-        const talent =
-            this.application.item.system.advancement.extraTalents[index];
+        const talent = extraTalents[index];
 
         // Find the new element
         const el = $(this.element!).find(`.talent-ref[data-item="${index}"]`);
@@ -210,11 +223,11 @@ export class AdvancementTalentListComponent extends DragDropComponentMixin(
 
                 // Update the item
                 if (!isNaN(newLevel) && newLevel !== talent.level) {
+                    // Update
+                    extraTalents[index].level = newLevel;
+
                     void this.application.item.update({
-                        [`system.advancement.extraTalents.${index}`]: {
-                            ...talent,
-                            level: newLevel,
-                        },
+                        'system.advancement.extraTalents': extraTalents,
                     });
                 } else {
                     // Trigger render
