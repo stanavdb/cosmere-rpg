@@ -1,4 +1,4 @@
-import { TalentType, Attribute, Skill } from '@system/types/cosmere';
+import { Talent } from '@system/types/item';
 import { CosmereItem } from '@system/documents';
 
 import { MappingField } from '@system/data/fields';
@@ -16,49 +16,9 @@ import {
     ActivatableItemData,
 } from './mixins/activatable';
 
-export const enum TalentPrerequisiteType {
-    Talent = 'talent',
-    Attribute = 'attribute',
-    Skill = 'skill',
-    Connection = 'connection',
-}
-
-interface BasePrerequisite<Type extends TalentPrerequisiteType> {
-    type: Type;
-}
-
-interface ConnectionPrerequisite
-    extends BasePrerequisite<TalentPrerequisiteType.Connection> {
-    description: string;
-}
-
-interface AttributePrerequisite
-    extends BasePrerequisite<TalentPrerequisiteType.Attribute> {
-    attribute: Attribute;
-    value: number;
-}
-
-interface SkillPrerequisite
-    extends BasePrerequisite<TalentPrerequisiteType.Skill> {
-    skill: Skill;
-    rank: number;
-}
-
-interface TalentPrerequisite
-    extends BasePrerequisite<TalentPrerequisiteType.Talent> {
-    label?: string;
-    talent: string;
-}
-
-export type Prequisite =
-    | ConnectionPrerequisite
-    | AttributePrerequisite
-    | SkillPrerequisite
-    | TalentPrerequisite;
-
 export interface TalentItemData
     extends IdItemData,
-        TypedItemData<TalentType>,
+        TypedItemData<Talent.Type>,
         DescriptionItemData,
         ActivatableItemData {
     /**
@@ -94,10 +54,10 @@ export interface TalentItemData
      */
     hasAncestry?: boolean;
 
-    prerequisites: Record<string, Prequisite>;
-    readonly prerequisitesArray: ({ id: string } & Prequisite)[];
+    prerequisites: Record<string, Talent.Prerequisite>;
+    readonly prerequisitesArray: ({ id: string } & Talent.Prerequisite)[];
     readonly prerequisiteTypeSelectOptions: Record<
-        TalentPrerequisiteType,
+        Talent.Prerequisite.Type,
         string
     >;
 
@@ -118,17 +78,17 @@ export class TalentItemDataModel extends DataModelMixin<
     CosmereItem
 >(
     IdItemMixin({
-        initial: 'none',
+        initialFromName: true,
     }),
     TypedItemMixin({
-        initial: TalentType.Path,
+        initial: Talent.Type.Path,
         choices: () =>
-            Object.entries(CONFIG.COSMERE.talentTypes).reduce(
+            Object.entries(CONFIG.COSMERE.items.talent.types).reduce(
                 (acc, [key, config]) => ({
                     ...acc,
                     [key]: config.label,
                 }),
-                {} as Record<TalentType, string>,
+                {} as Record<Talent.Type, string>,
             ),
     }),
     DescriptionItemMixin({
@@ -164,16 +124,8 @@ export class TalentItemDataModel extends DataModelMixin<
                             required: true,
                             nullable: false,
                             blank: false,
-                            choices: {
-                                [TalentPrerequisiteType.Talent]:
-                                    'COSMERE.Talent.Prerequisite.Type.Talent',
-                                [TalentPrerequisiteType.Attribute]:
-                                    'COSMERE.Talent.Prerequisite.Type.Attribute',
-                                [TalentPrerequisiteType.Skill]:
-                                    'COSMERE.Talent.Prerequisite.Type.Skill',
-                                [TalentPrerequisiteType.Connection]:
-                                    'COSMERE.Talent.Prerequisite.Type.Connection',
-                            },
+                            choices:
+                                CONFIG.COSMERE.items.talent.prerequisite.types,
                         }),
 
                         // Connection
@@ -219,32 +171,60 @@ export class TalentItemDataModel extends DataModelMixin<
                         label: new foundry.data.fields.StringField({
                             nullable: true,
                         }),
-                        talent: new foundry.data.fields.StringField(),
+                        talents: new foundry.data.fields.ArrayField(
+                            new foundry.data.fields.SchemaField({
+                                uuid: new foundry.data.fields.StringField({
+                                    required: true,
+                                    nullable: false,
+                                    blank: false,
+                                }),
+                                id: new foundry.data.fields.StringField({
+                                    required: true,
+                                    nullable: false,
+                                    blank: false,
+                                }),
+                                label: new foundry.data.fields.StringField({
+                                    required: true,
+                                    nullable: false,
+                                    blank: false,
+                                }),
+                            }),
+                            {
+                                nullable: true,
+                            },
+                        ),
+                        mode: new foundry.data.fields.StringField({
+                            nullable: true,
+                            blank: false,
+                            choices:
+                                CONFIG.COSMERE.items.talent.prerequisite.modes,
+                        }),
                     },
                     {
                         nullable: true,
-                        validate: (value?: Partial<Prequisite>) => {
+                        validate: (value?: Partial<Talent.Prerequisite>) => {
                             if (!value) return;
 
                             switch (value.type) {
-                                case TalentPrerequisiteType.Talent:
+                                case Talent.Prerequisite.Type.Talent:
                                     return (
-                                        !!value.talent &&
-                                        value.talent.length > 0
+                                        !!value.talents &&
+                                        value.talents.length > 0 &&
+                                        !!value.mode
                                     );
-                                case TalentPrerequisiteType.Attribute:
+                                case Talent.Prerequisite.Type.Attribute:
                                     return (
                                         !!value.attribute &&
                                         value.attribute.length > 0 &&
                                         !!value.value
                                     );
-                                case TalentPrerequisiteType.Skill:
+                                case Talent.Prerequisite.Type.Skill:
                                     return (
                                         !!value.skill &&
                                         value.skill.length > 0 &&
                                         !!value.rank
                                     );
-                                case TalentPrerequisiteType.Connection:
+                                case Talent.Prerequisite.Type.Connection:
                                     return (
                                         !!value.description &&
                                         value.description.length > 0
@@ -260,7 +240,7 @@ export class TalentItemDataModel extends DataModelMixin<
         });
     }
 
-    get prerequisitesArray(): ({ id: string } & Prequisite)[] {
+    get prerequisitesArray(): ({ id: string } & Talent.Prerequisite)[] {
         return Object.entries(this.prerequisites).map(([id, prerequisite]) => ({
             id,
             ...prerequisite,
@@ -273,18 +253,20 @@ export class TalentItemDataModel extends DataModelMixin<
                 this.schema.fields
                     .prerequisites as MappingField<foundry.data.fields.SchemaField>
             ).model.fields.type as foundry.data.fields.StringField
-        ).choices as Record<TalentPrerequisiteType, string>;
+        ).choices as Record<Talent.Prerequisite.Type, string>;
 
         return Object.entries(choices).reduce(
             (acc, [key, label]) => ({
                 ...acc,
                 [key]: label,
             }),
-            {} as Record<TalentPrerequisiteType, string>,
+            {} as Record<Talent.Prerequisite.Type, string>,
         );
     }
 
     public prepareDerivedData() {
+        super.prepareDerivedData();
+
         // Get item
         const item = this.parent;
 
@@ -318,18 +300,18 @@ export class TalentItemDataModel extends DataModelMixin<
             this.prerequisitesMet = this.prerequisitesArray.every(
                 (prerequisite) => {
                     switch (prerequisite.type) {
-                        case TalentPrerequisiteType.Talent:
+                        case Talent.Prerequisite.Type.Talent:
                             return actor.items.some(
                                 (item) =>
                                     item.isTalent() &&
                                     item.id === prerequisite.id,
                             );
-                        case TalentPrerequisiteType.Skill:
+                        case Talent.Prerequisite.Type.Skill:
                             return (
                                 actor.system.skills[prerequisite.skill].rank >=
                                 (prerequisite.rank ?? 1)
                             );
-                        case TalentPrerequisiteType.Attribute:
+                        case Talent.Prerequisite.Type.Attribute:
                             return (
                                 actor.system.attributes[prerequisite.attribute]
                                     .value >= (prerequisite.value ?? 1)

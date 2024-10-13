@@ -1,7 +1,8 @@
 import { Attribute } from '@system/types/cosmere';
+import { CosmereItem } from '@system/documents/item';
 import { ConstructorOf } from '@system/types/utils';
 
-import { Prequisite, TalentPrerequisiteType } from '@system/data/item/talent';
+import { Talent } from '@system/types/item';
 
 // Dialogs
 import { EditTalentPrerequisiteDialog } from '../dialogs/edit-talent-prerequisite';
@@ -36,8 +37,8 @@ export class TalentPrerequisitesComponent extends HandlebarsApplicationComponent
         event: Event,
     ) {
         // Create a new prerequisite
-        const newRule: Prequisite = {
-            type: TalentPrerequisiteType.Attribute,
+        const newRule: Talent.Prerequisite = {
+            type: Talent.Prerequisite.Type.Attribute,
             attribute: Attribute.Strength,
             value: 1,
         };
@@ -99,14 +100,17 @@ export class TalentPrerequisitesComponent extends HandlebarsApplicationComponent
 
     /* --- Context --- */
 
-    public _prepareContext(params: never, context: BaseItemSheetRenderContext) {
-        return Promise.resolve({
+    public async _prepareContext(
+        params: never,
+        context: BaseItemSheetRenderContext,
+    ) {
+        return {
             ...context,
-            ...this.preparePrerequisitesContext(),
-        });
+            ...(await this.preparePrerequisitesContext()),
+        };
     }
 
-    private preparePrerequisitesContext() {
+    private async preparePrerequisitesContext() {
         // Get the prerequisites data
         const {
             prerequisitesArray: prerequisites,
@@ -114,11 +118,44 @@ export class TalentPrerequisitesComponent extends HandlebarsApplicationComponent
         } = this.application.item.system;
 
         return {
-            prerequisites: prerequisites.map((rule) => ({
-                ...rule,
-                typeLabel: prerequisiteTypeSelectOptions[rule.type],
-            })),
+            prerequisites: await Promise.all(
+                prerequisites.map(
+                    this.preparePrerequisiteRuleContext.bind(this),
+                ),
+            ),
             prerequisiteTypeSelectOptions,
+        };
+    }
+
+    private async preparePrerequisiteRuleContext(rule: Talent.Prerequisite) {
+        return {
+            ...rule,
+            typeLabel:
+                this.application.item.system.prerequisiteTypeSelectOptions[
+                    rule.type
+                ],
+
+            ...(rule.type === Talent.Prerequisite.Type.Talent
+                ? {
+                      modeLabel:
+                          CONFIG.COSMERE.items.talent.prerequisite.modes[
+                              rule.mode
+                          ],
+                      talents: await Promise.all(
+                          rule.talents.map(async (ref) => {
+                              // Look up doc
+                              const doc = (await fromUuid(
+                                  ref.uuid,
+                              )) as unknown as CosmereItem;
+
+                              return {
+                                  ...ref,
+                                  link: doc.toAnchor().outerHTML,
+                              };
+                          }),
+                      ),
+                  }
+                : {}),
         };
     }
 

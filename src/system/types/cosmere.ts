@@ -244,11 +244,6 @@ export const enum DamageType {
     Healing = 'heal',
 }
 
-export const enum TalentType {
-    Ancestry = 'ancestry',
-    Path = 'path',
-}
-
 /* --- System --- */
 
 export const enum ActorType {

@@ -570,3 +570,31 @@ app-ancestry-bonus-talents {
         }
     }
 }
+
+app-talent-prerequisite-talent-list {
+    display: block;
+    border: 1px dashed #d3d3d342;
+    padding: 0 0.5rem;
+    border-radius: 0.3rem;
+
+    ul {
+        .talent {
+            display: flex;
+            align-items: center;
+
+            .link {
+                flex: 1;
+                display: flex;
+                justify-content: center;
+            }
+        }
+    }
+
+    p {
+        text-align: center;
+        font-size: 10pt;
+        font-style: italic;
+        opacity: .7;
+        text-shadow: 0 0 0.2rem black;
+    }
+}

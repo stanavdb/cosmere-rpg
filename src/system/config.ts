@@ -30,9 +30,10 @@ import {
     PathType,
     EquipHand,
     EquipmentType,
-    TalentType,
 } from './types/cosmere';
 import { AdvantageMode } from './types/roll';
+
+import { Talent } from './types/item';
 
 const COSMERE: CosmereRPGConfig = {
     sizes: {
@@ -515,6 +516,34 @@ const COSMERE: CosmereRPGConfig = {
                 },
             },
         },
+        talent: {
+            types: {
+                [Talent.Type.Ancestry]: {
+                    label: 'COSMERE.Talent.Type.Ancestry',
+                },
+                [Talent.Type.Path]: {
+                    label: 'COSMERE.Talent.Type.Path',
+                },
+            },
+            prerequisite: {
+                types: {
+                    [Talent.Prerequisite.Type.Talent]:
+                        'COSMERE.Talent.Prerequisite.Type.Talent',
+                    [Talent.Prerequisite.Type.Attribute]:
+                        'COSMERE.Talent.Prerequisite.Type.Attribute',
+                    [Talent.Prerequisite.Type.Skill]:
+                        'COSMERE.Talent.Prerequisite.Type.Skill',
+                    [Talent.Prerequisite.Type.Connection]:
+                        'COSMERE.Talent.Prerequisite.Type.Connection',
+                },
+                modes: {
+                    [Talent.Prerequisite.Mode.AnyOf]:
+                        'COSMERE.Talent.Prerequisite.Mode.AnyOf',
+                    [Talent.Prerequisite.Mode.AllOf]:
+                        'COSMERE.Talent.Prerequisite.Mode.AllOf',
+                },
+            },
+        },
     },
 
     currencies: {},
@@ -711,15 +740,6 @@ const COSMERE: CosmereRPGConfig = {
         [DamageType.Healing]: {
             label: 'COSMERE.DamageTypes.Healing',
             ignoreDeflect: true,
-        },
-    },
-
-    talentTypes: {
-        [TalentType.Ancestry]: {
-            label: 'COSMERE.Talent.Type.Ancestry',
-        },
-        [TalentType.Path]: {
-            label: 'COSMERE.Talent.Type.Path',
         },
     },
 

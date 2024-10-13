@@ -1,4 +1,4 @@
-import { TalentType } from '@system/types/cosmere';
+import { Talent } from '@system/types/item';
 import { TalentItem } from '@system/documents/item';
 import { DeepPartial } from '@system/types/utils';
 
@@ -79,8 +79,8 @@ export class TalentItemSheet extends BaseItemSheet {
     ) {
         return {
             ...(await super._prepareContext(options)),
-            isPathTalent: this.item.system.type === TalentType.Path,
-            isAncestryTalent: this.item.system.type === TalentType.Ancestry,
+            isPathTalent: this.item.system.type === Talent.Type.Path,
+            isAncestryTalent: this.item.system.type === Talent.Type.Ancestry,
         };
     }
 }

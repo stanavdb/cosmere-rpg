@@ -10,11 +10,25 @@
     {{!-- Talent --}}
     {{#if (eq type "talent")}}
     <div class="form-group">
-        <label>{{localize "COSMERE.Item.Sheet.Talent.Prerequisites.TalentId"}}</label>
-        {{app-id-input
-            name="talent"
-            value=talent
-            placeholder="COSMERE.Item.Sheet.Talent.Prerequisites.TalentIdPlaceholder"
+        <label>{{localize "GENERIC.Mode"}}</label>
+        {{#if (gt talents.length 1)}}
+        <select name="mode">
+            {{selectOptions prerequisiteModeSelectOptions selected=mode localize=true}}
+        </select>
+        {{else}}
+        <input type="text"
+            name="mode"
+            value="—"
+            readonly
+        >
+        {{/if}}
+    </div>
+
+    <div class="form-group">
+        {{app-talent-prerequisite-talent-list
+            rootTalent=rootTalent
+            talents=talents
+            mode=mode
         }}
     </div>
     {{/if}}
