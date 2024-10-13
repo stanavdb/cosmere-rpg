@@ -1,4 +1,7 @@
 .sheet.actor.adversary {
+    border: 1px solid var(--plotweaver-color-base-6);
+    background: linear-gradient(var(--plotweaver-color-sheet) 35%, transparent);
+
     section.skills {
         margin-top: 1rem;
         min-height: 0;
@@ -33,5 +36,11 @@
 
     app-actor-attributes {
         margin-top: 0.5rem;
+    }
+
+    app-actor-details{
+        .deflect {
+            border: 1px solid var(--plotweaver-color-base-5);
+        }
     }
 }
