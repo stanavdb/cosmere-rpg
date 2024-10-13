@@ -1,10 +1,5 @@
-@import './style/sheets/module.scss';
-@import './style/chat/module.scss';
-@import './style/sidebar/combat.scss';
-@import './style/dialog.scss';
-@import './style/components.scss';
+@import './style/module.scss';
 
-// @import './style/chat/module.scss';
 /* ----------------------------------------- */
 /*  Globals                                  */
 /* ----------------------------------------- */
@@ -85,7 +80,8 @@
     font-family: 'Laski Sans';
     font-style: normal;
     font-weight: 600;
-    src: url('assets/fonts/laski-sans/Laski-Sans-SemiBold.woff2') format('woff2');
+    src: url('assets/fonts/laski-sans/Laski-Sans-SemiBold.woff2')
+        format('woff2');
 }
 
 @font-face {
@@ -100,7 +96,8 @@
     src: url('https://dl.dropboxusercontent.com/scl/fi/9909gen4fd0oveyzfposx/CosmereDingbats-Regular.otf?rlkey=ig6odq9hxyo1st8kt3ujp1czz&st=72qrads3&raw=1');
 }
 
-.application h1, span.document-name {
+.application h1,
+span.document-name {
     font-family: 'Penumbra Web Pro';
 }
 

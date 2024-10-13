@@ -57,16 +57,8 @@ export class BaseItemSheet extends TabsApplicationMixin(
         form: HTMLFormElement,
         formData: FormDataExtended,
     ) {
-        if (
-            !(event.target instanceof HTMLInputElement) &&
-            !(event.target instanceof HTMLTextAreaElement) &&
-            !(
-                event.target instanceof
-                foundry.applications.elements.HTMLProseMirrorElement
-            )
-        )
-            return;
-        if (!event.target.name) return;
+        if (event instanceof SubmitEvent) return;
+        if (!('name' in event.target!)) return;
 
         if (this.item.isPhysical() && 'system.price.unit' in formData.object) {
             // Get currency id

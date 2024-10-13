@@ -248,7 +248,6 @@ app-item-effects-list {
 }
 
 app-item-talent-picks-list {
-
     .talent-picks-list {
         display: grid;
         grid-template-columns: [level-start] 8ch [level-end quantity-start] 8ch [quantity-end controls-start] 10ch [controls-end];
@@ -311,7 +310,9 @@ app-item-talents-list {
     .talents-list {
         width: fit-content;
         display: grid;
-        grid-template-columns: [id-start] 16ch [id-end name-start] minmax(20ch, 1fr) [name-end level-start] 10ch [level-end controls-start] 10ch [controls-end];
+        grid-template-columns:
+            [id-start] 16ch [id-end name-start] minmax(20ch, 1fr)
+            [name-end level-start] 10ch [level-end controls-start] 10ch [controls-end];
         padding: 0;
         margin-top: 0;
         margin-bottom: 0;
@@ -517,6 +518,55 @@ app-talent-prerequisites {
                 border-bottom-left-radius: 0.3rem;
                 border-bottom-right-radius: 0.3rem;
             }
+        }
+    }
+}
+
+app-ancestry-advancement-talent-list {
+    display: block;
+    border-radius: 0.3rem;
+    outline: 1px solid transparent;
+    transition: outline-color 0.5s;
+
+    ul.talent-list {
+        li {
+            .col.name {
+                flex: 1;
+            }
+
+            .col.level {
+                width: 10rem;
+                text-align: center;
+            }
+
+            &.drop .col {
+                text-align: center;
+                font-style: italic;
+                opacity: 0.5;
+            }
+        }
+    }
+
+    &.dragover {
+        outline: 2px solid var(--color-cool-3);
+        box-shadow: 0 0 5px var(--color-shadow-primary);
+
+        ul.talent-list li.drop .col {
+            opacity: 1;
+        }
+    }
+}
+
+app-ancestry-bonus-talents {
+    .list-table {
+        .col.quantity,
+        .col.level {
+            flex: 1;
+            text-align: center;
+        }
+
+        .col.restrictions {
+            flex: 3;
         }
     }
 }

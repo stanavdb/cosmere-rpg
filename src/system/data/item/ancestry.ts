@@ -1,5 +1,5 @@
 import { Size, CreatureType } from '@system/types/cosmere';
-import { CosmereItem } from '@system/documents';
+import { CosmereItem, PathItem, TalentItem } from '@system/documents/item';
 
 // Mixins
 import { DataModelMixin } from '../mixins';
@@ -10,18 +10,16 @@ import {
 } from './mixins/description';
 
 interface TalentGrant {
-    id: string;
-    name: string;
+    uuid: string;
     level: number;
 }
 
-interface ExtraTalentPicks {
-    restrictions: string; // TODO: link up with the Talent Pre-reqs?;
-    levels: {
-        level: number;
-        quantity: number;
-    }[];
+export interface BonusTalentsRule {
+    level: number;
+    quantity: number;
+    restrictions: string;
 }
+
 export interface AncestryItemData extends IdItemData, DescriptionItemData {
     size: Size;
     type: {
@@ -30,9 +28,19 @@ export interface AncestryItemData extends IdItemData, DescriptionItemData {
         subtype?: string | null;
     };
     advancement: {
-        extraPath: string;
+        extraPath: string; // UUID of the PathItem
+
+        /**
+         * This is a list of talents that are granted to the character
+         * at specific levels.
+         */
         extraTalents: TalentGrant[];
-        extraTalentPicks: ExtraTalentPicks;
+
+        /**
+         * This is the number of bonus talents a character
+         * with this ancestry can pick at each level.
+         */
+        bonusTalents: BonusTalentsRule[];
     };
 }
 
@@ -84,21 +92,31 @@ export class AncestryItemDataModel extends DataModelMixin<
                 }),
             }),
             advancement: new foundry.data.fields.SchemaField({
-                extraTalentPicks: new foundry.data.fields.SchemaField({
-                    levels: new foundry.data.fields.ArrayField(
-                        new foundry.data.fields.SchemaField({
-                            level: new foundry.data.fields.NumberField(),
-                            quantity: new foundry.data.fields.NumberField(),
-                        }),
-                    ),
-                    restrictions: new foundry.data.fields.StringField(),
+                extraPath: new foundry.data.fields.DocumentUUIDField({
+                    type: 'Item',
                 }),
-                extraPath: new foundry.data.fields.StringField(),
                 extraTalents: new foundry.data.fields.ArrayField(
                     new foundry.data.fields.SchemaField({
-                        id: new foundry.data.fields.StringField(),
-                        name: new foundry.data.fields.StringField(),
+                        uuid: new foundry.data.fields.DocumentUUIDField({
+                            type: 'Item',
+                        }),
                         level: new foundry.data.fields.NumberField(),
+                    }),
+                ),
+
+                bonusTalents: new foundry.data.fields.ArrayField(
+                    new foundry.data.fields.SchemaField({
+                        level: new foundry.data.fields.NumberField({
+                            required: true,
+                            min: 0,
+                            initial: 0,
+                        }),
+                        quantity: new foundry.data.fields.NumberField({
+                            required: true,
+                            min: 0,
+                            initial: 0,
+                        }),
+                        restrictions: new foundry.data.fields.StringField(),
                     }),
                 ),
             }),
@@ -117,9 +135,5 @@ export class AncestryItemDataModel extends DataModelMixin<
 
     get extraTalents(): TalentGrant[] {
         return this.advancement.extraTalents;
-    }
-
-    get extraTalentPicks(): ExtraTalentPicks {
-        return this.advancement.extraTalentPicks;
     }
 }
