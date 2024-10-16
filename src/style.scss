@@ -20,8 +20,8 @@
     --plotweaver-color-invest-front: #3e6abb;
     --plotweaver-color-invest-back: #182845;
 
-    --font-primary: 'Laski Sans';
-    --font-h5: 'Laski-Sans';
+    // --font-primary: 'Laski Sans';
+    // --font-h5: 'Laski-Sans';
 
     /* ----------------------------------------- */
     /*  Default Generic Theme                    */
@@ -99,10 +99,19 @@
 .application h1,
 span.document-name {
     font-family: 'Penumbra Web Pro';
+    font-variant: small-caps;
 }
 
 .application h4 {
     font-variant: small-caps;
+}
+
+.application h5 {
+    font-family: 'Laski Sans';
+}
+
+.application {
+    font-family: 'Laski Sans';
 }
 
 em.cosmere-icon,

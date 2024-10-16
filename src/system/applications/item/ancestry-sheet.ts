@@ -15,7 +15,6 @@ export class AncestrySheet extends BaseItemSheet {
             window: {
                 resizable: true,
                 positioned: true,
-                title: '<i class="fas fa-timeline"></i> ' + this.name,
             },
         },
     );
