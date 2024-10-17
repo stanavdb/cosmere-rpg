@@ -35,7 +35,9 @@ export class EquipmentItemDataModel extends DataModelMixin<
                 {} as Record<EquipmentType, string>,
             ),
     }),
-    DescriptionItemMixin(),
+    DescriptionItemMixin({
+        value: 'COSMERE.Item.Type.Equipment.desc_placeholder',
+    }),
     PhysicalItemMixin(),
     ActivatableItemMixin(),
 ) {

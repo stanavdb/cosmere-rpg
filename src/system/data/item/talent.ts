@@ -91,7 +91,9 @@ export class TalentItemDataModel extends DataModelMixin<
                 {} as Record<Talent.Type, string>,
             ),
     }),
-    DescriptionItemMixin(),
+    DescriptionItemMixin({
+        value: 'COSMERE.Item.Type.Talent.desc_placeholder',
+    }),
     ActivatableItemMixin(),
 ) {
     static defineSchema() {

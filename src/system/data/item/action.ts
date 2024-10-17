@@ -35,7 +35,9 @@ export class ActionItemDataModel extends DataModelMixin<
                 {} as Record<ActionType, string>,
             ),
     }),
-    DescriptionItemMixin(),
+    DescriptionItemMixin({
+        value: 'COSMERE.Item.Type.Action.desc_placeholder',
+    }),
     ActivatableItemMixin(),
     DamagingItemMixin(),
 ) {
