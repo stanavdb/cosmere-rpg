@@ -91,7 +91,7 @@ export const enum Skill {
 
 export const enum DerivedStatistic {
     MovementRate = 'mvr',
-    LiftingCapactiy = 'lif',
+    LiftingCapacity = 'lif',
     RecoveryDie = 'rcd',
 }
 
