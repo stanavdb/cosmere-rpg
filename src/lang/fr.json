@@ -809,13 +809,13 @@
       "trait": "Trait",
       "action": "Action",
       "talent": "Talent",
-      "equipment": "Équipment",
+      "equipment": "Équipement",
       "weapon": "Arme"
     }
   },
   "UNITS": {
     "Distance": {
-      "Feet": "Pied"
+      "Feet": "Pieds"
     }
   }
 }
