@@ -1,9 +1,9 @@
 {
   "COSMERE": {
-    "title": "Cosmere RPG",
+    "title": "RPG Cosmère",
     "Actor": {
       "Character": {
-        "Character": "Character",
+        "Character": "Personnage",
         "Cultures": {
           "placeholder": "[Culture]"
         },
@@ -20,7 +20,7 @@
           "name": "Expertise",
           "Armor": "Armure",
           "Cultural": "Culturale",
-          "Specialist": "spécialisée",
+          "Specialist": "Spécialisée",
           "Utility": "Utilitaire",
           "Weapon": "Arme"
         }
@@ -28,7 +28,7 @@
       "Adversary": {
         "Adversary": "Adversaire",
         "Traits": {
-          "placeholder": "[Trait d'adversaire]"
+          "placeholder": "[Adversary Trait]"
         },
         "Role": {
           "Minion": "Sbire",
@@ -61,7 +61,7 @@
         "Action": "Action",
         "Reaction": "Réaction",
         "FreeAction": "Action gratuite",
-        "Special": "Spéciale"
+        "Special": "Spécial"
       },
       "Attribute": {
         "name": "Attribut",
@@ -532,7 +532,7 @@
             "Edit": "Modifier ce prérequis",
             "Delete": "Remove ce prérequis",
             "TalentId": "Identifiant de talent",
-            "TalentIdPlaceholder": "Identifant de talent",
+            "TalentIdPlaceholder": "Identifiant de talent",
             "Attribute": "Attribut",
             "AttributeValue": "Valeur",
             "AttributeValuePlaceholder": "Valeur d'attribut minimale",
