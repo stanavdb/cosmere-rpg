@@ -1,0 +1,821 @@
+{
+  "COSMERE": {
+    "title": "Cosmere RPG",
+    "Actor": {
+      "Character": {
+        "Character": "Character",
+        "Cultures": {
+          "placeholder": "[Culture]"
+        },
+        "Ancestry": {
+          "placeholder": "[Ascendance]"
+        },
+        "Path": {
+          "placeholder": "[Voie]"
+        },
+        "Specialties": {
+          "placeholder": "[Spécialité]"
+        },
+        "Expertise": {
+          "name": "Expertise",
+          "Armor": "Armure",
+          "Cultural": "Culturale",
+          "Specialist": "spécialisée",
+          "Utility": "Utilitaire",
+          "Weapon": "Arme"
+        }
+      },
+      "Adversary": {
+        "Adversary": "Adversaire",
+        "Traits": {
+          "placeholder": "[Trait d'adversaire]"
+        },
+        "Role": {
+          "Minion": "Sbire",
+          "Rival": "Rival",
+          "Boss": "Boss"
+        }
+      },
+      "Actions": {
+        "Aid": "Aider",
+        "AvoidDanger": "Éviter le danger",
+        "Banter": "Plaisanter",
+        "Brace": "Se préparer",
+        "Disengage": "Se désengager",
+        "Dodge": "Esquiver",
+        "Drop": "Lâcher",
+        "Enhance": "Améliorer",
+        "GainAdvantage": "Prendre l'avantage",
+        "Grapple": "Attraper",
+        "Interact": "Interagir",
+        "Move": "Se déplacer",
+        "ReactiveStrike": "Frapper en réaction",
+        "Ready": "Se préparer",
+        "Recover": "Se rétablir",
+        "Regenerate": "Se régénérer",
+        "Shove": "Pousser",
+        "Strike": "Frapper",
+        "UseASkill": "Utiliser une compétence"
+      },
+      "ActionCosts": {
+        "Action": "Action",
+        "Reaction": "Réaction",
+        "FreeAction": "Action gratuite",
+        "Special": "Spéciale"
+      },
+      "Attribute": {
+        "name": "Attribut",
+        "name_plural": "Attributs",
+        "Strength": {
+          "long": "Force",
+          "short": "FOR"
+        },
+        "Speed": {
+          "long": "Vitesse",
+          "short": "VIT"
+        },
+        "Intellect": {
+          "long": "Intellect",
+          "short": "INT"
+        },
+        "Willpower": {
+          "long": "Volonté",
+          "short": "VOL"
+        },
+        "Awareness": {
+          "long": "Conscience",
+          "short": "CON"
+        },
+        "Presence": {
+          "long": "Présence",
+          "short": "PRE"
+        }
+      },
+      "Resource": {
+        "Health": "Santé",
+        "Focus": "Focus",
+        "Investiture": "Investiture"
+      },
+      "Skill": {
+        "label": "Compétence",
+        "label_p": "Compétence",
+        "Agility": "Agilité",
+        "Athletics": "Athlétisme",
+        "HeavyWeapons": "Armes lourdes",
+        "LightWeapons": "Armes légères",
+        "Stealth": "Discrétion",
+        "Thievery": "Larcin",
+        "Crafting": "Artisanat",
+        "Deduction": "Déduction",
+        "Discipline": "Discipline",
+        "Intimidation": "Intimidation",
+        "Lore": "Savoir",
+        "Medicine": "Médecine",
+        "Deception": "Tromperie",
+        "Insight": "Perspicacité",
+        "Leadership": "Commandement",
+        "Perception": "Perception",
+        "Persuasion": "Persuasion",
+        "Survival": "Survie"
+      },
+      "Statistics": {
+        "Defense": "Défense",
+        "SensesRange": "Sens",
+        "MovementRate": "Déplacement",
+        "LiftingCapacity": "Capacité de charge",
+        "RecoveryDie": "Récupération",
+        "Deflect": "Déviation",
+        "NoObscuredSense": "Non affecté par les sens obscurcis."
+      },
+      "Size": {
+        "Small": "Petit",
+        "Medium": "Moyen",
+        "Large": "Grand",
+        "Huge": "Énorme",
+        "Gargantuan": "Gargantuesque"
+      },
+      "Type": {
+        "Custom": "Personnalisé",
+        "Humanoid": "Humanoïde",
+        "Animal": "Animal"
+      },
+      "Sheet": {
+        "Header": {
+          "Editable": "Éditable",
+          "Locked": "Verrouillé"
+        },
+        "Item": {
+          "Edit": "Éditer",
+          "Details": "Détails",
+          "Remove": "Supprimer"
+        },
+        "Actions": {
+          "label": "Actions",
+          "Activation": "Utilisation",
+          "Consume": "Coût",
+          "Uses": "Utilisations",
+          "Use": "Utiliser",
+          "Strike": "Frapper"
+        },
+        "Equipment": {
+          "Quantity": "Quantité",
+          "Weight": "Poids",
+          "IncreaseQuantity": "Augmenter la quantité",
+          "DecreaseQuantity": "Réduire la quantité"
+        },
+        "Inventory": {
+          "label": "Inventaire",
+          "Item": {
+            "Quantity": "Quantité",
+            "Weight": "Poids"
+          }
+        },
+        "Conditions": "États",
+        "Injuries": {
+          "Label": "Blessures",
+          "Duration": "Durée",
+          "Days": "jours",
+          "Permanent": "Permanent",
+          "DecreaseDuration": "Diminuer la durée de la blessure",
+          "IncreaseDuration": "Augmenter la durée de la blessure",
+          "CreateInjury": "Nouvelle blessure",
+          "NewInjury": "Nouvelle blessure"
+        },
+        "Level": "Niveau",
+        "Tier": "Palier",
+        "Expertises": "Expertises",
+        "EditExpertises": "Modifier les expertises",
+        "ConfigureSkills": "Configurer les compétences",
+        "EditRole": "Éditer le rôle",
+        "EditSize": "Éditer la taille",
+        "EditType": "Éditer le type",
+        "CreatureType": "Type",
+        "CustomType": "Type personnalisé",
+        "Subtype": "Sous-type",
+        "Edit": "Éditer",
+        "View": "Voir",
+        "Favorites": "Favoris",
+        "DropFavorite": "Déposer des favoris",
+        "AncestryPlaceholder": "Ajouter une ascendance",
+        "PathPlaceholder": "Ajouter une voie",
+        "ShortRest": "Repos court",
+        "LongRest": "Repos long",
+        "ToggleShowSkills": "Afficher les compétences sans rang",
+        "ToggleCollapseSkills": "Masquer les compétences sans rang",
+        "ConfigureDefense": "Configurer la défense",
+        "ConfigureMovement": "Configurer la vitesse de déplacement",
+        "ConfigureSensesRange": "Configurer la portée des sens",
+        "ConfigureRecovery": "Configurer le dé de récupération",
+        "RollInjury": "Lancer le dé de blessure",
+        "Tabs": {
+          "Details": "Détails",
+          "Actions": "Actions",
+          "Equipment": "Équipement",
+          "Goals": "Objectif",
+          "Effects": "Effets & états"
+        },
+        "Search": {
+          "Item": {
+            "Placeholder": "Rechercher des actions"
+          },
+          "Equipment": {
+            "Placeholder": "Rechercher des objets"
+          },
+          "Effects": {
+            "Placeholder": "Rechercher des effets"
+          },
+          "Clear": "Effacer la recherche",
+          "ChangeSortDirection": "Inverser l'ordre de tri"
+        },
+        "Details": {
+          "Purpose": "Raison d'être",
+          "Obstacle": "Obstacle",
+          "Goals": {
+            "Label": "Objectifs",
+            "New": "Ajouter un nouvel objectif",
+            "NewText": "Nouvel objectif",
+            "AdjustProgressTooltipInc": "Click gauche pour augmenter la progression.",
+            "AdjustProgressTooltipDec": "Click droit pour diminuer la progression.",
+            "HideComplete": "Masquer complétés"
+          },
+          "Connections": {
+            "Label": "Connexions",
+            "New": "Ajouter une connexion",
+            "NewText": "Nouvelle connexion"
+          }
+        },
+        "Skills": {
+          "AdjustTooltip": "Click gauche pour augmenter le rang de [skill].<br>Click droit pour réduire le rang de [skill]"
+        }
+      }
+    },
+    "AttributeGroup": {
+      "Physical": {
+        "long": "Physique",
+        "short": "PHY"
+      },
+      "Cognitive": {
+        "long": "Cognitif",
+        "short": "COG"
+      },
+      "Spiritual": {
+        "long": "Spirituel",
+        "short": "SPI"
+      }
+    },
+    "Item": {
+      "Type": {
+        "Weapon": {
+          "label": "Arme",
+          "label_plural": "Armes"
+        },
+        "Armor": {
+          "label": "Armure",
+          "label_plural": "Armures"
+        },
+        "Equipment": {
+          "label": "Équipement",
+          "label_plural": "Équipements"
+        },
+        "Loot": {
+          "label": "Butin",
+          "label_plural": "Butins"
+        },
+        "Ancestry": {
+          "label": "Ascendance",
+          "label_plural": "Ascendances"
+        },
+        "Culture": {
+          "label": "Culture",
+          "label_plural": "Cultures"
+        },
+        "Path": {
+          "label": "Voie",
+          "label_plural": "Voies"
+        },
+        "Specialty": {
+          "label": "Spécialité",
+          "label_plural": "Spécialités"
+        },
+        "Talent": {
+          "label": "Talent",
+          "label_plural": "Talents"
+        },
+        "Action": {
+          "label": "Action",
+          "label_plural": "Actions"
+        },
+        "Trait": {
+          "label": "Trait",
+          "label_plural": "Traits"
+        },
+        "Injury": {
+          "label": "Blessure",
+          "label_plural": "Blessures"
+        },
+        "Connection": {
+          "label": "Connexion",
+          "label_plural": "Connexions"
+        }
+      },
+      "Weapon": {
+        "Type": {
+          "Light": "Léger",
+          "Heavy": "Lourd",
+          "Special": "Spécial"
+        },
+        "Name": {
+          "placeholder": "[Weapon Name]"
+        },
+        "Trait": {
+          "Cumbersome": "Encombrant",
+          "Dangerous": "Dangereux",
+          "Deadly": "Mortel",
+          "Defensive": "Défensif",
+          "Discreet": "Discret",
+          "Indirect": "Indirect",
+          "Loaded": "Chargé",
+          "Momentum": "Élan",
+          "Offhand": "Main secondaire",
+          "Pierce": "Perforant",
+          "Quickdraw": "Dégainage rapide",
+          "Thrown": "Lancé",
+          "TwoHanded": "À deux mains",
+          "Unique": "Unique",
+          "Fragile": "Fragile",
+          "Reach": "Portée"
+        },
+        "Strike": "Frapper",
+        "Improvised": "Arme improvisée",
+        "Unarmed": "À main nue"
+      },
+      "Armor": {
+        "Name": {
+          "placeholder": "[Armor Name]"
+        },
+        "Trait": {
+          "Cumbersome": "Encombrant",
+          "Dangerous": "Dangereux",
+          "Presentable": "Présentable"
+        },
+        "Deflect": "Déviation"
+      },
+      "Equipment": {
+        "Type": {
+          "Basic": "Basique"
+        }
+      },
+      "Action": {
+        "Type": {
+          "Basic": {
+            "label": "Action basique",
+            "label_plural": "Actions basiques"
+          }
+        }
+      },
+      "Activation": {
+        "Type": {
+          "Action": "Action",
+          "SkillTest": "Skill Test",
+          "Utility": "Utilitaire"
+        },
+        "ConsumeType": {
+          "Resource": {
+            "Label": "Ressource"
+          },
+          "Item": {
+            "Label": "Objet"
+          }
+        },
+        "Uses": {
+          "Types": {
+            "Charge": {
+              "Singular": "Charge",
+              "Plural": "Charges"
+            },
+            "Use": {
+              "Singular": "Utilisation",
+              "Plural": "Utilisations"
+            }
+          },
+          "Recharge": {
+            "Label": "Recharge",
+            "PerScene": "Par scène"
+          },
+          "Per": "Par"
+        }
+      },
+      "Injuries": {
+        "Name": {
+          "placeholder": "[Injury Name]"
+        },
+        "Duration": {
+          "FleshWound": "Plaie superficielle",
+          "ShallowInjury": "Lésion légère",
+          "ViciousInjury": "Lésion grave",
+          "PermanentInjury": "Lésion permanente",
+          "Death": "Mort"
+        }
+      },
+      "Equip": {
+        "Types": {
+          "Wear": {
+            "Label": "Porté"
+          },
+          "Hold": {
+            "Label": "Tenu"
+          }
+        },
+        "Hold": {
+          "OneHanded": {
+            "Label": "Une main"
+          },
+          "TwoHanded": {
+            "Label": "Deux mains"
+          }
+        },
+        "Hand": {
+          "Main": {
+            "Label": "Main principale"
+          },
+          "Off": {
+            "Label": "Main secondaire"
+          }
+        },
+        "Equip": {
+          "Label": "Équiper"
+        },
+        "Unequip": {
+          "Label": "Déséquiper"
+        },
+        "Unequipped": {
+          "Label": "Déséquipé"
+        }
+      },
+      "AttackFlavor": "[actor] attaque avec son arme [item].",
+      "Sheet": {
+        "Tabs": {
+          "Description": "Description",
+          "Effects": "Effets",
+          "Details": "Détails"
+        },
+        "Identifier": {
+          "Label": "Identifiant",
+          "Description": "Utilisé pour identifier de manière unique ce/cette [type]. L'identifiant ne peut contenir que des lettres (a-z), des chiffres (0-9), des tirets (-) et des underscores (_)."
+        },
+        "Type": "Type",
+        "Injury": {
+          "Duration": "Durée",
+          "InitialDuration": "Initiale",
+          "RemainingDuration": "Restante"
+        },
+        "Specialty": {
+          "PathId": "Identifiant de voie",
+          "PathIdDescription": "L'identifiant de voie auquel appartient cette spécialité. L'identifiant de voie ne peut contenir que des lettres (a-z), des chiffres (0-9), des tirets (-) et des underscores (_)."
+        },
+        "Loot": {
+          "IsMoney": "Monétaire",
+          "IsMoneyDescription": "Ce butin est-il une forme de monnaie ?"
+        },
+        "Properties": {
+          "Quantity": "Quantité",
+          "Weight": "Poids",
+          "Price": "Prix"
+        },
+        "Equip": {
+          "Title": "Détails d'équipement",
+          "AlwaysEquipped": "Toujours équipé ?",
+          "Traits": "Traits",
+          "ExpertTraits": "Traits experts",
+          "LoseTrait": "Perds [trait]",
+          "ModifyTraitValue": "[trait] [[value]] >",
+          "ModifyTraitValueFull": "[trait] [[value]] > [[newValue]]",
+          "TraitsShow": "Afficher les traits",
+          "TraitsHide": "Masquer les traits",
+          "ExpertTraitsShow": "Afficher tous les traits experts",
+          "ExpertTraitsHide": "Masquer tous les traits experts"
+        },
+        "Activation": {
+          "Title": "Utilisation",
+          "Type": "Type d'activation",
+          "Cost": "Coût d'activation",
+          "Consume": "Ressource d'activation",
+          "Uses": "Utilisations limitées",
+          "Recharge": "Recharge"
+        },
+        "Attack": {
+          "Title": "Attaque",
+          "Type": "Type d'attaque",
+          "Range": "Portée",
+          "RangeShort": "Courte",
+          "RangeLong": "Longue"
+        },
+        "Damage": {
+          "Title": "Dégâts",
+          "Formula": "Formule de dégâts"
+        },
+        "Talent": {
+          "PathId": "Identifiant de voie",
+          "PathIdPlaceholder": "Identifiant de voie",
+          "PathIdDescription": "L'identifiant de voie auquel ce talent appartient.",
+          "SpecialtyId": "Identifiant de spécialité",
+          "SpecialtyIdPlaceholder": "Identifiant de spécialité — Optionnel",
+          "SpecialtyIdDescription": "L'identifiant de spécialité auquel ce talent appartient.",
+          "AncestryId": "Identifiant d'ascendance",
+          "AncestryIdPlaceholder": "Identifiant d'ascendance",
+          "AncestryIdDescription": "L'identifiant d'ascendance auquel ce talent appartient.",
+          "Prerequisites": {
+            "Label": "Prérequis",
+            "Type": "Type",
+            "Description": "Description",
+            "Create": "Nouveau prérequis",
+            "Edit": "Modifier ce prérequis",
+            "Delete": "Remove ce prérequis",
+            "TalentId": "Identifiant de talent",
+            "TalentIdPlaceholder": "Identifant de talent",
+            "Attribute": "Attribut",
+            "AttributeValue": "Valeur",
+            "AttributeValuePlaceholder": "Valeur d'attribut minimale",
+            "Skill": "Compétence",
+            "SkillRank": "Rang",
+            "SkillRankPlaceholder": "Rang de compétence minimal",
+            "Connection": "Connexion",
+            "ConnectionDescription": "Description",
+            "ConnectionDescriptionPlaceholder": "Description de connexion",
+            "DropTalents": "Déposer des talents ici pour les ajouter à la liste."
+          }
+        }
+      }
+    },
+    "Attack": {
+      "Type": {
+        "Melee": "Melée",
+        "Ranged": "À distance"
+      }
+    },
+    "DamageTypes": {
+      "Energy": "Énergie",
+      "Impact": "Impact",
+      "Keen": "Tranchant",
+      "Spirit": "Spirituel",
+      "Vital": "Vital",
+      "Healing": "Soin"
+    },
+    "Paths": {
+      "Types": {
+        "Heroic": {
+          "Label": "Héroïque"
+        }
+      }
+    },
+    "Talent": {
+      "Type": {
+        "Ancestry": "Ascendance",
+        "Path": "Voie"
+      },
+      "Prerequisite": {
+        "Type": {
+          "Talent": "Talent",
+          "Attribute": "Attribut",
+          "Skill": "Compétence",
+          "Connection": "Connexion"
+        },
+        "Mode": {
+          "AnyOf": "N'importe lequel",
+          "AllOf": "Tous"
+        }
+      }
+    },
+    "Currencies": {},
+    "Combat": {
+      "FastPlayers": "Personnages rapides",
+      "SlowPlayers": "Personnages lents",
+      "FastAdversaries": "Adversaires rapides",
+      "SlowAdversaries": "Adversaires lents",
+      "ToggleTurn": "Changer de vitesse de tour",
+      "ResetActivation": "Annuler l'agissement",
+      "Activate": "Marquer comme ayant agi"
+    },
+    "Conditions": {
+      "Afflicted": "Affligé",
+      "Determined": "Déterminé",
+      "Disoriented": "Désorienté",
+      "Empowered": "Renforcé",
+      "Enhanced": "Amélioré",
+      "Encumbered": "Encombré",
+      "Exhausted": "Épuisé",
+      "Focused": "Concentré",
+      "Immobilized": "Immobilisé",
+      "Prone": "À terre",
+      "Restrained": "Entravé",
+      "Slowed": "Ralenti",
+      "Stunned": "Étourdi",
+      "Surprised": "Surpris",
+      "Unconscious": "Inconscient"
+    },
+    "Sheet": {
+      "Effects": {
+        "Label": "Effets",
+        "Inactive": "Effets inactifs",
+        "Passive": "Effets passifs",
+        "Temporary": "Effets temporaires",
+        "Source": "Source",
+        "Enable": "Activer l'effet",
+        "Disable": "Désactiver l'effet",
+        "Duration": "Durée",
+        "Create": "Nouvel effet",
+        "Edit": "Modifier cet effet",
+        "Delete": "Supprimer cet effet",
+        "ToggleActive": "Activer"
+      }
+    },
+    "Attribute": {
+      "str": "Force",
+      "spd": "Vitesse",
+      "int": "Intellect",
+      "wil": "Volonté",
+      "awa": "Conscience",
+      "pre": "Présence"
+    },
+    "Skill": {
+      "agi": "Agilité",
+      "ath": "Athlétisme",
+      "hwp": "Armes lourdes",
+      "lwp": "Armes légères",
+      "stl": "Discrétion",
+      "thv": "Larcin",
+      "cra": "Artisanat",
+      "ded": "Déduction",
+      "dis": "Discipline",
+      "inm": "Intimidation",
+      "lor": "Savoir",
+      "med": "Médecine",
+      "dec": "Tromperie",
+      "ins": "Perspicacité",
+      "lea": "Commandement",
+      "prc": "Perception",
+      "prs": "Persuasion",
+      "sur": "Survie"
+    },
+    "ChatMessage": {
+      "Action": {
+        "Graze": "Éraflure: Réduire la concentration",
+        "ApplyDamage": "Appliquer les dégâts",
+        "ApplyGraze": "Appliquer les dégâts d'éraflure",
+        "ApplyHealing": "Appliquer les soins"
+      },
+      "ApplyDamage": "[actor] subit [amount] de dégâts",
+      "ApplyHealing": "[actor] récupère [amount] de santé",
+      "ViewRollsDetails": "Détails des lancés",
+      "InjuryDuration": "Durée de la blessure.",
+      "Welcome": "<h2>Bienvenue dans le système de RPG Cosmère !</h2> <p>Merci d'essayer le système de jeu de rôle Cosmère développé par la communauté ! Vous utilisez actuellement la version <strong>[version]</strong>. Étant donné qu'il s'agit d'une version préliminaire, certains bugs ou fonctionnalités manquantes peuvent être attendus, mais vos retours nous aideront à améliorer le système.</p> <p>Si vous rencontrez des problèmes ou avez des suggestions, nous aimerions avoir de vos nouvelles ! Merci de les signaler sur notre <a href=\"https://github.com/stanavdb/cosmere-rpg/issues\">page de tickets GitHub</a>, et assurez-vous de consulter les <a href=\"https://github.com/stanavdb/cosmere-rpg/blob/main/CONTRIBUTING.md\">règles de contribution</a> si vous souhaitez participer au développement.</p> <p>Pour des discussions, des mises à jour et du support, rejoignez-nous sur le <a href=\"https://discord.gg/B9Zam3qdZt\">serveur Discord officiel du RPG Cosmère</a>. Vous pouvez nous trouver dans <em>vtt-discussion > Foundry VTT System Development</em>.</p> <p>Nous sommes ravis de vous avoir à bord et espérons que vous apprécierez de jouer dans le Cosmère !</p>",
+    }
+  },
+  "DICE": {
+    "RollMode": "Mode de lancé",
+    "Plot": {
+      "Die": "Dé de narration",
+      "RaiseTheStakes": "Augmenter les enjeux",
+      "Complication": "Complication",
+      "Opportunity": "Opportunité"
+    },
+    "AdvantageMode": {
+      "None": "None",
+      "Advantage": "Avantage",
+      "Disadvantage": "Désavantage"
+    },
+    "Damage": {
+      "Label": "Dégâts",
+      "Apply": "Appliquer",
+      "Graze": "Érafler"
+    }
+  },
+  "ROLLS": {
+    "Recovery": "[character] lance son dé de récupération.",
+    "RecoveryTend": "Soigné par [tender]."
+  },
+  "DIALOG": {
+    "ItemConsume": {
+      "Title": "Consumer la ressource",
+      "ShouldConsume": "Consumer la ressource ?"
+    },
+    "EditExpertise": {
+      "Remove": "Supprimer",
+      "Add": "Ajouter une expertise personnalisée",
+      "AddPlaceholder": "Expertise personnalisée"
+    },
+    "ConfigureResource": {
+      "Title": "Configurer le maximum {resource}: {actor}"
+    },
+    "LongRest": {
+      "ShouldPerform": "Réaliser le repos long ?"
+    },
+    "ShortRest": {
+      "Title": "Repos court",
+      "TendedToBy": "Soigné par"
+    },
+    "ConfigureDefense": {
+      "Title": "Configurer la défense {attribute-group} : {actor}"
+    },
+    "ConfigureMovementRate": {
+      "Title": "Configurer la vitesse de déplacement: {actor}"
+    },
+    "ConfigureSensesRange": {
+      "Title": "Configurer la portée des sens: {actor}",
+      "ObscuredUnaffected": "Non affecté par les sens obscurcis"
+    },
+    "ConfigureRecoveryDie": {
+      "Title": "Configurer le dé de récupération : {actor}"
+    },
+    "EditTalentPrerequisite": {
+      "Title": "Modifier les prérequis"
+    },
+    "ConfigureAttack": {
+      "AdvantageMode": {
+        "Title": "Mode d'avantage",
+        "Field": {
+          "Type": "Type",
+          "Dice": "Dé"
+        }
+      }
+    }
+  },
+  "GENERIC": {
+    "Unknown": "Inconnu",
+    "None": "Aucun",
+    "Default": "Défaut",
+    "Formula": "Formule",
+    "Value": "Valeur",
+    "Skill": "Compétence",
+    "Attribute": "Attribut",
+    "SkillTest": "Test de compétence",
+    "Plot": "Narration",
+    "Damage": "Dégât",
+    "Cost": "Coût",
+    "Configure": "Configurer",
+    "DistanceUnit": "pied",
+    "ViewDetails": "Afficher détails",
+    "HideDetails": "Masquer détails",
+    "Bonus": "Bonus",
+    "Mode": "Mode",
+    "Turns": "Tours",
+    "Rounds": "Rounds",
+    "Button": {
+      "Roll": "Lancer",
+      "Continue": "Continuer",
+      "Remove": "Supprimer",
+      "Edit": "Modifier",
+      "Save": "Sauvegarder",
+      "Cancel": "Annuler",
+      "Update": "Mettre à jour"
+    },
+    "Notification": {
+      "GrazeFocusSpent": "Réduit le focus de 1"
+    },
+    "Warning": {
+      "NotImplemented": "Désolé ! [action] n'est pas implémenté pour l'instant",
+      "NoActor": "Aucun acteur sélectionné ou assigné trouvé pour ce lancé",
+      "NotEnoughResource": "Ne peux pas consommer, pas assez de ressource",
+      "NotEnoughUses": "Ne peux pas consommer, pas assez d'activations restante",
+      "ItemConsumeResourceNotConfigured": "La ressource sélectionnée pour être consommée n'est pas configurée sur cet objet",
+      "NoDuplicateExpertises": "Impossible de dupliquer une expertise",
+      "NoFocus": "Pas assez de focus pour réaliser cette action",
+      "TalentCannotBePrerequisiteOfItself": "Un talent ne peut pas être son propre prérequis",
+      "DuplicatePrerequisiteTalentRef": "Un talent avec l'identifiant {talentId} existe déjà ({talentName})"
+    },
+    "DerivedValue": {
+      "Mode": {
+        "Derived": "Derivé",
+        "Override": "Personnalisé"
+      }
+    },
+    "Units": {
+      "Days": "Jours"
+    }
+  },
+  "TYPES": {
+    "Actor": {
+      "character": "Personnage",
+      "adversary": "Adversaire"
+    },
+    "Item": {
+      "culture": "Culture",
+      "path": "Voie",
+      "connection": "Connexion",
+      "injury": "Blessure",
+      "specialty": "Spécialité",
+      "loot": "Butin",
+      "armor": "Armure",
+      "trait": "Trait",
+      "action": "Action",
+      "talent": "Talent",
+      "equipment": "Équipment",
+      "weapon": "Arme"
+    }
+  },
+  "UNITS": {
+    "Distance": {
+      "Feet": "Pied"
+    }
+  }
+}
