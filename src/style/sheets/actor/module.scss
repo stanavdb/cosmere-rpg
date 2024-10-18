@@ -4,6 +4,72 @@
 .sheet.actor {
     overflow: visible;
 
+    .decorations {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+
+        width: 100%;
+        height: 100%;
+        border: none;
+
+        .top.left {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+
+            top: calc(-2.25rem - 3px);
+            left: -3px;
+
+            path {
+                fill: var(--plotweaver-color-accent);
+            }
+        }
+
+        .top.right {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            transform: scale(-1, 1);
+
+            top: calc(-2.25rem - 3px);
+            right: -3px;
+
+            path {
+                fill: var(--plotweaver-color-accent);
+            }
+        }
+
+        .bot.left {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            transform: scale(1, -1);
+
+            bottom: -3px;
+            left: -3px;
+
+            path {
+                fill: var(--plotweaver-color-accent);
+            }
+        }
+
+        .bot.right {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            transform: scale(-1, -1);
+
+            bottom: -3px;
+            right: -3px;
+
+            path {
+                fill: var(--plotweaver-color-accent);
+            }
+        }
+    }
+
     .window-content {
         overflow: visible;
     }
@@ -39,7 +105,7 @@
         flex-direction: column;
         position: absolute;
 
-        left: 100%;
+        left: calc(100% + 2px);
         top: 15%;
         gap: 0.5rem;
 
@@ -52,7 +118,7 @@
 
             color: var(--plotweaver-color-faded);
             background: var(--plotweaver-color-sheet);
-            border: 1px solid var(--plotweaver-color-base-6);
+            border: 1px solid var(--plotweaver-color-accent);
             border-top-right-radius: 0.3rem;
             border-bottom-right-radius: 0.3rem;
 
@@ -80,9 +146,14 @@
                 color: var(--plotweaver-color-off-white);
             }
 
-            .details {
-                // Ancestry and other details
+            .document-name{
+                text-transform: capitalize;
                 color: var(--plotweaver-color-accent);
+            }
+
+            .details {
+                text-transform: uppercase;
+                color: var(--plotweaver-color-faded);
                 font-size: 10pt;
                 margin-top: 0.3rem;
 
@@ -115,22 +186,37 @@
                     color: var(--plotweaver-color-faded);
                     text-transform: uppercase;
                     font-size: 8pt;
+                    z-index: 1;
                 }
 
                 .container {
+                    position: relative;
                     display: flex;
                     align-content: center;
                     text-align: center;
 
                     background-color: var(--plotweaver-color-sheet);
-                    border: 2pt solid var(--plotweaver-color-accent);
                     border-radius: 50%;
                     width: 3rem;
                     height: 3rem;
-                    padding: 0.2rem;
+
+                    svg {
+                        position: absolute;
+                        left: -0.5rem;
+                        top: -0.6rem;
+                        width: 4rem;
+                        height: 4rem;
+
+                        path {
+                            fill: var(--plotweaver-color-base-4);
+                        }
+                    }
 
                     .value {
                         width: 100%;
+                        padding: 0.3rem;
+                        color: var(--plotweaver-color-accent);
+                        z-index: 1;
                     }
                 }
             }
@@ -144,13 +230,12 @@
         align-items: flex-start;
         flex: 1;
 
-
         .col-left {
             height: 100%;
             display: flex;
             flex-direction: column;
 
-            width: 25%;
+            width: 26%;
             flex: unset;
         }
 
@@ -164,6 +249,7 @@
             .tab-body {
                 flex: 1;
                 display: flex;
+                padding-top: 0.25rem;
 
                 .tab {
                     flex: 1;
@@ -177,14 +263,14 @@
                 width: 100%;
 
                 section.skills {
-                    margin-right: 0.25rem;
+                    margin: 0 0.25rem;
                 }
 
                 section.paths {
                     display: flex;
                     flex-direction: column;
                     height: 100%;
-                    margin-left: 0.25rem;
+                    margin: 0 0.25rem;
                 }
             }
         }
@@ -257,7 +343,6 @@ app-actor-details {
 
         .deflect {
             position: absolute;
-            left: calc(50% - 1rem);
             top: calc(100% - 1rem);
         }
     }
@@ -278,17 +363,24 @@ app-actor-details {
             }
 
             .container {
-                width: 4rem;
-                height: 2rem;
+                width: 54px;
+                height: 26px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-
-                border: 1px solid var(--plotweaver-color-base-5);
                 padding: 0.1rem 0.4rem;
-                border-radius: 0.3rem;
 
                 background-color: var(--plotweaver-color-sheet);
+
+                svg {
+                    position: absolute;
+                    width: 58px;
+                    height: 30px;
+
+                    path {
+                        fill: var(--plotweaver-color-base-5);
+                    }
+                }
 
                 .value {
                     color: var(--plotweaver-color-off-white);
@@ -312,14 +404,14 @@ app-actor-details {
 
     .deflect {
         // Deflect shield
-        background-color: var(--plotweaver-color-sheet); // url("/systems/cosmere-rpg/assets/icons/ui/border_deflect.svg");
-        width: 2rem;
-        height: 2.3rem;
-
         display: flex;
         align-items: center;
         justify-content: center;
-        border: 2px solid var(--plotweaver-color-accent);
+        background-color: var(--plotweaver-color-sheet); // url("/systems/cosmere-rpg/assets/icons/ui/border_deflect.svg");
+
+        // Approximation of background
+        width: calc(2rem - 3px);
+        height: calc(2.25rem - 3px);
         border-bottom-left-radius: 50%;
         border-bottom-right-radius: 50%;
 
@@ -328,12 +420,23 @@ app-actor-details {
             margin-top: 0.075rem;
             margin-bottom: 0.2rem;
         }
+
+        svg {
+            position: absolute;
+            width: 32px;
+            height: 38px;
+
+            path {
+                fill: var(--plotweaver-color-accent);
+            }
+        }
     }
 }
 
 app-actor-resource {
     display: flex;
     flex-direction: column;
+    position: relative;
 
     .resource {
         display: flex;
@@ -353,27 +456,39 @@ app-actor-resource {
                 text-transform: uppercase;
                 font-size: 8pt;
                 margin-left: 0.6rem;
+                height: 17px;
+            }
+        }
+
+        svg {
+            position: absolute;
+            width: 100%;
+            height: 2.25rem;
+            z-index: 1;
+            top: 1rem;
+
+            path {
+                fill: var(--plotweaver-color-base-5);
             }
         }
 
         .bar {
-            width: 100%;
-            height: 2.2rem;
+            width: calc(100% - 3px);
+            height: calc(2.25rem - 5px);
             display: flex;
             position: relative;
-
-            border: 1px solid var(--plotweaver-color-base-5);
-            border-radius: 0.5rem;
-            overflow: hidden;
+            margin: 2px;
 
             &.editable {
                 cursor: pointer;
             }
 
             .value {
+                position: relative;
                 z-index: 1;
                 margin-left: 1rem;
                 text-shadow: 0 0 0.3rem black;
+                bottom: 3px;
 
                 .delim {
                     font-weight: normal;
@@ -494,7 +609,7 @@ app-actor-attributes {
         height: 100%;
 
         > .label {
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.5rem;
 
             color: var(--plotweaver-color-accent);
             text-align: center;
@@ -560,7 +675,18 @@ app-actor-attributes {
         align-items: center;
 
         flex: unset;
-        margin-top: -1rem;
+        margin-top: -0.5rem;
+
+        svg {
+            position: absolute;
+            width: 40px;
+            height: 50px;
+            margin-top: 2px;
+
+            path {
+                fill: var(--plotweaver-color-accent)
+            }
+        }
 
         .defense-box {
             display: flex;
@@ -568,15 +694,13 @@ app-actor-attributes {
             justify-content: center;
             position: relative;
 
+            // approximation for the background
             background-color: var(--plotweaver-color-base-1);
-            border: 1px solid var(--plotweaver-color-accent);
             border-bottom-left-radius: 50%;
             border-bottom-right-radius: 50%;
-
             padding-bottom: 0.2rem;
-
-            width: 2.5rem;
-            height: 2.5rem;
+            width: calc(40px - 0.2rem);
+            height: calc(50px - 0.2rem);
 
             .value {
                 font-size: 13pt;
@@ -1033,14 +1157,80 @@ app-actor-effects-list {
 
 app-actor-skills-group,
 app-adversary-skills-group {
+    position: relative;
+
     &:has(> *) {
         display: flex;
         padding: 0.4rem 0.2rem;
         margin-bottom: 0.75rem;
-        border-radius: 0.3rem;
 
-        border: 1px solid var(--plotweaver-color-base-4);
+        border: 1px solid var(--plotweaver-color-base-5);
         background: var(--plotweaver-color-base-1);
+    }
+
+    .skill-decorations {
+        pointer-events: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        width: 100%;
+        height: 100%;
+
+        .top.left {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+
+            top: -3px;
+            left: -3px;
+
+            path {
+                fill: var(--plotweaver-color-base-5);
+            }
+        }
+
+        .top.right {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            transform: scale(-1, 1);
+
+            top: -3px;
+            right: -3px;
+
+            path {
+                fill: var(--plotweaver-color-base-5);
+            }
+        }
+
+        .bot.left {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            transform: scale(1, -1);
+
+            bottom: -3px;
+            left: -3px;
+
+            path {
+                fill: var(--plotweaver-color-base-5);
+            }
+        }
+
+        .bot.right {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            transform: scale(-1, -1);
+
+            bottom: -3px;
+            right: -3px;
+
+            path {
+                fill: var(--plotweaver-color-base-5);
+            }
+        }
     }
 
     .skill-list {

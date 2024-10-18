@@ -1,6 +1,113 @@
+.sheet.actor.adversary.minimized {border: none;}
+
 .sheet.actor.adversary {
-    border: 1px solid var(--plotweaver-color-base-6);
+    border: 3px solid var(--plotweaver-color-base-6);
     background: linear-gradient(var(--plotweaver-color-sheet) 35%, transparent);
+
+    .decorations {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+
+        width: 100%;
+        height: 100%;
+        border: none;
+
+        .top.left {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+
+            top: calc(-2.25rem - 3px);
+            left: -3px;
+
+            path {
+                fill: var(--plotweaver-color-base-6);
+            }
+        }
+
+        .top.right {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            transform: scale(-1, 1);
+
+            top: calc(-2.25rem - 3px);
+            right: -3px;
+
+            path {
+                fill: var(--plotweaver-color-base-6);
+            }
+        }
+
+        .bot.left {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            transform: scale(1, -1);
+
+            bottom: -3px;
+            left: -3px;
+
+            path {
+                fill: var(--plotweaver-color-base-6);
+            }
+        }
+
+        .bot.right {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            transform: scale(-1, -1);
+
+            bottom: -3px;
+            right: -3px;
+
+            path {
+                fill: var(--plotweaver-color-base-6);
+            }
+        }
+    }
+
+    nav {
+        > a {
+            border: 1px solid var(--plotweaver-color-base-6);
+        }
+    }
+
+    .sheet-header {
+        .title {
+            .document-name{
+                text-transform: capitalize;
+                color: var(--plotweaver-color-accent);
+            }
+
+            .details {
+                text-transform: uppercase;
+                color: var(--plotweaver-color-faded);
+            }
+        }
+
+        .level-details {
+            .level {
+                .container {
+                    position: relative;
+                    border-radius: 5%;
+
+                    svg {
+                        position: absolute;
+                        width: 3rem;
+                        left: 0;
+
+                        path {
+                            fill: var(--plotweaver-color-base-6);
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     section.skills {
         margin-top: 1rem;
@@ -39,7 +146,7 @@
     }
 
     app-actor-details{
-        .deflect {
+        .deflect { // Placeholder as bg svg / mask is not yet ready
             border: 1px solid var(--plotweaver-color-base-5);
         }
     }

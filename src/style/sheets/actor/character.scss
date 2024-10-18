@@ -1,6 +1,12 @@
+.sheet.actor.character.minimized {border: none;}
+
 .sheet.actor.character {
-    border: 1px solid var(--plotweaver-color-base-6);
+    border: 3px solid var(--plotweaver-color-accent);
     background: linear-gradient(var(--plotweaver-color-sheet) 35%, transparent);
+
+    .minimized {
+        border: none;
+    }
 
     .sheet-header {
         .title {
