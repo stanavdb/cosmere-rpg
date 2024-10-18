@@ -4,6 +4,72 @@
 .sheet.actor {
     overflow: visible;
 
+    .decorations {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+
+        width: 100%;
+        height: 100%;
+        border: none;
+
+        .top.left {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+
+            top: calc(-2.25rem - 3px);
+            left: -3px;
+
+            path {
+                fill: var(--plotweaver-color-accent);
+            }
+        }
+
+        .top.right {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            transform: scale(-1, 1);
+
+            top: calc(-2.25rem - 3px);
+            right: -3px;
+
+            path {
+                fill: var(--plotweaver-color-accent);
+            }
+        }
+
+        .bot.left {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            transform: scale(1, -1);
+
+            bottom: -3px;
+            left: -3px;
+
+            path {
+                fill: var(--plotweaver-color-accent);
+            }
+        }
+
+        .bot.right {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            transform: scale(-1, -1);
+
+            bottom: -3px;
+            right: -3px;
+
+            path {
+                fill: var(--plotweaver-color-accent);
+            }
+        }
+    }
+
     .window-content {
         overflow: visible;
     }
@@ -34,30 +100,38 @@
     }
 
     nav {
+        // Tab icons and navigation
         border: none;
         flex-direction: column;
         position: absolute;
-        left: 100%;
+
+        left: calc(100% + 2px);
         top: 15%;
+        gap: 0.5rem;
 
         > a {
-            background: rgba(11, 10, 19, 0.9);
             width: 2.88867rem;
             height: 2.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid #302831;
+
+            color: var(--plotweaver-color-faded);
+            background: var(--plotweaver-color-sheet);
+            border: 1px solid var(--plotweaver-color-accent);
             border-top-right-radius: 0.3rem;
             border-bottom-right-radius: 0.3rem;
 
             &.active {
-                background-color: rgb(45 41 77 / 90%);
+                color: var(--plotweaver-color-accent);
+                background-color: var(--plotweaver-color-base-4);
             }
         }
     }
 
     .sheet-header {
+        width: 100%;
+        padding: 0 0.5rem;
         margin-bottom: 1rem;
 
         .title {
@@ -68,15 +142,22 @@
                 margin: 0;
                 text-align: left;
                 font-size: inherit;
+                background-color: var(--plotweaver-color-base-3);
+                color: var(--plotweaver-color-off-white);
+            }
+
+            .document-name{
+                text-transform: capitalize;
+                color: var(--plotweaver-color-accent);
             }
 
             .details {
                 text-transform: uppercase;
+                color: var(--plotweaver-color-faded);
                 font-size: 10pt;
                 margin-top: 0.3rem;
 
                 .delim {
-                    margin: 0.2rem;
                     opacity: 0.5;
                 }
 
@@ -100,22 +181,52 @@
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                margin-left: 0.5rem;
 
                 .label {
+                    color: var(--plotweaver-color-faded);
                     text-transform: uppercase;
-                    font-size: 7.5pt;
+                    font-size: 8pt;
+                    z-index: 1;
                 }
 
                 .container {
-                    border: 1px solid;
-                    padding: 0.2rem;
+                    position: relative;
+                    display: flex;
+                    align-content: center;
+                    text-align: center;
+
+                    background-color: var(--plotweaver-color-sheet);
+                    border-radius: 50%;
+                    width: 3rem;
+                    height: 3rem;
+
+                    svg {
+                        position: absolute;
+                        left: -0.5rem;
+                        top: -0.6rem;
+                        width: 4rem;
+                        height: 4rem;
+
+                        path {
+                            fill: var(--plotweaver-color-base-4);
+                        }
+                    }
+
+                    .value {
+                        width: 100%;
+                        padding: 0.3rem;
+                        color: var(--plotweaver-color-accent);
+                        z-index: 1;
+                    }
                 }
             }
         }
     }
 
     .sheet-content {
+        // Positioning of content
+        width: 100%;
+        padding: 0.5rem;
         align-items: flex-start;
         flex: 1;
 
@@ -124,7 +235,7 @@
             display: flex;
             flex-direction: column;
 
-            width: 25%;
+            width: 26%;
             flex: unset;
         }
 
@@ -132,12 +243,13 @@
             flex: 1;
             display: flex;
             flex-direction: column;
+            margin-left: 1rem;
             height: 100%;
-            padding: 0 1rem;
 
             .tab-body {
                 flex: 1;
                 display: flex;
+                padding-top: 0.25rem;
 
                 .tab {
                     flex: 1;
@@ -151,14 +263,14 @@
                 width: 100%;
 
                 section.skills {
-                    margin-right: 0.25rem;
+                    margin: 0 0.25rem;
                 }
 
                 section.paths {
                     display: flex;
                     flex-direction: column;
                     height: 100%;
-                    margin-left: 0.25rem;
+                    margin: 0 0.25rem;
                 }
             }
         }
@@ -174,33 +286,44 @@
 /* --- Components --- */
 
 app-actor-details {
+    // Actor image and derived statistics
     display: flex;
     flex-direction: column;
     margin-bottom: 1rem;
 
     .portrait-info {
+        // Character sheet portrait values
         display: flex;
         position: relative;
         justify-content: center;
 
         .portrait {
+            display: flex;
+
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+
             border: 0.3rem solid;
             border-radius: 50%;
-            overflow: hidden;
-            display: flex;
             filter: drop-shadow(2px 4px 6px black);
+            border-color: var(--plotweaver-color-accent);
 
             img {
+                min-width: 100%;
+                object-fit: cover;
+                object-position: top;
                 border: none;
             }
         }
 
         a.rest {
+            // Short and Long Rest buttons
             position: absolute;
-            background: white;
+            background: var(--plotweaver-color-accent);
             width: 1.3rem;
             height: 1.3rem;
-            color: black;
+            color: var(--plotweaver-color-sheet);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -220,13 +343,14 @@ app-actor-details {
 
         .deflect {
             position: absolute;
-            left: calc(50% - 1rem);
             top: calc(100% - 1rem);
         }
     }
 
     .derived-statistics {
-        margin-top: 1rem;
+        // Movement, Recover and Sense derived statistics
+        margin-top: 1.75rem;
+        gap: 0.25rem;
 
         .derived-stat {
             display: flex;
@@ -235,25 +359,36 @@ app-actor-details {
 
             &.movement,
             &.senses {
-                transform: translateY(-1rem);
+                transform: translateY(-1.20rem);
             }
 
             .container {
-                width: 4rem;
-                height: 2rem;
+                width: 54px;
+                height: 26px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-
-                border: 2px solid;
                 padding: 0.1rem 0.4rem;
-                border-radius: 0.3rem;
+
+                background-color: var(--plotweaver-color-sheet);
+
+                svg {
+                    position: absolute;
+                    width: 58px;
+                    height: 30px;
+
+                    path {
+                        fill: var(--plotweaver-color-base-5);
+                    }
+                }
 
                 .value {
+                    color: var(--plotweaver-color-off-white);
                     font-size: 14pt;
                 }
 
                 .unit {
+                    color: var(--plotweaver-color-faded);
                     text-transform: uppercase;
                     font-size: 8pt;
                 }
@@ -268,12 +403,15 @@ app-actor-details {
     }
 
     .deflect {
-        background: rgb(11 10 19 / 100%);
-        width: 2rem;
+        // Deflect shield
         display: flex;
         align-items: center;
         justify-content: center;
-        border: 2px solid;
+        background-color: var(--plotweaver-color-sheet); // url("/systems/cosmere-rpg/assets/icons/ui/border_deflect.svg");
+
+        // Approximation of background
+        width: calc(2rem - 3px);
+        height: calc(2.25rem - 3px);
         border-bottom-left-radius: 50%;
         border-bottom-right-radius: 50%;
 
@@ -282,12 +420,23 @@ app-actor-details {
             margin-top: 0.075rem;
             margin-bottom: 0.2rem;
         }
+
+        svg {
+            position: absolute;
+            width: 32px;
+            height: 38px;
+
+            path {
+                fill: var(--plotweaver-color-accent);
+            }
+        }
     }
 }
 
 app-actor-resource {
     display: flex;
     flex-direction: column;
+    position: relative;
 
     .resource {
         display: flex;
@@ -302,31 +451,44 @@ app-actor-resource {
             padding-right: 0.5rem;
 
             .label {
+                color: var(--plotweaver-color-faded);
                 flex: 1;
                 text-transform: uppercase;
-                font-size: 9pt;
+                font-size: 8pt;
                 margin-left: 0.6rem;
+                height: 17px;
+            }
+        }
+
+        svg {
+            position: absolute;
+            width: 100%;
+            height: 2.25rem;
+            z-index: 1;
+            top: 1rem;
+
+            path {
+                fill: var(--plotweaver-color-base-5);
             }
         }
 
         .bar {
-            width: 100%;
-            height: 2.47rem;
+            width: calc(100% - 3px);
+            height: calc(2.25rem - 5px);
             display: flex;
             position: relative;
-
-            border: 2px solid;
-            border-radius: 0.75rem;
-            overflow: hidden;
+            margin: 2px;
 
             &.editable {
                 cursor: pointer;
             }
 
             .value {
+                position: relative;
                 z-index: 1;
                 margin-left: 1rem;
                 text-shadow: 0 0 0.3rem black;
+                bottom: 3px;
 
                 .delim {
                     font-weight: normal;
@@ -370,30 +532,69 @@ app-actor-resource {
 
         &.hea {
             .bar {
-                background: darkred;
+                background: var(--plotweaver-color-health-back);
 
                 .inner-bar {
-                    background: green;
+                    background: var(--plotweaver-color-health-front);
+                }
+
+                .inner-bar:after {
+                    content: "";
+                    display: block;
+                    width: 25%;
+                    height: 100%;
+                    position: relative;
+                    left: 100%;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    background: linear-gradient(90deg, var(--plotweaver-color-health-front), transparent);
+                    pointer-events: none;
                 }
             }
         }
 
         &.foc {
             .bar {
-                background: #220040;
+                background: var(--plotweaver-color-focus-back);
 
                 .inner-bar {
-                    background: #5f00b2;
+                    background: var(--plotweaver-color-focus-front);
+                }
+
+                .inner-bar:after {
+                    content: "";
+                    display: block;
+                    width: 25%;
+                    height: 100%;
+                    position: relative;
+                    left: 100%;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    background: linear-gradient(90deg, var(--plotweaver-color-focus-front), transparent);
+                    pointer-events: none;
                 }
             }
         }
 
         &.inv {
             .bar {
-                background: #191e32;
+                background: var(--plotweaver-color-invest-back);
 
                 .inner-bar {
-                    background: #516bd2;
+                    background: var(--plotweaver-color-invest-front);
+                }
+
+                .inner-bar:after {
+                    content: "";
+                    display: block;
+                    width: 25%;
+                    height: 100%;
+                    position: relative;
+                    left: 100%;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    background: linear-gradient(90deg, var(--plotweaver-color-invest-front), transparent);
+                    pointer-events: none;
                 }
             }
         }
@@ -408,6 +609,9 @@ app-actor-attributes {
         height: 100%;
 
         > .label {
+            margin-bottom: 0.5rem;
+
+            color: var(--plotweaver-color-accent);
             text-align: center;
             font-size: 12pt;
             text-transform: uppercase;
@@ -431,6 +635,8 @@ app-actor-attributes {
             margin-bottom: -1.6rem;
             z-index: 1;
             font-size: 8pt;
+
+            color: var(--plotweaver-color-faded);
         }
 
         .value {
@@ -446,12 +652,18 @@ app-actor-attributes {
         &:first-child {
             .value input {
                 border-bottom-left-radius: 1rem;
+                color: var(--plotweaver-color-off-white);
+                background-color: var(--plotweaver-color-base-2);
+                border: 1px solid var(--plotweaver-color-base-6);
             }
         }
 
         &:last-child {
             .value input {
                 border-bottom-right-radius: 1rem;
+                color: var(--plotweaver-color-off-white);
+                background-color: var(--plotweaver-color-base-2);
+                border: 1px solid var(--plotweaver-color-base-6);
             }
         }
     }
@@ -463,7 +675,18 @@ app-actor-attributes {
         align-items: center;
 
         flex: unset;
-        margin-top: -1rem;
+        margin-top: -0.5rem;
+
+        svg {
+            position: absolute;
+            width: 40px;
+            height: 50px;
+            margin-top: 2px;
+
+            path {
+                fill: var(--plotweaver-color-accent)
+            }
+        }
 
         .defense-box {
             display: flex;
@@ -471,14 +694,13 @@ app-actor-attributes {
             justify-content: center;
             position: relative;
 
-            border: 1px solid #463a47;
+            // approximation for the background
+            background-color: var(--plotweaver-color-base-1);
             border-bottom-left-radius: 50%;
             border-bottom-right-radius: 50%;
-
             padding-bottom: 0.2rem;
-
-            width: 2.5rem;
-            height: 2.5rem;
+            width: calc(40px - 0.2rem);
+            height: calc(50px - 0.2rem);
 
             .value {
                 font-size: 13pt;
@@ -790,7 +1012,7 @@ app-actor-search-bar {
     .search-bar {
         position: relative;
         padding-right: 0.5rem;
-        background: #302831;
+        background: var(--plotweaver-color-base-1);
         display: flex;
         align-items: center;
         border-radius: 0.3rem;
@@ -803,8 +1025,10 @@ app-actor-search-bar {
         }
 
         input {
+            // gets overwritten
             padding-left: 2rem !important;
-            color: #d0b8a3;
+            color: var(--plotweaver-color-off-white) !important;
+            background-color: var(--plotweaver-color-base-1) !important;
 
             &::placeholder {
                 color: #e7d1b14a;
@@ -829,14 +1053,14 @@ app-actor-conditions {
     flex-direction: column;
     width: 100%;
 
-    background: #302831;
     margin-top: 1rem;
     border-radius: 0.3rem;
     overflow: hidden;
+    border: 1px solid var(--plotweaver-color-base-4);
 
     .header {
         height: 2rem;
-        background: #0f0610;
+        background: var(--plotweaver-color-base-1);
         display: flex;
         align-items: center;
         padding: 0 0.5rem;
@@ -852,21 +1076,24 @@ app-actor-conditions {
     }
 
     .condition {
+        color: var(--plotweaver-color-accent);
+        background-color: var(--plotweaver-color-base-1);
         display: flex;
         height: 2rem;
         align-items: center;
         padding: 0 0.5rem;
 
         &:not(:nth-last-child(-n + 3)) {
-            border-bottom: 1pt dashed #ffffff4d;
+            border-bottom: 1pt dashed var(--plotweaver-color-base-6);
         }
 
         &:not(:nth-child(3n)) {
-            border-right: 1pt dashed #ffffff4d;
+            border-right: 1pt dashed var(--plotweaver-color-base-6);
         }
 
         &:not(.active) > a {
             opacity: 0.3;
+            color: var(--plotweaver-color-off-white);
 
             &:hover {
                 opacity: 1;
@@ -892,6 +1119,36 @@ app-actor-conditions {
     }
 }
 
+app-actor-injuries-list,
+app-actor-equipment-list {
+    display: flex;
+    flex-direction: column;
+
+    color: var(--plotweaver-color-off-white);
+    overflow: hidden;
+
+    .injuries-list,
+    .equipment-list {
+        border: 1px solid var(--plotweaver-color-base-4);
+        border-radius: 0.3rem;
+
+        .injury.header,
+        .item.header {
+            height: 2rem;
+            background: var(--plotweaver-color-base-1) !important;
+            display: flex;
+            align-items: center;
+            padding: 0 0.5rem;
+        }
+
+        .injury.item,
+        .item.usable,
+        .details.expanded {
+            background: var(--plotweaver-color-base-1);
+        }
+    }
+}
+
 app-actor-effects-list {
     .effects-list:not(.editable) {
         pointer-events: none;
@@ -900,17 +1157,84 @@ app-actor-effects-list {
 
 app-actor-skills-group,
 app-adversary-skills-group {
+    position: relative;
+
     &:has(> *) {
         display: flex;
         padding: 0.4rem 0.2rem;
-        margin-bottom: 0.5rem;
-        border-radius: 0.3rem;
+        margin-bottom: 0.75rem;
 
-        border: 1px solid #463a47;
-        background: #0b0a13;
+        border: 1px solid var(--plotweaver-color-base-5);
+        background: var(--plotweaver-color-base-1);
+    }
+
+    .skill-decorations {
+        pointer-events: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        width: 100%;
+        height: 100%;
+
+        .top.left {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+
+            top: -3px;
+            left: -3px;
+
+            path {
+                fill: var(--plotweaver-color-base-5);
+            }
+        }
+
+        .top.right {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            transform: scale(-1, 1);
+
+            top: -3px;
+            right: -3px;
+
+            path {
+                fill: var(--plotweaver-color-base-5);
+            }
+        }
+
+        .bot.left {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            transform: scale(1, -1);
+
+            bottom: -3px;
+            left: -3px;
+
+            path {
+                fill: var(--plotweaver-color-base-5);
+            }
+        }
+
+        .bot.right {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            transform: scale(-1, -1);
+
+            bottom: -3px;
+            right: -3px;
+
+            path {
+                fill: var(--plotweaver-color-base-5);
+            }
+        }
     }
 
     .skill-list {
+        color: var(--plotweaver-color-off-white);
         flex: 1;
         display: flex;
         flex-direction: column;
