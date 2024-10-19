@@ -473,6 +473,7 @@ export async function preloadHandlebarsTemplates() {
         'systems/cosmere-rpg/templates/item/specialty/partials/specialty-details-tab.hbs',
         'systems/cosmere-rpg/templates/item/loot/partials/loot-details-tab.hbs',
         'systems/cosmere-rpg/templates/item/armor/partials/armor-details-tab.hbs',
+        'systems/cosmere-rpg/templates/item/ancestry/partials/ancestry-details-tab.hbs',
         'systems/cosmere-rpg/templates/item/talent/partials/talent-details-tab.hbs',
         'systems/cosmere-rpg/templates/combat/combatant.hbs',
         'systems/cosmere-rpg/templates/chat/parts/roll-details.hbs',
