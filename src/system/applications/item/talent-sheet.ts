@@ -68,20 +68,6 @@ export class TalentItemSheet extends BaseItemSheet {
         )
             formData.set('system.path', null);
 
-        // Get modality
-        const hasModality = formData.get('hasModality') === 'true';
-
-        // Set modality
-        if (hasModality && this.item.system.modality === null) {
-            formData.set('system.modality', '<id>');
-        } else if (!hasModality && this.item.system.modality !== null) {
-            formData.set('system.modality', null);
-        }
-
-        if (hasModality && formData.get('system.modality') === '') {
-            formData.set('system.modality', '<id>');
-        }
-
         // Invoke super
         super.onFormEvent(event, form, formData);
     }

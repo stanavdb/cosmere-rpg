@@ -6,6 +6,7 @@ import './details-equip';
 import './details-activation';
 import './details-attack';
 import './details-damage';
+import './details-modality';
 import './properties';
 import './talent-prerequisites';
 import './advancement-talent-list';

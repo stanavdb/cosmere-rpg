@@ -240,6 +240,21 @@ export class BaseItemSheet extends TabsApplicationMixin(
             });
         }
 
+        if (this.item.hasModality()) {
+            // Get modality enabled
+            const modalityEnabled = formData.get('modalityEnabled') === 'true';
+
+            // Set modality
+            if (modalityEnabled && this.item.system.modality === null) {
+                formData.set('system.modality', '<id>');
+            } else if (!modalityEnabled && this.item.system.modality !== null) {
+                formData.set('system.modality', null);
+            }
+
+            // Remove modality enabled
+            formData.delete('modalityEnabled');
+        }
+
         // Update the document
         void this.item.update(formData.object);
     }

@@ -51,29 +51,7 @@
 
     {{app-item-details-activation}}
     {{app-item-details-damage}}
-
-    <h5>{{localize "COSMERE.Item.Sheet.Talent.Modality.Label"}}</h5>
-    <div class="form-group">
-        <label>{{localize "COSMERE.Item.Sheet.Talent.Modality.HasModality"}}</label>
-        <input type="checkbox" 
-            name="hasModality"
-            {{#if @root.hasModality}}
-            checked
-            {{/if}}
-        >
-    </div>
-    {{#if @root.hasModality}}
-    <div class="form-group">
-        <label>{{localize @root.systemFields.modality.label}}</label>
-        {{app-id-input
-            name="system.modality"
-            value=@root.item.system.modality
-        }}
-    </div>
-    <p class="hint">
-        {{localize @root.systemFields.modality.hint}}
-    </p>
-    {{/if}}
+    {{app-item-details-modality}}
 </div>
 
 {{/with}}

@@ -38,6 +38,7 @@ import { TraitsItemData } from '@system/data/item/mixins/traits';
 import { EquippableItemData } from '@system/data/item/mixins/equippable';
 import { DescriptionItemData } from '@system/data/item/mixins/description';
 import { IdItemData } from '@system/data/item/mixins/id';
+import { ModalityItemData } from '@system/data/item/mixins/modality';
 
 // Rolls
 import {
@@ -199,6 +200,13 @@ export class CosmereItem<
      */
     public hasId(): this is CosmereItem<IdItemData> {
         return 'id' in this.system;
+    }
+
+    /**
+     * Does this item have modality?
+     */
+    public hasModality(): this is CosmereItem<ModalityItemData> {
+        return 'modality' in this.system;
     }
 
     /* --- Accessors --- */
