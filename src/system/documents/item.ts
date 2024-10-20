@@ -594,10 +594,16 @@ export class CosmereItem<
                 });
             });
         }
+        // Check if the item has an attack
+        const hasAttack = this.hasAttack();
+
+        // Check if the item has damage
+        const hasDamage = this.hasDamage() && this.system.damage.formula;
 
         // Check if a roll is required
         const rollRequired =
-            this.system.activation.type === ActivationType.SkillTest;
+            this.system.activation.type === ActivationType.SkillTest ||
+            hasDamage;
 
         // Get the speaker
         const speaker =
@@ -607,11 +613,10 @@ export class CosmereItem<
         const descriptionHTML = await this.getEnrichedDescription();
 
         if (rollRequired) {
-            const hasDamage = this.hasDamage() && this.system.damage.formula;
-
             const rolls: foundry.dice.Roll[] = [];
+            let flavor = this.system.activation.flavor;
 
-            if (hasDamage) {
+            if (hasAttack && hasDamage) {
                 const attackResult = await this.rollAttack({
                     ...options,
                     actor,
@@ -628,16 +633,49 @@ export class CosmereItem<
                 });
                 if (!attackResult) return null;
 
+                // Add the rolls to the list
                 rolls.push(...attackResult);
-            } else {
-                const roll = await this.roll({
-                    ...options,
-                    actor,
-                    chatMessage: false,
-                });
-                if (!roll) return null;
 
-                rolls.push(roll);
+                // Set the flavor
+                flavor = flavor
+                    ? flavor
+                    : `${game.i18n!.localize(
+                          `COSMERE.Skill.${attackResult[0].data.skill.id}`,
+                      )} (${game.i18n!.localize(
+                          `COSMERE.Attribute.${attackResult[0].data.skill.attribute}`,
+                      )})`;
+            } else {
+                if (hasDamage) {
+                    const damageRoll = await this.rollDamage({
+                        ...options,
+                        actor,
+                        chatMessage: false,
+                    });
+                    if (!damageRoll) return null;
+
+                    rolls.push(damageRoll);
+                }
+
+                if (this.system.activation.type === ActivationType.SkillTest) {
+                    const roll = await this.roll({
+                        ...options,
+                        actor,
+                        chatMessage: false,
+                    });
+                    if (!roll) return null;
+
+                    // Add the roll to the list
+                    rolls.push(roll);
+
+                    // Set the flavor
+                    flavor = flavor
+                        ? flavor
+                        : `${game.i18n!.localize(
+                              `COSMERE.Skill.${roll.data.skill.id}`,
+                          )} (${game.i18n!.localize(
+                              `COSMERE.Attribute.${roll.data.skill.attribute}`,
+                          )})`;
+                }
             }
 
             // Create chat message
@@ -648,6 +686,7 @@ export class CosmereItem<
                     item: this,
                     hasDescription: !!descriptionHTML,
                     descriptionHTML,
+                    flavor,
                 }),
                 rolls: rolls,
             });
@@ -664,11 +703,7 @@ export class CosmereItem<
             // as flavor can also be an empty string, which we'd like to replace with the default flavor too
             const flavor =
                 // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-                this.system.activation.flavor ||
-                game
-                    .i18n!.localize('COSMERE.Item.DefaultFlavor')
-                    .replace('[actor]', actor.name)
-                    .replace('[item]', this.name);
+                this.system.activation.flavor || undefined;
 
             // Create chat message
             const message = (await ChatMessage.create({
