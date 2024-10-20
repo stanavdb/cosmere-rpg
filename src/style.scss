@@ -118,10 +118,10 @@ span.document-name {
     font-family: 'Laski Sans';
 }
 
+span.cosmere-icon,
 em.cosmere-icon,
 i.cosmere-icon {
     font-family: 'cosmere-dingbats';
-    font-style: normal;
 
     &.complication {
         color: red;
@@ -166,4 +166,9 @@ i.cosmere-icon {
     &.passive::after {
         content: '8';
     }
+}
+
+em.cosmere-icon,
+i.cosmere-icon {
+    font-style: normal;
 }

@@ -89,7 +89,6 @@
         margin-top: 0.5rem;
 
         .tab {
-            height: 100%;
             width: 100%;
             max-width: max(80ch, 80%);
             margin-left: auto;
@@ -110,7 +109,8 @@
         flex-direction: column;
     }
 
-    p.notes {
+    p.notes,
+    p.hint {
         color: #efe6d8bf;
     }
 
@@ -157,6 +157,12 @@
     &.talent,
     &.weapon {
         min-height: 500px;
+    }
+
+    &.weapon {
+        app-prose-mirror-editor {
+            min-height: 300px;
+        }
     }
 }
 
@@ -475,7 +481,7 @@ app-talent-prerequisite-talent-list {
         text-align: center;
         font-size: 10pt;
         font-style: italic;
-        opacity: .7;
+        opacity: 0.7;
         text-shadow: 0 0 0.2rem black;
     }
 }
