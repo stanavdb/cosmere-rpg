@@ -36,13 +36,15 @@ export class SpecialtyItemDataModel extends DataModelMixin<
                 required: true,
                 nullable: false,
                 blank: false,
-                initial: 'parent-path',
+                initial: '<path>',
             }),
             hasPath: new foundry.data.fields.BooleanField(),
         });
     }
 
     public prepareDerivedData() {
+        super.prepareDerivedData();
+
         // Get item
         const item = this.parent;
 
