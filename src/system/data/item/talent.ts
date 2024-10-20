@@ -15,12 +15,14 @@ import {
     ActivatableItemMixin,
     ActivatableItemData,
 } from './mixins/activatable';
+import { DamagingItemMixin, DamagingItemData } from './mixins/damaging';
 
 export interface TalentItemData
     extends IdItemData,
         TypedItemData<Talent.Type>,
         DescriptionItemData,
-        ActivatableItemData {
+        ActivatableItemData,
+        DamagingItemData {
     /**
      * The id of the Path this Talent belongs to.
      */
@@ -95,6 +97,7 @@ export class TalentItemDataModel extends DataModelMixin<
         value: 'COSMERE.Item.Type.Talent.desc_placeholder',
     }),
     ActivatableItemMixin(),
+    DamagingItemMixin(),
 ) {
     static defineSchema() {
         return foundry.utils.mergeObject(super.defineSchema(), {
