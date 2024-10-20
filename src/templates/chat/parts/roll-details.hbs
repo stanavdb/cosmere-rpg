@@ -3,7 +3,6 @@
         <div class="dice-formula">{{formula}}</div>
     </div>
     <div class="dice-total collapsed">
-        {{log this}}
         <div class="total-value {{#if rolledOpportunity}}opportunity{{/if}} {{#if rolledComplication}}complication{{/if}}">
             <span>{{total}}</span>
             {{#times opportunitiesCount}}
@@ -13,7 +12,7 @@
             <i class="cosmere-icon complication"></i>
             {{/times}}
 
-            {{#if isDamage}}
+            {{#if (and isDamage hasMod)}}
             <span class="mod">+ {{options.mod}}</span>
             {{/if}}
 

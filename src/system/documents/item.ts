@@ -832,7 +832,10 @@ export class CosmereItem<
         const attribute = attributeId
             ? actor.system.attributes[attributeId]
             : undefined;
-        const mod = (skill?.rank ?? 0) + (attribute?.value ?? 0);
+        const mod =
+            skill !== undefined || attribute !== undefined
+                ? (skill?.rank ?? 0) + (attribute?.value ?? 0)
+                : undefined;
 
         return {
             ...actor.getRollData(),

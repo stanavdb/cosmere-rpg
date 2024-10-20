@@ -292,7 +292,7 @@ export class CosmereChatMessage extends ChatMessage {
         // Apply damage
         void actor.applyDamage(
             ...damageRolls.map((r) => ({
-                amount: (r.total ?? 0) + (includeMod ? r.mod : 0),
+                amount: (r.total ?? 0) + (includeMod ? (r.mod ?? 0) : 0),
                 type: r.damageType,
             })),
         );
@@ -314,7 +314,7 @@ export class CosmereChatMessage extends ChatMessage {
         // Apply damage
         void actor.applyDamage(
             ...damageRolls.map((r) => ({
-                amount: (r.total ?? 0) + (includeMod ? r.mod : 0),
+                amount: (r.total ?? 0) + (includeMod ? (r.mod ?? 0) : 0),
                 type: DamageType.Healing,
             })),
         );
