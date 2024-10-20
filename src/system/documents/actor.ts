@@ -176,6 +176,33 @@ export class CosmereActor<
                     });
                 }
             }
+
+            // Get the first culture item
+            const cultureItem = itemData.find(
+                (d) => d.type === ItemType.Culture,
+            );
+
+            // Filter out any culture items beyond the first
+            data = itemData.filter(
+                (d) => d.type !== ItemType.Culture || d === cultureItem,
+            );
+
+            // If a culture item was present, replace the current (after create)
+            if (cultureItem) {
+                // Get current culture item
+                const currentCultureItem = this.items.find(
+                    (i) => i.type === ItemType.Culture,
+                );
+
+                // Remove existing culture after create, if present
+                if (currentCultureItem) {
+                    postCreateActions.push(() => {
+                        void this.deleteEmbeddedDocuments('Item', [
+                            currentCultureItem.id,
+                        ]);
+                    });
+                }
+            }
         }
 
         // Perform create

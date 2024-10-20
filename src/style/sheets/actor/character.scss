@@ -82,7 +82,7 @@
         }
     }
 
-    app-character-ancestry {
+    app-character-ancestry, app-character-culture {
         position: relative;
         display: flex;
         align-items: center;
@@ -96,13 +96,12 @@
         overflow: hidden;
         box-shadow: 0 0 0.5rem black;
 
-        cursor: pointer;
-
-        .ancestry {
+        .ancestry, .culture {
             display: flex;
             flex-direction: column;
             flex: 1;
             z-index: 1;
+            cursor: pointer;
 
             .name {
                 font-size: 13pt;
@@ -114,7 +113,7 @@
                 opacity: 0.75;
             }
 
-            &:hover {
+            &:not(.placeholder):hover {
                 text-shadow: 0 0 8px var(--color-shadow-primary);
             }
         }
@@ -130,6 +129,10 @@
             right: 0;
             opacity: 0.25;
             top: -6rem;
+
+            img {
+                width: 100%;
+            }
         }
 
         &:has(> .placeholder) {
@@ -140,6 +143,7 @@
             opacity: 0.5;
             box-shadow: 0 0 1rem 0.1rem black;
             background: #00000036;
+            text-align: center;
         }
     }
 
