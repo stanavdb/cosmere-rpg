@@ -263,6 +263,11 @@ export class CosmereItem<
                 )})`,
                 defaultAttribute: skill.attribute,
                 parts: ['@mod'].concat(options.parts ?? []),
+                plotDie: options.plotDie ?? this.system.activation.plotDie,
+                opportunity:
+                    options.opportunity ?? this.system.activation.opportunity,
+                complication:
+                    options.complication ?? this.system.activation.complication,
             }),
         );
 
@@ -406,6 +411,9 @@ export class CosmereItem<
                         attributeId,
                         actor,
                     ),
+                    plotDie:
+                        options.skillTest?.plotDie ??
+                        this.system.activation.plotDie,
                 },
                 damageRoll: {
                     ...options.damage,
@@ -625,6 +633,8 @@ export class CosmereItem<
                         plotDie: options.plotDie,
                         advantageMode: options.advantageMode,
                         advantageModePlot: options.advantageModePlot,
+                        opportunity: options.opportunity,
+                        complication: options.complication,
                     },
                     damage: {
                         advantageMode: options.advantageModeDamage,
@@ -936,6 +946,18 @@ export namespace CosmereItem {
         plotDie?: boolean;
 
         /**
+         * The value of d20 result which represents an opportunity
+         * @default 20
+         */
+        opportunity?: number;
+
+        /**
+         * The value of d20 result which represent an complication
+         * @default 1
+         */
+        complication?: number;
+
+        /**
          * The dice roll component parts, excluding the initial d20
          *
          * @default []
@@ -957,17 +979,32 @@ export namespace CosmereItem {
 
     export type RollDamageOptions = Omit<
         RollOptions,
-        'parts' | 'plotDie' | 'configurable' | 'advantageModePlot'
+        | 'parts'
+        | 'opportunity'
+        | 'complication'
+        | 'plotDie'
+        | 'configurable'
+        | 'advantageModePlot'
     >;
 
     export interface RollAttackOptions
         extends Omit<
             RollOptions,
-            'parts' | 'plotDie' | 'advantageMode' | 'advantageModePlot'
+            | 'parts'
+            | 'opportunity'
+            | 'complication'
+            | 'plotDie'
+            | 'advantageMode'
+            | 'advantageModePlot'
         > {
         skillTest?: Pick<
             RollOptions,
-            'parts' | 'plotDie' | 'advantageMode' | 'advantageModePlot'
+            | 'parts'
+            | 'opportunity'
+            | 'complication'
+            | 'plotDie'
+            | 'advantageMode'
+            | 'advantageModePlot'
         >;
         damage?: Pick<RollOptions, 'advantageMode'>;
     }

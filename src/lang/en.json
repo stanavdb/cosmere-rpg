@@ -416,7 +416,9 @@
                         "PerScene": "Per scene"
                     },
                     "Per": "Per"
-                }
+                },
+                "Opportunity": "Opportunity Threshold",
+                "Complication": "Complication Threshold"
             },
             "Injuries": {
                 "Name": {
