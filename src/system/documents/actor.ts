@@ -70,6 +70,14 @@ interface DamageInstance {
     type?: DamageType;
 }
 
+interface ApplyDamageOptions {
+    /**
+     * Whether or not to display a chat message
+     * @default true
+     */
+    chatMessage?: boolean;
+}
+
 export type CosmereActorRollData<T extends CommonActorData = CommonActorData> =
     {
         [K in keyof T]: T[K];
@@ -244,7 +252,26 @@ export class CosmereActor<
         }
     }
 
-    public async applyDamage(...instances: DamageInstance[]) {
+    /**
+     * Utility function to apply damage to this actor.
+     * This function will automatically apply deflect and
+     * send a chat message.
+     */
+    public async applyDamage(
+        ...config: DamageInstance[] | [...DamageInstance[], ApplyDamageOptions]
+    ) {
+        // Check if the last argument is an options object
+        const hasOptions =
+            config.length > 0 && !('amount' in config[config.length - 1]);
+
+        // Get instances
+        const instances = (
+            hasOptions ? config.slice(0, -1) : config
+        ) as DamageInstance[];
+        const { chatMessage = true } = (
+            hasOptions ? config[config.length - 1] : {}
+        ) as ApplyDamageOptions;
+
         // Get health resource
         const health = this.system.resources[Resource.Health];
 
@@ -285,26 +312,43 @@ export class CosmereActor<
             'system.resources.hea.value': newHealth,
         });
 
-        // Chat message
-        let flavor = game
-            .i18n!.localize(
-                isHealing
-                    ? 'COSMERE.ChatMessage.ApplyHealing'
-                    : 'COSMERE.ChatMessage.ApplyDamage',
-            )
-            .replace('[actor]', this.name)
-            .replace('[amount]', Math.abs(damage).toString());
+        if (chatMessage) {
+            // Chat message
+            let flavor = game
+                .i18n!.localize(
+                    isHealing
+                        ? 'COSMERE.ChatMessage.ApplyHealing'
+                        : 'COSMERE.ChatMessage.ApplyDamage',
+                )
+                .replace('[actor]', this.name)
+                .replace('[amount]', Math.abs(damage).toString());
 
-        if (!isHealing && deflected > 0) {
-            flavor += ` (${totalDamage} - <i class="deflect fa-solid fa-shield"></i>${deflected})`;
+            if (!isHealing && deflected > 0) {
+                flavor += ` (${totalDamage} - <i class="deflect fa-solid fa-shield"></i>${deflected})`;
+            }
+
+            // Chat message
+            await ChatMessage.create({
+                user: game.user!.id,
+                speaker: ChatMessage.getSpeaker({
+                    actor: this,
+                }) as ChatSpeakerData,
+                content: `<span class="damage-notification">
+                    ${flavor}.
+                    <a class="action" 
+                        data-action="undo-damage" 
+                        data-amount="${damage}"
+                        data-tooltip="${
+                            isHealing
+                                ? 'COSMERE.ChatMessage.UndoHealing'
+                                : 'COSMERE.ChatMessage.UndoDamage'
+                        }"
+                    >
+                        <i class="fa-solid fa-rotate-left"></i>
+                    </a>
+                </span>`,
+            });
         }
-
-        // Chat message
-        await ChatMessage.create({
-            user: game.user!.id,
-            speaker: ChatMessage.getSpeaker({ actor: this }) as ChatSpeakerData,
-            content: `${flavor}.`,
-        });
     }
 
     public async applyHealing(amount: number) {
