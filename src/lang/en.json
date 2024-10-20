@@ -467,6 +467,12 @@
                     "Label": "Unequipped"
                 }
             },
+            "Talent": {
+                "Modality": {
+                    "Label": "Modality Identifier",
+                    "Hint": "Identifier of the modality this talent belongs to. (e.g. \"stance\")"
+                }
+            },
             "AttackFlavor": "[actor] attacks with their [item].",
             "Sheet": {
                 "Basics": "Basics",
@@ -580,6 +586,11 @@
                         "ConnectionDescription": "Description",
                         "ConnectionDescriptionPlaceholder": "Connection Description",
                         "DropTalents": "Drop Talents here to add them to the list."
+                    },
+                    "Modality": {
+                        "Label": "Modality",
+                        "HasModality": "Has Modality?",
+                        "HasModalityDescription": "Does this talent have a modality? (e.g. Stance)"
                     }
                 }
             }

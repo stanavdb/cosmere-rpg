@@ -207,6 +207,33 @@ export class CosmereItem<
         return this.getFlag('cosmere-rpg', 'favorites.isFavorite');
     }
 
+    /**
+     * Checks if the talent item mode is active.
+     * Only relevant for talents that have a modality configured.
+     */
+    public get isModeActive(): boolean {
+        // Check if item is talent
+        if (!this.isTalent()) return false;
+
+        // Check if item has modality
+        if (!this.system.modality) return false;
+
+        // Check actor
+        if (!this.actor) return false;
+
+        // Get modality id
+        const modalityId = this.system.modality;
+
+        // Check actor modality flag
+        const activeMode = this.actor.getFlag(
+            'cosmere-rpg',
+            `mode.${modalityId}`,
+        );
+
+        // Check if the actor has the mode active
+        return activeMode === this.system.id;
+    }
+
     /* --- Roll & Usage utilities --- */
 
     /**
@@ -602,6 +629,16 @@ export class CosmereItem<
                 });
             });
         }
+
+        // Handle talent mode activation
+        if (this.isTalent() && this.system.modality) {
+            // Add post roll action to activate the mode
+            postRoll.push(() => {
+                // Handle mode activation
+                void this.actor?.setMode(this.system.modality!, this.system.id);
+            });
+        }
+
         // Check if the item has an attack
         const hasAttack = this.hasAttack();
 

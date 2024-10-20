@@ -266,6 +266,9 @@ export class BaseItemSheet extends TabsApplicationMixin(
         return {
             ...(await super._prepareContext(options)),
             item: this.item,
+            systemFields: (
+                this.item.system.schema as foundry.data.fields.SchemaField
+            ).fields,
             editable: this.isEditable,
             descHtml: enrichedDescValue,
             sideTabs: game.settings!.get('cosmere-rpg', 'itemSheetSideTabs'),

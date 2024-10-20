@@ -73,6 +73,11 @@ export interface TalentItemData
      * they're just plain strings.
      */
     prerequisitesMet: boolean;
+
+    /**
+     * The id of the modality this Talent belongs to. (i.e. "stance")
+     */
+    modality?: string;
 }
 
 export class TalentItemDataModel extends DataModelMixin<
@@ -119,6 +124,15 @@ export class TalentItemDataModel extends DataModelMixin<
                 initial: null,
             }),
             hasAncestry: new foundry.data.fields.BooleanField(),
+
+            modality: new foundry.data.fields.StringField({
+                required: false,
+                nullable: true,
+                blank: false,
+                label: 'COSMERE.Item.Talent.Modality.Label',
+                hint: 'COSMERE.Item.Talent.Modality.Hint',
+                initial: null,
+            }),
 
             prerequisites: new MappingField(
                 new foundry.data.fields.SchemaField(

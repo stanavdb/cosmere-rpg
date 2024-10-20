@@ -9,7 +9,11 @@ import {
     Resource,
     InjuryType,
 } from '@system/types/cosmere';
-import { CosmereItem, CosmereItemData } from '@system/documents/item';
+import {
+    CosmereItem,
+    CosmereItemData,
+    TalentItem,
+} from '@system/documents/item';
 import {
     CommonActorData,
     CommonActorDataModel,
@@ -189,6 +193,52 @@ export class CosmereActor<
     }
 
     /* --- Functions --- */
+
+    public async setMode(modality: string, mode: string) {
+        await this.setFlag('cosmere-rpg', `mode.${modality}`, mode);
+
+        // Get all effects for this modality
+        const effects = this.applicableEffects.filter(
+            (effect) =>
+                effect.parent instanceof CosmereItem &&
+                effect.parent.isTalent() &&
+                effect.parent.system.modality === modality,
+        );
+
+        // Get the effect for the new mode
+        const modeEffect = effects.find(
+            (effect) => (effect.parent as TalentItem).system.id === mode,
+        );
+
+        // Deactivate all other effects
+        for (const effect of effects) {
+            if (effect !== modeEffect && !effect.disabled) {
+                void effect.update({ disabled: true });
+            }
+        }
+
+        // Activate the mode effect
+        if (modeEffect) {
+            void modeEffect.update({ disabled: false });
+        }
+    }
+
+    public async clearMode(modality: string) {
+        await this.unsetFlag('cosmere-rpg', `mode.${modality}`);
+
+        // Get all effects for this modality
+        const effects = this.effects.filter(
+            (effect) =>
+                effect.parent instanceof CosmereItem &&
+                effect.parent.isTalent() &&
+                effect.parent.system.id === modality,
+        );
+
+        // Deactivate all effects
+        for (const effect of effects) {
+            void effect.update({ disabled: true });
+        }
+    }
 
     public async rollInjuryDuration() {
         // Get roll table
