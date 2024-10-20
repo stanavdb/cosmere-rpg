@@ -101,10 +101,13 @@ Handlebars.registerHelper('cosmereDingbat', (type: ActionCostType) => {
     }
 });
 
-Handlebars.registerHelper('derived', (derived?: Derived<string | number>) => {
-    if (!derived) return;
-    return Derived.getValue(derived);
-});
+Handlebars.registerHelper(
+    'derived',
+    (derived?: Derived<string | number>, includeBonus = true) => {
+        if (!derived) return;
+        return Derived.getValue(derived, includeBonus);
+    },
+);
 
 Handlebars.registerHelper(
     'skillMod',
