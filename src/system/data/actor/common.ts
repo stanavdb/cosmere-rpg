@@ -62,7 +62,7 @@ export interface CommonActorData {
         damage: DamageType[];
         condition: Condition[];
     };
-    attributes: Record<Attribute, { value: number }>;
+    attributes: Record<Attribute, { value: number; bonus: number }>;
     defenses: Record<AttributeGroup, { value: Derived<number>; bonus: number }>;
     deflect: DeflectData;
     resources: Record<
@@ -272,6 +272,12 @@ export class CommonActorDataModel<
                             integer: true,
                             min: 0,
                             max: 10,
+                            initial: 0,
+                        }),
+                        bonus: new foundry.data.fields.NumberField({
+                            required: true,
+                            nullable: false,
+                            integer: true,
                             initial: 0,
                         }),
                     });
@@ -518,13 +524,16 @@ export class CommonActorDataModel<
             const skillConfig = CONFIG.COSMERE.skills[skill];
 
             // Get the attribute associated with this skill
-            const attribute = skillConfig.attribute;
+            const attributeId = skillConfig.attribute;
+
+            // Get attribute
+            const attribute = this.attributes[attributeId];
 
             // Get skill rank
             const rank = this.skills[skill].rank;
 
             // Get attribute value
-            const attrValue = this.attributes[attribute].value;
+            const attrValue = attribute.value + attribute.bonus;
 
             // Calculate mod
             this.skills[skill].mod.value = attrValue + rank;

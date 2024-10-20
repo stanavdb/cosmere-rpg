@@ -639,7 +639,7 @@ export class CosmereItem<
         }
 
         // Handle talent mode activation
-        if (this.isTalent() && this.system.modality) {
+        if (this.hasModality() && this.system.modality) {
             // Add post roll action to activate the mode
             postRoll.push(() => {
                 // Handle mode activation
@@ -898,7 +898,7 @@ export class CosmereItem<
     ): D20RollData {
         const skill = actor.system.skills[skillId];
         const attribute = actor.system.attributes[attributeId];
-        const mod = skill.rank + attribute.value;
+        const mod = skill.rank + attribute.value + attribute.bonus;
 
         return {
             ...actor.getRollData(),
@@ -924,7 +924,9 @@ export class CosmereItem<
             : undefined;
         const mod =
             skill !== undefined || attribute !== undefined
-                ? (skill?.rank ?? 0) + (attribute?.value ?? 0)
+                ? (skill?.rank ?? 0) +
+                  (attribute?.value ?? 0) +
+                  (attribute?.bonus ?? 0)
                 : undefined;
 
         return {

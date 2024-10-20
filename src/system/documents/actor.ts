@@ -268,7 +268,7 @@ export class CosmereActor<
         const effects = this.applicableEffects.filter(
             (effect) =>
                 effect.parent instanceof CosmereItem &&
-                effect.parent.isTalent() &&
+                effect.parent.hasModality() &&
                 effect.parent.system.modality === modality,
         );
 
@@ -473,20 +473,30 @@ export class CosmereActor<
     }
 
     /**
+     * Utility function to get the modifier for a given attribute for this actor.
+     * @param attribute The attribute to get the modifier for
+     */
+    public getAttributeMod(attribute: Attribute): number {
+        // Get attribute
+        const attr = this.system.attributes[attribute];
+        return attr.value + attr.bonus;
+    }
+
+    /**
      * Utility function to get the modifier for a given skill for this actor.
      * @param skill The skill to get the modifier for
      * @param attributeOverride An optional attribute override, used instead of the default attribute
      */
     public getSkillMod(skill: Skill, attributeOverride?: Attribute): number {
-        // Get attribute
-        const attribute =
+        // Get attribute id
+        const attributeId =
             attributeOverride ?? CONFIG.COSMERE.skills[skill].attribute;
 
         // Get skill rank
         const rank = this.system.skills[skill].rank;
 
         // Get attribute value
-        const attrValue = this.system.attributes[attribute].value;
+        const attrValue = this.getAttributeMod(attributeId);
 
         return attrValue + rank;
     }
@@ -511,7 +521,7 @@ export class CosmereActor<
             mod: data.mod,
             attribute: skill.attribute,
         };
-        data.attribute = attribute.value;
+        data.attribute = attribute.value + attribute.bonus;
         data.attributes = this.system.attributes;
 
         // Prepare roll data

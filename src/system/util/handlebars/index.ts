@@ -110,6 +110,14 @@ Handlebars.registerHelper(
 );
 
 Handlebars.registerHelper(
+    'bonus',
+    (obj?: { value: number; bonus?: number }) => {
+        if (!obj) return;
+        return obj.value + (obj.bonus ?? 0);
+    },
+);
+
+Handlebars.registerHelper(
     'skillMod',
     (actor: CosmereActor, skill: Skill, attribute?: Attribute) => {
         return actor.getSkillMod(skill, attribute);
