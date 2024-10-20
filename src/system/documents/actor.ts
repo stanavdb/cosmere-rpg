@@ -192,6 +192,46 @@ export class CosmereActor<
         return result;
     }
 
+    public override async modifyTokenAttribute(
+        attribute: string,
+        value: number,
+        isDelta: boolean,
+        isBar: boolean,
+    ) {
+        if (isBar) {
+            // Get the attribute object
+            const attr = foundry.utils.getProperty(this.system, attribute) as {
+                value: number;
+                max: Derived<number>;
+            };
+            const current = attr.value;
+            const max = Derived.getValue(attr.max)!;
+            const update = Math.clamp(
+                isDelta ? current + value : value,
+                0,
+                max,
+            );
+            if (update === current) return this;
+
+            // Set up updates
+            const updates = {
+                [`system.${attribute}.value`]: update,
+            };
+
+            // Allow a hook to override these changes
+            const allowed = Hooks.call(
+                'modifyTokenAttribute',
+                { attribute, value, isDelta, isBar },
+                updates,
+            );
+            return allowed !== false
+                ? ((await this.update(updates)) as this)
+                : this;
+        } else {
+            await super.modifyTokenAttribute(attribute, value, isDelta, isBar);
+        }
+    }
+
     /* --- Functions --- */
 
     public async setMode(modality: string, mode: string) {
