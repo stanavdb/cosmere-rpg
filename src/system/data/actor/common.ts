@@ -55,6 +55,7 @@ export interface CommonActorData {
         custom?: string | null;
         subtype?: string | null;
     };
+    tier: number;
     senses: {
         range: Derived<number>;
     };
@@ -121,6 +122,13 @@ export class CommonActorDataModel<
                 subtype: new foundry.data.fields.StringField({
                     nullable: true,
                 }),
+            }),
+            tier: new foundry.data.fields.NumberField({
+                required: true,
+                nullable: false,
+                min: 0,
+                integer: true,
+                initial: 1,
             }),
             senses: new foundry.data.fields.SchemaField({
                 range: new DerivedValueField(
