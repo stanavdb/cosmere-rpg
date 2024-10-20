@@ -18,8 +18,7 @@ import { ArmorItemDataModel } from '@system/data/item/armor';
 // Fields
 import { DerivedValueField, Derived } from '../fields/derived-value-field';
 
-interface DeflectData {
-    value: number;
+interface DeflectData extends Derived<number> {
     source?: DeflectSource;
 }
 
@@ -65,13 +64,12 @@ export interface CommonActorData {
     };
     attributes: Record<Attribute, { value: number }>;
     defenses: Record<AttributeGroup, { value: Derived<number>; bonus: number }>;
+    deflect: DeflectData;
     resources: Record<
         Resource,
         {
             value: number;
             max: Derived<number>;
-            bonus: number;
-            deflect?: DeflectData;
         }
     >;
     skills: Record<
@@ -167,6 +165,25 @@ export class CommonActorDataModel<
             resources: this.getResourcesSchema(),
             skills: this.getSkillsSchema(),
             currency: this.getCurrencySchema(),
+            deflect: new DerivedValueField(
+                new foundry.data.fields.NumberField({
+                    required: true,
+                    nullable: false,
+                    integer: true,
+                    min: 0,
+                    initial: 0,
+                }),
+                {
+                    additionalFields: {
+                        source: new foundry.data.fields.StringField({
+                            initial: DeflectSource.Armor,
+                            choices: Object.keys(
+                                CONFIG.COSMERE.deflect.sources,
+                            ),
+                        }),
+                    },
+                },
+            ),
             movement: new foundry.data.fields.SchemaField({
                 rate: new DerivedValueField(
                     new foundry.data.fields.NumberField({
@@ -303,8 +320,6 @@ export class CommonActorDataModel<
         return new foundry.data.fields.SchemaField(
             Object.keys(resources).reduce(
                 (schemas, key) => {
-                    const resource = resources[key as Resource];
-
                     schemas[key] = new foundry.data.fields.SchemaField({
                         value: new foundry.data.fields.NumberField({
                             required: true,
@@ -328,31 +343,6 @@ export class CommonActorDataModel<
                             integer: true,
                             initial: 0,
                         }),
-
-                        ...(resource.deflect
-                            ? {
-                                  deflect: new foundry.data.fields.SchemaField({
-                                      value: new foundry.data.fields.NumberField(
-                                          {
-                                              required: true,
-                                              nullable: false,
-                                              integer: true,
-                                              min: 0,
-                                              initial: 0,
-                                          },
-                                      ),
-                                      source: new foundry.data.fields.StringField(
-                                          {
-                                              initial: DeflectSource.Armor,
-                                              choices: Object.keys(
-                                                  CONFIG.COSMERE.deflect
-                                                      .sources,
-                                              ),
-                                          },
-                                      ),
-                                  }),
-                              }
-                            : {}),
                     });
 
                     return schemas;
@@ -506,32 +496,13 @@ export class CommonActorDataModel<
                 const strength = this.attributes.str.value;
 
                 // Assign max
-                resource.max.value = 10 + strength + resource.bonus;
+                resource.max.value = 10 + strength + (resource.max.bonus ?? 0);
             } else if (key === Resource.Focus) {
                 // Get willpower value
                 const willpower = this.attributes.wil.value;
 
                 // Assign max
-                resource.max.value = 2 + willpower + resource.bonus;
-            }
-
-            if (CONFIG.COSMERE.resources[key].deflect) {
-                // Get deflect source, defaulting to armor
-                const source = resource.deflect?.source ?? DeflectSource.Armor;
-
-                if (source === DeflectSource.Armor) {
-                    // Find equipped armor
-                    const armor = this.parent.items
-                        .filter((item) => item.type === ItemType.Armor)
-                        .map(
-                            (item) =>
-                                item as unknown as CosmereItem<ArmorItemDataModel>,
-                        )
-                        .find((item) => item.system.equipped);
-
-                    // Derive deflect
-                    resource.deflect!.value = armor?.system.deflect ?? 0;
-                }
+                resource.max.value = 2 + willpower + (resource.max.bonus ?? 0);
             }
 
             // Get max
@@ -558,6 +529,24 @@ export class CommonActorDataModel<
             // Calculate mod
             this.skills[skill].mod.value = attrValue + rank;
         });
+
+        // Get deflect source, defaulting to armor
+        const source = this.deflect.source ?? DeflectSource.Armor;
+
+        // Derive deflect value
+        if (source === DeflectSource.Armor) {
+            // Find equipped armor
+            const armor = this.parent.items
+                .filter((item) => item.type === ItemType.Armor)
+                .map(
+                    (item) =>
+                        item as unknown as CosmereItem<ArmorItemDataModel>,
+                )
+                .find((item) => item.system.equipped);
+
+            // Derive deflect
+            this.deflect.value = armor?.system.deflect ?? 0;
+        }
 
         // Movement
         this.movement.rate.value = speedToMovementRate(

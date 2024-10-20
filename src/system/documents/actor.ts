@@ -112,6 +112,10 @@ export class CosmereActor<
             );
     }
 
+    public get deflect(): number {
+        return Derived.getValue(this.system.deflect) ?? 0;
+    }
+
     /* --- Type Guards --- */
 
     public isCharacter(): this is CharacterActor {
@@ -184,10 +188,6 @@ export class CosmereActor<
             CONFIG.COSMERE.injury.durationTable,
         )) as unknown as RollTable;
 
-        // Get armor deflect
-        const deflect =
-            this.system.resources[Resource.Health].deflect?.value ?? 0;
-
         // Get injury roll bonus
         const bonus = this.system.injuryRollBonus;
 
@@ -196,7 +196,9 @@ export class CosmereActor<
             (Derived.getValue(this.system.injuries) ?? 0) * -5;
 
         // Build formula
-        const formula = ['1d20', deflect, bonus, injuriesModifier].join(' + ');
+        const formula = ['1d20', this.deflect, bonus, injuriesModifier].join(
+            ' + ',
+        );
 
         // Roll
         const roll = new foundry.dice.Roll(formula);
@@ -255,13 +257,10 @@ export class CosmereActor<
                 : { ignoreDeflect: false };
 
             let amount = instance.amount;
-            if (!damageConfig.ignoreDeflect && health.deflect?.value) {
-                // Get deflect
-                const deflect = health.deflect.value;
-
+            if (!damageConfig.ignoreDeflect) {
                 // Apply deflect
-                amount = Math.max(0, amount - deflect);
-                deflected += deflect;
+                amount = Math.max(0, amount - this.deflect);
+                deflected += this.deflect;
             }
 
             if (instance.type === DamageType.Healing) {
