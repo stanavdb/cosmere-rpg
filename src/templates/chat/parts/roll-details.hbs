@@ -34,15 +34,16 @@
         <div class="roll-breakdown">
             <ul>
                 {{#each dice as |die|}}
+                {{#each die.results as |roll|}}
                 <li class="die roll {{die.denomination}}">
                     <span>
                     {{#if (not die.isPlotDie)}}
-                        {{die.total}}
+                        {{result}}
                     {{else}}
                         {{#if die.rolledOpportunity}}
                             <i class="cosmere-icon opportunity"></i>
                         {{else if die.rolledComplication}}
-                            <span>{{die.total}}</span>
+                            <span>{{roll.result}}</span>
                             <i class="cosmere-icon complication"></i>
                         {{else}}
                             —
@@ -50,6 +51,7 @@
                     {{/if}}
                     </span>
                 </li>
+                {{/each}}
                 {{/each}}
             </ul>
         </div>
