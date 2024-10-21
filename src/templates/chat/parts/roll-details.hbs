@@ -38,12 +38,12 @@
                 <li class="die roll {{die.denomination}}">
                     <span>
                     {{#if (not die.isPlotDie)}}
-                        {{result}}
+                        {{roll.result}}
                     {{else}}
                         {{#if die.rolledOpportunity}}
                             <i class="cosmere-icon opportunity"></i>
                         {{else if die.rolledComplication}}
-                            <span>{{roll.result}}</span>
+                            <span>{{roll.count}}</span>
                             <i class="cosmere-icon complication"></i>
                         {{else}}
                             —
