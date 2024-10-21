@@ -63,5 +63,5 @@
     },
     "url": "https://github.com/stanavdb/cosmere-rpg",
     "manifest": "https://raw.githubusercontent.com/stanavdb/cosmere-rpg/main/src/system.json",
-    "download": "https://github.com/stanavdb/cosmere-rpg/releases/download/release-0.1.0/cosmere-rpg-release-0.1.0.zip"
+    "download": "https://github.com/stanavdb/cosmere-rpg/releases/download/v0.1.0/cosmere-rpg-release-0.1.0.zip"
 }
