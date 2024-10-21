@@ -5,6 +5,7 @@
     "type": "module",
     "scripts": {
         "build": "npx rollup -c",
+        "build:pack": "npm run build && npm run pack",
         "build:watch": "npx rollup -c -w",
         "prepare": "husky",
         "lint": "eslint",
