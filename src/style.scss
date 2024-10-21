@@ -61,34 +61,13 @@
 /* ----------------------------------------- */
 /*  Fonts                                    */
 /* ----------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Didact+Gothic&display=swap');
+
 @font-face {
     font-family: 'Penumbra Web Pro';
     font-style: normal;
     font-weight: 400;
-    src: url('assets/fonts/penumbra-web-pro/PenumbraWebPro-Serif.woff')
-        format('woff');
-}
-
-@font-face {
-    font-family: 'Laski Sans';
-    font-style: normal;
-    font-weight: 400;
-    src: url('assets/fonts/laski-sans/Laski-Sans-Regular.woff2') format('woff2');
-}
-
-@font-face {
-    font-family: 'Laski Sans';
-    font-style: normal;
-    font-weight: 600;
-    src: url('assets/fonts/laski-sans/Laski-Sans-SemiBold.woff2')
-        format('woff2');
-}
-
-@font-face {
-    font-family: 'Laski Sans';
-    font-style: normal;
-    font-weight: 700;
-    src: url('assets/fonts/laski-sans/Laski-Sans-Bold.woff2') format('woff2');
+    src: url('https://fonts.cdnfonts.com/css/penumbra-web-pro')
 }
 
 @font-face {
@@ -107,15 +86,16 @@ span.document-name {
 }
 
 .application h4 {
-    font-variant: small-caps;
+    font-family: "Didact Gothic", sans-serif;
 }
 
 .application h5 {
-    font-family: 'Laski Sans';
+    font-family: "Didact Gothic", sans-serif;
 }
 
 .application {
-    font-family: 'Laski Sans';
+    font-family: "Didact Gothic", sans-serif;
+    font-size: 10pt;
 }
 
 span.cosmere-icon,
