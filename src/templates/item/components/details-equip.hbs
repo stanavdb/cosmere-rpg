@@ -1,0 +1,142 @@
+{{#if isEquippable}}
+    <h5>{{localize "COSMERE.Item.Sheet.Equip.Title"}}</h5>
+
+    {{!-- Is always equipped --}}
+    <div class="form-group">
+        <label>{{localize "COSMERE.Item.Sheet.Equip.AlwaysEquipped"}}</label>
+        <input type="checkbox" 
+            name="system.alwaysEquipped" 
+            {{#if item.system.alwaysEquipped}}
+            checked
+            {{/if}}
+            {{#if (not editable)}}
+            readonly
+            {{/if}}
+        >
+    </div>
+
+    {{!-- Traits --}}
+    <div class="form-group-stacked">
+        <div class="header">
+            <label>{{localize "COSMERE.Item.Sheet.Equip.Traits"}}</label>
+            {{#if traitsCollapsed}}
+            <span>{{traitsString}}</span>
+            {{/if}}
+            <div class="controls">
+                {{#if traitsCollapsed}}
+                <a data-action="toggle-traits-collapsed"
+                    data-tooltip="COSMERE.Item.Sheet.Equip.TraitsShow"
+                >
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+                {{else}}
+                <a data-action="toggle-traits-collapsed"
+                    data-tooltip="COSMERE.Item.Sheet.Equip.TraitsHide"
+                >
+                    <i class="fa-solid fa-chevron-down"></i>
+                </a>
+                {{/if}}
+            </div>
+        </div>
+        {{#if (not traitsCollapsed)}}
+        <div class="traits-list">
+            {{#each traits as |trait|}}
+            <div class="trait">
+                <input type="checkbox" 
+                    name="{{concat "system.traits." trait.id ".defaultActive"}}" 
+                    {{#if trait.active}}
+                    checked
+                    {{/if}}
+                    {{#if (not @root.editable)}}
+                    readonly
+                    {{/if}}
+                >
+                <label>{{localize trait.label}}</label>
+                {{#if trait.hasValue}}
+                <input 
+                    class="trait-value"
+                    name="{{concat "system.traits." trait.id ".defaultValue"}}" 
+                    {{#if trait.active}}
+                    type="number" 
+                    min="0"
+                    value="{{trait.value}}"
+                    {{else}}
+                    type="text"
+                    placeholder="—"
+                    {{/if}}
+                    {{#if (or (not @root.editable) (not trait.active))}}
+                    readonly
+                    {{/if}}
+                >
+                {{/if}}
+            </div>
+            {{/each}}
+        </div>
+        {{/if}}
+    </div>
+
+    {{!-- Expert Traits --}}
+    <div class="form-group-stacked">
+        <div class="header">
+            <label>{{localize "COSMERE.Item.Sheet.Equip.ExpertTraits"}}</label>
+            {{#if expertTraitsCollapsed}}
+            <span>{{expertTraitsString}}</span>
+            {{/if}}
+            <div class="controls">
+                {{#if expertTraitsCollapsed}}
+                <a data-action="toggle-expert-traits-collapsed"
+                    data-tooltip="COSMERE.Item.Sheet.Equip.ExpertTraitsShow"
+                >
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+                {{else}}
+                <a data-action="toggle-expert-traits-collapsed"
+                    data-tooltip="COSMERE.Item.Sheet.Equip.ExpertTraitsHide"
+                >
+                    <i class="fa-solid fa-chevron-down"></i>
+                </a>
+                {{/if}}
+            </div>
+        </div>
+
+        {{#if (not expertTraitsCollapsed)}}
+        <div class="traits-list">
+            {{#each expertTraits as |trait|}}
+            <div class="trait">
+                <input type="checkbox" 
+                    {{#if (eq trait.type "modify-trait-value")}}
+                    name="{{concat "system.traits." trait.id ".expertise.modifyValue"}}"
+                    {{else}}
+                    name="{{concat "system.traits." trait.id ".expertise.toggleActive"}}" 
+                    {{/if}}
+                    {{#if trait.active}}
+                    checked
+                    {{/if}}
+                    {{#if (not @root.editable)}}
+                    readonly
+                    {{/if}}
+                >
+                <label>{{localize trait.label}}</label>
+                {{#if (eq trait.type "modify-trait-value")}}
+                <input 
+                    class="trait-value"
+                    name="{{concat "system.traits." trait.id ".expertise.value"}}" 
+                    {{#if trait.active}}
+                    type="number" 
+                    min="0"
+                    value="{{trait.value}}"
+                    {{else}}
+                    type="text"
+                    value="—"
+                    {{/if}}
+                    {{#if (or (not @root.editable) (not trait.active))}}
+                    readonly
+                    {{/if}}
+                >
+                {{/if}}
+            </div>
+            {{/each}}
+        </div>
+        {{/if}}
+    </div>
+{{/if}}

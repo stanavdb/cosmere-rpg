@@ -1,0 +1,13 @@
+{{#with (lookup tabsMap "effects") as |tab|}}
+
+<div class="tab tab-content {{tab.cssClass}}" data-tab="effects" data-group="primary">
+    {{app-actor-search-bar id='effects-search' placeholder=(localize 'COSMERE.Actor.Sheet.Search.Effects.Placeholder')}}
+    {{app-actor-conditions}}
+    {{app-actor-injuries-list class="list-component"}}
+
+    {{app-actor-effects-list class='list-component' type='temporary'}}
+    {{app-actor-effects-list class='list-component' type='passive'}}
+    {{app-actor-effects-list class='list-component' type='inactive'}}
+</div>
+
+{{/with}}

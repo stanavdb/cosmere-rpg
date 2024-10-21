@@ -1,6 +1,7 @@
 {
     "id": "cosmere-rpg",
-    "title": "Cosmere RPG",
+    "title": "Cosmere Roleplaying Game",
+    "description": "A community-developed system for playing the Cosmere Roleplaying Game, by Dragonsteel Entertainment and Brotherwise Games.",
     "version": "0.1.0",
     "compatibility": {
         "minimum": "12",
@@ -23,16 +24,38 @@
             "weapon": {},
             "armor": {},
             "equipment": {},
-            "fabrial": {},
+            "loot": {},
 
             "ancestry": {},
+            "culture": {},
             "path": {},
+            "specialty": {},
             "talent": {},
             "trait": {},
 
-            "action": {}
+            "action": {},
+
+            "injury": {},
+            "connection": {}
         }
     },
+    "packs": [
+        {
+            "name": "tables",
+            "label": "Roll Tables",
+            "system": "cosmere-rpg",
+            "path": "packs/tables",
+            "type": "RollTable",
+            "private": false
+        }
+    ],
+    "languages": [
+        {
+            "lang": "en",
+            "name": "English",
+            "path": "lang/en.json"
+        }
+    ],
     "socket": true,
     "grid": {
         "distance": 5,

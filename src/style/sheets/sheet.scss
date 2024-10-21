@@ -1,3 +1,14 @@
+.sheet .window-content {
+    display: flex;
+    min-height: 0;
+    overflow: hidden;
+
+    .sheet-content {
+        min-height: 0;
+        flex: 1;
+    }
+}
+
 .window-content .sheet > * {
     flex: unset;
 }
@@ -6,6 +17,7 @@
 .sheet-body {
     display: flex;
     flex-direction: column;
+    flex: 1 !important;
 }
 
 .box-title {
@@ -15,15 +27,24 @@
     font-weight: bold;
 }
 
-.sheet {
+.application.sheet {
     .value {
         text-align: center;
         font-size: 18pt;
         font-weight: bold;
         margin: 0.25ch;
     }
+
+    .form-group input::placeholder {
+        opacity: 0.5 !important;
+    }
 }
 
-.rollable {
-    cursor: pointer;
+.sheet .tab-body {
+    min-height: 0;
+    overflow-y: auto;
+
+    .tab-content {
+        position: relative;
+    }
 }

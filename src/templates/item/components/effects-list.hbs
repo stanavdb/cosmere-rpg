@@ -1,0 +1,68 @@
+<ul class="effects-list {{#if editable}}editable{{/if}}">
+    <li class="effect header">
+        <div class="col name">
+            <span>{{localize title}}</span>
+        </div>
+        <div class="col source">
+            <span>{{localize "COSMERE.Sheet.Effects.Source"}}</span>
+        </div>
+        <div class="col duration">
+            <span>{{localize "COSMERE.Sheet.Effects.Duration"}}</span>
+        </div>
+        <div class="col controls flexrow">
+            {{#if editable}}
+            <div></div>
+            <div></div>
+            <a data-action="create-effect"
+                data-tooltip="COSMERE.Sheet.Effects.Create"
+            >
+                <i class="fa-solid fa-plus"></i>
+            </a>
+            {{else}}
+            <div></div>
+            {{/if}}
+        </div>
+    </li>
+
+    {{#each effects as |effect|}}
+    <li class="effect" data-id="{{effect.id}}">
+        <div class="col img">
+            <img src="{{effect.img}}">
+        </div>
+        <div class="col name">
+            <span>{{effect.name}}</span>
+        </div>
+        <div class="col source">
+            <span>{{effect.sourceName}}</span>
+        </div>
+        <div class="col duration">
+            <span>{{effect-duration effect}}</span>
+        </div>
+        <div class="col controls flexrow">
+            {{#if @root.editable}}
+            <a data-action="toggle-effect-active"
+                data-tooltip="COSMERE.Sheet.Effects.ToggleActive"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </a>
+            <a data-action="edit-effect"
+                data-tooltip="COSMERE.Sheet.Effects.Edit"
+            >
+                <i class="fa-solid fa-pen-to-square"></i>
+            </a>
+            <a data-action="delete-effect"
+                data-tooltip="COSMERE.Sheet.Effects.Delete"
+            >
+                <i class="fa-solid fa-trash"></i>
+            </a>
+            {{else}}
+            <a data-action="edit-effect"
+                data-tooltip="GENERIC.ViewDetails"
+            >
+                <i class="fa-solid fa-eye"></i>
+            </a>
+            {{/if}}
+        </div>
+    </li>
+    {{/each}}
+</ul>

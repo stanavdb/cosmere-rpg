@@ -1,0 +1,14 @@
+import './header';
+import './effects-list';
+import './details-id';
+import './details-type';
+import './details-equip';
+import './details-activation';
+import './details-attack';
+import './details-damage';
+import './details-modality';
+import './properties';
+import './talent-prerequisites';
+import './advancement-talent-list';
+import './ancestry-bonus-talents';
+import './talent-prerequisite-talent-list';

@@ -1,0 +1,20 @@
+<nav class="sheet-navigation sheet-tabs tabs">
+    {{#each tabs as |tab|}}
+    <a class="{{tab.cssClass}}"
+        data-tab="{{tab.id}}"
+        data-group="{{tab.group}}"
+        data-action="tab"
+        {{#if (eq ../includeLabel false)}}
+        data-tooltip="{{localize tab.label}}"
+        {{/if}}
+    >
+        {{#if tab.icon}}
+        {{{tab.icon}}}
+        {{/if}}
+
+        {{#if (not ../ignoreLabel)}}
+        <label>{{localize tab.label}}</label>
+        {{/if}}
+    </a>
+    {{/each}}
+</nav>

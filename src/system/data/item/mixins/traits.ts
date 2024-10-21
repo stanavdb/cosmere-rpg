@@ -1,9 +1,10 @@
+import { WeaponTraitId, ArmorTraitId } from '@system/types/cosmere';
 import { CosmereItem } from '@system/documents';
 import { ExpertiseItemData } from './expertise';
 
-interface TraitData {
-    id: string;
+import { MappingField } from '@system/data/fields';
 
+interface TraitData {
     /**
      * The default (not expertise) value of this trait
      */
@@ -43,25 +44,39 @@ interface TraitData {
     };
 }
 
-export interface TraitsItemData {
-    traits: Set<TraitData>;
+export interface TraitsItemData<
+    TraitId extends WeaponTraitId | ArmorTraitId = WeaponTraitId | ArmorTraitId,
+> {
+    traits: Record<TraitId, TraitData>;
+    readonly traitsArray: ({ id: TraitId } & TraitData)[];
 }
 
 /**
  * Mixin for weapon & armor traits
  */
-export function TraitsItemMixin<P extends CosmereItem>() {
-    return (base: typeof foundry.abstract.TypeDataModel<TraitsItemData, P>) => {
+export function TraitsItemMixin<
+    P extends CosmereItem,
+    TraitId extends WeaponTraitId | ArmorTraitId = WeaponTraitId | ArmorTraitId,
+>() {
+    return (
+        base: typeof foundry.abstract.TypeDataModel<
+            TraitsItemData<TraitId> & ExpertiseItemData,
+            P
+        >,
+    ) => {
         return class extends base {
             static defineSchema() {
+                const superSchema = super.defineSchema();
+
+                if (!('expertise' in superSchema)) {
+                    throw new Error(
+                        'TraitsItemMixin must be used in combination with ExpertiseItemMixin and must follow it',
+                    );
+                }
+
                 return foundry.utils.mergeObject(super.defineSchema(), {
-                    traits: new foundry.data.fields.SetField(
+                    traits: new MappingField(
                         new foundry.data.fields.SchemaField({
-                            id: new foundry.data.fields.StringField({
-                                required: true,
-                                nullable: false,
-                                blank: false,
-                            }),
                             defaultValue: new foundry.data.fields.NumberField({
                                 integer: true,
                             }),
@@ -92,23 +107,26 @@ export function TraitsItemMixin<P extends CosmereItem>() {
                 });
             }
 
+            get traitsArray(): ({ id: TraitId } & TraitData)[] {
+                return (Object.entries(this.traits) as [TraitId, TraitData][])
+                    .map(([id, trait]) => ({ id, ...trait }))
+                    .sort((a, b) => a.id.localeCompare(b.id));
+            }
+
             public prepareDerivedData(): void {
                 super.prepareDerivedData();
 
-                const system = this as unknown as TraitsItemData &
-                    ExpertiseItemData;
-
                 // Do we have expertise
-                const hasExpertise = system.expertise;
+                const hasExpertise = this.expertise;
 
-                system.traits.forEach((trait) => {
+                Object.values<TraitData>(this.traits).forEach((trait) => {
                     if (!hasExpertise) {
                         trait.active = trait.defaultActive;
                         trait.value = trait.defaultValue;
                     } else {
-                        if (trait.expertise.toggleActive) {
-                            trait.active = !trait.defaultActive;
-                        }
+                        trait.active = trait.expertise.toggleActive
+                            ? !trait.defaultActive
+                            : trait.defaultActive;
 
                         trait.value =
                             trait.expertise.value ?? trait.defaultValue;

@@ -1,0 +1,64 @@
+{{#if hasDamage}}
+<h5>{{localize "COSMERE.Item.Sheet.Damage.Title"}}</h5>
+{{!-- Formula & Type --}}
+<div class="form-group-stacked formula">
+    <label>{{localize "COSMERE.Item.Sheet.Damage.Formula"}}</label>
+    <div class="form-group">
+        <input name="system.damage.formula"
+            type="text"
+            value="{{item.system.damage.formula}}"
+            {{#if (not editable)}}
+            readonly
+            {{/if}}
+        >
+        <select name="system.damage.type"
+            {{#if (not editable)}}
+            disabled
+            {{/if}}
+        >
+            {{selectOptions typeSelectOptions selected=item.system.damage.type localize=true}}
+        </select>
+    </div>
+</div>
+
+{{#if hasSkillTest}}
+{{!-- Skill --}}
+<div class="form-group">
+    <label>{{localize "GENERIC.Skill"}}</label>
+
+    {{#if hasSkill}}
+    <select name="system.damage.skill"
+        {{#if (not editable)}}
+        disabled
+        {{/if}}
+    >
+        {{selectOptions skillSelectOptions selected=item.system.damage.skill localize=true}}
+    </select>
+    {{else}}
+    <input
+        type="text"
+        value="—"
+        readonly
+    >
+    {{/if}}
+</div>
+<div class="form-group">
+    <label>{{localize "GENERIC.Attribute"}}</label>
+    {{#if hasSkill}}
+    <select name="system.damage.attribute"
+        {{#if (not editable)}}
+        disabled
+        {{/if}}
+    >
+        {{selectOptions attributeSelectOptions selected=item.system.damage.attribute localize=true}}
+    </select>
+    {{else}}
+    <input
+        type="text"
+        value="—"
+        readonly
+    >
+    {{/if}}
+</div>
+{{/if}}
+{{/if}}

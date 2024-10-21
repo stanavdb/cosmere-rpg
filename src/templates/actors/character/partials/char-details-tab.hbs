@@ -1,0 +1,17 @@
+{{#with (lookup tabsMap "details") as |tab|}}
+
+<div class="tab tab-content split flexrow {{tab.cssClass}}" data-tab="details" data-group="primary">
+    <section class="skills">
+        {{#each @root.attributeGroups as |group|}}
+        {{app-actor-skills-group group-id=group}}
+        {{/each}}
+        {{app-character-expertises}}
+    </section>
+    <section class="paths">
+        {{app-character-ancestry}}
+        {{app-character-culture}}
+        {{app-character-paths-list}}
+    </section>
+</div>
+
+{{/with}}

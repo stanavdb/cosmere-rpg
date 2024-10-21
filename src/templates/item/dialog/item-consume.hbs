@@ -1,0 +1,9 @@
+<form>
+    <div class="form-group">
+        <label>
+            <span>{{ localize "DIALOG.ItemConsume.ShouldConsume" }}</span>
+            <span>({{amount}} {{localize consumedResourceLabel}})</span>
+        </label>
+        <input type="checkbox" name="shouldConsume" {{#if shouldConsume}}checked{{/if}}>
+    </div>
+</form>

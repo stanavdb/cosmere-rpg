@@ -1,0 +1,111 @@
+{
+    "name": "Injury Duration",
+    "_id": "qOXZSTYaP6jhnvBV",
+    "img": "icons/skills/wounds/injury-pain-body-orange.webp",
+    "description": "",
+    "results": [
+        {
+            "type": "text",
+            "weight": 1,
+            "range": [-100, -6],
+            "drawn": false,
+            "_id": "CRw5Bg39c9YsjqIb",
+            "_key": "!tables.results!qOXZSTYaP6jhnvBV.CRw5Bg39c9YsjqIb",
+            "text": "<strong>Death.</strong> The character dies.",
+            "img": "icons/magic/death/skeleton-skull-soul-blue.webp",
+            "documentId": null,
+            "flags": {
+                "cosmere-rpg": {
+                    "injury-data": {
+                        "type": "death"
+                    }
+                }
+            }
+        },
+        {
+            "type": "text",
+            "weight": 1,
+            "range": [-5, 0],
+            "drawn": false,
+            "_id": "IiPgT9EZYnvd84l7",
+            "_key": "!tables.results!qOXZSTYaP6jhnvBV.IiPgT9EZYnvd84l7",
+            "text": "<strong>Permanent Injury.</strong> The character suffers a permanent injury.",
+            "img": "icons/skills/wounds/bone-broken-marrow-red.webp",
+            "documentId": null,
+            "flags": {
+                "cosmere-rpg": {
+                    "injury-data": {
+                        "type": "permanent_injury"
+                    }
+                }
+            }
+        },
+        {
+            "type": "text",
+            "weight": 1,
+            "range": [1, 5],
+            "drawn": false,
+            "_id": "abMYSaKItDQ6UCpO",
+            "_key": "!tables.results!qOXZSTYaP6jhnvBV.abMYSaKItDQ6UCpO",
+            "text": "<strong>Vicious Injury.</strong> The character suffers a temporary injury with a duration of 6d6 days.",
+            "img": "icons/skills/wounds/injury-hand-blood-red.webp",
+            "documentId": null,
+            "flags": {
+                "cosmere-rpg": {
+                    "injury-data": {
+                        "type": "ViciousInjury",
+                        "durationFormula": "6d6"
+                    }
+                }
+            }
+        },
+        {
+            "type": "text",
+            "weight": 1,
+            "range": [6, 15],
+            "drawn": false,
+            "_id": "WnBhe042FZVoih9R",
+            "_key": "!tables.results!qOXZSTYaP6jhnvBV.WnBhe042FZVoih9R",
+            "text": "<strong>Shallow Injury.</strong> The character suffers a temporary injury with a duration of 1d6 days.",
+            "img": "icons/skills/wounds/blood-spurt-spray-red.webp",
+            "documentId": null,
+            "flags": {
+                "cosmere-rpg": {
+                    "injury-data": {
+                        "type": "shallow_injury",
+                        "durationFormula": "1d6"
+                    }
+                }
+            }
+        },
+        {
+            "type": "text",
+            "weight": 1,
+            "range": [16, 100],
+            "drawn": false,
+            "_id": "EkpBg0WjoIV5Xfdg",
+            "_key": "!tables.results!qOXZSTYaP6jhnvBV.EkpBg0WjoIV5Xfdg",
+            "text": "<strong>Flesh Wound.</strong> The character suffers a temporary injury for the remainder of the day.",
+            "img": "icons/skills/wounds/injury-triple-slash-bleed.webp",
+            "documentId": null,
+            "flags": {
+                "cosmere-rpg": {
+                    "injury-data": {
+                        "type": "flesh_wound",
+                        "durationFormula": "1"
+                    }
+                }
+            }
+        }
+    ],
+    "replacement": true,
+    "displayRoll": false,
+    "folder": null,
+    "sort": 0,
+    "ownership": {
+        "default": 0
+    },
+    "flags": {},
+    "formula": "1d20",
+    "_key": "!tables!qOXZSTYaP6jhnvBV"
+}
