@@ -279,9 +279,7 @@
             border-bottom-right-radius: 50%;
 
             span {
-                margin: 0;
-                margin-top: -0.2rem;
-                margin-bottom: 0.3rem;
+                margin: -0.1rem 0 0.3rem 0 !important
             }
         }
     }
@@ -328,7 +326,7 @@
                     z-index: 1;
                     margin-left: 1rem;
                     text-shadow: 0 0 0.3rem black;
-                    margin-top: -0.05rem;
+                    margin-top: 0;
 
                     .delim {
                         font-weight: normal;
@@ -430,7 +428,7 @@
             margin: 0 2.5pt;
 
             .box-title {
-                margin-bottom: -1.6rem;
+                margin-bottom: -1.2rem;
                 z-index: 1;
                 font-size: 8pt;
             }
@@ -453,6 +451,10 @@
             }
 
             &:last-child {
+                .box-title {
+                    margin-bottom: -1.4rem;
+                }
+
                 .value input {
                     border-bottom-right-radius: 1rem;
                 }
