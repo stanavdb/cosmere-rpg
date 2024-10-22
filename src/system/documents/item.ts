@@ -136,6 +136,10 @@ export class CosmereItem<
         return this.type === ItemType.Trait;
     }
 
+    public isEquipment(): this is CosmereItem<EquipmentItemDataModel> {
+        return this.type === ItemType.Equipment;
+    }
+
     /* --- Mixin type guards --- */
 
     /**

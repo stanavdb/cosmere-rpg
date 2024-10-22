@@ -310,8 +310,8 @@ export async function renderComponent(
 
     // Render
     const content = await renderTemplate(ComponentClass.TEMPLATE, {
-        ...context,
         ...instance,
+        ...context,
         __application: instance.application,
         __componentRef: componentRef,
         partId: instance.partId,
