@@ -93,14 +93,24 @@ export class DamageRoll extends foundry.dice.Roll<DamageRollData> {
             const modifier = this.hasAdvantage ? 'kh' : 'kl';
 
             if (dieTerm.number && dieTerm.number > 1) {
+                // Remove one die from the original
+                dieTerm.number -= 1;
+
+                // Create a new term with the modifier
                 const newTerm = new foundry.dice.terms.Die({
-                    number: 1,
+                    number: 2,
                     faces: dieTerm.faces,
                     modifiers: [modifier],
                 });
 
-                this.terms.push(newTerm);
+                this.terms.push(
+                    new foundry.dice.terms.OperatorTerm({
+                        operator: '+',
+                    }),
+                    newTerm,
+                );
             } else if (dieTerm.number === 1) {
+                dieTerm.number = 2;
                 dieTerm.modifiers.push(modifier);
             }
         }
