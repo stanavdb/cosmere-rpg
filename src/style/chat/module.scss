@@ -263,6 +263,10 @@
                     display: flex;
                     padding: 0.3rem 0.25rem;
                     margin: 0;
+
+                    .delim {
+                        margin-right: .5rem;
+                    }
                 }
             }
 
@@ -339,6 +343,10 @@
                         margin-right: 0.1rem;
                     }
                 }
+            }
+
+            &.discarded {
+                opacity: 0.3;
             }
 
             &::after {

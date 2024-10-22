@@ -35,7 +35,7 @@
             <ul>
                 {{#each dice as |die|}}
                 {{#each die.results as |roll|}}
-                <li class="die roll {{die.denomination}}">
+                <li class="die roll {{die.denomination}} {{#if roll.discarded}}discarded{{/if}}">
                     <span>
                     {{#if (not die.isPlotDie)}}
                         {{roll.result}}
@@ -52,6 +52,10 @@
                     </span>
                 </li>
                 {{/each}}
+
+                {{#if (not @last)}}
+                <li class="delim"></li>
+                {{/if}}
                 {{/each}}
             </ul>
         </div>
