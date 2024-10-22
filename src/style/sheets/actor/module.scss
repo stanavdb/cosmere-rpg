@@ -740,8 +740,6 @@
                 }
 
                 .controls {
-                    // width: 3rem;
-                    color: rgba(231, 209, 177, 0.3);
                     height: 100%;
 
                     > * {
@@ -756,6 +754,10 @@
                     &.edit {
                         width: 5rem;
                     }
+                }
+
+                &:not(.header) .controls {
+                    color: rgba(231, 209, 177, 0.3);
                 }
 
                 &:not(.expanded) {
