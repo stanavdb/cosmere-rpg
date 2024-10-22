@@ -278,7 +278,8 @@
                 "Armor": {
                     "label": "Armor",
                     "label_plural": "Armor",
-                    "desc_placeholder": "Edit this to describe what this armor is & how it looks."
+                    "desc_placeholder": "Edit this to describe what this armor is & how it looks.",
+                    "New": "New Armor"
                 },
                 "Equipment": {
                     "label": "Equipment",
@@ -289,7 +290,8 @@
                 "Loot": {
                     "label": "Loot",
                     "label_plural": "Loot",
-                    "desc_placeholder": "Edit this to describe the item."
+                    "desc_placeholder": "Edit this to describe the item.",
+                    "New": "New Loot"
                 },
                 "Ancestry": {
                     "label": "Ancestry",
@@ -862,6 +864,7 @@
         "Clear": "Clear",
         "Name": "Name",
         "Level": "Level",
+        "Add": "Add",
         "Button": {
             "Roll": "Roll",
             "Continue": "Continue",

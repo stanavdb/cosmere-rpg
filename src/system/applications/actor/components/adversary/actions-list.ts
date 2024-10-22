@@ -33,17 +33,6 @@ export class AdversaryActionsListComponent extends ActorActionsListComponent {
                     item.system.alwaysEquipped,
             );
 
-        // Get all traits items
-        const traitItems = activatableItems.filter((item) => item.isTrait());
-
-        // Get all weapon items
-        const weaponItems = activatableItems.filter((item) => item.isWeapon());
-
-        // Get all action items (all non-trait, non-weapon items)
-        const actionItems = activatableItems.filter(
-            (item) => !item.isTrait() && !item.isWeapon(),
-        );
-
         // Ensure all items have an expand state record
         activatableItems.forEach((item) => {
             if (!(item.id in this.itemState)) {
@@ -69,19 +58,19 @@ export class AdversaryActionsListComponent extends ActorActionsListComponent {
             sections: [
                 await this.prepareSectionData(
                     this.sections[0],
-                    traitItems,
+                    activatableItems,
                     searchText,
                     sortDir,
                 ),
                 await this.prepareSectionData(
                     this.sections[1],
-                    weaponItems,
+                    activatableItems,
                     searchText,
                     sortDir,
                 ),
                 await this.prepareSectionData(
                     this.sections[2],
-                    actionItems,
+                    activatableItems,
                     searchText,
                     sortDir,
                 ),
@@ -139,6 +128,7 @@ export class AdversaryActionsListComponent extends ActorActionsListComponent {
     ) {
         // Get items for section, filter by search text, and sort
         const sectionItems = items
+            .filter(section.filter)
             .filter((i) => i.name.toLowerCase().includes(searchText))
             .sort(
                 (a, b) =>

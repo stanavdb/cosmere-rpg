@@ -1,5 +1,6 @@
 import { EquipHand, ItemType } from '@system/types/cosmere';
 import { CosmereItem } from '@system/documents/item';
+import { CosmereActor } from '@system/documents/actor';
 import { ConstructorOf } from '@system/types/utils';
 
 import { AppContextMenu } from '@system/applications/utils/context-menu';
@@ -18,6 +19,39 @@ interface EquipmentItemState {
 
 interface AdditionalItemData {
     descriptionHTML?: string;
+}
+
+export interface ListSection {
+    /**
+     * The id of the section
+     */
+    id: string;
+
+    /**
+     * Nicely formatted label for the section
+     */
+    label: string;
+
+    /**
+     * Whether this section counts as default.
+     * Default sections are always shown in edit mode, even if they are empty.
+     */
+    default: boolean;
+
+    /**
+     * Filter function to determine if an item should be included in this section
+     */
+    filter: (item: CosmereItem) => boolean;
+
+    /**
+     * Factory function to create a new item of this type
+     */
+    new?: (parent: CosmereActor) => Promise<CosmereItem | null | undefined>;
+}
+
+export interface ListSectionData extends ListSection {
+    items: CosmereItem[];
+    itemData: Record<string, AdditionalItemData>;
 }
 
 interface RenderContext extends BaseActorSheetRenderContext {
@@ -41,12 +75,15 @@ export class ActorEquipmentListComponent extends HandlebarsApplicationComponent<
     static readonly ACTIONS = {
         'toggle-action-details': this.onToggleActionDetails,
         'use-item': this.onUseItem,
+        'new-item': this.onNewItem,
         'toggle-equip': this.onToggleEquip,
         'cycle-equip': this.onCycleEquip,
         'decrease-quantity': this.onDecreaseQuantity,
         'increase-quantity': this.onIncreaseQuantity,
     };
     /* eslint-enable @typescript-eslint/unbound-method */
+
+    protected sections: ListSection[] = [];
 
     /**
      * Map of id to state
@@ -82,6 +119,28 @@ export class ActorEquipmentListComponent extends HandlebarsApplicationComponent<
 
         // Use the item
         void this.application.actor.useItem(item);
+    }
+
+    private static async onNewItem(
+        this: ActorEquipmentListComponent,
+        event: Event,
+    ) {
+        // Get section element
+        const sectionElement = $(event.target!).closest('[data-section-id]');
+
+        // Get section id
+        const sectionId = sectionElement.data('section-id') as string;
+
+        // Get section
+        const section = this.sections.find((s) => s.id === sectionId);
+        if (!section) return;
+
+        // Create new item
+        const item = await section.new?.(this.application.actor);
+        if (!item) return;
+
+        // Render the item sheet
+        void item.sheet?.render(true);
     }
 
     public static onToggleEquip(
@@ -188,56 +247,73 @@ export class ActorEquipmentListComponent extends HandlebarsApplicationComponent<
             }
         });
 
+        // Prepare sections
+        this.sections = [
+            this.prepareSection(ItemType.Weapon),
+            this.prepareSection(ItemType.Armor),
+            this.prepareSection(ItemType.Equipment),
+            this.prepareSection(ItemType.Loot),
+        ];
+
         return {
             ...context,
 
-            sections: await this.categorizeItemsByType(
-                physicalItems,
-                context.equipmentSearch.text,
-                context.equipmentSearch.sort,
+            sections: await Promise.all(
+                this.sections.map((section) =>
+                    this.prepareSectionData(
+                        section,
+                        physicalItems,
+                        context.equipmentSearch.text,
+                        context.equipmentSearch.sort,
+                    ),
+                ),
             ),
 
             itemState: this.itemState,
         };
     }
 
-    private async categorizeItemsByType(
+    protected prepareSection(type: ItemType): ListSection {
+        return {
+            id: type,
+            label: CONFIG.COSMERE.items.types[type].labelPlural,
+            default: true,
+            filter: (item) => item.type === type,
+            new: (parent: CosmereActor) =>
+                CosmereItem.create(
+                    {
+                        type,
+                        name: game.i18n!.localize(
+                            `COSMERE.Item.Type.${type.capitalize()}.New`,
+                        ),
+                    },
+                    { parent },
+                ) as Promise<CosmereItem>,
+        };
+    }
+
+    protected async prepareSectionData(
+        section: ListSection,
         items: CosmereItem[],
         filterText: string,
         sort: SortDirection,
     ) {
-        // Get item types
-        const types = Object.keys(CONFIG.COSMERE.items.types) as ItemType[];
+        // Get items for section, filter by search text, and sort
+        const sectionItems = items
+            .filter(section.filter)
+            .filter((i) => i.name.toLowerCase().includes(filterText))
+            .sort(
+                (a, b) =>
+                    a.name.compare(b.name) *
+                    (sort === SortDirection.Descending ? 1 : -1),
+            );
 
-        // Categorize items by types
-        const categories = types.reduce(
-            (result, type) => {
-                // Get all physical items of type
-                result[type] = items
-                    .filter((item) => item.type === type)
-                    .filter((i) => i.name.toLowerCase().includes(filterText))
-                    .sort(
-                        (a, b) =>
-                            a.name.compare(b.name) *
-                            (sort === SortDirection.Descending ? 1 : -1),
-                    );
-
-                return result;
-            },
-            {} as Record<ItemType, CosmereItem[]>,
-        );
-
-        // Set up sections
-        return await Promise.all(
-            (Object.keys(categories) as ItemType[])
-                .filter((type) => categories[type].length > 0)
-                .map(async (type) => ({
-                    id: type,
-                    label: CONFIG.COSMERE.items.types[type].labelPlural,
-                    items: categories[type],
-                    itemData: await this.prepareItemData(categories[type]),
-                })),
-        );
+        return {
+            ...section,
+            canAddNewItems: !!section.new,
+            items: sectionItems,
+            itemData: await this.prepareItemData(sectionItems),
+        };
     }
 
     private async prepareItemData(items: CosmereItem[]) {

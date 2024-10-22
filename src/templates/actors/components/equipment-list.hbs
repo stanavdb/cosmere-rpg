@@ -12,7 +12,15 @@
         <div class="col controls flexrow">
             <div></div>
             {{#if @root.editable}}
-            <div></div>
+                {{#if section.canAddNewItems}}
+                    <a data-action="new-item"
+                        data-tooltip="{{concat (localize "GENERIC.Add") " " (localize (concat "TYPES.Item." section.id))}}"
+                    >
+                        <i class="fa-solid fa-plus"></i>
+                    </a>
+                {{else}}
+                    <div></div>
+                {{/if}}
             {{/if}}
         </div>
     </li>
