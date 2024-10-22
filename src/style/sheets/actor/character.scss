@@ -5,6 +5,19 @@
         }
     }
 
+    .cultures-placeholder {
+        border: 1px dashed;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem 1rem;
+        opacity: 0.5;
+        box-shadow: 0 0 1rem 0.1rem black;
+        background: #00000036;
+        text-align: center;
+        border-radius: 0.3rem;
+        margin-bottom: 1rem;
+    }
+
     /* --- Tabs --- */
 
     .tab.split {

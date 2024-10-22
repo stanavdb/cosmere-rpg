@@ -157,6 +157,30 @@ export class CosmereActor<
 
     /* --- Lifecycle --- */
 
+    public override async _preCreate(
+        data: object,
+        options: object,
+        user: foundry.documents.BaseUser,
+    ): Promise<boolean | void> {
+        if ((await super._preCreate(data, options, user)) === false)
+            return false;
+
+        // Configure prototype token settings
+        const prototypeToken = {};
+
+        if (this.isCharacter()) {
+            foundry.utils.mergeObject(prototypeToken, {
+                sight: {
+                    enabled: true,
+                },
+                actorLink: true,
+                disposition: CONST.TOKEN_DISPOSITIONS.FRIENDLY,
+            });
+        }
+
+        this.updateSource({ prototypeToken });
+    }
+
     public override async createEmbeddedDocuments(
         embeddedName: string,
         data: object[],

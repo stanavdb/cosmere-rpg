@@ -21,6 +21,7 @@ declare class Actor<
     public readonly name: string;
     public readonly img: string;
     public readonly system: D;
+    public prototypeToken: TokenDocument | null;
 
     /**
      * The statuses that are applied to this actor by active effects
