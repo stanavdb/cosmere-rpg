@@ -816,6 +816,9 @@
             "Warning": {
                 "DuplicateLevel": "A rule for level {level} already exists"
             }
+        },
+        "ReleaseNotes": {
+            "Title": "Cosmere Roleplaying Game - Release Notes {version}"
         }
     },
     "COMPONENT": {

@@ -1,3 +1,6 @@
+// Dialogs
+import { ReleaseNotesDialog } from '@system/applications/dialogs/release-notes';
+
 Hooks.on('ready', async () => {
     // Ensure this message is only displayed when creating a new world
     if (
@@ -21,6 +24,9 @@ Hooks.on('ready', async () => {
 });
 
 Hooks.on('ready', async () => {
+    // Ensure user is a GM
+    if (!game.user!.isGM) return;
+
     const currentVersion = game.system!.version;
     const latestVersion = game.settings!.get(
         'cosmere-rpg',
@@ -34,5 +40,8 @@ Hooks.on('ready', async () => {
             'latestVersion',
             currentVersion,
         );
+
+        // Show the release notes
+        void ReleaseNotesDialog.show();
     }
 });
