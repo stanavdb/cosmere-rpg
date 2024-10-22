@@ -688,7 +688,7 @@ export class CosmereActor<
                         title: 'COSMERE.Actor.Sheet.LongRest',
                     },
                     content: `<span>${game.i18n!.localize(
-                        'COSMERE.Actor.Sheet.ShouldPerformLongRest',
+                        'DIALOG.LongRest.ShouldPerform',
                     )}</span>`,
                     buttons: [
                         {
