@@ -1,9 +1,11 @@
-# Release 0.1.0
-This is the first release of the Cosmere Roleplaying Game System. As an early version, it’s expected that some features are incomplete, and bugs may occur. The system has not yet been play-tested, so certain mechanics may not function as intended.  
+### Release 0.1.1
 
-Key missing or incomplete features include:  
-- Support for path-specific skills (e.g., surge skills)
-- Multiple damage types on a single item/talent/action
-- Character advancement and leveling
-- Multiple advantages/disadvantages on damage dice
-- Advantage/disadvantage on plot dice
+#### What's New:
+- **Token Defaults:** Added default settings for Character Actor tokens, including sight, Actor data linking, and disposition.
+- **Actor Sheets:** Added the ability to create new Items directly from the Character sheet.
+
+#### Fixes:
+- **Multiple Cultures:** Fixed an issue that prevented adding multiple cultures to a Character.
+- **Long Rest Dialog:** Corrected the localization string to display properly.
+- **Damage Rolls:** Advantage now correctly applies to damage rolls. (Though you can still only apply one count of advantage.)
+- **Item Sheets:** Added a max height to Item sheets, so they now scroll instead of growing endlessly, improving readability.
