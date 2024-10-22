@@ -7,8 +7,15 @@ import { HandlebarsApplicationComponent } from '@system/applications/component-s
 import { BaseActorSheetRenderContext } from '../../base';
 import { CharacterSheet } from '../../character-sheet';
 
+// NOTE: Must use type here instead of interface as an interface doesn't match AnyObject type
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+type Params = {
+    culture: CultureItem;
+};
+
 export class CharacterCultureComponent extends HandlebarsApplicationComponent<
-    ConstructorOf<CharacterSheet>
+    ConstructorOf<CharacterSheet>,
+    Params
 > {
     static TEMPLATE =
         'systems/cosmere-rpg/templates/actors/character/components/culture.hbs';
@@ -27,40 +34,26 @@ export class CharacterCultureComponent extends HandlebarsApplicationComponent<
     /* --- Actions --- */
 
     private static onRemove(this: CharacterCultureComponent) {
-        void this.application.actor.items
-            .find((item) => item.isCulture())
-            ?.delete();
+        void this.params!.culture.delete();
     }
 
     private static onView(this: CharacterCultureComponent) {
-        const cultureItem = this.application.actor.items.find((item) =>
-            item.isCulture(),
-        );
-        void cultureItem?.sheet?.render(true);
+        void this.params!.culture.sheet?.render(true);
     }
 
     /* --- Context --- */
 
     public _prepareContext(
-        params: never,
+        params: Params,
         context: BaseActorSheetRenderContext,
     ) {
-        // Find the culture
-        const cultureItem = this.application.actor.items.find((item) =>
-            item.isCulture(),
-        ) as CultureItem | undefined;
-
         return Promise.resolve({
             ...context,
 
-            ...(cultureItem
-                ? {
-                      culture: {
-                          label: cultureItem.name,
-                          img: cultureItem.img,
-                      },
-                  }
-                : {}),
+            culture: {
+                label: params.culture.name,
+                img: params.culture.img,
+            },
         });
     }
 }
