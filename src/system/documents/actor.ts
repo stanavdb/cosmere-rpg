@@ -12,6 +12,9 @@ import {
 import {
     CosmereItem,
     CosmereItemData,
+    AncestryItem,
+    CultureItem,
+    PathItem,
     TalentItem,
 } from '@system/documents/item';
 import {
@@ -128,6 +131,20 @@ export class CosmereActor<
         return Derived.getValue(this.system.deflect) ?? 0;
     }
 
+    public get ancestry(): AncestryItem | undefined {
+        return this.items.find((i) => i.isAncestry()) as
+            | AncestryItem
+            | undefined;
+    }
+
+    public get cultures(): CultureItem[] {
+        return this.items.filter((i) => i.isCulture());
+    }
+
+    public get paths(): PathItem[] {
+        return this.items.filter((i) => i.isPath());
+    }
+
     /* --- Type Guards --- */
 
     public isCharacter(): this is CharacterActor {
@@ -172,33 +189,6 @@ export class CosmereActor<
                     postCreateActions.push(() => {
                         void this.deleteEmbeddedDocuments('Item', [
                             currentAncestryItem.id,
-                        ]);
-                    });
-                }
-            }
-
-            // Get the first culture item
-            const cultureItem = itemData.find(
-                (d) => d.type === ItemType.Culture,
-            );
-
-            // Filter out any culture items beyond the first
-            data = itemData.filter(
-                (d) => d.type !== ItemType.Culture || d === cultureItem,
-            );
-
-            // If a culture item was present, replace the current (after create)
-            if (cultureItem) {
-                // Get current culture item
-                const currentCultureItem = this.items.find(
-                    (i) => i.type === ItemType.Culture,
-                );
-
-                // Remove existing culture after create, if present
-                if (currentCultureItem) {
-                    postCreateActions.push(() => {
-                        void this.deleteEmbeddedDocuments('Item', [
-                            currentCultureItem.id,
                         ]);
                     });
                 }
