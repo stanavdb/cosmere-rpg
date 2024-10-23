@@ -572,7 +572,11 @@
                 },
                 "Damage": {
                     "Title": "Damage",
-                    "Formula": "Damage Formula"
+                    "Formula": "Damage Formula",
+                    "GrazeOverride": "Override Graze Damage Calculation",
+                    "GrazeShow": "Show New Graze Damage Formula",
+                    "GrazeHide": "Hide New Graze Damage Forumla",
+                    "GrazeFormula": "New Formula"
                 },
                 "Modality": {
                     "Title": "Modality",
