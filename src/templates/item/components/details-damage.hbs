@@ -61,4 +61,37 @@
     {{/if}}
 </div>
 {{/if}}
+
+<div class="form-group-stacked">
+    <div class="header">
+        <label>{{localize "COSMERE.Item.Sheet.Damage.GrazeOverride"}}</label>
+        <div class="controls">
+            {{#if grazeInputCollapsed}}
+            <a data-action="toggle-graze-collapsed"
+                data-tooltip="COSMERE.Item.Sheet.Damage.GrazeShow"
+            >
+                <i class="fa-solid fa-chevron-left"></i>
+            </a>
+            {{else}}
+            <a data-action="toggle-graze-collapsed"
+                data-tooltip="COSMERE.Item.Sheet.Damage.GrazeHide"
+            >
+                <i class="fa-solid fa-chevron-down"></i>
+            </a>
+            {{/if}}
+        </div>
+    </div>
+    {{#if (not grazeInputCollapsed)}}
+    <div class="form-group formula">
+        <label>{{localize "COSMERE.Item.Sheet.Damage.GrazeFormula"}}</label>
+        <input name="system.damage.grazeOverrideFormula"
+            type="text"
+            value="{{item.system.damage.grazeOverrideFormula}}"
+            {{#if (not editable)}}
+            readonly
+            {{/if}}
+        >
+    </div>
+    {{/if}}
+</div>
 {{/if}}
