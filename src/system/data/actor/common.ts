@@ -12,13 +12,22 @@ import {
     Condition,
 } from '@system/types/cosmere';
 import { CosmereActor } from '@system/documents/actor';
-import { CosmereItem } from '@system/documents';
-import { ArmorItemDataModel } from '@system/data/item/armor';
+import { ArmorItem } from '@system/documents';
 
 // Fields
 import { DerivedValueField, Derived } from '../fields/derived-value-field';
 
 interface DeflectData extends Derived<number> {
+    /**
+     * The natural deflect value for this actor.
+     * This value is used when deflect cannot be derived from its source, or
+     * when the natural value is higher than the derived value.
+     */
+    natural?: number;
+
+    /**
+     * The source of the deflect value
+     */
     source?: DeflectSource;
 }
 
@@ -175,6 +184,14 @@ export class CommonActorDataModel<
                 }),
                 {
                     additionalFields: {
+                        natural: new foundry.data.fields.NumberField({
+                            required: false,
+                            nullable: true,
+                            integer: true,
+                            initial: 0,
+                            label: 'COSMERE.Deflect.Natural.Label',
+                            hint: 'COSMERE.Deflect.Natural.Hint',
+                        }),
                         source: new foundry.data.fields.StringField({
                             initial: DeflectSource.Armor,
                             choices: Object.keys(
@@ -544,17 +561,26 @@ export class CommonActorDataModel<
 
         // Derive deflect value
         if (source === DeflectSource.Armor) {
-            // Find equipped armor
+            // Get natural deflect value
+            const natural = this.deflect.natural ?? 0;
+
+            // Find equipped armor with the highest deflect value
             const armor = this.parent.items
-                .filter((item) => item.type === ItemType.Armor)
-                .map(
-                    (item) =>
-                        item as unknown as CosmereItem<ArmorItemDataModel>,
-                )
-                .find((item) => item.system.equipped);
+                .filter((item) => item.isArmor())
+                .filter((item) => item.system.equipped)
+                .reduce(
+                    (highest, item) =>
+                        !highest || item.system.deflect > highest.system.deflect
+                            ? item
+                            : highest,
+                    null as ArmorItem | null,
+                );
+
+            // Get armor deflect value
+            const armorDeflect = armor?.system.deflect ?? 0;
 
             // Derive deflect
-            this.deflect.value = armor?.system.deflect ?? 0;
+            this.deflect.value = Math.max(natural, armorDeflect);
         }
 
         // Movement
