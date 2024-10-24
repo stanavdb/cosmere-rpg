@@ -127,6 +127,12 @@
                 "Deflect": "Deflect",
                 "NoObscuredSense": "Unaffected by Obscured Senses."
             },
+            "Deflect": {
+                "Natural": {
+                    "Label": "Natural Deflect",
+                    "Hint": "Natural deflect is used when no armor is worn, or when the natural deflect is higher than the worn armor."
+                }
+            },
             "Size": {
                 "Small": "Small",
                 "Medium": "Medium",
@@ -207,6 +213,7 @@
                 "ToggleShowSkills": "Show skills without ranks",
                 "ToggleCollapseSkills": "Hide skills without ranks",
                 "ConfigureDefense": "Configure Defense",
+                "ConfigureDeflect": "Configure Deflect",
                 "ConfigureMovement": "Configure Movement Rate",
                 "ConfigureSensesRange": "Configure Senses Range",
                 "ConfigureRecovery": "Configure Recovery Die",
@@ -807,6 +814,9 @@
         },
         "ConfigureRecoveryDie": {
             "Title": "Configure Recovery Die: {actor}"
+        },
+        "ConfigureDeflect": {
+            "Title": "Configure Deflect: {actor}"
         },
         "EditTalentPrerequisite": {
             "Title": "Edit Prerequisite"

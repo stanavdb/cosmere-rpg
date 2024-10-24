@@ -28,6 +28,14 @@
         <span class="value">{{derived deflect}}</span>
 
         {{/with}}
+
+        {{#if isEditMode}}
+        <a data-action="configure-deflect"
+            data-tooltip="COSMERE.Actor.Sheet.ConfigureDeflect"
+        >
+            <i class="fa-solid fa-gear"></i>
+        </a>
+        {{/if}}
     </div>
     {{/if}}
 </div>
@@ -76,6 +84,13 @@
             {{#with actor.system.deflect as |deflect|}}
             <span class="value">{{derived deflect}}</span>
             {{/with}}
+            {{#if isEditMode}}
+            <a data-action="configure-deflect"
+                data-tooltip="COSMERE.Actor.Sheet.ConfigureDeflect"
+            >
+                <i class="fa-solid fa-gear"></i>
+            </a>
+            {{/if}}
         </div>
         <span class="label">
             {{localize "COSMERE.Actor.Statistics.Deflect"}}
