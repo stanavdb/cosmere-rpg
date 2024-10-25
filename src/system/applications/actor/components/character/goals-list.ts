@@ -1,4 +1,5 @@
 import { ConstructorOf, MouseButton } from '@system/types/utils';
+import { SYSTEM_ID } from '@src/system/constants';
 
 // Component imports
 import { HandlebarsApplicationComponent } from '@system/applications/component-system';
@@ -107,7 +108,7 @@ export class CharacterGoalsListComponent extends HandlebarsApplicationComponent<
         // Get current state
         const hideCompletedGoals =
             this.application.actor.getFlag<boolean>(
-                'cosmere-rpg',
+                SYSTEM_ID,
                 HIDE_COMPLETED_FLAG,
             ) ?? false;
 
@@ -202,7 +203,7 @@ export class CharacterGoalsListComponent extends HandlebarsApplicationComponent<
     ) {
         const hideCompletedGoals =
             this.application.actor.getFlag<boolean>(
-                'cosmere-rpg',
+                SYSTEM_ID,
                 HIDE_COMPLETED_FLAG,
             ) ?? false;
 

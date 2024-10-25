@@ -1,4 +1,5 @@
 import { Resource } from '@src/system/types/cosmere';
+import { SYSTEM_ID } from '@src/system/constants';
 import { CosmereActor } from '@system/documents/actor';
 import { DeepPartial, AnyObject } from '@system/types/utils';
 
@@ -102,7 +103,7 @@ export class BaseActorSheet<
     /* --- Accessors --- */
 
     public get mode(): ActorSheetMode {
-        return this.actor.getFlag('cosmere-rpg', 'sheet.mode') ?? 'edit';
+        return this.actor.getFlag(SYSTEM_ID, 'sheet.mode') ?? 'edit';
     }
 
     /* --- Drag drop --- */

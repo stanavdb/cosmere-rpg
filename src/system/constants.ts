@@ -24,3 +24,7 @@ export const IMPORTED_RESOURCES = {
     PLOT_DICE_OP:
         'https://dl.dropboxusercontent.com/scl/fi/cdswnywdr57sp79l4f9zd/Op.png?rlkey=4v6pgtxcrmwuzgazjgcpbs4xq&st=qnzdxl58&raw=1&t=.png',
 };
+
+export const SYSTEM_ID = 'cosmere-rpg';
+
+export const SYSTEM_NAME = 'Cosmere Roleplaying Game';

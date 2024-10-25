@@ -1,5 +1,6 @@
 import { AncestryItem } from '@system/documents/item';
 import { DeepPartial } from '@system/types/utils';
+import { SYSTEM_ID } from '@src/system/constants';
 
 import { BaseItemSheet } from './base';
 
@@ -7,7 +8,7 @@ export class AncestrySheet extends BaseItemSheet {
     static DEFAULT_OPTIONS = foundry.utils.mergeObject(
         foundry.utils.deepClone(super.DEFAULT_OPTIONS),
         {
-            classes: ['cosmere-rpg', 'sheet', 'item', 'ancestry'],
+            classes: [SYSTEM_ID, 'sheet', 'item', 'ancestry'],
             position: {
                 width: 600,
                 height: 550,

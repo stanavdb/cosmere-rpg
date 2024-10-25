@@ -9,6 +9,7 @@ import { EditExpertisesDialog } from './dialogs/edit-expertises';
 
 // Base
 import { BaseActorSheet, BaseActorSheetRenderContext } from './base';
+import { SYSTEM_ID } from '@src/system/constants';
 
 export type AdversarySheetRenderContext = Omit<
     BaseActorSheetRenderContext,
@@ -26,7 +27,7 @@ export class AdversarySheet extends BaseActorSheet<AdversarySheetRenderContext> 
     static DEFAULT_OPTIONS = foundry.utils.mergeObject(
         foundry.utils.deepClone(super.DEFAULT_OPTIONS),
         {
-            classes: ['cosmere-rpg', 'sheet', 'actor', 'adversary'],
+            classes: [SYSTEM_ID, 'sheet', 'actor', 'adversary'],
             position: {
                 width: 850,
                 height: 850,
@@ -60,9 +61,7 @@ export class AdversarySheet extends BaseActorSheet<AdversarySheetRenderContext> 
     }
 
     get areSkillsCollapsed(): boolean {
-        return (
-            this.actor.getFlag('cosmere-rpg', 'sheet.skillsCollapsed') ?? false
-        );
+        return this.actor.getFlag(SYSTEM_ID, 'sheet.skillsCollapsed') ?? false;
     }
 
     /* --- Actions --- */
@@ -70,7 +69,7 @@ export class AdversarySheet extends BaseActorSheet<AdversarySheetRenderContext> 
     private static onToggleSkillsCollapsed(this: AdversarySheet) {
         // Update the flag
         void this.actor.setFlag(
-            'cosmere-rpg',
+            SYSTEM_ID,
             'sheet.skillsCollapsed',
             !this.areSkillsCollapsed,
         );
