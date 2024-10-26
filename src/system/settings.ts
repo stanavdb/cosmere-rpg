@@ -88,7 +88,12 @@ export function registerSystemKeybindings() {
         },
         {
             name: KEYBINDINGS.SKIP_DIALOG_DISADVANTAGE,
-            editable: [{ key: 'ControlLeft' }, { key: 'ControlRight' }],
+            editable: [
+                { key: 'ControlLeft' },
+                { key: 'ControlRight' },
+                { key: 'OsLeft' },
+                { key: 'OsRight' },
+            ],
         },
         {
             name: KEYBINDINGS.SKIP_DIALOG_RAISE_STAKES,
