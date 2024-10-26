@@ -2,6 +2,7 @@ import './components';
 
 import { ItemType } from '@system/types/cosmere';
 import { CharacterActor } from '@system/documents';
+import { SYSTEM_ID } from '@src/system/constants';
 
 // Base
 import { BaseActorSheet } from './base';
@@ -15,7 +16,7 @@ export class CharacterSheet extends BaseActorSheet {
     static DEFAULT_OPTIONS = foundry.utils.mergeObject(
         foundry.utils.deepClone(super.DEFAULT_OPTIONS),
         {
-            classes: ['cosmere-rpg', 'sheet', 'actor', 'character'],
+            classes: [SYSTEM_ID, 'sheet', 'actor', 'character'],
             position: {
                 width: 850,
                 height: 1000,

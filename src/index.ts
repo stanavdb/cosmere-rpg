@@ -1,12 +1,12 @@
 import { ActorType, Condition, ItemType } from './system/types/cosmere';
-
+import { SYSTEM_ID } from './system/constants';
 import COSMERE from './system/config';
 
 import './style.scss';
 import './system/hooks';
 
 import { preloadHandlebarsTemplates } from './system/util/handlebars';
-import { registerSettings } from './system/settings';
+import { SettingsUtility } from './system/settings';
 
 import * as applications from './system/applications';
 import * as dataModels from './system/data';
@@ -94,7 +94,7 @@ Hooks.once('init', async () => {
     registerStatusEffects();
 
     // Register settings
-    registerSettings();
+    SettingsUtility.registerSettings();
 });
 
 /**
@@ -127,7 +127,7 @@ function registerActorSheet(
     type: ActorType,
     sheet: typeof foundry.applications.api.ApplicationV2<any, any, any>,
 ) {
-    Actors.registerSheet('cosmere-rpg', sheet as any, {
+    Actors.registerSheet(SYSTEM_ID, sheet as any, {
         types: [type],
         makeDefault: true,
         label: `TYPES.Actor.${type}`,
@@ -138,7 +138,7 @@ function registerItemSheet(
     type: ItemType,
     sheet: typeof foundry.applications.api.ApplicationV2<any, any, any>,
 ) {
-    Items.registerSheet('cosmere-rpg', sheet as any, {
+    Items.registerSheet(SYSTEM_ID, sheet as any, {
         types: [type],
         makeDefault: true,
         label: `TYPES.Item.${type}`,

@@ -24,7 +24,7 @@ import {
 import { CharacterActorDataModel } from '@system/data/actor/character';
 import { AdversaryActorDataModel } from '@system/data/actor/adversary';
 import { Derived } from '@system/data/fields';
-
+import { SYSTEM_ID } from '../constants';
 import { d20Roll, D20Roll, D20RollData, DamageRoll } from '@system/dice';
 
 // Dialogs
@@ -119,11 +119,11 @@ export class CosmereActor<
 
     public get favorites(): CosmereItem[] {
         return this.items
-            .filter((i) => i.getFlag('cosmere-rpg', 'favorites.isFavorite'))
+            .filter((i) => i.getFlag(SYSTEM_ID, 'favorites.isFavorite'))
             .sort(
                 (a, b) =>
-                    a.getFlag<number>('cosmere-rpg', 'favorites.sort') -
-                    b.getFlag<number>('cosmere-rpg', 'favorites.sort'),
+                    a.getFlag<number>(SYSTEM_ID, 'favorites.sort') -
+                    b.getFlag<number>(SYSTEM_ID, 'favorites.sort'),
             );
     }
 
@@ -276,7 +276,7 @@ export class CosmereActor<
     /* --- Functions --- */
 
     public async setMode(modality: string, mode: string) {
-        await this.setFlag('cosmere-rpg', `mode.${modality}`, mode);
+        await this.setFlag(SYSTEM_ID, `mode.${modality}`, mode);
 
         // Get all effects for this modality
         const effects = this.applicableEffects.filter(
@@ -305,7 +305,7 @@ export class CosmereActor<
     }
 
     public async clearMode(modality: string) {
-        await this.unsetFlag('cosmere-rpg', `mode.${modality}`);
+        await this.unsetFlag(SYSTEM_ID, `mode.${modality}`);
 
         // Get all effects for this modality
         const effects = this.effects.filter(
@@ -356,7 +356,7 @@ export class CosmereActor<
 
         // Get injury data
         const data: { type: InjuryType; durationFormula: string } =
-            result.getFlag('cosmere-rpg', 'injury-data');
+            result.getFlag(SYSTEM_ID, 'injury-data');
 
         if (
             data.type !== InjuryType.Death &&
