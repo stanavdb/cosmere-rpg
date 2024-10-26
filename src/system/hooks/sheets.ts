@@ -1,12 +1,10 @@
 import { BaseItemSheet } from '../applications/item/base';
-import { SETTING_NAMES, SettingsUtility } from '../settings';
+import { getSettingValue, SETTING_NAMES } from '../settings';
 
 Hooks.on(
     'renderItemSheetV2',
     (itemSheet: BaseItemSheet, node: HTMLFormElement) => {
-        if (
-            SettingsUtility.getSettingValue(SETTING_NAMES.ITEM_SHEET_SIDE_TABS)
-        ) {
+        if (getSettingValue(SETTING_NAMES.ITEM_SHEET_SIDE_TABS)) {
             node.classList.add('side-tabs');
         }
     },
