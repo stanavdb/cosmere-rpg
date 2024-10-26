@@ -1,5 +1,4 @@
 import { BaseItemSheet } from '../applications/item/base';
-import { SYSTEM_ID } from '../constants';
 import { SETTING_NAMES, SettingsUtility } from '../settings';
 
 Hooks.on(

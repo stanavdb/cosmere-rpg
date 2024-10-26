@@ -1,7 +1,6 @@
 import { ArmorTraitId, WeaponTraitId } from '@system/types/cosmere';
 import { CosmereItem } from '@system/documents/item';
 import { DeepPartial, AnyObject } from '@system/types/utils';
-import { SYSTEM_ID } from '@src/system/constants';
 
 // Mixins
 import { ComponentHandlebarsApplicationMixin } from '@system/applications/component-system';
