@@ -4,7 +4,7 @@ import { SYSTEM_ID } from './constants';
  * Enumerable of identifiers for setting names.
  * @enum {String}
  */
-export const SETTING_NAMES = {
+export const SETTINGS = {
     INTERNAL_FIRST_CREATION: 'firstTimeWorldCreation',
     INTERNAL_LATEST_VERSION: 'latestVersion',
     ITEM_SHEET_SIDE_TABS: 'itemSheetSideTabs',
@@ -12,10 +12,10 @@ export const SETTING_NAMES = {
 };
 
 /**
- * Registers all necessary system settings.
+ * Register all of the system's settings.
  */
-export function registerSettings() {
-    game.settings!.register(SYSTEM_ID, SETTING_NAMES.INTERNAL_FIRST_CREATION, {
+export function registerSystemSettings() {
+    game.settings!.register(SYSTEM_ID, SETTINGS.INTERNAL_FIRST_CREATION, {
         name: 'First Time World Creation',
         scope: 'world',
         config: false,
@@ -23,7 +23,7 @@ export function registerSettings() {
         type: Boolean,
     });
 
-    game.settings!.register(SYSTEM_ID, SETTING_NAMES.INTERNAL_LATEST_VERSION, {
+    game.settings!.register(SYSTEM_ID, SETTINGS.INTERNAL_LATEST_VERSION, {
         name: 'Latest Version',
         scope: 'world',
         config: false,
@@ -33,7 +33,7 @@ export function registerSettings() {
 
     // SHEET SETTINGS
     const sheetOptions = [
-        { name: SETTING_NAMES.ITEM_SHEET_SIDE_TABS, default: false },
+        { name: SETTINGS.ITEM_SHEET_SIDE_TABS, default: false },
     ];
 
     sheetOptions.forEach((option) => {
@@ -49,7 +49,7 @@ export function registerSettings() {
 
     // ROLL SETTINGS
     const rollOptions = [
-        { name: SETTING_NAMES.ROLL_SKIP_DIALOG_DEFAULT, default: false },
+        { name: SETTINGS.ROLL_SKIP_DIALOG_DEFAULT, default: false },
     ];
 
     rollOptions.forEach((option) => {
