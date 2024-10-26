@@ -1,8 +1,7 @@
 import { SYSTEM_ID } from './constants';
 
 /**
- * Enumerable of identifiers for setting names.
- * @enum {String}
+ * Index of identifiers for system settings.
  */
 export const SETTINGS = {
     INTERNAL_FIRST_CREATION: 'firstTimeWorldCreation',
