@@ -69,6 +69,6 @@ export function registerSettings() {
  * @param {string} settingKey The identifier of the setting to retrieve.
  * @returns {string|boolean} The value of the setting as set for the world/client.
  */
-export function getSettingValue(settingKey: string) {
+export function getSystemSetting(settingKey: string) {
     return game.settings!.get(SYSTEM_ID, settingKey);
 }
