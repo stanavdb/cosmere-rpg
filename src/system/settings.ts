@@ -12,9 +12,12 @@ export const SETTING_NAMES = {
 };
 
 /**
- * Utility class for registry of module settings and retrieval of setting data.
+ * Utility class for registry of system settings and retrieval of setting data.
  */
 export class SettingsUtility {
+    /**
+     * Registers all necessary system settings.
+     */
     static registerSettings() {
         game.settings!.register(
             SYSTEM_ID,
