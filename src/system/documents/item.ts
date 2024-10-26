@@ -6,6 +6,7 @@ import {
     ActivationType,
 } from '@system/types/cosmere';
 import { CosmereActor } from './actor';
+import { SYSTEM_ID } from '../constants';
 
 import { Derived } from '@system/data/fields';
 
@@ -216,7 +217,7 @@ export class CosmereItem<
     /* --- Accessors --- */
 
     public get isFavorite(): boolean {
-        return this.getFlag('cosmere-rpg', 'favorites.isFavorite');
+        return this.getFlag(SYSTEM_ID, 'favorites.isFavorite');
     }
 
     /**
@@ -237,10 +238,7 @@ export class CosmereItem<
         const modalityId = this.system.modality;
 
         // Check actor modality flag
-        const activeMode = this.actor.getFlag(
-            'cosmere-rpg',
-            `mode.${modalityId}`,
-        );
+        const activeMode = this.actor.getFlag(SYSTEM_ID, `mode.${modalityId}`);
 
         // Check if the actor has the mode active
         return activeMode === this.system.id;
@@ -876,7 +874,7 @@ export class CosmereItem<
         await this.update(
             {
                 flags: {
-                    'cosmere-rpg': {
+                    SYSTEM_ID: {
                         favorites: {
                             isFavorite: true,
                             sort: index,
@@ -890,8 +888,8 @@ export class CosmereItem<
 
     public async clearFavorite() {
         await Promise.all([
-            this.unsetFlag('cosmere-rpg', 'favorites.isFavorite'),
-            this.unsetFlag('cosmere-rpg', 'favorites.sort'),
+            this.unsetFlag(SYSTEM_ID, 'favorites.isFavorite'),
+            this.unsetFlag(SYSTEM_ID, 'favorites.sort'),
         ]);
     }
 

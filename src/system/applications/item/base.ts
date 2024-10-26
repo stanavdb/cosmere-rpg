@@ -1,6 +1,7 @@
 import { ArmorTraitId, WeaponTraitId } from '@system/types/cosmere';
 import { CosmereItem } from '@system/documents/item';
 import { DeepPartial, AnyObject } from '@system/types/utils';
+import { SYSTEM_ID } from '@src/system/constants';
 
 // Mixins
 import { ComponentHandlebarsApplicationMixin } from '@system/applications/component-system';
@@ -286,7 +287,7 @@ export class BaseItemSheet extends TabsApplicationMixin(
             ).fields,
             editable: this.isEditable,
             descHtml: enrichedDescValue,
-            sideTabs: game.settings!.get('cosmere-rpg', 'itemSheetSideTabs'),
+            sideTabs: game.settings!.get(SYSTEM_ID, 'itemSheetSideTabs'),
         };
     }
 }
