@@ -1,10 +1,13 @@
 import { BaseItemSheet } from '../applications/item/base';
 import { SYSTEM_ID } from '../constants';
+import { SETTING_NAMES, SettingsUtility } from '../settings';
 
 Hooks.on(
     'renderItemSheetV2',
     (itemSheet: BaseItemSheet, node: HTMLFormElement) => {
-        if (game.settings!.get(SYSTEM_ID, 'itemSheetSideTabs')) {
+        if (
+            SettingsUtility.getSettingValue(SETTING_NAMES.ITEM_SHEET_SIDE_TABS)
+        ) {
             node.classList.add('side-tabs');
         }
     },

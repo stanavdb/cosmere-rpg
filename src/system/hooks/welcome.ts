@@ -1,12 +1,13 @@
 // Dialogs
 import { ReleaseNotesDialog } from '@system/applications/dialogs/release-notes';
 import { SYSTEM_ID } from '../constants';
+import { SETTING_NAMES, SettingsUtility } from '../settings';
 
 Hooks.on('ready', async () => {
     // Ensure this message is only displayed when creating a new world
     if (
         !game.user!.isGM ||
-        !game.settings!.get(SYSTEM_ID, 'firstTimeWorldCreation')
+        !SettingsUtility.getSettingValue(SETTING_NAMES.INTERNAL_FIRST_CREATION)
     )
         return;
 
@@ -29,9 +30,8 @@ Hooks.on('ready', async () => {
     if (!game.user!.isGM) return;
 
     const currentVersion = game.system!.version;
-    const latestVersion = game.settings!.get(
-        SYSTEM_ID,
-        'latestVersion',
+    const latestVersion = SettingsUtility.getSettingValue(
+        SETTING_NAMES.INTERNAL_LATEST_VERSION,
     ) as string;
 
     if (currentVersion > latestVersion) {
