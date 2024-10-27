@@ -8,7 +8,7 @@ export const SETTINGS = {
     INTERNAL_LATEST_VERSION: 'latestVersion',
     ITEM_SHEET_SIDE_TABS: 'itemSheetSideTabs',
     ROLL_SKIP_DIALOG_DEFAULT: 'skipRollDialogByDefault',
-};
+} as const;
 
 /**
  * Register all of the system's settings.
