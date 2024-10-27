@@ -69,7 +69,7 @@ export function hasKey<T extends object>(
  */
 export function determineConfigurationMode({
     configure = true,
-    advantage = true,
+    advantage = false,
     disadvantage = false,
     raiseStakes = false,
 }) {
