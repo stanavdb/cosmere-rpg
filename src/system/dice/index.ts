@@ -77,12 +77,16 @@ export async function d20Roll(
     config: D20RollConfigration,
 ): Promise<D20Roll | null> {
     // Handle key modifiers
-    const { fastForward, advantageMode, plotDie } = determineConfigurationMode({
-        configure: config.configure,
-        advantage: config.advantageMode === AdvantageMode.Advantage,
-        disadvantage: config.advantageMode === AdvantageMode.Disadvantage,
-        raiseStakes: config.plotDie,
-    });
+    const { fastForward, advantageMode, plotDie } = determineConfigurationMode(
+        config.configure,
+        config.advantageMode
+            ? config.advantageMode === AdvantageMode.Advantage
+            : undefined,
+        config.advantageMode
+            ? config.advantageMode === AdvantageMode.Disadvantage
+            : undefined,
+        config.plotDie,
+    );
 
     // Replace config values with key modified values
     config.advantageMode = advantageMode;

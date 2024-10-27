@@ -60,19 +60,18 @@ export function hasKey<T extends object>(
 /**
  * Processes pressed keys and provided config values to determine final values for a roll, specifically:
  * if it should skip the configuration dialog, what advantage mode it is using, and if it has raised stakes.
- * @param {object} [options]
- * @param {boolean} [options.configure] Should the roll dialog be skipped?
- * @param {boolean} [options.advantage] Is something granting this roll advantage?
- * @param {boolean} [options.disadvantage] Is something granting this roll disadvantage?
- * @param {boolean} [options.raiseStakes] Is something granting this roll raised stakes?
+ * @param {boolean} [configure] Should the roll dialog be skipped?
+ * @param {boolean} [advantage] Is something granting this roll advantage?
+ * @param {boolean} [disadvantage] Is something granting this roll disadvantage?
+ * @param {boolean} [raiseStakes] Is something granting this roll raised stakes?
  * @returns {{fastForward: boolean, advantageMode: AdvantageMode, plotDie: boolean}} Whether a roll should fast forward, have a plot die, and its advantage mode.
  */
-export function determineConfigurationMode({
-    configure = true,
-    advantage = false,
-    disadvantage = false,
-    raiseStakes = false,
-}) {
+export function determineConfigurationMode(
+    configure?: boolean,
+    advantage?: boolean,
+    disadvantage?: boolean,
+    raiseStakes?: boolean,
+) {
     const modifiers = {
         advantage: areKeysPressed(KEYBINDINGS.SKIP_DIALOG_ADVANTAGE),
         disadvantage: areKeysPressed(KEYBINDINGS.SKIP_DIALOG_DISADVANTAGE),
@@ -80,16 +79,18 @@ export function determineConfigurationMode({
     };
 
     const fastForward =
-        !configure ||
-        isFastForward() ||
-        Object.values(modifiers).some((k) => k);
-    const advantageMode =
-        advantage || modifiers.advantage
-            ? AdvantageMode.Advantage
-            : disadvantage || modifiers.disadvantage
-              ? AdvantageMode.Disadvantage
-              : AdvantageMode.None;
-    const plotDie = raiseStakes || modifiers.raiseStakes;
+        configure !== undefined
+            ? !configure
+            : isFastForward() || Object.values(modifiers).some((k) => k);
+
+    const hasAdvantage = advantage ?? modifiers.advantage;
+    const hasDisadvantage = disadvantage ?? modifiers.disadvantage;
+    const advantageMode = hasAdvantage
+        ? AdvantageMode.Advantage
+        : hasDisadvantage
+          ? AdvantageMode.Disadvantage
+          : AdvantageMode.None;
+    const plotDie = raiseStakes ?? modifiers.raiseStakes;
 
     return { fastForward, advantageMode, plotDie };
 }

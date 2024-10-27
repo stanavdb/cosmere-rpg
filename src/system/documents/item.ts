@@ -452,15 +452,18 @@ export class CosmereItem<
 
         // Handle key modifiers
         const { fastForward, advantageMode, plotDie } =
-            determineConfigurationMode({
-                configure: options.configurable,
-                advantage:
-                    options.skillTest.advantageMode === AdvantageMode.Advantage,
-                disadvantage:
-                    options.skillTest.advantageMode ===
-                    AdvantageMode.Disadvantage,
-                raiseStakes: options.skillTest.plotDie,
-            });
+            determineConfigurationMode(
+                options.configurable,
+                options.skillTest.advantageMode
+                    ? options.skillTest.advantageMode ===
+                          AdvantageMode.Advantage
+                    : undefined,
+                options.skillTest.advantageMode
+                    ? options.skillTest.advantageMode ===
+                          AdvantageMode.Disadvantage
+                    : undefined,
+                options.skillTest.plotDie,
+            );
 
         // Replace config values with key modified values
         options.skillTest.advantageMode = advantageMode;
