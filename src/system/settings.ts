@@ -97,7 +97,7 @@ export function registerSystemKeybindings() {
         },
         {
             name: KEYBINDINGS.SKIP_DIALOG_RAISE_STAKES,
-            editable: [{ key: 'MetaLeft' }, { key: 'MetaRight' }],
+            editable: [{ key: 'KeyQ' }],
         },
     ];
 

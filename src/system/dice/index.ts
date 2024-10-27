@@ -3,6 +3,9 @@ import { Attribute } from '@system/types/cosmere';
 import { D20Roll, D20RollOptions, D20RollData } from './d20-roll';
 import { DamageRoll, DamageRollOptions, DamageRollData } from './damage-roll';
 import { RollMode } from './types';
+import { areKeysPressed, determineConfigurationMode } from '../utils';
+import { KEYBINDINGS } from '../settings';
+import { AdvantageMode } from '../types/roll';
 
 export * from './d20-roll';
 export * from './damage-roll';
@@ -25,7 +28,7 @@ export interface D20RollConfigration extends D20RollOptions {
      * Whether or not to show the roll configuration dialog
      * @default true
      */
-    configurable?: boolean;
+    configure?: boolean;
 
     /* -- Chat message -- */
 
@@ -73,6 +76,14 @@ export interface DamageRollConfiguration extends DamageRollOptions {
 export async function d20Roll(
     config: D20RollConfigration,
 ): Promise<D20Roll | null> {
+    // Handle key modifiers
+    const { fastForward, advantageMode, plotDie } = determineConfigurationMode({
+        configure: config.configure,
+        advantage: config.advantageMode === AdvantageMode.Advantage,
+        disadvantage: config.advantageMode === AdvantageMode.Disadvantage,
+        raiseStakes: config.plotDie,
+    });
+
     // Roll parameters
     const defaultRollMode =
         config.rollMode ?? game.settings!.get('core', 'rollMode');
@@ -80,21 +91,26 @@ export async function d20Roll(
     // Construct the roll
     const roll = new D20Roll(config.parts ?? [], config.data, {
         ...config,
+        advantageMode,
+        plotDie,
     });
 
-    // Prompt dialog to configure the d20 roll
-    const configured =
-        config.configurable !== false
-            ? await roll.configureDialog({
-                  title: config.title,
-                  plotDie: config.plotDie,
-                  defaultRollMode,
-                  defaultAttribute:
-                      config.defaultAttribute ?? config.data.skill.attribute,
-                  data: config.data,
-              })
-            : roll;
-    if (configured === null) return null;
+    if (!fastForward) {
+        // Prompt dialog to configure the d20 roll
+        const configured =
+            config.configure !== false
+                ? await roll.configureDialog({
+                      title: config.title,
+                      plotDie: config.plotDie,
+                      defaultRollMode,
+                      defaultAttribute:
+                          config.defaultAttribute ??
+                          config.data.skill.attribute,
+                      data: config.data,
+                  })
+                : roll;
+        if (configured === null) return null;
+    }
 
     // Evaluate the configure roll
     await roll.evaluate();
