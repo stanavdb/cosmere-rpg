@@ -52,6 +52,7 @@ import {
 } from '@system/dice';
 import { AdvantageMode } from '@system/types/roll';
 import { RollMode } from '@system/dice/types';
+import { determineConfigurationMode } from '../utils';
 
 // Constants
 const CONSUME_CONFIGURATION_DIALOG_TEMPLATE =
@@ -446,8 +447,27 @@ export class CosmereItem<
             this.system.damage.attribute ??
             actor.system.skills[damageSkillId].attribute;
 
+        options.skillTest ??= {};
+        options.damage ??= {};
+
+        // Handle key modifiers
+        const { fastForward, advantageMode, plotDie } =
+            determineConfigurationMode({
+                configure: options.configurable,
+                advantage:
+                    options.skillTest.advantageMode === AdvantageMode.Advantage,
+                disadvantage:
+                    options.skillTest.advantageMode ===
+                    AdvantageMode.Disadvantage,
+                raiseStakes: options.skillTest.plotDie,
+            });
+
+        // Replace config values with key modified values
+        options.skillTest.advantageMode = advantageMode;
+        options.skillTest.plotDie = plotDie;
+
         // Perform configuration
-        if (options.configurable !== false) {
+        if (!fastForward && options.configurable !== false) {
             const attackConfig = await AttackConfigurationDialog.show({
                 title: `${this.name} (${game.i18n!.localize(
                     CONFIG.COSMERE.skills[skillTestSkillId].label,
@@ -483,14 +503,12 @@ export class CosmereItem<
             skillTestAttributeId = attackConfig.attribute;
             options.rollMode = attackConfig.rollMode;
 
-            options.skillTest ??= {};
             options.skillTest.plotDie = attackConfig.skillTest.plotDie;
             options.skillTest.advantageMode =
                 attackConfig.skillTest.advantageMode;
             options.skillTest.advantageModePlot =
                 attackConfig.skillTest.advantageModePlot;
 
-            options.damage ??= {};
             options.damage.advantageMode =
                 attackConfig.damageRoll.advantageMode;
         }

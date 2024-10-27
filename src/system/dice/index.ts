@@ -84,7 +84,7 @@ export async function d20Roll(
         raiseStakes: config.plotDie,
     });
 
-    // Override config values with final values
+    // Replace config values with key modified values
     config.advantageMode = advantageMode;
     config.plotDie = plotDie;
 
