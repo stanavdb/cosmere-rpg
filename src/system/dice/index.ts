@@ -84,16 +84,16 @@ export async function d20Roll(
         raiseStakes: config.plotDie,
     });
 
+    // Override config values with final values
+    config.advantageMode = advantageMode;
+    config.plotDie = plotDie;
+
     // Roll parameters
     const defaultRollMode =
         config.rollMode ?? game.settings!.get('core', 'rollMode');
 
     // Construct the roll
-    const roll = new D20Roll(config.parts ?? [], config.data, {
-        ...config,
-        advantageMode,
-        plotDie,
-    });
+    const roll = new D20Roll(config.parts ?? [], config.data, { ...config });
 
     if (!fastForward) {
         // Prompt dialog to configure the d20 roll

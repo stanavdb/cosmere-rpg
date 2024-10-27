@@ -32,8 +32,6 @@ export function areKeysPressed(action: string): boolean {
     addModifiers(KeyboardManager.MODIFIER_KEYS.SHIFT);
     addModifiers(KeyboardManager.MODIFIER_KEYS.ALT);
 
-    console.log(keybinds, game.keyboard!.downKeys, activeModifiers);
-
     return getSystemKeybinding(action).some((b) => {
         if (
             game.keyboard!.downKeys.has(b.key) &&
