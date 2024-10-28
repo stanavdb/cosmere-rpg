@@ -614,7 +614,12 @@ export class CosmereActor<
     public async useItem(
         item: CosmereItem,
         options?: Omit<CosmereItem.UseOptions, 'actor'>,
-    ): Promise<D20Roll | [D20Roll, DamageRoll] | null> {
+    ): Promise<
+        | D20Roll
+        | [D20Roll, DamageRoll]
+        | [D20Roll, DamageRoll, DamageRoll]
+        | null
+    > {
         return item.use({ ...options, actor: this });
     }
 

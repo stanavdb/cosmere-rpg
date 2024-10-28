@@ -331,7 +331,7 @@ export class CosmereItem<
      */
     public async rollDamage(
         options: CosmereItem.RollDamageOptions = {},
-    ): Promise<DamageRoll | null> {
+    ): Promise<[DamageRoll, DamageRoll | undefined] | null> {
         if (!this.hasDamage() || !this.system.damage.formula) return null;
 
         // Get the actor to roll for (either assigned through option, the parent of this item, or the first controlled actor)
@@ -371,6 +371,7 @@ export class CosmereItem<
             skillId,
             attributeId,
             actor,
+            this.system.damage.grazeOverrideFormula,
         );
 
         // Perform the roll
@@ -382,6 +383,26 @@ export class CosmereItem<
                 data: rollData,
             }),
         );
+        rollData.baseRoll = roll.result;
+
+        // Roll the dice pool for graze damage silently if set.
+        let grazeRoll = undefined;
+        if (rollData.grazeOverrideForumla) {
+            grazeRoll = await damageRoll(
+                foundry.utils.mergeObject(options, {
+                    formula: rollData.grazeOverrideForumla,
+                    damageType: this.system.damage.type,
+                    data: rollData,
+                }),
+            );
+            // hide from DSN
+            grazeRoll.dice.forEach(
+                (die) =>
+                    (die.results[0] = Object.assign(die.results[0], {
+                        hidden: true,
+                    })),
+            );
+        }
 
         if (roll && options.chatMessage !== false) {
             // Get the speaker
@@ -396,7 +417,7 @@ export class CosmereItem<
         }
 
         // Return the roll
-        return roll;
+        return [roll, grazeRoll];
     }
 
     /**
@@ -405,7 +426,7 @@ export class CosmereItem<
      */
     public async rollAttack(
         options: CosmereItem.RollAttackOptions = {},
-    ): Promise<[D20Roll, DamageRoll] | null> {
+    ): Promise<[D20Roll, DamageRoll, DamageRoll | undefined] | null> {
         if (!this.hasActivation()) return null;
         if (!this.hasDamage() || !this.system.damage.formula) return null;
 
@@ -457,7 +478,12 @@ export class CosmereItem<
                 damageRoll: {
                     ...options.damage,
                     parts: this.system.damage.formula.split(' + '),
-                    data: this.getDamageRollData(skillId, attributeId, actor),
+                    data: this.getDamageRollData(
+                        skillId,
+                        attributeId,
+                        actor,
+                        this.system.damage.grazeOverrideFormula,
+                    ),
                 },
                 defaultAttribute: attributeId,
                 defaultRollMode: options.rollMode,
@@ -494,7 +520,7 @@ export class CosmereItem<
         }))!;
 
         // Roll the damage
-        const damageRoll = (await this.rollDamage({
+        const [damageRoll, grazeRoll] = (await this.rollDamage({
             ...options.damage,
             actor,
             skill: skillId,
@@ -520,12 +546,12 @@ export class CosmereItem<
                 user: game.user!.id,
                 speaker,
                 content: `<p>${flavor}</p>`,
-                rolls: [skillRoll, damageRoll],
+                rolls: [skillRoll, damageRoll, grazeRoll],
             })) as ChatMessage;
         }
 
         // Return the rolls
-        return [skillRoll, damageRoll];
+        return [skillRoll, damageRoll, grazeRoll];
     }
 
     /**
@@ -534,7 +560,12 @@ export class CosmereItem<
      */
     public async use(
         options: CosmereItem.UseOptions = {},
-    ): Promise<D20Roll | [D20Roll, DamageRoll] | null> {
+    ): Promise<
+        | D20Roll
+        | [D20Roll, DamageRoll]
+        | [D20Roll, DamageRoll, DamageRoll]
+        | null
+    > {
         if (!this.hasActivation()) return null;
 
         // Set up post roll actions
@@ -693,7 +724,9 @@ export class CosmereItem<
                 if (!attackResult) return null;
 
                 // Add the rolls to the list
-                rolls.push(...attackResult);
+                rolls.push(
+                    ...attackResult.filter((roll) => roll !== undefined),
+                );
 
                 // Set the flavor
                 flavor = flavor
@@ -705,14 +738,15 @@ export class CosmereItem<
                       )})`;
             } else {
                 if (hasDamage) {
-                    const damageRoll = await this.rollDamage({
+                    const [damageRoll, grazeRoll] = (await this.rollDamage({
                         ...options,
                         actor,
                         chatMessage: false,
-                    });
+                    }))!;
                     if (!damageRoll) return null;
 
                     rolls.push(damageRoll);
+                    if (grazeRoll) rolls.push(grazeRoll);
                 }
 
                 if (this.system.activation.type === ActivationType.SkillTest) {
@@ -755,7 +789,9 @@ export class CosmereItem<
 
             // Return the result
             return hasDamage
-                ? (rolls as [D20Roll, DamageRoll])
+                ? (rolls as
+                      | [D20Roll, DamageRoll]
+                      | [D20Roll, DamageRoll, DamageRoll])
                 : (rolls[0] as D20Roll);
         } else {
             // NOTE: Use boolean or operator (`||`) here instead of nullish coalescing (`??`),
@@ -921,6 +957,7 @@ export class CosmereItem<
         skillId: Skill | undefined,
         attributeId: Attribute | undefined,
         actor: CosmereActor,
+        grazeOverride: string | undefined,
     ): DamageRollData {
         const skill = skillId ? actor.system.skills[skillId] : undefined;
         const attribute = attributeId
@@ -945,6 +982,9 @@ export class CosmereItem<
                   }
                 : undefined,
             attribute: attribute?.value,
+            // strimming empty strings as per line 778
+            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+            grazeOverrideForumla: grazeOverride || undefined,
         };
     }
 }

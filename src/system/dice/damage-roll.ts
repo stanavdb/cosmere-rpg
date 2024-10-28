@@ -15,6 +15,8 @@ export type DamageRollData<
         attribute: Attribute;
     };
     attribute?: number;
+    grazeOverrideForumla?: string;
+    baseRoll?: string;
 };
 
 export interface DamageRollOptions
