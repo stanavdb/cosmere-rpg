@@ -1,3 +1,5 @@
+import { ItemType } from '@system/types/cosmere';
+import { GoalItem } from '@system/documents/item';
 import { ConstructorOf, MouseButton } from '@system/types/utils';
 import { SYSTEM_ID } from '@src/system/constants';
 
@@ -33,7 +35,7 @@ export class CharacterGoalsListComponent extends HandlebarsApplicationComponent<
     };
     /* eslint-enable @typescript-eslint/unbound-method */
 
-    private contextGoalId: number | null = null;
+    private contextGoalId: string | null = null;
     private controlsDropdownExpanded = false;
     private controlsDropdownPosition?: { top: number; right: number };
 
@@ -49,7 +51,7 @@ export class CharacterGoalsListComponent extends HandlebarsApplicationComponent<
             // Get goal id
             const goalId = $(event.currentTarget!)
                 .closest('[data-id]')
-                .data('id') as number;
+                .data('id') as string;
 
             this.contextGoalId = goalId;
 
@@ -85,6 +87,7 @@ export class CharacterGoalsListComponent extends HandlebarsApplicationComponent<
 
         // Get the goals
         const goals = this.application.actor.system.goals;
+        if (!goals) return;
 
         // Modify the goal
         goals[goalId].level += incrementBool ? 1 : -1;
@@ -136,8 +139,14 @@ export class CharacterGoalsListComponent extends HandlebarsApplicationComponent<
 
         // Ensure context goal id is set
         if (this.contextGoalId !== null) {
-            // Edit the goal
-            this.editGoal(this.contextGoalId);
+            // Get the goal
+            const goalItem = this.application.actor.items.get(
+                this.contextGoalId,
+            );
+            if (!goalItem?.isGoal()) return;
+
+            // Show item sheet
+            void goalItem.sheet?.render(true);
         }
     }
 
@@ -146,23 +155,15 @@ export class CharacterGoalsListComponent extends HandlebarsApplicationComponent<
 
         // Ensure context goal id is set
         if (this.contextGoalId !== null) {
-            // Get goals
-            const goals = this.application.actor.system.goals;
-
-            // Update the goals
-            goals.splice(this.contextGoalId, 1);
-
-            // Update actor
-            await this.application.actor.update(
-                {
-                    'system.goals': goals,
-                },
-                { render: false },
+            // Get the goal
+            const goalItem = this.application.actor.items.get(
+                this.contextGoalId,
             );
-        }
+            if (!goalItem?.isGoal()) return;
 
-        // Render
-        await this.render();
+            // Delete the goal
+            await goalItem.delete();
+        }
     }
 
     public static async onAddGoal(this: CharacterGoalsListComponent) {
@@ -171,33 +172,29 @@ export class CharacterGoalsListComponent extends HandlebarsApplicationComponent<
 
         // Get the goals
         const goals = this.application.actor.system.goals;
+        if (!goals) return;
 
-        // Add new goal
-        goals.push({
-            text: game.i18n!.localize(
-                'COSMERE.Actor.Sheet.Details.Goals.NewText',
-            ),
-            level: 0,
-        });
-
-        // Update the actor
-        await this.application.actor.update(
+        // Create goal
+        const goal = (await Item.create(
             {
-                'system.goals': goals,
+                type: ItemType.Goal,
+                name: game.i18n!.localize(
+                    'COSMERE.Actor.Sheet.Details.Goals.NewText',
+                ),
+                system: {
+                    level: 0,
+                },
             },
-            { render: false },
-        );
+            { parent: this.application.actor },
+        )) as GoalItem;
 
-        // Render
-        await this.render();
-
-        // Edit goal
-        this.editGoal(goals.length - 1);
+        // Show item sheet
+        void goal.sheet?.render(true);
     }
 
     /* --- Context --- */
 
-    public _prepareContext(
+    public async _prepareContext(
         params: never,
         context: BaseActorSheetRenderContext,
     ) {
@@ -210,10 +207,12 @@ export class CharacterGoalsListComponent extends HandlebarsApplicationComponent<
         return Promise.resolve({
             ...context,
 
-            goals: this.application.actor.system.goals
+            goals: this.application.actor.goals
                 .map((goal) => ({
-                    ...goal,
-                    achieved: goal.level === 3,
+                    id: goal.id,
+                    name: goal.name,
+                    level: goal.system.level,
+                    achieved: goal.system.level === 3,
                 }))
                 .filter((goal) => !hideCompletedGoals || !goal.achieved),
 
@@ -223,59 +222,6 @@ export class CharacterGoalsListComponent extends HandlebarsApplicationComponent<
                 expanded: this.controlsDropdownExpanded,
                 position: this.controlsDropdownPosition,
             },
-        });
-    }
-
-    /* --- Helpers --- */
-
-    private editGoal(index: number) {
-        // Get goal element
-        const element = $(this.element!).find(`.goal[data-id="${index}"]`);
-
-        // Get span element
-        const span = element.find('span.title');
-
-        // Hide span title
-        span.addClass('inactive');
-
-        // Get input element
-        const input = element.find('input.title');
-
-        // Show
-        input.removeClass('inactive');
-
-        setTimeout(() => {
-            // Focus input
-            input.trigger('select');
-
-            // Add event handler
-            input.on('focusout', async () => {
-                // Remove handler
-                input.off('focusout');
-
-                // Get the goals
-                const goals = this.application.actor.system.goals;
-
-                // Modify the goal
-                goals[index].text = input.val() as string;
-
-                // Update value
-                await this.application.actor.update({
-                    'system.goals': goals,
-                });
-
-                // Render
-                void this.render();
-            });
-
-            input.on('keypress', (event) => {
-                if (event.which !== 13) return; // Enter key
-
-                event.preventDefault();
-                event.stopPropagation();
-
-                input.trigger('focusout');
-            });
         });
     }
 }

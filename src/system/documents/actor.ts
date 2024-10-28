@@ -16,6 +16,7 @@ import {
     CultureItem,
     PathItem,
     TalentItem,
+    GoalItem,
 } from '@system/documents/item';
 import {
     CommonActorData,
@@ -145,6 +146,10 @@ export class CosmereActor<
         return this.items.filter((i) => i.isPath());
     }
 
+    public get goals(): GoalItem[] {
+        return this.items.filter((i) => i.isGoal());
+    }
+
     /* --- Type Guards --- */
 
     public isCharacter(): this is CharacterActor {
@@ -156,6 +161,13 @@ export class CosmereActor<
     }
 
     /* --- Lifecycle --- */
+
+    protected override _initialize(options?: object) {
+        super._initialize(options);
+
+        // Migrate goals
+        void this.migrateGoals();
+    }
 
     public override async _preCreate(
         data: object,
@@ -775,5 +787,36 @@ export class CosmereActor<
                 (expertise) => expertise.type === type && expertise.id === id,
             ) ?? false
         );
+    }
+
+    /* --- Helpers --- */
+
+    /**
+     * Migrate goals from the system object to individual items.
+     *
+     */
+    private async migrateGoals() {
+        if (!this.isCharacter() || !this.system.goals) return;
+
+        const goals = this.system.goals;
+
+        // Remove goals from data
+        await this.update({
+            'system.goals': null,
+        });
+
+        // Create goal items
+        goals.forEach((goalData) => {
+            void Item.create(
+                {
+                    type: ItemType.Goal,
+                    name: goalData.text,
+                    system: {
+                        level: goalData.level,
+                    },
+                },
+                { parent: this },
+            );
+        });
     }
 }

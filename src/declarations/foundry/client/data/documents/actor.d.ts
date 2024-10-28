@@ -77,16 +77,16 @@ declare class Actor<
     /**
      * Handle how changes to a Token attribute bar are applied to the Actor.
      * This allows for game systems to override this behavior and deploy special logic.
-     * @param {string} attribute    The attribute path
-     * @param {number} value        The target attribute value
-     * @param {boolean} isDelta     Whether the number represents a relative change (true) or an absolute change (false)
-     * @param {boolean} isBar       Whether the new value is part of an attribute bar, or just a direct value
-     * @returns {Promise<documents.Actor>}  The updated Actor document
+     * @param attribute     The attribute path
+     * @param value         The target attribute value
+     * @param isDelta       Whether the number represents a relative change (true) or an absolute change (false)
+     * @param isBar         Whether the new value is part of an attribute bar, or just a direct value
+     * @returns             The updated Actor document
      */
     public async modifyTokenAttribute(
-        attribute,
-        value,
-        isDelta,
-        isBar,
+        attribute: string,
+        value: number,
+        isDelta: boolean,
+        isBar: boolean,
     ): Promise<Actor | undefined>;
 }

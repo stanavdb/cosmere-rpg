@@ -28,6 +28,8 @@ import {
     TraitItemDataModel,
     LootItemDataModel,
     EquipmentItemDataModel,
+    GoalItemDataModel,
+    PowerItemDataModel,
 } from '@system/data/item';
 
 import { ActivatableItemData } from '@system/data/item/mixins/activatable';
@@ -139,6 +141,14 @@ export class CosmereItem<
 
     public isEquipment(): this is CosmereItem<EquipmentItemDataModel> {
         return this.type === ItemType.Equipment;
+    }
+
+    public isGoal(): this is GoalItem {
+        return this.type === ItemType.Goal;
+    }
+
+    public isPower(): this is PowerItem {
+        return this.type === ItemType.Power;
     }
 
     /* --- Mixin type guards --- */
@@ -1106,3 +1116,5 @@ export type ActionItem = CosmereItem<ActionItemDataModel>;
 export type TalentItem = CosmereItem<TalentItemDataModel>;
 export type EquipmentItem = CosmereItem<EquipmentItemDataModel>;
 export type WeaponItem = CosmereItem<WeaponItemDataModel>;
+export type GoalItem = CosmereItem<GoalItemDataModel>;
+export type PowerItem = CosmereItem<PowerItemDataModel>;

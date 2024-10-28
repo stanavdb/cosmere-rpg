@@ -99,6 +99,10 @@ export const enum PathType {
     Heroic = 'heroic',
 }
 
+export const enum PowerType {
+    None = 'none',
+}
+
 /**
  * The categories of weapon available
  */
@@ -269,6 +273,9 @@ export const enum ItemType {
 
     Injury = 'injury',
     Connection = 'connection',
+    Goal = 'goal',
+
+    Power = 'power',
 }
 
 export const enum TurnSpeed {

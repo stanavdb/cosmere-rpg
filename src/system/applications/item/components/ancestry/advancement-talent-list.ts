@@ -2,7 +2,7 @@ import { AnyObject, ConstructorOf } from '@system/types/utils';
 
 // Component imports
 import { HandlebarsApplicationComponent } from '@system/applications/component-system';
-import { AncestrySheet } from '../ancestry-sheet';
+import { AncestrySheet } from '../../ancestry-sheet';
 
 // Mixins
 import { DragDropComponentMixin } from '@system/applications/mixins/drag-drop';

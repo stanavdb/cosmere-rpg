@@ -36,7 +36,10 @@
             "action": {},
 
             "injury": {},
-            "connection": {}
+            "connection": {},
+            "goal": {},
+
+            "power": {}
         }
     },
     "packs": [

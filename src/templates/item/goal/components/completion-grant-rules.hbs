@@ -1,0 +1,55 @@
+<ul class="list-table">
+    <li class="header">
+        <div class="col type">
+            <span>{{localize "GENERIC.Type"}}</span>
+        </div>
+        <div class="col description">
+            <span>{{localize "GENERIC.Description"}}</span>
+        </div>
+        <div class="col controls">
+            {{#if editable}}
+            <div></div>
+            <a data-action="create-rule"
+                data-tooltip="{{localize "COSMERE.Item.Goal.Sheet.GrantRule.CreateRule"}}"
+            >
+                <i class="fas fa-plus"></i>
+            </a>
+            {{/if}}
+        </div>
+    </li>
+
+    {{#each rules as |rule index|}}
+    <li class="goal-grant-rule" data-id="{{rule._id}}">
+        <div class="col type">
+            <span>{{localize (concat "COSMERE.Item.Goal.GrantType." rule.type)}}</span>
+        </div>
+
+        <div class="col description">
+            {{#if (eq rule.type "skill-ranks")}}
+            <span>
+                {{localize "COSMERE.Item.Goal.Sheet.GrantRule.SkillRanksDescriptionValue" 
+                    skill=(localize (concat "COSMERE.Skill." rule.skill))
+                    ranks=rule.ranks
+                }}
+            </span>
+            {{else if (eq rule.type "power")}}
+                {{{rule.link}}}
+            {{/if}}
+        </div>
+
+        <div class="col controls">
+            {{#if @root.editable}}
+            <a data-action="edit-rule" 
+                data-tooltip="{{localize "GENERIC.Button.Edit"}}"
+            >
+                <i class="fas fa-edit"></i>
+            </a>
+            <a data-action="remove-rule" 
+                data-tooltip="{{localize "GENERIC.Button.Remove"}}"
+            >
+                <i class="fas fa-trash-alt"></i>
+            </a>
+            {{/if}}
+    </li>
+    {{/each}}
+</ul>

@@ -755,7 +755,7 @@ namespace foundry {
              * @param options Options provided to the model constructor
              * @returns Migrated and cleaned source data which will be stored to the model instance
              */
-            _initializeSource(
+            protected _initializeSource(
                 data: object | DataModel,
                 options?: object,
             ): object;
@@ -773,7 +773,7 @@ namespace foundry {
              * This mirrors the workflow of SchemaField#initialize but with some added functionality.
              * @param options Options provided to the model constructor
              */
-            _initialize(options?: object);
+            protected _initialize(options?: object);
 
             /**
              * Reset the state of this data instance back to mirror the contained source data, erasing any changes.

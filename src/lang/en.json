@@ -347,6 +347,16 @@
                     "label": "Connection",
                     "label_plural": "Connections",
                     "desc_placeholder": "Edit this to create a description of the NPC and how they are connected to the character."
+                },
+                "Goal": {
+                    "label": "Goal",
+                    "label_plural": "Goals",
+                    "desc_placeholder": "Edit this to describe the goal."
+                },
+                "Power": {
+                    "label": "Power",
+                    "label_plural": "Powers",
+                    "desc_placeholder": "Edit this to describe the power."
                 }
             },
             "Weapon": {
@@ -410,6 +420,80 @@
                 "Ancestry": {
                     "Label": "Ancestry Identifier",
                     "Hint": "Identifier of the Ancenstry this action belongs to. (e.g. \"human\")"
+                }
+            },
+            "Goal": {
+                "Level": {
+                    "Label": "Progress"
+                },
+                "GrantRule": {
+                    "Type": {
+                        "Label": "Type"
+                    },
+                    "Skill": {
+                        "Label": "Skill"
+                    },
+                    "Ranks": {
+                        "Label": "Ranks"
+                    },
+                    "Power": {
+                        "Label": "Power"
+                    },
+                    "Validation": {
+                        "MissingSkillOrRanks": "Must set a Skill and Ranks",
+                        "MissingPower": "Must set a Power"
+                    }
+                },
+                "GrantType": {
+                    "skill-ranks": "Skill Ranks",
+                    "power": "Power"
+                },
+                "Sheet": {
+                    "OnCompletion": "On Completion",
+                    "GrantRule": {
+                        "CreateRule": "New Rule",
+                        "SkillRanksDescriptionValue": "{ranks} ranks in {skill}",
+                        "PowerReferencePlaceholder": "Drop a Power here to set a power"
+                    }
+                }
+            },
+            "Power": {
+                "Skill": {
+                    "Label": "Skill",
+                    "Hint": "The skill associated with this power. Gaining this power grants the character access to this skill."
+                }
+            },
+            "Path": {
+                "LinkedSkills": {
+                    "Label": "Linked Skills",
+                    "Hint": "These skills are displayed alongside the path in the character sheet."
+                }
+            },
+            "Talent": {
+                "Type": {
+                    "Ancestry": "Ancestry",
+                    "Path": "Path",
+                    "Power": "Power"
+                },
+                "Prerequisite": {
+                    "Type": {
+                        "Talent": "Talent",
+                        "Attribute": "Attribute",
+                        "Skill": "Skill",
+                        "Connection": "Connection",
+                        "Level": "Level"
+                    },
+                    "Mode": {
+                        "AnyOf": "Any of",
+                        "AllOf": "All of"
+                    },
+                    "Level": {
+                        "Label": "Level"
+                    }
+                },
+                "Power": {
+                    "Label": "Power Identifier",
+                    "Hint": "Identifier of the power this talent belongs to."
                 }
             },
             "Activation": {
@@ -639,24 +723,6 @@
                 }
             }
         },
-        "Talent": {
-            "Type": {
-                "Ancestry": "Ancestry",
-                "Path": "Path"
-            },
-            "Prerequisite": {
-                "Type": {
-                    "Talent": "Talent",
-                    "Attribute": "Attribute",
-                    "Skill": "Skill",
-                    "Connection": "Connection"
-                },
-                "Mode": {
-                    "AnyOf": "Any of",
-                    "AllOf": "All of"
-                }
-            }
-        },
         "Currencies": {},
         "Combat": {
             "FastPlayers": "Fast Characters",
@@ -837,6 +903,9 @@
                 "DuplicateLevel": "A rule for level {level} already exists"
             }
         },
+        "EditGrantRule": {
+            "Title": "Edit Rule"
+        },
         "ReleaseNotes": {
             "Title": "Cosmere Roleplaying Game - Release Notes {version}"
         }
@@ -848,6 +917,9 @@
                 "WrongType": "The dropped Document must be of type {type}",
                 "WrongSubtype": "The dropped {type} must be of type {subtype}"
             }
+        },
+        "MultiValueSelect": {
+            "DefaultPlaceholder": "Select an option"
         }
     },
     "GENERIC": {
@@ -875,6 +947,8 @@
         "Name": "Name",
         "Level": "Level",
         "Add": "Add",
+        "Type": "Type",
+        "Description": "Description",
         "Button": {
             "Roll": "Roll",
             "Continue": "Continue",
@@ -918,6 +992,7 @@
             "ancestry": "Ancestry",
             "path": "Path",
             "connection": "Connection",
+            "goal": "Goal",
             "injury": "Injury",
             "specialty": "Specialty",
             "loot": "Loot",
@@ -926,7 +1001,8 @@
             "action": "Action",
             "talent": "Talent",
             "equipment": "Equipment",
-            "weapon": "Weapon"
+            "weapon": "Weapon",
+            "power": "Power"
         }
     },
     "UNITS": {

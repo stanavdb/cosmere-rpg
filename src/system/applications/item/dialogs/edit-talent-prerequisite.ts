@@ -124,6 +124,11 @@ export class EditTalentPrerequisiteDialog extends ComponentHandlebarsApplication
             this.data.talents ??= [];
         } else if (this.data.type === Talent.Prerequisite.Type.Connection) {
             this.data.description = formData.get('description') as string;
+        } else if (
+            this.data.type === Talent.Prerequisite.Type.Level &&
+            formData.has('level')
+        ) {
+            this.data.level = parseInt(formData.get('level') as string);
         }
 
         // Render
@@ -146,6 +151,10 @@ export class EditTalentPrerequisiteDialog extends ComponentHandlebarsApplication
         return Promise.resolve({
             editable: true,
             rootTalent: this.talent,
+            schema: this.talent.system.schema._getField([
+                'prerequisites',
+                'model',
+            ]),
             ...this.data,
 
             typeSelectOptions: this.talent.system.prerequisiteTypeSelectOptions,

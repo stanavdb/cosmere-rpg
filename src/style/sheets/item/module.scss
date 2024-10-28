@@ -485,3 +485,22 @@ app-talent-prerequisite-talent-list {
         text-shadow: 0 0 0.2rem black;
     }
 }
+
+app-goal-completion-grant-rules {
+    .col.type {
+        width: 5rem;
+    }
+
+    .col.description {
+        flex: 1;
+    }
+
+    .col.controls {
+        margin-left: 1rem;
+
+        > * {
+            width: 1rem;
+            text-align: center;
+        }
+    }
+}

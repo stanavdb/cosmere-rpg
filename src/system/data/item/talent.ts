@@ -58,6 +58,17 @@ export interface TalentItemData
      */
     hasAncestry?: boolean;
 
+    /**
+     * The id of the Power this Talent belongs to.
+     */
+    power?: string;
+    /**
+     * Derived value that indicates whether or not the parent
+     * Actor has the required power. If no power is defined for this
+     * Talent, this value will be undefined.
+     */
+    hasPower?: boolean;
+
     prerequisites: Record<string, Talent.Prerequisite>;
     readonly prerequisitesArray: ({ id: string } & Talent.Prerequisite)[];
     readonly prerequisiteTypeSelectOptions: Record<
@@ -122,6 +133,14 @@ export class TalentItemDataModel extends DataModelMixin<
                 initial: null,
             }),
             hasAncestry: new foundry.data.fields.BooleanField(),
+            power: new foundry.data.fields.StringField({
+                required: false,
+                nullable: true,
+                initial: null,
+                label: 'COSMERE.Item.Talent.Power.Label',
+                hint: 'COSMERE.Item.Talent.Power.Hint',
+            }),
+            hasPower: new foundry.data.fields.BooleanField(),
 
             prerequisites: new MappingField(
                 new foundry.data.fields.SchemaField(
@@ -205,6 +224,13 @@ export class TalentItemDataModel extends DataModelMixin<
                             choices:
                                 CONFIG.COSMERE.items.talent.prerequisite.modes,
                         }),
+
+                        // Level
+                        level: new foundry.data.fields.NumberField({
+                            min: 0,
+                            initial: 0,
+                            label: 'COSMERE.Item.Talent.Prerequisite.Level.Label',
+                        }),
                     },
                     {
                         nullable: true,
@@ -250,6 +276,15 @@ export class TalentItemDataModel extends DataModelMixin<
                                     )
                                         throw new Error(
                                             'Field "description" is required for prerequisite rule of type "Connection"',
+                                        );
+                                    break;
+                                case Talent.Prerequisite.Type.Level:
+                                    if (
+                                        value.level === undefined ||
+                                        value.level === null
+                                    )
+                                        throw new Error(
+                                            'Field "level" is required for prerequisite rule of type "Level"',
                                         );
                                     break;
                                 default:
@@ -314,6 +349,13 @@ export class TalentItemDataModel extends DataModelMixin<
             this.hasAncestry =
                 actor?.items.some(
                     (item) => item.isAncestry() && item.id === this.ancestry,
+                ) ?? false;
+        }
+
+        if (this.power) {
+            this.hasPower =
+                actor?.items.some(
+                    (item) => item.isPower() && item.id === this.power,
                 ) ?? false;
         }
 

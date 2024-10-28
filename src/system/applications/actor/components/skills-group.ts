@@ -82,14 +82,28 @@ export class ActorSkillsGroupComponent extends HandlebarsApplicationComponent<
             id: params['group-id'],
 
             skills: skillIds
-                .map((skillId) => ({
-                    id: skillId,
-                    config: CONFIG.COSMERE.skills[skillId],
-                    ...this.application.actor.system.skills[skillId],
-                    active:
-                        !CONFIG.COSMERE.skills[skillId].hiddenUntilAcquired ||
-                        this.application.actor.system.skills[skillId].rank >= 1,
-                }))
+                .map((skillId) => {
+                    // Get config
+                    const config = CONFIG.COSMERE.skills[skillId];
+
+                    // Get attribute config
+                    const attrConfig =
+                        CONFIG.COSMERE.attributes[config.attribute];
+
+                    return {
+                        id: skillId,
+                        config: {
+                            ...config,
+                            attrLabel: attrConfig.labelShort,
+                        },
+                        ...this.application.actor.system.skills[skillId],
+                        active:
+                            !config.hiddenUntilAcquired ||
+                            this.application.actor.system.skills[skillId]
+                                .rank >= 1,
+                    };
+                })
+                .filter((skill) => skill.config.core) // Filter out non-core skills
                 .sort((a, b) => {
                     const _a = a.config.hiddenUntilAcquired ? 1 : 0;
                     const _b = b.config.hiddenUntilAcquired ? 1 : 0;

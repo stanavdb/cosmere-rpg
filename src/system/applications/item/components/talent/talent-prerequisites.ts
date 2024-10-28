@@ -5,12 +5,12 @@ import { ConstructorOf } from '@system/types/utils';
 import { Talent } from '@system/types/item';
 
 // Dialogs
-import { EditTalentPrerequisiteDialog } from '../dialogs/edit-talent-prerequisite';
+import { EditTalentPrerequisiteDialog } from '../../dialogs/edit-talent-prerequisite';
 
 // Component imports
 import { HandlebarsApplicationComponent } from '@system/applications/component-system';
-import { TalentItemSheet } from '../talent-sheet';
-import { BaseItemSheetRenderContext } from '../base';
+import { TalentItemSheet } from '../../talent-sheet';
+import { BaseItemSheetRenderContext } from '../../base';
 
 export class TalentPrerequisitesComponent extends HandlebarsApplicationComponent<
     ConstructorOf<TalentItemSheet>

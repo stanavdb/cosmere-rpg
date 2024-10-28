@@ -1,0 +1,15 @@
+{{#with (lookup tabsMap "details") as |tab|}}
+
+<div class="tab tab-content {{tab.cssClass}}" data-tab="details" data-group="primary">
+    {{formGroup @root.systemFields.level 
+        value=@root.item.system.level 
+        localize=true
+    }}
+
+    <h5>{{localize "COSMERE.Item.Goal.Sheet.OnCompletion"}}</h5>
+    {{app-goal-completion-grant-rules 
+        rules=@root.item.system.onCompletion.grants
+    }}
+</div>
+
+{{/with}}
