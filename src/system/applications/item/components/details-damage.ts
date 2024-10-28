@@ -45,13 +45,15 @@ export class DetailsDamageComponent extends HandlebarsApplicationComponent<
         const hasSkill =
             hasSkillTest && this.application.item.system.activation.skill;
 
+        this.grazeOverrideCollapsed = this.application.item.system.damage
+            .grazeOverrideFormula
+            ? this.application.item.system.damage.grazeOverrideFormula === ''
+            : this.grazeOverrideCollapsed;
+
         return {
             hasSkillTest,
             hasSkill,
-            grazeInputCollapsed:
-                this.grazeOverrideCollapsed ||
-                this.application.item.system.damage.grazeOverrideFormula !==
-                    undefined,
+            grazeInputCollapsed: this.grazeOverrideCollapsed,
 
             typeSelectOptions: {
                 none: '—',
