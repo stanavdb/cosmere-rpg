@@ -6,7 +6,7 @@ import './style.scss';
 import './system/hooks';
 
 import { preloadHandlebarsTemplates } from './system/util/handlebars';
-import { registerSettings } from './system/settings';
+import { registerSystemSettings } from './system/settings';
 
 import * as applications from './system/applications';
 import * as dataModels from './system/data';
@@ -94,7 +94,7 @@ Hooks.once('init', async () => {
     registerStatusEffects();
 
     // Register settings
-    registerSettings();
+    registerSystemSettings();
 });
 
 /**
