@@ -77,6 +77,10 @@ function markdownParser(config) {
 
                 // Construct the destination path
                 const dest = path.join(srcPath, config.targets[index].dest, `${fileName}.html`);
+                const destDir = path.join(srcPath, config.targets[index].dest);
+                if(!fs.existsSync(destDir)){
+                    fs.mkdirSync(destDir);
+                }
 
                 // Write the parsed markdown to the destination path
                 fs.writeFileSync(dest, `<div>${markdown}</div>`);
