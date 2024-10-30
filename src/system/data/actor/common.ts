@@ -83,7 +83,18 @@ export interface CommonActorData {
     >;
     skills: Record<
         Skill,
-        { attribute: Attribute; rank: number; mod: Derived<number> }
+        {
+            attribute: Attribute;
+            rank: number;
+            mod: Derived<number>;
+
+            /**
+             * Derived field describing whether this skill is unlocked or not.
+             * This field is only present for non-core skills.
+             * Core skills are always unlocked.
+             */
+            unlocked?: boolean;
+        }
     >;
     injuries: Derived<number>;
     injuryRollBonus: number;
@@ -405,6 +416,18 @@ export class CommonActorDataModel<
                                 initial: 0,
                             }),
                         ),
+
+                        // Only present for non-core skills
+                        ...(!skills[key].core
+                            ? {
+                                  unlocked:
+                                      new foundry.data.fields.BooleanField({
+                                          required: true,
+                                          nullable: false,
+                                          initial: false,
+                                      }),
+                              }
+                            : {}),
                     });
 
                     return schemas;
@@ -554,6 +577,19 @@ export class CommonActorDataModel<
 
             // Calculate mod
             this.skills[skill].mod.value = attrValue + rank;
+        });
+
+        // Derive non-core skill unlocks
+        (Object.keys(this.skills) as Skill[]).forEach((skill) => {
+            if (CONFIG.COSMERE.skills[skill].core) return;
+
+            // Check if the actor has a power that unlocks this skill
+            const unlocked = this.parent.powers.some(
+                (power) => power.system.skill === skill,
+            );
+
+            // Set unlocked status
+            this.skills[skill].unlocked = unlocked;
         });
 
         // Get deflect source, defaulting to armor

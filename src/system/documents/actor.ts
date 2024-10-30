@@ -18,6 +18,7 @@ import {
     PathItem,
     TalentItem,
     GoalItem,
+    PowerItem,
 } from '@system/documents/item';
 import {
     CommonActorData,
@@ -156,6 +157,10 @@ export class CosmereActor<
 
     public get goals(): GoalItem[] {
         return this.items.filter((i) => i.isGoal());
+    }
+
+    public get powers(): PowerItem[] {
+        return this.items.filter((i) => i.isPower());
     }
 
     /* --- Type Guards --- */
@@ -589,7 +594,7 @@ export class CosmereActor<
             attributeOverride ?? CONFIG.COSMERE.skills[skill].attribute;
 
         // Get skill rank
-        const rank = this.system.skills[skill].rank;
+        const rank = this.system.skills[skill]?.rank ?? 0;
 
         // Get attribute value
         const attrValue = this.getAttributeMod(attributeId);
