@@ -55,6 +55,9 @@ Hooks.once('init', async () => {
 
     CONFIG.ActiveEffect.legacyTransferral = false;
 
+    // Add fonts
+    configureFonts();
+
     Actors.unregisterSheet('core', ActorSheet);
     registerActorSheet(ActorType.Character, applications.actor.CharacterSheet);
     registerActorSheet(ActorType.Adversary, applications.actor.AdversarySheet);
@@ -149,3 +152,85 @@ function registerItemSheet(
     });
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */
+
+/**
+ * Configure additional system fonts.
+ */
+function configureFonts() {
+    Object.assign(CONFIG.fontDefinitions, {
+        Roboto: {
+            editor: true,
+            fonts: [
+                {
+                    urls: [
+                        `systems/${SYSTEM_ID}/assets/fonts/roboto/Roboto-Regular.woff2`,
+                    ],
+                },
+                {
+                    urls: [
+                        `systems/${SYSTEM_ID}/assets/fonts/roboto/Roboto-Bold.woff2`,
+                    ],
+                    weight: 'bold',
+                },
+                {
+                    urls: [
+                        `systems/${SYSTEM_ID}/assets/fonts/roboto/Roboto-Italic.woff2`,
+                    ],
+                    style: 'italic',
+                },
+                {
+                    urls: [
+                        `systems/${SYSTEM_ID}/assets/fonts/roboto/Roboto-BoldItalic.woff2`,
+                    ],
+                    weight: 'bold',
+                    style: 'italic',
+                },
+            ],
+        },
+        'Roboto Condensed': {
+            editor: true,
+            fonts: [
+                {
+                    urls: [
+                        `systems/${SYSTEM_ID}/assets/fonts/roboto-condensed/RobotoCondensed-Regular.woff2`,
+                    ],
+                },
+                {
+                    urls: [
+                        `systems/${SYSTEM_ID}/assets/fonts/roboto-condensed/RobotoCondensed-Bold.woff2`,
+                    ],
+                    weight: 'bold',
+                },
+                {
+                    urls: [
+                        `systems/${SYSTEM_ID}/assets/fonts/roboto-condensed/RobotoCondensed-Italic.woff2`,
+                    ],
+                    style: 'italic',
+                },
+                {
+                    urls: [
+                        `systems/${SYSTEM_ID}/assets/fonts/roboto-condensed/RobotoCondensed-BoldItalic.woff2`,
+                    ],
+                    weight: 'bold',
+                    style: 'italic',
+                },
+            ],
+        },
+        'Roboto Slab': {
+            editor: true,
+            fonts: [
+                {
+                    urls: [
+                        `systems/${SYSTEM_ID}/assets/fonts/roboto-slab/RobotoSlab-Regular.ttf`,
+                    ],
+                },
+                {
+                    urls: [
+                        `systems/${SYSTEM_ID}/assets/fonts/roboto-slab/RobotoSlab-Bold.ttf`,
+                    ],
+                    weight: 'bold',
+                },
+            ],
+        },
+    });
+}
