@@ -21,7 +21,6 @@
 {{#if (not readonly)}}
 <div class="new-select">
     <select>
-        {{log this}}
         <option value="" disabled selected>{{localize (default placeholder "COMPONENT.MultiValueSelect.DefaultPlaceholder")}}</option>
         {{selectOptions options localize=true}}
     </select>

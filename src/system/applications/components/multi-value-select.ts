@@ -164,7 +164,10 @@ export class MultiValueSelectComponent extends HandlebarsApplicationComponent<
         // Prepare options
         const options =
             foundry.utils.getType(params.options) === 'Object'
-                ? (params.options as Record<string, string>)
+                ? (foundry.utils.deepClone(params.options) as Record<
+                      string,
+                      string
+                  >)
                 : (params.options as string[]).reduce(
                       (acc, key) => ({ ...acc, [key]: key }),
                       {} as Record<string, string>,
