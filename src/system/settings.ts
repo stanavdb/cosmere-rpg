@@ -71,7 +71,7 @@ export const KEYBINDINGS = {
     SKIP_DIALOG_ADVANTAGE: 'skipDialogAdvantage',
     SKIP_DIALOG_DISADVANTAGE: 'skipDialogDisadvantage',
     SKIP_DIALOG_RAISE_STAKES: 'skipDialogRaiseStakes',
-};
+} as const;
 
 /**
  * Register all of the system's keybindings.
