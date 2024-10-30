@@ -79,12 +79,11 @@ export class D20Roll extends foundry.dice.Roll<D20RollData> {
     declare options: D20RollOptions & { configured: boolean };
 
     public constructor(
-        protected parts: string[],
+        protected parts: string,
         data: D20RollData,
         options: D20RollOptions = {},
     ) {
-        const formula = ['1d20'].concat(parts).join(' + ');
-        super(formula, data, options);
+        super(parts, data, options);
 
         if (!this.options.configured) {
             this.configureModifiers();

@@ -545,9 +545,15 @@ export class CosmereActor<
         const rollData = foundry.utils.mergeObject(
             {
                 data: data as D20RollData,
-                title: `${flavor}: ${this.name}`,
-                chatMessage: false,
+                title: flavor,
                 defaultAttribute: options.attribute ?? skill.attribute,
+                messageData: {
+                    speaker:
+                        options.speaker ??
+                        (ChatMessage.getSpeaker({
+                            actor: this,
+                        }) as ChatSpeakerData),
+                },
             },
             options,
         );
@@ -555,21 +561,6 @@ export class CosmereActor<
 
         // Perform roll
         const roll = await d20Roll(rollData);
-
-        if (roll) {
-            // Get the speaker
-            const speaker =
-                options.speaker ??
-                (ChatMessage.getSpeaker({ actor: this }) as ChatSpeakerData);
-
-            // Create chat message
-            await ChatMessage.create({
-                user: game.user!.id,
-                speaker,
-                content: `<p>${flavor}</p>`,
-                rolls: [roll],
-            });
-        }
 
         // Return roll
         return roll;
