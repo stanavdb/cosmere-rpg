@@ -12,9 +12,11 @@
     </h4>
     <div class="message-metadata">
         <time class="message-timestamp">{{timestamp}}</time>
+        {{#if canRepeat}}
         <a aria-label="Repeat" class="message-repeat">
             <i class="fas fa-repeat"></i>
         </a>
+        {{/if}}
         <a aria-label="Delete" class="message-delete">
             <i class="fas fa-trash"></i>
         </a>
