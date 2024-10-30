@@ -3,6 +3,9 @@ import {
     ItemType,
     ActivationType,
     ActionCostType,
+    ItemConsumeType,
+    Resource,
+    PowerType,
 } from '@system/types/cosmere';
 import { CosmereItem } from '@system/documents/item';
 import { CosmereActor } from '@system/documents';
@@ -292,6 +295,8 @@ export class ActorActionsListComponent extends HandlebarsApplicationComponent<
         return [
             STATIC_SECTIONS.Weapons,
 
+            ...this.preparePowersSections(),
+
             ...paths.map((path) => ({
                 id: path.system.id,
                 label: game.i18n!.format(
@@ -367,6 +372,57 @@ export class ActorActionsListComponent extends HandlebarsApplicationComponent<
             STATIC_SECTIONS.BasicActions,
             STATIC_SECTIONS.MiscActions,
         ];
+    }
+
+    protected preparePowersSections() {
+        // Get powers
+        const powers = this.application.actor.powers;
+
+        // Get list of unique power types
+        const powerTypes = [
+            ...new Set(powers.map((p) => p.system.type)),
+        ].filter((type) => type !== PowerType.None) as PowerType[];
+
+        return powerTypes.map((type) => {
+            // Get config
+            const config = CONFIG.COSMERE.power.types[type];
+
+            return {
+                id: type,
+                label: game.i18n!.localize(config.plural),
+                default: false,
+                filter: (item: CosmereItem) =>
+                    item.isPower() && item.system.type === type,
+                new: (parent: CosmereActor) =>
+                    CosmereItem.create(
+                        {
+                            type: ItemType.Power,
+                            name: game.i18n!.format(
+                                'COSMERE.Item.Type.Power.New',
+                                {
+                                    type: game.i18n!.localize(config.label),
+                                },
+                            ),
+                            system: {
+                                type,
+                                activation: {
+                                    type: ActivationType.Utility,
+                                    cost: {
+                                        type: ActionCostType.Action,
+                                        value: 1,
+                                    },
+                                    consume: {
+                                        type: ItemConsumeType.Resource,
+                                        resource: Resource.Investiture,
+                                        value: 1,
+                                    },
+                                },
+                            },
+                        },
+                        { parent },
+                    ) as Promise<CosmereItem>,
+            };
+        });
     }
 
     protected async prepareSectionsData(

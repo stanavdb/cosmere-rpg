@@ -356,7 +356,8 @@
                 "Power": {
                     "label": "Power",
                     "label_plural": "Powers",
-                    "desc_placeholder": "Edit this to describe the power."
+                    "desc_placeholder": "Edit this to describe the power.",
+                    "New": "New {type}"
                 }
             },
             "Weapon": {

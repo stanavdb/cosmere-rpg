@@ -759,6 +759,7 @@ const COSMERE: CosmereRPGConfig = {
         types: {
             [PowerType.None]: {
                 label: 'GENERIC.None',
+                plural: 'GENERIC.None',
             },
         },
     },

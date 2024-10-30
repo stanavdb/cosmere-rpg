@@ -228,6 +228,7 @@ export interface TalentTypeConfig {
 
 export interface PowerTypeConfig {
     label: string;
+    plural: string;
 }
 
 export interface CosmereRPGConfig {

@@ -69,6 +69,7 @@ export function registerPowerType(data: PowerTypeConfigData, force = false) {
     // Add to power types
     CONFIG.COSMERE.power.types[data.id as PowerType] = {
         label: data.label,
+        plural: data.plural,
     };
 }
 
