@@ -256,7 +256,7 @@
                     }
                 },
                 "Skills": {
-                    "AdjustTooltip": "Left Click to increase [skill]'s Rank.<br>Right Click to decrease [skill]'s Rank."
+                    "AdjustTooltip": "Left Click to increase {skill}'s Rank.<br>Right Click to decrease {skill}'s Rank."
                 }
             }
         },
