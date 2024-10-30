@@ -33,7 +33,7 @@ import {
 } from './cosmere';
 import { AdvantageMode } from './roll';
 
-import { Talent } from './item';
+import { Talent, Goal } from './item';
 
 export interface SizeConfig {
     label: string;
@@ -267,6 +267,12 @@ export interface CosmereRPGConfig {
 
         equipment: {
             types: Record<EquipmentType, EquipmentTypeConfig>;
+        };
+
+        goal: {
+            rewards: {
+                types: Record<Goal.Reward.Type, string>;
+            };
         };
 
         talent: {

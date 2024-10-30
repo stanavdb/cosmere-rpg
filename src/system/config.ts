@@ -34,7 +34,7 @@ import {
 } from './types/cosmere';
 import { AdvantageMode } from './types/roll';
 
-import { Talent } from './types/item';
+import { Talent, Goal } from './types/item';
 
 const COSMERE: CosmereRPGConfig = {
     sizes: {
@@ -524,6 +524,16 @@ const COSMERE: CosmereRPGConfig = {
             types: {
                 [EquipmentType.Basic]: {
                     label: 'COSMERE.Item.Equipment.Type.Basic',
+                },
+            },
+        },
+        goal: {
+            rewards: {
+                types: {
+                    [Goal.Reward.Type.Items]:
+                        'COSMERE.Item.Goal.Reward.Type.Items',
+                    [Goal.Reward.Type.SkillRanks]:
+                        'COSMERE.Item.Goal.Reward.Type.SkillRanks',
                 },
             },
         },

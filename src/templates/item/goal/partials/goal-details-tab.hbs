@@ -6,9 +6,9 @@
         localize=true
     }}
 
-    <h5>{{localize "COSMERE.Item.Goal.Sheet.OnCompletion"}}</h5>
-    {{app-goal-completion-grant-rules 
-        rules=@root.item.system.onCompletion.grants
+    <h5>{{localize "COSMERE.Item.Sheet.Goal.Reward.Title"}}</h5>
+    {{app-goal-rewards-list
+        rewards=@root.item.system.rewards
     }}
 </div>
 

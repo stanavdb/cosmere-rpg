@@ -9,8 +9,8 @@
         <div class="col controls">
             {{#if editable}}
             <div></div>
-            <a data-action="create-rule"
-                data-tooltip="{{localize "COSMERE.Item.Goal.Sheet.GrantRule.CreateRule"}}"
+            <a data-action="create-reward"
+                data-tooltip="{{localize "COSMERE.Item.Sheet.Goal.Reward.Create"}}"
             >
                 <i class="fas fa-plus"></i>
             </a>
@@ -18,33 +18,38 @@
         </div>
     </li>
 
-    {{#each rules as |rule index|}}
-    <li class="goal-grant-rule" data-id="{{rule._id}}">
+    {{#each rewards as |reward index|}}
+    <li class="goal-reward" data-id="{{reward._id}}">
         <div class="col type">
-            <span>{{localize (concat "COSMERE.Item.Goal.GrantType." rule.type)}}</span>
+            <span>{{localize typeLabel}}</span>
         </div>
 
         <div class="col description">
-            {{#if (eq rule.type "skill-ranks")}}
+            {{#if (eq reward.type "skill-ranks")}}
             <span>
-                {{localize "COSMERE.Item.Goal.Sheet.GrantRule.SkillRanksDescriptionValue" 
-                    skill=(localize (concat "COSMERE.Skill." rule.skill))
-                    ranks=rule.ranks
+                {{localize "COSMERE.Item.Sheet.Goal.Reward.SkillRanksDescriptionValue" 
+                    skill=(localize (concat "COSMERE.Skill." reward.skill))
+                    ranks=reward.ranks
                 }}
             </span>
-            {{else if (eq rule.type "power")}}
-                {{{rule.link}}}
+            {{else if (eq reward.type "items")}}
+                {{#each reward.items as |item|}}
+                {{{item.link}}}
+                {{#if (not @last)}}
+                <span>,</span>
+                {{/if}}
+                {{/each}}
             {{/if}}
         </div>
 
         <div class="col controls">
             {{#if @root.editable}}
-            <a data-action="edit-rule" 
+            <a data-action="edit-reward" 
                 data-tooltip="{{localize "GENERIC.Button.Edit"}}"
             >
                 <i class="fas fa-edit"></i>
             </a>
-            <a data-action="remove-rule" 
+            <a data-action="remove-reward" 
                 data-tooltip="{{localize "GENERIC.Button.Remove"}}"
             >
                 <i class="fas fa-trash-alt"></i>

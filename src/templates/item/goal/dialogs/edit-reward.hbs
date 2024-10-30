@@ -4,18 +4,13 @@
     {{#if (eq type "skill-ranks")}}
         {{formGroup schema.fields.skill value=skill localize=true blank=false}}
         {{formGroup schema.fields.ranks value=ranks localize=true}}
-    {{else if (eq type "power")}}
+    {{else if (eq type "items")}}
         <div class="form-group">
-            <label>{{localize schema.fields.power.label}}</label>
-            <div class="form-fields">
-                {{app-document-reference-input
-                    name="power"
-                    value=power
-                    type="Item"
-                    subtype="power"
-                    placeholder="COSMERE.Item.Goal.Sheet.GrantRule.PowerReferencePlaceholder"
-                }}
-            </div>
+            {{app-document-drop-list
+                name="items"
+                value=items
+                type="Item"
+            }}
         </div>
     {{/if}}
 

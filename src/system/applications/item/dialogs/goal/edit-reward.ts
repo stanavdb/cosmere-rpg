@@ -3,15 +3,17 @@ import { GoalItem } from '@system/documents/item';
 import { Goal } from '@system/types/item';
 import { AnyObject } from '@system/types/utils';
 
+import { CollectionField } from '@system/data/fields';
+
 const { ApplicationV2 } = foundry.applications.api;
 
 import { ComponentHandlebarsApplicationMixin } from '@system/applications/component-system';
 
-type GrantRuleData = {
+type RewardData = {
     _id: string;
-} & Goal.GrantRule;
+} & Goal.Reward;
 
-export class EditGrantRuleDialog extends ComponentHandlebarsApplicationMixin(
+export class EditGoalRewardDialog extends ComponentHandlebarsApplicationMixin(
     ApplicationV2<AnyObject>,
 ) {
     /**
@@ -28,13 +30,13 @@ export class EditGrantRuleDialog extends ComponentHandlebarsApplicationMixin(
                 resizable: true,
                 positioned: true,
             },
-            classes: ['dialog', 'edit-grant-rule'],
+            classes: ['dialog', 'edit-reward'],
             tag: 'dialog',
             position: {
                 width: 425,
             },
             actions: {
-                update: this.onUpdateGrantRule,
+                update: this.onUpdateReward,
             },
         },
     );
@@ -44,7 +46,7 @@ export class EditGrantRuleDialog extends ComponentHandlebarsApplicationMixin(
         {
             form: {
                 template:
-                    'systems/cosmere-rpg/templates/item/goal/dialogs/edit-grant-rule.hbs',
+                    'systems/cosmere-rpg/templates/item/goal/dialogs/edit-reward.hbs',
                 forms: {
                     form: {
                         handler: this.onFormEvent,
@@ -58,61 +60,61 @@ export class EditGrantRuleDialog extends ComponentHandlebarsApplicationMixin(
 
     private constructor(
         private goal: GoalItem,
-        private rule: GrantRuleData,
+        private reward: RewardData,
     ) {
         super({
-            id: `${goal.uuid}.OnCompletion.Grants.${rule._id}`,
+            id: `${goal.uuid}.Rewards.${reward._id}`,
             window: {
-                title: 'DIALOG.EditGrantRule.Title',
+                title: 'DIALOG.EditGoalReward.Title',
             },
         });
     }
 
     /* --- Statics --- */
 
-    public static async show(goal: GoalItem, rule: GrantRuleData) {
-        const dialog = new this(goal, foundry.utils.deepClone(rule));
+    public static async show(goal: GoalItem, reward: RewardData) {
+        const dialog = new this(goal, foundry.utils.deepClone(reward));
         await dialog.render(true);
     }
 
     /* --- Actions --- */
 
-    private static async onUpdateGrantRule(this: EditGrantRuleDialog) {
+    private static async onUpdateReward(this: EditGoalRewardDialog) {
         // Validate
         if (
-            this.rule.type === Goal.GrantType.SkillRanks &&
-            (this.rule.skill === null || this.rule.ranks === null)
+            this.reward.type === Goal.Reward.Type.SkillRanks &&
+            (this.reward.skill === null || this.reward.ranks === null)
         ) {
             ui.notifications.error(
-                'COSMERE.Item.Goal.GrantRule.Validation.MissingSkillOrRanks',
+                'COSMERE.Item.Goal.Reward.Validation.MissingSkillOrRanks',
             );
             return;
         } else if (
-            this.rule.type === Goal.GrantType.Power &&
-            this.rule.power === null
+            this.reward.type === Goal.Reward.Type.Items &&
+            this.reward.items === null
         ) {
             ui.notifications.error(
-                'COSMERE.Item.Goal.GrantRule.Validation.MissingPower',
+                'COSMERE.Item.Goal.Reward.Validation.MissingItems',
             );
             return;
         }
 
         // Prepare updates
         const updates =
-            this.rule.type === Goal.GrantType.SkillRanks
+            this.reward.type === Goal.Reward.Type.SkillRanks
                 ? {
-                      type: this.rule.type,
-                      skill: this.rule.skill,
-                      ranks: this.rule.ranks,
+                      type: this.reward.type,
+                      skill: this.reward.skill,
+                      ranks: this.reward.ranks,
                   }
                 : {
-                      type: this.rule.type,
-                      power: this.rule.power,
+                      type: this.reward.type,
+                      items: this.reward.items,
                   };
 
         // Perform updates
         await this.goal.update({
-            [`system.onCompletion.grants.${this.rule._id}`]: updates,
+            [`system.rewards.${this.reward._id}`]: updates,
         });
 
         // Close
@@ -122,7 +124,7 @@ export class EditGrantRuleDialog extends ComponentHandlebarsApplicationMixin(
     /* --- Form --- */
 
     protected static onFormEvent(
-        this: EditGrantRuleDialog,
+        this: EditGoalRewardDialog,
         event: Event,
         form: HTMLFormElement,
         formData: FormDataExtended,
@@ -130,24 +132,19 @@ export class EditGrantRuleDialog extends ComponentHandlebarsApplicationMixin(
         if (event instanceof SubmitEvent) return;
 
         // Get type
-        const type = formData.get('type') as Goal.GrantType;
-        this.rule.type = type;
+        this.reward.type = formData.get('type') as Goal.Reward.Type;
 
         if (
-            this.rule.type === Goal.GrantType.SkillRanks &&
+            this.reward.type === Goal.Reward.Type.SkillRanks &&
             formData.has('skill')
         ) {
-            foundry.utils.mergeObject(this.rule, {
-                skill: formData.get('skill') as Skill,
-                ranks: parseInt(formData.get('ranks') as string, 10),
-            });
+            this.reward.skill = formData.get('skill') as Skill;
+            this.reward.ranks = parseInt(formData.get('ranks') as string, 10);
         } else if (
-            this.rule.type === Goal.GrantType.Power &&
-            formData.has('power')
+            this.reward.type === Goal.Reward.Type.Items &&
+            formData.has('items')
         ) {
-            foundry.utils.mergeObject(this.rule, {
-                power: formData.get('power') as string,
-            });
+            this.reward.items = formData.object.items as unknown as string[];
         }
 
         // Render
@@ -167,13 +164,10 @@ export class EditGrantRuleDialog extends ComponentHandlebarsApplicationMixin(
     public _prepareContext() {
         return Promise.resolve({
             goal: this.goal,
-            ...this.rule,
+            ...this.reward,
 
-            schema: this.goal.system.schema._getField([
-                'onCompletion',
-                'grants',
-                'model',
-            ]),
+            schema: (this.goal.system.schema.fields.rewards as CollectionField)
+                .model,
         });
     }
 }

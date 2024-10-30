@@ -426,8 +426,10 @@
                 "Level": {
                     "Label": "Progress"
                 },
-                "GrantRule": {
+                "Reward": {
                     "Type": {
+                        "Items": "Items",
+                        "SkillRanks": "Skill Ranks",
                         "Label": "Type"
                     },
                     "Skill": {
@@ -436,24 +438,12 @@
                     "Ranks": {
                         "Label": "Ranks"
                     },
-                    "Power": {
-                        "Label": "Power"
+                    "Items": {
+                        "Label": "Items"
                     },
                     "Validation": {
                         "MissingSkillOrRanks": "Must set a Skill and Ranks",
-                        "MissingPower": "Must set a Power"
-                    }
-                },
-                "GrantType": {
-                    "skill-ranks": "Skill Ranks",
-                    "power": "Power"
-                },
-                "Sheet": {
-                    "OnCompletion": "On Completion",
-                    "GrantRule": {
-                        "CreateRule": "New Rule",
-                        "SkillRanksDescriptionValue": "{ranks} ranks in {skill}",
-                        "PowerReferencePlaceholder": "Drop a Power here to set a power"
+                        "MissingItems": "Must set Items"
                     }
                 }
             },
@@ -716,6 +706,13 @@
                         "Edit": "Edit rule",
                         "Delete": "Remove rule"
                     }
+                },
+                "Goal": {
+                    "Reward": {
+                        "Title": "Rewards",
+                        "Create": "New Reward",
+                        "SkillRanksDescriptionValue": "{ranks} ranks in {skill}"
+                    }
                 }
             }
         },
@@ -922,6 +919,9 @@
         },
         "EditGrantRule": {
             "Title": "Edit Rule"
+        },
+        "EditGoalReward": {
+            "Title": "Edit Reward"
         },
         "ReleaseNotes": {
             "Title": "Cosmere Roleplaying Game - Release Notes {version}"

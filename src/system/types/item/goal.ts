@@ -1,18 +1,19 @@
 import { Skill } from '../cosmere';
 
-export const enum GrantType {
-    SkillRanks = 'skill-ranks',
-    Power = 'power',
+export namespace Reward {
+    export const enum Type {
+        SkillRanks = 'skill-ranks',
+        Items = 'items',
+    }
 }
 
-interface BaseGrantRule<Type extends GrantType> {
+interface BaseReward<Type extends Reward.Type> {
     type: Type;
 }
 
-export interface SkillRanksGrantRule
-    extends BaseGrantRule<GrantType.SkillRanks> {
+export interface SkillRanksReward extends BaseReward<Reward.Type.SkillRanks> {
     /**
-     * The Skill being granted
+     * The Skill of which ranks are being granted
      */
     skill: Skill;
 
@@ -22,11 +23,11 @@ export interface SkillRanksGrantRule
     ranks: number;
 }
 
-export interface PowerGrantRule extends BaseGrantRule<GrantType.Power> {
+export interface ItemsReward extends BaseReward<Reward.Type.Items> {
     /**
-     * The UUID of the Power Item being granted
+     * The UUIDs of the items being granted
      */
-    power: string;
+    items: string[];
 }
 
-export type GrantRule = SkillRanksGrantRule | PowerGrantRule;
+export type Reward = SkillRanksReward | ItemsReward;

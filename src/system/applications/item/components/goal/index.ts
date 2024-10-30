@@ -1,1 +1,1 @@
-import './completion-grant-rules';
+import './rewards-list';
