@@ -11,7 +11,7 @@ export class RecordCollection<T> implements Collection<T> {
      * to be backing record object itself. This ensures its stored
      * properly.
      */
-    /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call */
+    /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment */
     constructor(entries?: [string, T][]) {
         if (entries) {
             entries.forEach(([key, value]) => {
@@ -21,7 +21,10 @@ export class RecordCollection<T> implements Collection<T> {
     }
 
     get contents(): T[] {
-        return Object.values(this);
+        return Object.entries(this).map(([key, value]) => ({
+            ...value,
+            _id: key,
+        }));
     }
 
     public find<S extends T>(
@@ -187,12 +190,12 @@ export class RecordCollection<T> implements Collection<T> {
         : T)[] {
         return this.contents.map((value) => {
             if (value && typeof value === 'object' && 'toJSON' in value) {
-                return (value as any).toJSON();
+                return { ...(value as any).toJSON(), _id: (value as any)._id };
             }
             return value;
         });
     }
-    /* eslint-enable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call  */
+    /* eslint-enable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment */
 }
 
 export class CollectionField<
@@ -268,7 +271,13 @@ export class CollectionField<
                     )
                   : foundry.utils.getType(value) === 'Object'
                     ? new RecordCollection(Object.entries(value))
-                    : new RecordCollection();
+                    : foundry.utils.getType(value) === 'Array'
+                      ? new RecordCollection(
+                            (value as { _id?: string; id?: string }[]).map(
+                                (v, i) => [v._id ?? v.id ?? i.toString(), v],
+                            ),
+                        )
+                      : new RecordCollection();
 
         return result;
     }
@@ -283,13 +292,14 @@ export class CollectionField<
     }
 
     public override toObject(value: RecordCollection<unknown>) {
-        return Array.from(value.entries()).reduce(
+        const result = Array.from(value.entries()).reduce(
             (acc, [id, v]) => ({
                 ...acc,
                 [id]: this.model.toObject(v) as unknown,
             }),
             {},
         );
+        return result;
     }
 
     public override _getField(path: string[]): foundry.data.fields.DataField {

@@ -984,7 +984,8 @@
             "Update": "Update"
         },
         "Notification": {
-            "GrazeFocusSpent": "Reduced focus by 1"
+            "GrazeFocusSpent": "Reduced focus by 1",
+            "AddedItem": "Added {type} \"{item}\" to {actor}"
         },
         "Warning": {
             "NotImplemented": "Sorry! [action] is not implemented yet",

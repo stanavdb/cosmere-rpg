@@ -9,6 +9,7 @@ import {
     Resource,
     InjuryType,
 } from '@system/types/cosmere';
+import { Talent } from '@system/types/item';
 import {
     CosmereItem,
     CosmereItemData,
@@ -93,6 +94,13 @@ export type CosmereActorRollData<T extends CommonActorData = CommonActorData> =
         attr: Record<string, number>;
         skills: Record<string, { rank: number; mod: number }>;
     };
+
+// Constants
+/**
+ * Item types of which only a single instance can be
+ * embedded in an actor.
+ */
+const SINGLETON_ITEM_TYPES = [ItemType.Ancestry];
 
 export class CosmereActor<
     T extends CommonActorDataModel = CommonActorDataModel,
@@ -198,38 +206,9 @@ export class CosmereActor<
         data: object[],
         opertion?: Partial<foundry.abstract.DatabaseCreateOperation>,
     ): Promise<foundry.abstract.Document[]> {
-        const postCreateActions = new Array<() => void>();
-
-        if (embeddedName === 'Item') {
-            const itemData = data as CosmereItemData[];
-
-            // Get the first ancestry item
-            const ancestryItem = itemData.find(
-                (d) => d.type === ItemType.Ancestry,
-            );
-
-            // Filter out any ancestry items beyond the first
-            data = itemData.filter(
-                (d) => d.type !== ItemType.Ancestry || d === ancestryItem,
-            );
-
-            // If an ancestry item was present, replace the current (after create)
-            if (ancestryItem) {
-                // Get current ancestry item
-                const currentAncestryItem = this.items.find(
-                    (i) => i.type === ItemType.Ancestry,
-                );
-
-                // Remove existing ancestry after create, if present
-                if (currentAncestryItem) {
-                    postCreateActions.push(() => {
-                        void this.deleteEmbeddedDocuments('Item', [
-                            currentAncestryItem.id,
-                        ]);
-                    });
-                }
-            }
-        }
+        // Pre create actions
+        if (!this.preCreateEmbeddedDocuments(embeddedName, data, opertion))
+            return [];
 
         // Perform create
         const result = await super.createEmbeddedDocuments(
@@ -239,7 +218,7 @@ export class CosmereActor<
         );
 
         // Post create actions
-        postCreateActions.forEach((func) => func());
+        this.postCreateEmbeddedDocuments(embeddedName, result);
 
         // Return result
         return result;
@@ -282,6 +261,94 @@ export class CosmereActor<
                 : this;
         } else {
             await super.modifyTokenAttribute(attribute, value, isDelta, isBar);
+        }
+    }
+
+    /* --- Handlers --- */
+
+    protected preCreateEmbeddedDocuments(
+        embeddedName: string,
+        data: object[],
+        opertion?: Partial<foundry.abstract.DatabaseCreateOperation>,
+    ): boolean | void {
+        if (embeddedName === 'Item') {
+            const itemData = data as CosmereItemData[];
+
+            // Check for singleton items
+            SINGLETON_ITEM_TYPES.forEach((type) => {
+                // Get the first item of this type
+                const item = itemData.find((d) => d.type === type);
+
+                // Filter out any other items of this type
+                data = item
+                    ? itemData.filter((d) => d.type !== type || d === item)
+                    : itemData;
+            });
+        }
+    }
+
+    protected postCreateEmbeddedDocuments(
+        embeddedName: string,
+        documents: foundry.abstract.Document[],
+    ): void {
+        documents.forEach((doc) => {
+            if (embeddedName === 'Item') {
+                const item = doc as CosmereItem;
+
+                if (item.isAncestry()) {
+                    this.onAncestryAdded(item);
+                } else if (item.isTalent()) {
+                    this.onTalentAdded(item);
+                }
+            }
+        });
+    }
+
+    protected onAncestryAdded(item: AncestryItem) {
+        // Find any other ancestry items
+        const otherAncestries = this.items.filter(
+            (i) => i.isAncestry() && i.id !== item.id,
+        );
+
+        // Remove other ancestries
+        otherAncestries.forEach((i) => {
+            void i.delete();
+        });
+    }
+
+    protected onTalentAdded(item: TalentItem) {
+        // Check if the talent has grant rules
+        if (item.system.grantRules.size > 0) {
+            // Execute grant rules
+            item.system.grantRules.forEach((rule) => {
+                if (rule.type === Talent.GrantRule.Type.Items) {
+                    rule.items.forEach(async (itemUUID) => {
+                        // Get document
+                        const doc = (await fromUuid(
+                            itemUUID,
+                        )) as unknown as CosmereItem;
+
+                        // Add the item to the actor
+                        await this.createEmbeddedDocuments('Item', [
+                            doc.toObject(),
+                        ]);
+
+                        // Notification
+                        ui.notifications.info(
+                            game.i18n!.format(
+                                'GENERIC.Notification.AddedItem',
+                                {
+                                    type: game.i18n!.localize(
+                                        `TYPES.Item.${doc.type}`,
+                                    ),
+                                    item: doc.name,
+                                    actor: this.name,
+                                },
+                            ),
+                        );
+                    });
+                }
+            });
         }
     }
 
