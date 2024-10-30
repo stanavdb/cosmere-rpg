@@ -328,6 +328,7 @@ export class TalentItemDataModel extends DataModelMixin<
                         ),
                     },
                     {
+                        nullable: true,
                         validate: (value: Talent.GrantRule) => {
                             if (value.type === Talent.GrantRule.Type.Items) {
                                 if (!value.items)
