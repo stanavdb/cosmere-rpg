@@ -5,7 +5,12 @@ import {
     ItemConsumeType,
     ActivationType,
 } from '@system/types/cosmere';
+import { Goal } from '@system/types/item';
+import { GoalItemData } from '@system/data/item/goal';
+import { DeepPartial } from '@system/types/utils';
+
 import { CosmereActor } from './actor';
+
 import { SYSTEM_ID } from '../constants';
 
 import { Derived } from '@system/data/fields';
@@ -252,6 +257,75 @@ export class CosmereItem<
 
         // Check if the actor has the mode active
         return activeMode === this.system.id;
+    }
+
+    /* --- Lifecycle --- */
+
+    override _onUpdate(_changes: object, options: object, userId: string) {
+        if (game.user?.id !== userId) return;
+
+        if (this.isGoal()) {
+            const changes: { system?: DeepPartial<GoalItemData> } = _changes;
+
+            if (changes.system?.level === 3) {
+                this.handleGoalComplete();
+            }
+        }
+    }
+
+    /* --- Event handlers --- */
+
+    protected handleGoalComplete() {
+        // Ensure the item is a goal
+        if (!this.isGoal()) return;
+
+        // Ensure actor is set
+        if (!this.actor) return;
+
+        // Get the rewards
+        const rewards = this.system.rewards;
+
+        // Handle rewards
+        rewards.forEach(async (reward) => {
+            if (reward.type === Goal.Reward.Type.SkillRanks) {
+                await this.actor!.modifySkillRank(reward.skill, reward.ranks);
+
+                // Notification
+                ui.notifications.info(
+                    game.i18n!.format(
+                        'GENERIC.Notification.IncreasedSkillRank',
+                        {
+                            skill: CONFIG.COSMERE.skills[reward.skill].label,
+                            amount: reward.ranks,
+                            actor: this.actor!.name,
+                        },
+                    ),
+                );
+            } else if (reward.type === Goal.Reward.Type.Items) {
+                reward.items.forEach(async (itemUUID) => {
+                    // Get the item
+                    const item = (await fromUuid(
+                        itemUUID,
+                    )) as unknown as CosmereItem;
+
+                    // Add the item to the actor
+                    await this.actor!.createEmbeddedDocuments('Item', [
+                        item.toObject(),
+                    ]);
+
+                    // Notification
+                    ui.notifications.info(
+                        game.i18n!.format('GENERIC.Notification.AddedItem', {
+                            type: game.i18n!.localize(
+                                `TYPES.Item.${item.type}`,
+                            ),
+                            item: item.name,
+                            actor: this.actor!.name,
+                        }),
+                    );
+                });
+            }
+        });
     }
 
     /* --- Roll & Usage utilities --- */

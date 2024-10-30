@@ -985,7 +985,8 @@
         },
         "Notification": {
             "GrazeFocusSpent": "Reduced focus by 1",
-            "AddedItem": "Added {type} \"{item}\" to {actor}"
+            "AddedItem": "Added {type} \"{item}\" to {actor}",
+            "IncreasedSkillRank": "Increased {actor}'s {skill} rank by {amount}"
         },
         "Warning": {
             "NotImplemented": "Sorry! [action] is not implemented yet",

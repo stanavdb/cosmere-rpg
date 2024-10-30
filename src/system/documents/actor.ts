@@ -207,7 +207,10 @@ export class CosmereActor<
         opertion?: Partial<foundry.abstract.DatabaseCreateOperation>,
     ): Promise<foundry.abstract.Document[]> {
         // Pre create actions
-        if (!this.preCreateEmbeddedDocuments(embeddedName, data, opertion))
+        if (
+            this.preCreateEmbeddedDocuments(embeddedName, data, opertion) ===
+            false
+        )
             return [];
 
         // Perform create
@@ -665,23 +668,39 @@ export class CosmereActor<
     }
 
     /**
+     * Utility function to modify a skill value
+     */
+    public async modifySkillRank(
+        skillId: Skill,
+        change: number,
+        render?: boolean,
+    ): Promise<void>;
+    /**
      * Utility function to increment/decrement a skill value
      */
     public async modifySkillRank(
         skillId: Skill,
-        incrementBool = true,
+        increment: boolean,
+        render?: boolean,
+    ): Promise<void>;
+    public async modifySkillRank(
+        skillId: Skill,
+        param1: boolean | number = true,
         render = true,
     ) {
+        const incrementBool = typeof param1 === 'boolean' ? param1 : true;
+        const changeAmount = typeof param1 === 'number' ? param1 : 1;
+
         const skillpath = `system.skills.${skillId}.rank`;
         const skill = this.system.skills[skillId];
         if (incrementBool) {
             await this.update(
-                { [skillpath]: Math.clamp(skill.rank + 1, 0, 5) },
+                { [skillpath]: Math.clamp(skill.rank + changeAmount, 0, 5) },
                 { render },
             );
         } else {
             await this.update(
-                { [skillpath]: Math.clamp(skill.rank - 1, 0, 5) },
+                { [skillpath]: Math.clamp(skill.rank - changeAmount, 0, 5) },
                 { render },
             );
         }

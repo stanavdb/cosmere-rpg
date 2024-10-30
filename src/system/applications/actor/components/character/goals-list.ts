@@ -83,23 +83,25 @@ export class CharacterGoalsListComponent extends HandlebarsApplicationComponent<
         // Get goal id
         const goalId = $(event.currentTarget!)
             .closest('[data-id]')
-            .data('id') as number;
+            .data('id') as string | undefined;
+        if (!goalId) return;
 
-        // Get the goals
-        const goals = this.application.actor.system.goals;
-        if (!goals) return;
+        // Get the goal
+        const goalItem = this.application.actor.items.get(goalId);
+        if (!goalItem?.isGoal()) return;
 
-        // Modify the goal
-        goals[goalId].level += incrementBool ? 1 : -1;
-        goals[goalId].level = Math.max(0, Math.min(3, goals[goalId].level));
+        // Get the goal's current level
+        const currentLevel = goalItem.system.level;
 
-        // Adjust the rank
-        await this.application.actor.update(
-            {
-                'system.goals': goals,
-            },
-            { render: false },
-        );
+        // Calculate the new level
+        const newLevel = incrementBool
+            ? Math.min(currentLevel + 1, 3)
+            : Math.max(currentLevel - 1, 0);
+
+        // Update the goal
+        await goalItem.update({
+            'system.level': newLevel,
+        });
 
         // Render
         await this.render();
