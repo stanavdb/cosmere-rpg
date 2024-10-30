@@ -105,3 +105,40 @@ app-multi-value-select {
         }
     }
 }
+
+app-document-drop-list {
+    --input-focus-outline-color: var(--color-cool-3);
+
+    display: block;
+    border: 1px dashed var(--color-dark-4);
+    padding: 0 0.5rem;
+    border-radius: 0.3rem;
+    outline: 1px solid transparent;
+    transition: outline-color 0.5s;
+
+    ul {
+        .document {
+            display: flex;
+            align-items: center;
+
+            .link {
+                flex: 1;
+                display: flex;
+                justify-content: center;
+            }
+        }
+    }
+
+    p {
+        text-align: center;
+        font-size: 10pt;
+        font-style: italic;
+        color: var(--color-dark-4);
+        text-shadow: 0 0 0.2rem black;
+    }
+
+    &.dragover {
+        outline: 2px solid var(--input-focus-outline-color);
+        box-shadow: 0 0 5px var(--color-shadow-primary);
+    }
+}

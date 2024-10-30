@@ -491,6 +491,17 @@
                         "Label": "Level"
                     }
                 },
+                "GrantRule": {
+                    "Label": "On Obtain",
+                    "Hint": "These rules are applied when the talent is obtained.",
+                    "Type": {
+                        "Items": "Grant Items",
+                        "Label": "Type"
+                    },
+                    "Items": {
+                        "Label": "Items"
+                    }
+                },
                 "Power": {
                     "Label": "Power Identifier",
                     "Hint": "Identifier of the power this talent belongs to."
@@ -698,6 +709,12 @@
                         "ConnectionDescription": "Description",
                         "ConnectionDescriptionPlaceholder": "Connection Description",
                         "DropTalents": "Drop Talents here to add them to the list."
+                    },
+                    "GrantRules": {
+                        "Description": "Description",
+                        "Create": "New rule",
+                        "Edit": "Edit rule",
+                        "Delete": "Remove rule"
                     }
                 }
             }
@@ -914,6 +931,14 @@
         "DocumentReferenceInput": {
             "Placeholder": "Drop a {type} here to create a reference",
             "Warning": {
+                "WrongType": "The dropped Document must be of type {type}",
+                "WrongSubtype": "The dropped {type} must be of type {subtype}"
+            }
+        },
+        "DocumentDropListComponent": {
+            "Placeholder": "Drop a {type} here to add it to the list",
+            "Warning": {
+                "DocumentAlreadyInList": "The dropped {type} is already in the list",
                 "WrongType": "The dropped Document must be of type {type}",
                 "WrongSubtype": "The dropped {type} must be of type {subtype}"
             }

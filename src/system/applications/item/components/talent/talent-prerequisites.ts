@@ -5,7 +5,7 @@ import { ConstructorOf } from '@system/types/utils';
 import { Talent } from '@system/types/item';
 
 // Dialogs
-import { EditTalentPrerequisiteDialog } from '../../dialogs/edit-talent-prerequisite';
+import { EditTalentPrerequisiteDialog } from '../../dialogs/talent/edit-talent-prerequisite';
 
 // Component imports
 import { HandlebarsApplicationComponent } from '@system/applications/component-system';

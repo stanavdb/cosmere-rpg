@@ -4,7 +4,7 @@ import { ConstructorOf } from '@system/types/utils';
 
 // Component imports
 import { HandlebarsApplicationComponent } from '@system/applications/component-system';
-import { EditTalentPrerequisiteDialog } from '../../dialogs/edit-talent-prerequisite';
+import { EditTalentPrerequisiteDialog } from '../../dialogs/talent/edit-talent-prerequisite';
 
 // Mixins
 import { DragDropComponentMixin } from '@system/applications/mixins/drag-drop';

@@ -196,7 +196,8 @@ export class RecordCollection<T> implements Collection<T> {
 }
 
 export class CollectionField<
-    ElementField extends foundry.data.fields.DataField,
+    ElementField extends
+        foundry.data.fields.DataField = foundry.data.fields.DataField,
 > extends foundry.data.fields.ObjectField {
     constructor(
         public readonly model: ElementField,
@@ -223,8 +224,17 @@ export class CollectionField<
         if (!(value instanceof RecordCollection))
             throw new Error('must be a RecordCollection');
         const errors = this._validateValues(value, options);
-        if (!foundry.utils.isEmpty(errors))
-            throw new foundry.data.validation.DataModelValidationError(errors);
+        if (!foundry.utils.isEmpty(errors)) {
+            // Create validatior failure
+            const failure =
+                new foundry.data.validation.DataModelValidationFailure();
+
+            // Set fields
+            failure.fields = errors;
+
+            // Throw error
+            throw new foundry.data.validation.DataModelValidationError(failure);
+        }
     }
 
     protected _validateValues(
@@ -233,11 +243,16 @@ export class CollectionField<
     ) {
         const errors: Record<
             string,
-            foundry.data.fields.DataModelValidationFailure
+            foundry.data.validation.DataModelValidationFailure
         > = {};
         Array.from(value.entries()).forEach(([id, v]) => {
-            const error = this.model.validate(v, options);
-            if (error) errors[id] = error;
+            const error = this.model.validate(
+                v,
+                options,
+            ) as foundry.data.validation.DataModelValidationFailure | null;
+            if (error) {
+                errors[id] = error;
+            }
         });
 
         return errors;

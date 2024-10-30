@@ -275,6 +275,9 @@ export interface CosmereRPGConfig {
                 types: Record<Talent.Prerequisite.Type, string>;
                 modes: Record<Talent.Prerequisite.Mode, string>;
             };
+            grantRules: {
+                types: Record<Talent.GrantRule.Type, string>;
+            };
         };
     };
 

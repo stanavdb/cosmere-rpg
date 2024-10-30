@@ -494,13 +494,14 @@ app-goal-completion-grant-rules {
     .col.description {
         flex: 1;
     }
+}
 
-    .col.controls {
-        margin-left: 1rem;
+app-talent-grant-rules-list {
+    .col.type {
+        width: 5rem;
+    }
 
-        > * {
-            width: 1rem;
-            text-align: center;
-        }
+    .col.description {
+        flex: 1;
     }
 }

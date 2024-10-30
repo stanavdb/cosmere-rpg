@@ -2,7 +2,7 @@ import { BonusTalentsRule } from '@system/data/item/ancestry';
 import { AnyObject, ConstructorOf } from '@system/types/utils';
 
 // Dialogs
-import { EditBonusTalentsRuleDialog } from '../../dialogs/edit-bonus-talents-rule';
+import { EditBonusTalentsRuleDialog } from '../../dialogs/talent/edit-bonus-talents-rule';
 
 // Component imports
 import { HandlebarsApplicationComponent } from '@system/applications/component-system';

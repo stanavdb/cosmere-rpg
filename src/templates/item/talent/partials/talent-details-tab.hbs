@@ -60,6 +60,14 @@
 
     {{app-item-details-activation}}
     {{app-item-details-damage}}
+
+    {{!-- Grant rules --}}
+    <h5>{{localize @root.systemFields.grantRules.label}}</h5>
+    {{app-talent-grant-rules-list}}
+    <p class="hint">
+        {{localize @root.systemFields.grantRules.hint}}
+    </p>
+
     {{app-item-details-modality}}
 </div>
 

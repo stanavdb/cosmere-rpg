@@ -559,6 +559,12 @@ const COSMERE: CosmereRPGConfig = {
                         'COSMERE.Item.Talent.Prerequisite.Mode.AllOf',
                 },
             },
+            grantRules: {
+                types: {
+                    [Talent.GrantRule.Type.Items]:
+                        'COSMERE.Item.Talent.GrantRule.Type.Items',
+                },
+            },
         },
     },
 
