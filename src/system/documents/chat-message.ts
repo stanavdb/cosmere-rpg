@@ -67,6 +67,44 @@ export class CosmereChatMessage extends ChatMessage {
         return html;
     }
 
+    /**
+     * Listen for shift key being pressed to show the chat message "delete" icon, or released (or focus lost) to hide it.
+     */
+    public static activateListeners() {
+        window.addEventListener(
+            'keydown',
+            () => this.toggleModifiers({ releaseAll: false }),
+            { passive: true },
+        );
+        window.addEventListener(
+            'keyup',
+            () => this.toggleModifiers({ releaseAll: false }),
+            { passive: true },
+        );
+        window.addEventListener(
+            'blur',
+            () => this.toggleModifiers({ releaseAll: true }),
+            { passive: true },
+        );
+    }
+
+    /* -------------------------------------------- */
+
+    /**
+     * Toggles attributes on the chatlog based on which modifier keys are being held.
+     * @param {object} [options]
+     * @param {boolean} [options.releaseAll=false]  Force all modifiers to be considered released.
+     */
+    public static toggleModifiers({ releaseAll = false }) {
+        document.querySelectorAll('.chat-sidebar > ol').forEach((chatlog) => {
+            const chatlogHTML = chatlog as HTMLElement;
+            for (const key of Object.values(KeyboardManager.MODIFIER_KEYS)) {
+                if (game.keyboard!.isModifierActive(key) && !releaseAll)
+                    chatlogHTML.dataset[`modifier${key}`] = '';
+                else delete chatlogHTML.dataset[`modifier${key}`];
+            }
+        });
+    }
     protected async enrichChatCard(html: JQuery) {
         const actor = this.associatedActor;
 

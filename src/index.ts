@@ -104,6 +104,11 @@ Hooks.once('init', async () => {
     registerSystemKeybindings();
 });
 
+Hooks.once('ready', () => {
+    // Chat message listeners
+    documents.CosmereChatMessage.activateListeners();
+});
+
 /**
  * Helper function to register the configured
  * conditions as status effects.
