@@ -308,6 +308,18 @@ export class CosmereItem<
                         itemUUID,
                     )) as unknown as CosmereItem;
 
+                    // Get the id
+                    const id = item.hasId() ? item.system.id : null;
+
+                    // Ensure the item is not already embedded
+                    if (
+                        id &&
+                        this.actor!.items.some(
+                            (i) => i.hasId() && i.system.id === id,
+                        )
+                    )
+                        return;
+
                     // Add the item to the actor
                     await this.actor!.createEmbeddedDocuments('Item', [
                         item.toObject(),
