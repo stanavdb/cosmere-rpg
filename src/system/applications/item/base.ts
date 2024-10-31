@@ -1,11 +1,11 @@
 import { ArmorTraitId, WeaponTraitId } from '@system/types/cosmere';
 import { CosmereItem } from '@system/documents/item';
 import { DeepPartial, AnyObject } from '@system/types/utils';
-import { SYSTEM_ID } from '@src/system/constants';
 
 // Mixins
 import { ComponentHandlebarsApplicationMixin } from '@system/applications/component-system';
 import { TabsApplicationMixin } from '@system/applications/mixins';
+import { getSystemSetting, SETTINGS } from '@src/system/settings';
 
 const { ItemSheetV2 } = foundry.applications.sheets;
 
@@ -287,7 +287,7 @@ export class BaseItemSheet extends TabsApplicationMixin(
             ).fields,
             editable: this.isEditable,
             descHtml: enrichedDescValue,
-            sideTabs: game.settings!.get(SYSTEM_ID, 'itemSheetSideTabs'),
+            sideTabs: getSystemSetting(SETTINGS.ITEM_SHEET_SIDE_TABS),
         };
     }
 }
