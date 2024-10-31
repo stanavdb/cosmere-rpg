@@ -4,22 +4,20 @@
     {{app-item-details-id}}
     {{app-item-details-type}}
 
-    {{#if (not (eq @root.item.system.type 'none'))}}
-        {{formGroup @root.systemFields.customSkill
-            value=@root.item.system.customSkill
-            localize=true
-        }}
+    {{formGroup @root.systemFields.customSkill
+        value=@root.item.system.customSkill
+        localize=true
+    }}
 
-        {{#if @root.item.system.customSkill}}
-            {{formGroup @root.systemFields.skill
-                value=@root.item.system.skill
-                localize=true
-                blank="GENERIC.None"
-            }}
-        {{/if}}
-        
-        {{app-item-details-activation}}
+    {{#if @root.item.system.customSkill}}
+        {{formGroup @root.systemFields.skill
+            value=@root.item.system.skill
+            localize=true
+            blank="GENERIC.None"
+        }}
     {{/if}}
+    
+    {{app-item-details-activation}}
 </div>
 
 {{/with}}

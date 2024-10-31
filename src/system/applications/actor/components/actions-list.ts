@@ -379,9 +379,7 @@ export class ActorActionsListComponent extends HandlebarsApplicationComponent<
         const powers = this.application.actor.powers;
 
         // Get list of unique power types
-        const powerTypes = [
-            ...new Set(powers.map((p) => p.system.type)),
-        ].filter((type) => type !== PowerType.None) as PowerType[];
+        const powerTypes = [...new Set(powers.map((p) => p.system.type))];
 
         return powerTypes.map((type) => {
             // Get config
