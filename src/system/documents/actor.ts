@@ -20,12 +20,16 @@ import {
     GoalItem,
     PowerItem,
 } from '@system/documents/item';
+
 import {
     CommonActorData,
     CommonActorDataModel,
 } from '@system/data/actor/common';
 import { CharacterActorDataModel } from '@system/data/actor/character';
 import { AdversaryActorDataModel } from '@system/data/actor/adversary';
+
+import { PowerItemData } from '@system/data/item';
+
 import { Derived } from '@system/data/fields';
 import { SYSTEM_ID } from '../constants';
 import { d20Roll, D20Roll, D20RollData, DamageRoll } from '@system/dice';
@@ -292,6 +296,41 @@ export class CosmereActor<
                     ? itemData.filter((d) => d.type !== type || d === item)
                     : itemData;
             });
+
+            // Pre add powers
+            itemData.forEach((d, i) => {
+                if (d.type === ItemType.Power) {
+                    if (
+                        this.preAddPower(
+                            d as CosmereItemData<PowerItemData>,
+                        ) === false
+                    ) {
+                        itemData.splice(i, 1);
+                    }
+                }
+            });
+        }
+    }
+
+    protected preAddPower(
+        data: CosmereItemData<PowerItemData>,
+    ): boolean | void {
+        // Ensure a power with the same id does not already exist
+        if (
+            this.powers.some(
+                (i) => i.hasId() && i.system.id === data.system?.id,
+            )
+        ) {
+            ui.notifications.error(
+                game.i18n!.format(
+                    'COSMERE.Item.Power.Notification.PowerExists',
+                    {
+                        actor: this.name,
+                        identifier: data.system!.id,
+                    },
+                ),
+            );
+            return false;
         }
     }
 

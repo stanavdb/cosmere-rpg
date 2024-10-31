@@ -459,6 +459,9 @@
                 "Skill": {
                     "Label": "Skill",
                     "Hint": "The skill associated with this power. Gaining this power grants the character access to this skill."
+                },
+                "Notification": {
+                    "PowerExists": "A power with identifier \"{identifier}\" already exists on {actor}."
                 }
             },
             "Path": {
