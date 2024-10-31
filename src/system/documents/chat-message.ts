@@ -1,18 +1,9 @@
 import { DamageType } from '@system/types/cosmere';
 import { D20Roll } from '@system/dice/d20-roll';
 import { DamageRoll } from '@system/dice/damage-roll';
-import { AnyObject } from '@system/types/utils';
 
 import { CosmereActor } from './actor';
-import { CosmereItem } from './item';
-
-// Constants
-const CHAT_CARD_HEADER_TEMPLATE =
-    'systems/cosmere-rpg/templates/chat/parts/chat-card-header.hbs';
-const CHAT_CARD_ROLLS_TEMPLATE =
-    'systems/cosmere-rpg/templates/chat/parts/chat-card-rolls.hbs';
-const CHAT_CARD_ACTIONS_TEMPLATE =
-    'systems/cosmere-rpg/templates/chat/parts/chat-card-actions.hbs';
+import { renderSystemTemplate, TEMPLATES } from '../utils';
 
 const ACTIVITY_CARD_TEMPLATE =
     'systems/cosmere-rpg/templates/chat/activity-card.hbs';

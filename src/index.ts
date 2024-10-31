@@ -17,6 +17,7 @@ import * as documents from './system/documents';
 import * as dice from './system/dice';
 
 import CosmereAPI from './system/api';
+import { TEMPLATES } from './system/utils';
 
 declare global {
     interface LenientGlobalVariableTypes {
@@ -52,6 +53,8 @@ Hooks.once('init', async () => {
     CONFIG.ui.combat = applications.combat.CosmereCombatTracker;
 
     CONFIG.Token.documentClass = documents.CosmereTokenDocument;
+
+    Roll.TOOLTIP_TEMPLATE = `systems/${SYSTEM_ID}/templates/${TEMPLATES.ROLL_BREAKDOWN}`;
 
     CONFIG.ActiveEffect.legacyTransferral = false;
 
