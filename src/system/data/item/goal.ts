@@ -5,12 +5,13 @@ import { CollectionField } from '@system/data/fields';
 
 // Mixins
 import { DataModelMixin } from '../mixins';
+import { IdItemMixin, IdItemData } from './mixins/id';
 import {
     DescriptionItemMixin,
     DescriptionItemData,
 } from './mixins/description';
 
-export interface GoalItemData extends DescriptionItemData {
+export interface GoalItemData extends IdItemData, DescriptionItemData {
     /**
      * The progress level of the goal
      */
@@ -26,6 +27,9 @@ export class GoalItemDataModel extends DataModelMixin<
     GoalItemData,
     CosmereItem
 >(
+    IdItemMixin({
+        initialFromName: true,
+    }),
     DescriptionItemMixin({
         value: 'COSMERE.Item.Type.Goal.desc_placeholder',
     }),
