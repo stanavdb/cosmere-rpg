@@ -449,6 +449,13 @@
                 }
             },
             "Power": {
+                "Identifier": {
+                    "Hint": "Used to uniquely identify this power. Should be the same as the identifier of the associated skill, unless a custom skill is used."
+                },
+                "CustomSkill": {
+                    "Label": "Use custom skill?",
+                    "Hint": "If checked, configure a custom skill instead of the skill matching this power's identifier."
+                },
                 "Skill": {
                     "Label": "Skill",
                     "Hint": "The skill associated with this power. Gaining this power grants the character access to this skill."
@@ -593,7 +600,7 @@
                 },
                 "Identifier": {
                     "Label": "Identifier",
-                    "Description": "Used to uniquely identify this [type]. Identifier can only contain letters (a-z), numbers (0-9), dashes (-), and underscores (_)."
+                    "Hint": "Used to uniquely identify this {type}. Identifier can only contain letters (a-z), numbers (0-9), dashes (-), and underscores (_)."
                 },
                 "Type": "Type",
                 "Injury": {

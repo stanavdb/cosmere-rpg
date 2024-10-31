@@ -19,8 +19,15 @@ export interface PowerItemData
         TypedItemData<PowerType>,
         DescriptionItemData {
     /**
+     * Wether to a custom skill is used, or
+     * the skill is derived from the power's id.
+     */
+    customSkill: boolean;
+
+    /**
      * The skill associated with this power.
      * This cannot be a core skill.
+     * If `customSkill` is `false`, the skill with the same id as the power is used.
      */
     skill: Skill | null;
 }
@@ -31,6 +38,7 @@ export class PowerItemDataModel extends DataModelMixin<
 >(
     IdItemMixin({
         initialFromName: true,
+        hint: 'COSMERE.Item.Power.Identifier.Hint',
     }),
     TypedItemMixin({
         initial: () => Object.keys(CONFIG.COSMERE.power.types)[0],
@@ -50,6 +58,13 @@ export class PowerItemDataModel extends DataModelMixin<
 ) {
     static defineSchema() {
         return foundry.utils.mergeObject(super.defineSchema(), {
+            customSkill: new foundry.data.fields.BooleanField({
+                required: true,
+                initial: false,
+                label: 'COSMERE.Item.Power.CustomSkill.Label',
+                hint: 'COSMERE.Item.Power.CustomSkill.Hint',
+            }),
+
             skill: new foundry.data.fields.StringField({
                 required: true,
                 nullable: true,
@@ -69,5 +84,14 @@ export class PowerItemDataModel extends DataModelMixin<
                         ),
             }),
         });
+    }
+
+    public prepareDerivedData() {
+        super.prepareDerivedData();
+
+        if (!this.customSkill) {
+            const validId = this.id in CONFIG.COSMERE.skills;
+            this.skill = validId ? (this.id as Skill) : null;
+        }
     }
 }

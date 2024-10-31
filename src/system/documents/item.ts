@@ -262,6 +262,8 @@ export class CosmereItem<
     /* --- Lifecycle --- */
 
     override _onUpdate(_changes: object, options: object, userId: string) {
+        super._onUpdate(_changes, options, userId);
+
         if (game.user?.id !== userId) return;
 
         if (this.isGoal()) {
