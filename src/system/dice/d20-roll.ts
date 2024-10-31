@@ -73,6 +73,8 @@ export interface D20RollOptions
      * The attribute that is used for the roll by default
      */
     defaultAttribute?: Attribute;
+
+    data?: D20RollData;
 }
 
 export class D20Roll extends foundry.dice.Roll<D20RollData> {
@@ -249,6 +251,7 @@ export class D20Roll extends foundry.dice.Roll<D20RollData> {
         if (!result) return null;
 
         if (result.attribute !== this.options.defaultAttribute) {
+            this.data.skill.attribute = result.attribute;
             const skill = this.data.skill;
             const attribute = this.data.attributes[result.attribute];
             this.terms[2] = new foundry.dice.terms.NumericTerm({
