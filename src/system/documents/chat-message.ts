@@ -3,7 +3,8 @@ import { D20Roll } from '@system/dice/d20-roll';
 import { DamageRoll } from '@system/dice/damage-roll';
 
 import { CosmereActor } from './actor';
-import { renderSystemTemplate, TEMPLATES } from '../utils';
+import { hasKey, renderSystemTemplate, TEMPLATES } from '../utils';
+import { PlotDie } from '../dice';
 
 const ACTIVITY_CARD_TEMPLATE =
     'systems/cosmere-rpg/templates/chat/activity-card.hbs';
@@ -18,7 +19,6 @@ interface ChatMessageAction {
 
 export class CosmereChatMessage extends ChatMessage {
     /* --- Accessors --- */
-
     public get associatedActor(): CosmereActor | null {
         // NOTE: game.scenes resolves to any type
         /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-member-access */
@@ -48,14 +48,253 @@ export class CosmereChatMessage extends ChatMessage {
     }
 
     /* --- Rendering --- */
-
     public override async getHTML(): Promise<JQuery> {
         const html = await super.getHTML();
 
         // Enrich the chat card
-        await this.enrichChatCard(html);
+        await this.enrichCardHeader(html);
+
+        if (this.isContentVisible) {
+            await this.enrichCardContent(html);
+
+            html.find('.dice-roll').on('click', (event) =>
+                this.onClickDiceRoll(event),
+            );
+        }
+        //await this.enrichChatCard(html);
 
         return html;
+    }
+
+    protected async enrichCardHeader(html: JQuery) {
+        const actor = this.associatedActor;
+
+        let img;
+        let name;
+
+        if (this.isContentVisible) {
+            img = actor?.img ?? this.author.avatar;
+            name = this.alias;
+        } else {
+            img = this.author.avatar;
+            name = this.author.name;
+        }
+
+        const headerHTML = await renderSystemTemplate(
+            TEMPLATES.CHAT_CARD_HEADER,
+            {
+                img,
+                name,
+                subtitle:
+                    name !== this.author.name ? this.author.name : undefined,
+                timestamp: html.find('.message-timestamp').text(),
+                canRepeat: this.hasSkillTest || this.hasDamage,
+            },
+        );
+
+        // Replace header
+        html.find('.message-header').replaceWith(headerHTML);
+
+        const deleteButton = html
+            .find('.message-metadata')
+            .find('.message-delete');
+        if (!game.user!.isGM) deleteButton?.remove();
+    }
+
+    protected async enrichCardContent(html: JQuery) {
+        const content = $(
+            await renderSystemTemplate(TEMPLATES.CHAT_CARD_CONTENT, {}),
+        );
+        content.find('.chat-card').append(html.find('.dice-roll'));
+
+        await this.enrichSkillTest(content);
+        await this.enrichDamage(content);
+
+        // Replace content
+        html.find('.message-content').replaceWith(content);
+    }
+
+    protected async enrichSkillTest(html: JQuery) {
+        if (!this.hasSkillTest) return;
+
+        const d20Roll = this.d20Rolls[0];
+        const skill = d20Roll?.options?.data?.skill;
+
+        if (!skill) return;
+
+        const sectionHTML = await renderSystemTemplate(
+            TEMPLATES.CHAT_CARD_SECTION,
+            {
+                type: 'skill',
+                icon: 'fa-regular fa-dice-d20',
+                title: game.i18n!.localize('GENERIC.SkillTest'),
+                subtitle: {
+                    skill: CONFIG.COSMERE.skills[skill.id].label,
+                    attribute:
+                        CONFIG.COSMERE.attributes[skill.attribute].labelShort,
+                },
+            },
+        );
+
+        html.find('.chat-card').append(sectionHTML);
+
+        const roll = html.find('.dice-roll');
+        const tooltip = roll.find('.dice-tooltip');
+        this.enrichD20Tooltip(this.d20Rolls[0], tooltip[0]);
+        tooltip.prepend(roll.find('.dice-formula'));
+
+        const section = html.find('.chat-card-section.skill');
+        section.append(roll);
+
+        await this.enrichD20(d20Roll, html);
+    }
+
+    protected async enrichDamage(html: JQuery) {
+        if (!this.hasDamage) return;
+
+        const sectionHTML = await renderSystemTemplate(
+            TEMPLATES.CHAT_CARD_SECTION,
+            {
+                type: 'damage',
+                icon: 'fa-solid fa-burst',
+                title: game.i18n!.localize('GENERIC.Damage'),
+            },
+        );
+
+        html.find('.chat-card').append(sectionHTML);
+    }
+
+    protected async enrichD20(roll: D20Roll, html: JQuery) {
+        const OPPORTUNITY = 'opportunity';
+        const COMPLICATION = 'complication';
+
+        if (!roll) return;
+
+        // Process bonuses beyond the base d20s into a single roll.
+        const bonusTerms = roll.terms.slice(1);
+
+        for (const term of bonusTerms) {
+            // Terms throw an error if already evaluated. We can ignore them if so.
+            try {
+                await term.evaluate();
+            } catch (err) {
+                continue;
+            }
+        }
+
+        const bonusRoll =
+            bonusTerms && bonusTerms.length > 0
+                ? Roll.fromTerms(bonusTerms)
+                : null;
+        const d20Dice = roll.dice.find((d) => d.faces === 20);
+
+        if (!d20Dice) return;
+
+        const plot = [];
+
+        if (roll.hasPlotDie) {
+            const plotDice = roll.terms.filter((r) => r instanceof PlotDie);
+            for (const plotDie of plotDice) {
+                if (plotDie.rolledOpportunity) plot.push(OPPORTUNITY);
+                if (plotDie.rolledComplication) plot.push(COMPLICATION);
+            }
+        }
+
+        const entries = [];
+        for (let i = 0; i < d20Dice.results.length; i++) {
+            const tmpResults = [];
+            tmpResults.push(foundry.utils.duplicate(d20Dice.results[i]));
+
+            while (
+                d20Dice?.results[i]?.rerolled &&
+                !d20Dice?.results[i]?.count
+            ) {
+                if (i + 1 >= d20Dice.results.length) {
+                    break;
+                }
+
+                i++;
+                tmpResults.push(foundry.utils.duplicate(d20Dice.results[i]));
+            }
+
+            // Die terms must have active results or the base roll total of the generated roll is 0.
+            // This does not apply to dice that have been rerolled (unless they are replaced by a fixer value eg. for reliable talent).
+            tmpResults.forEach((r) => {
+                r.active = !(r.rerolled && !r.count);
+            });
+
+            const modifiers = new Array<
+                keyof (typeof foundry.dice.terms.Die)['MODIFIERS']
+            >();
+            for (const mod of d20Dice.modifiers) {
+                if (hasKey(foundry.dice.terms.Die.MODIFIERS, mod)) {
+                    modifiers.push(mod);
+                }
+            }
+
+            const baseTerm = new foundry.dice.terms.Die({
+                number: 1,
+                faces: 20,
+                results: tmpResults,
+                modifiers,
+            });
+            const baseRoll = D20Roll.fromTerms([baseTerm]);
+
+            const total = (baseRoll?.total ?? 0) + (bonusRoll?.total ?? 0);
+
+            const plotD20 = [...plot];
+            for (let o = 0; o < baseRoll.opportunitiesCount; o++) {
+                plotD20.push(OPPORTUNITY);
+            }
+            for (let c = 0; c < baseRoll.complicationsCount; c++) {
+                plotD20.push(COMPLICATION);
+            }
+
+            entries.push({
+                roll: baseRoll,
+                total: total,
+                ignored: tmpResults.some((r) => r.discarded) ? true : undefined,
+                plotType: plotD20.some((p) => p === OPPORTUNITY)
+                    ? OPPORTUNITY
+                    : plotD20.some((p) => p === COMPLICATION)
+                      ? COMPLICATION
+                      : undefined,
+                plotDice: plotD20,
+            });
+        }
+
+        const rollHTML = await renderSystemTemplate(
+            TEMPLATES.CHAT_CARD_ROLL_D20,
+            { entries },
+        );
+
+        html.find('.dice-total').replaceWith(rollHTML);
+    }
+
+    /**
+     * Augment roll tooltips with some additional information and styling.
+     * @param {Roll} roll The roll instance.
+     * @param {HTMLElement} html The roll tooltip markup.
+     */
+    protected enrichD20Tooltip(roll: Roll, html: HTMLElement) {
+        const constant = Number(
+            roll.terms
+                .filter((r) => r instanceof foundry.dice.terms.NumericTerm)
+                .reduce((acc, curr) => acc + curr.number, 0),
+        );
+        if (!constant) return;
+        const sign = constant < 0 ? '-' : '+';
+        const part = document.createElement('section');
+        part.classList.add('tooltip-part', 'constant');
+        part.innerHTML = `
+            <div class="dice">
+                <ol class="dice-rolls"></ol>
+                <div class="total">
+                <span class="value"><span class="sign">${sign}</span>${Math.abs(constant)}</span>
+                </div>
+            </div>
+            `;
+        html.appendChild(part);
     }
 
     /**
@@ -79,14 +318,12 @@ export class CosmereChatMessage extends ChatMessage {
         );
     }
 
-    /* -------------------------------------------- */
-
     /**
      * Toggles attributes on the chatlog based on which modifier keys are being held.
      * @param {object} [options]
      * @param {boolean} [options.releaseAll=false]  Force all modifiers to be considered released.
      */
-    public static toggleModifiers({ releaseAll = false }) {
+    private static toggleModifiers({ releaseAll = false }) {
         document.querySelectorAll('.chat-sidebar > ol').forEach((chatlog) => {
             const chatlogHTML = chatlog as HTMLElement;
             for (const key of Object.values(KeyboardManager.MODIFIER_KEYS)) {
@@ -96,13 +333,25 @@ export class CosmereChatMessage extends ChatMessage {
             }
         });
     }
+
+    /**
+     * Handle dice roll expansion.
+     * @param {PointerEvent} event  The triggering event.
+     * @protected
+     */
+    private onClickDiceRoll(event: JQuery.ClickEvent) {
+        event.stopPropagation();
+        const target = event.currentTarget as HTMLElement;
+        target?.classList.toggle('expanded');
+    }
+
     protected async enrichChatCard(html: JQuery) {
         const actor = this.associatedActor;
 
         const name = this.isContentVisible ? this.alias : this.author.name;
 
         // Render header
-        const header = await renderTemplate(CHAT_CARD_HEADER_TEMPLATE, {
+        const header = await renderTemplate(TEMPLATES.CHAT_CARD_HEADER, {
             img: this.isContentVisible
                 ? (actor?.img ?? this.author.avatar)
                 : this.author.avatar,
@@ -190,7 +439,7 @@ export class CosmereChatMessage extends ChatMessage {
         );
 
         // Render d20 rolls
-        const rollsHtml = await renderTemplate(CHAT_CARD_ROLLS_TEMPLATE, {
+        const rollsHtml = await renderTemplate(TEMPLATES.CHAT_CARD_ROLLS, {
             rolls: [...d20Rolls, ...remainingRolls],
             damageRolls,
         });
@@ -293,7 +542,7 @@ export class CosmereChatMessage extends ChatMessage {
         }
 
         // Render actions
-        const actionsHtml = await renderTemplate(CHAT_CARD_ACTIONS_TEMPLATE, {
+        const actionsHtml = await renderTemplate(TEMPLATES.CHAT_CARD_ACTIONS, {
             hasActions: groups.length > 0,
             groups,
         });

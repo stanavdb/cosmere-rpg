@@ -7,6 +7,7 @@ export const TEMPLATES = {
     CHAT_CARD_HEADER: 'chat/parts/chat-card-header.hbs',
     CHAT_CARD_CONTENT: 'chat/parts/chat-card-content.hbs',
     CHAT_CARD_SECTION: 'chat/parts/chat-card-section.hbs',
+    CHAT_CARD_ROLL_D20: 'chat/parts/chat-card-roll-d20.hbs',
 
     ROLL_BREAKDOWN: 'chat/roll-breakdown.hbs',
 
