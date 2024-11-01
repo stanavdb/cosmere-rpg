@@ -28,7 +28,7 @@ export interface D20RollConfigration extends D20RollOptions {
      * Whether or not to show the roll configuration dialog
      * @default true
      */
-    configure?: boolean;
+    configurable?: boolean;
 
     /* -- Chat message -- */
 
@@ -78,7 +78,7 @@ export async function d20Roll(
 ): Promise<D20Roll | null> {
     // Handle key modifiers
     const { fastForward, advantageMode, plotDie } = determineConfigurationMode(
-        config.configure,
+        config.configurable,
         config.advantageMode
             ? config.advantageMode === AdvantageMode.Advantage
             : undefined,
@@ -102,7 +102,7 @@ export async function d20Roll(
     if (!fastForward) {
         // Prompt dialog to configure the d20 roll
         const configured =
-            config.configure !== false
+            config.configurable !== false
                 ? await roll.configureDialog({
                       title: config.title,
                       plotDie: config.plotDie,
