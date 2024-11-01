@@ -54,7 +54,7 @@ Hooks.once('init', async () => {
 
     CONFIG.Token.documentClass = documents.CosmereTokenDocument;
 
-    Roll.TOOLTIP_TEMPLATE = `systems/${SYSTEM_ID}/templates/${TEMPLATES.ROLL_BREAKDOWN}`;
+    Roll.TOOLTIP_TEMPLATE = `systems/${SYSTEM_ID}/templates/${TEMPLATES.CHAT_ROLL_TOOLTIP}`;
 
     CONFIG.ActiveEffect.legacyTransferral = false;
 
