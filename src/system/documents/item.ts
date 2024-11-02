@@ -52,7 +52,7 @@ import {
 } from '@system/dice';
 import { AdvantageMode } from '@system/types/roll';
 import { RollMode } from '@system/dice/types';
-import { determineConfigurationMode } from '../utils';
+import { determineConfigurationMode } from '../utils/generic';
 
 // Constants
 const CONSUME_CONFIGURATION_DIALOG_TEMPLATE =

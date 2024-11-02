@@ -4,7 +4,7 @@ import { ConstructorOf } from '@system/types/utils';
 import { EditCreatureTypeDialog } from '@system/applications/actor/dialogs/edit-creature-type';
 
 // Utils
-import { getTypeLabel } from '@system/utils';
+import { getTypeLabel } from '@src/system/utils/actor';
 
 // Component imports
 import { HandlebarsApplicationComponent } from '@system/applications/component-system';

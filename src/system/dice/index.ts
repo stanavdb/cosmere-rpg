@@ -2,10 +2,8 @@ import { Attribute } from '@system/types/cosmere';
 
 import { D20Roll, D20RollOptions, D20RollData } from './d20-roll';
 import { DamageRoll, DamageRollOptions, DamageRollData } from './damage-roll';
-import { RollMode } from './types';
-import { areKeysPressed, determineConfigurationMode } from '../utils';
-import { KEYBINDINGS } from '../settings';
 import { AdvantageMode } from '../types/roll';
+import { determineConfigurationMode } from '../utils/generic';
 
 export * from './d20-roll';
 export * from './damage-roll';
