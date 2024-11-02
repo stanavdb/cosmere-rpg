@@ -385,7 +385,7 @@ export class CosmereItem<
         // We want to store the unmodded damage for use in graze calcs
         // This isn't a particularly perfect solution, but it's functional
         // only undoing the automatic addition of the selected attribute
-        rollData.baseRoll = roll.total - rollData.mod;
+        rollData.baseRoll = (roll.total ?? 0) - (rollData.mod ?? 0);
 
         // Roll the dice pool for graze damage silently if set.
         let grazeRoll = undefined;
