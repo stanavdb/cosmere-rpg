@@ -5,7 +5,7 @@ import { AnyObject } from '@system/types/utils';
 import { CommonActorData } from '@system/data/actor/common';
 
 // Utils
-import { getTypeLabel } from '@system/utils';
+import { getTypeLabel } from '@src/system/utils/actor';
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
