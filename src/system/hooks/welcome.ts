@@ -1,12 +1,11 @@
 // Dialogs
 import { ReleaseNotesDialog } from '@system/applications/dialogs/release-notes';
+import { SYSTEM_ID } from '../constants';
+import { getSystemSetting, SETTINGS } from '../settings';
 
 Hooks.on('ready', async () => {
     // Ensure this message is only displayed when creating a new world
-    if (
-        !game.user!.isGM ||
-        !game.settings!.get('cosmere-rpg', 'firstTimeWorldCreation')
-    )
+    if (!game.user!.isGM || !getSystemSetting(SETTINGS.INTERNAL_FIRST_CREATION))
         return;
 
     // Get system version
@@ -20,7 +19,7 @@ Hooks.on('ready', async () => {
     });
 
     // Mark the setting so the message doesn't appear again
-    await game.settings!.set('cosmere-rpg', 'firstTimeWorldCreation', false);
+    await game.settings!.set(SYSTEM_ID, 'firstTimeWorldCreation', false);
 });
 
 Hooks.on('ready', async () => {
@@ -28,18 +27,13 @@ Hooks.on('ready', async () => {
     if (!game.user!.isGM) return;
 
     const currentVersion = game.system!.version;
-    const latestVersion = game.settings!.get(
-        'cosmere-rpg',
-        'latestVersion',
+    const latestVersion = getSystemSetting(
+        SETTINGS.INTERNAL_LATEST_VERSION,
     ) as string;
 
     if (currentVersion > latestVersion) {
         // Record the latest version of the system
-        await game.settings!.set(
-            'cosmere-rpg',
-            'latestVersion',
-            currentVersion,
-        );
+        await game.settings!.set(SYSTEM_ID, 'latestVersion', currentVersion);
 
         // Show the release notes
         void ReleaseNotesDialog.show();

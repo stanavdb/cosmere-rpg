@@ -20,9 +20,3 @@ export function getTypeLabel(type: CommonActorData['type']): string {
     // Construct type label
     return `${primaryLabel} ${subtype ? `(${subtype})` : ''}`.trim();
 }
-
-/* --- Default export --- */
-
-export default {
-    getTypeLabel,
-};

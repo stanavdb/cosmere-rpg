@@ -127,6 +127,12 @@
                 "Deflect": "Deflect",
                 "NoObscuredSense": "Unaffected by Obscured Senses."
             },
+            "Deflect": {
+                "Natural": {
+                    "Label": "Natural Deflect",
+                    "Hint": "Natural deflect is used when no armor is worn, or when the natural deflect is higher than the worn armor."
+                }
+            },
             "Size": {
                 "Small": "Small",
                 "Medium": "Medium",
@@ -207,6 +213,7 @@
                 "ToggleShowSkills": "Show skills without ranks",
                 "ToggleCollapseSkills": "Hide skills without ranks",
                 "ConfigureDefense": "Configure Defense",
+                "ConfigureDeflect": "Configure Deflect",
                 "ConfigureMovement": "Configure Movement Rate",
                 "ConfigureSensesRange": "Configure Senses Range",
                 "ConfigureRecovery": "Configure Recovery Die",
@@ -812,6 +819,9 @@
         "ConfigureRecoveryDie": {
             "Title": "Configure Recovery Die: {actor}"
         },
+        "ConfigureDeflect": {
+            "Title": "Configure Deflect: {actor}"
+        },
         "EditTalentPrerequisite": {
             "Title": "Edit Prerequisite"
         },
@@ -927,5 +937,21 @@
         "Distance": {
             "Feet": "Feet"
         }
+    },
+    "SETTINGS": {
+        "itemSheetSideTabs": {
+            "name": "Vertical Side Tabs for Item Sheets",
+            "hint": "If enabled, item sheets use vertical tabs down the right-hand side, similar to the character sheet, instead of the default in-line horizontal ones."
+        },
+        "skipRollDialogByDefault": {
+            "name": "Skip Roll Dialog by Default",
+            "hint": "If enabled, rolls will skip the roll configuration dialog when clicked, using the default roll configuration. The dialog can still be accessed by holding the 'Skip/Show Dialog' key modifier from the system controls."
+        }
+    },
+    "KEYBINDINGS": {
+        "skipDialogDefault": "Skip/Show Dialog",
+        "skipDialogAdvantage": "Skip Dialog with Advantage",
+        "skipDialogDisadvantage": "Skip Dialog with Disadvantage",
+        "skipDialogRaiseStakes": "Skip Dialog with Raise Stakes"
     }
 }

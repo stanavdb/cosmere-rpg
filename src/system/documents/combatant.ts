@@ -2,6 +2,7 @@ import { DocumentModificationOptions } from '@league-of-foundry-developers/found
 import { SchemaField } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/fields.mjs';
 import { CosmereActor } from './actor';
 import { ActorType, TurnSpeed } from '@src/system/types/cosmere';
+import { SYSTEM_ID } from '../constants';
 
 export class CosmereCombatant extends Combatant {
     override get actor(): CosmereActor {
@@ -17,8 +18,8 @@ export class CosmereCombatant extends Combatant {
         userID: string,
     ) {
         super._onCreate(data, options, userID);
-        void this.setFlag('cosmere-rpg', 'turnSpeed', TurnSpeed.Slow);
-        void this.setFlag('cosmere-rpg', 'activated', false);
+        void this.setFlag(SYSTEM_ID, 'turnSpeed', TurnSpeed.Slow);
+        void this.setFlag(SYSTEM_ID, 'activated', false);
         void this.combat?.setInitiative(
             this.id!,
             this.generateInitiative(this.actor.type, TurnSpeed.Slow),
@@ -41,13 +42,10 @@ export class CosmereCombatant extends Combatant {
      * Utility function to flip the combatants current turn speed between slow and fast. It then updates initiative to force an update of the combat-tracker ui
      */
     toggleTurnSpeed() {
-        const currentSpeed = this.getFlag(
-            'cosmere-rpg',
-            'turnSpeed',
-        ) as TurnSpeed;
+        const currentSpeed = this.getFlag(SYSTEM_ID, 'turnSpeed') as TurnSpeed;
         const newSpeed =
             currentSpeed === TurnSpeed.Slow ? TurnSpeed.Fast : TurnSpeed.Slow;
-        void this.setFlag('cosmere-rpg', 'turnSpeed', newSpeed);
+        void this.setFlag(SYSTEM_ID, 'turnSpeed', newSpeed);
         void this.combat?.setInitiative(
             this.id!,
             this.generateInitiative(this.actor.type, newSpeed),

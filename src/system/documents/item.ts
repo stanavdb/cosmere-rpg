@@ -6,6 +6,7 @@ import {
     ActivationType,
 } from '@system/types/cosmere';
 import { CosmereActor } from './actor';
+import { SYSTEM_ID } from '../constants';
 
 import { Derived } from '@system/data/fields';
 
@@ -51,6 +52,7 @@ import {
 } from '@system/dice';
 import { AdvantageMode } from '@system/types/roll';
 import { RollMode } from '@system/dice/types';
+import { determineConfigurationMode } from '../utils/generic';
 
 // Constants
 const CONSUME_CONFIGURATION_DIALOG_TEMPLATE =
@@ -216,7 +218,7 @@ export class CosmereItem<
     /* --- Accessors --- */
 
     public get isFavorite(): boolean {
-        return this.getFlag('cosmere-rpg', 'favorites.isFavorite');
+        return this.getFlag(SYSTEM_ID, 'favorites.isFavorite');
     }
 
     /**
@@ -237,10 +239,7 @@ export class CosmereItem<
         const modalityId = this.system.modality;
 
         // Check actor modality flag
-        const activeMode = this.actor.getFlag(
-            'cosmere-rpg',
-            `mode.${modalityId}`,
-        );
+        const activeMode = this.actor.getFlag(SYSTEM_ID, `mode.${modalityId}`);
 
         // Check if the actor has the mode active
         return activeMode === this.system.id;
@@ -461,29 +460,63 @@ export class CosmereItem<
             return null;
         }
 
-        // Get skill to use
-        const skillId = options.skill ?? this.system.activation.skill;
-        if (!skillId) return null;
-        const skill = actor.system.skills[skillId];
+        // Get the skill to use during the skill test
+        const skillTestSkillId =
+            options.skillTest?.skill ?? this.system.activation.skill;
+        if (!skillTestSkillId) return null;
 
-        // Get the attribute
-        let attributeId =
-            options.attribute ??
+        // Get the skill to use during the damage roll
+        const damageSkillId =
+            options.damage?.skill ??
+            this.system.damage.skill ??
+            skillTestSkillId;
+
+        // Get the attribute to use during the skill test
+        let skillTestAttributeId =
+            options.skillTest?.attribute ??
             this.system.activation.attribute ??
-            skill.attribute;
+            actor.system.skills[skillTestSkillId].attribute;
+
+        // Get the attribute to use during the damage roll
+        const damageAttributeId =
+            options.damage?.attribute ??
+            this.system.damage.attribute ??
+            actor.system.skills[damageSkillId].attribute;
+
+        options.skillTest ??= {};
+        options.damage ??= {};
+
+        // Handle key modifiers
+        const { fastForward, advantageMode, plotDie } =
+            determineConfigurationMode(
+                options.configurable,
+                options.skillTest.advantageMode
+                    ? options.skillTest.advantageMode ===
+                          AdvantageMode.Advantage
+                    : undefined,
+                options.skillTest.advantageMode
+                    ? options.skillTest.advantageMode ===
+                          AdvantageMode.Disadvantage
+                    : undefined,
+                options.skillTest.plotDie,
+            );
+
+        // Replace config values with key modified values
+        options.skillTest.advantageMode = advantageMode;
+        options.skillTest.plotDie = plotDie;
 
         // Perform configuration
-        if (options.configurable !== false) {
+        if (!fastForward && options.configurable !== false) {
             const attackConfig = await AttackConfigurationDialog.show({
                 title: `${this.name} (${game.i18n!.localize(
-                    CONFIG.COSMERE.skills[skillId].label,
+                    CONFIG.COSMERE.skills[skillTestSkillId].label,
                 )})`,
                 skillTest: {
                     ...options.skillTest,
                     parts: ['@mod'].concat(options.skillTest?.parts ?? []),
                     data: this.getSkillTestRollData(
-                        skillId,
-                        attributeId,
+                        skillTestSkillId,
+                        skillTestAttributeId,
                         actor,
                     ),
                     plotDie:
@@ -493,26 +526,28 @@ export class CosmereItem<
                 damageRoll: {
                     ...options.damage,
                     parts: this.system.damage.formula.split(' + '),
-                    data: this.getDamageRollData(skillId, attributeId, actor),
+                    data: this.getDamageRollData(
+                        skillTestSkillId,
+                        skillTestAttributeId,
+                        actor,
+                    ),
                 },
-                defaultAttribute: attributeId,
+                defaultAttribute: skillTestAttributeId,
                 defaultRollMode: options.rollMode,
             });
 
             // If the dialog was closed, exit out of rolls
             if (!attackConfig) return null;
 
-            attributeId = attackConfig.attribute;
+            skillTestAttributeId = attackConfig.attribute;
             options.rollMode = attackConfig.rollMode;
 
-            options.skillTest ??= {};
             options.skillTest.plotDie = attackConfig.skillTest.plotDie;
             options.skillTest.advantageMode =
                 attackConfig.skillTest.advantageMode;
             options.skillTest.advantageModePlot =
                 attackConfig.skillTest.advantageModePlot;
 
-            options.damage ??= {};
             options.damage.advantageMode =
                 attackConfig.damageRoll.advantageMode;
         }
@@ -521,8 +556,8 @@ export class CosmereItem<
         const skillRoll = (await this.roll({
             ...options.skillTest,
             actor,
-            skill: skillId,
-            attribute: attributeId,
+            skill: skillTestSkillId,
+            attribute: skillTestAttributeId,
             rollMode: options.rollMode,
             speaker: options.speaker,
             configurable: false,
@@ -533,8 +568,8 @@ export class CosmereItem<
         const damageRolls = (await this.rollDamage({
             ...options.damage,
             actor,
-            skill: skillId,
-            attribute: attributeId,
+            skill: damageSkillId,
+            attribute: damageAttributeId,
             rollMode: options.rollMode,
             speaker: options.speaker,
             chatMessage: false,
@@ -896,7 +931,7 @@ export class CosmereItem<
         await this.update(
             {
                 flags: {
-                    'cosmere-rpg': {
+                    SYSTEM_ID: {
                         favorites: {
                             isFavorite: true,
                             sort: index,
@@ -910,8 +945,8 @@ export class CosmereItem<
 
     public async clearFavorite() {
         await Promise.all([
-            this.unsetFlag('cosmere-rpg', 'favorites.isFavorite'),
-            this.unsetFlag('cosmere-rpg', 'favorites.sort'),
+            this.unsetFlag(SYSTEM_ID, 'favorites.isFavorite'),
+            this.unsetFlag(SYSTEM_ID, 'favorites.sort'),
         ]);
     }
 
@@ -1077,6 +1112,8 @@ export namespace CosmereItem {
     export interface RollAttackOptions
         extends Omit<
             RollOptions,
+            | 'skill'
+            | 'attribute'
             | 'parts'
             | 'opportunity'
             | 'complication'
@@ -1086,6 +1123,8 @@ export namespace CosmereItem {
         > {
         skillTest?: Pick<
             RollOptions,
+            | 'skill'
+            | 'attribute'
             | 'parts'
             | 'opportunity'
             | 'complication'
@@ -1093,7 +1132,7 @@ export namespace CosmereItem {
             | 'advantageMode'
             | 'advantageModePlot'
         >;
-        damage?: Pick<RollOptions, 'advantageMode'>;
+        damage?: Pick<RollOptions, 'advantageMode' | 'skill' | 'attribute'>;
     }
 
     export interface UseOptions extends RollOptions {

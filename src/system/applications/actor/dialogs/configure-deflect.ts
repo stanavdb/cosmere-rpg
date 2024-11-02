@@ -1,15 +1,13 @@
-import { CreatureType } from '@system/types/cosmere';
+import { AttributeGroup } from '@system/types/cosmere';
 import { CosmereActor } from '@system/documents';
 import { AnyObject } from '@system/types/utils';
 
 import { CommonActorData } from '@system/data/actor/common';
-
-// Utils
-import { getTypeLabel } from '@src/system/utils/actor';
+import { Derived } from '@system/data/fields';
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
-export class EditCreatureTypeDialog extends HandlebarsApplicationMixin(
+export class ConfigureDeflectDialog extends HandlebarsApplicationMixin(
     ApplicationV2<AnyObject>,
 ) {
     /**
@@ -21,17 +19,16 @@ export class EditCreatureTypeDialog extends HandlebarsApplicationMixin(
         foundry.utils.deepClone(super.DEFAULT_OPTIONS),
         {
             window: {
-                title: 'COSMERE.Actor.Sheet.EditType',
                 minimizable: false,
                 positioned: true,
             },
-            classes: ['dialog', 'edit-creature-type'],
+            classes: ['dialog', 'configure-deflect'],
             tag: 'dialog',
             position: {
-                width: 300,
+                width: 350,
             },
             actions: {
-                'update-type': this.onUpdateType,
+                'update-deflect': this.onUpdateDeflect,
             },
         },
     );
@@ -41,7 +38,7 @@ export class EditCreatureTypeDialog extends HandlebarsApplicationMixin(
         {
             form: {
                 template:
-                    'systems/cosmere-rpg/templates/actors/adversary/dialogs/edit-creature-type.hbs',
+                    'systems/cosmere-rpg/templates/actors/dialogs/configure-deflect.hbs',
                 forms: {
                     form: {
                         handler: this.onFormEvent,
@@ -53,27 +50,38 @@ export class EditCreatureTypeDialog extends HandlebarsApplicationMixin(
     );
     /* eslint-enable @typescript-eslint/unbound-method */
 
-    private type: CommonActorData['type'];
+    private data: CommonActorData['deflect'];
+    private mode: Derived.Mode;
 
     private constructor(private actor: CosmereActor) {
         super({
-            id: `${actor.uuid}.type`,
+            id: `${actor.uuid}.Deflect`,
+            window: {
+                title: game.i18n!.format('DIALOG.ConfigureDeflect.Title', {
+                    actor: actor.name,
+                }),
+            },
         });
 
-        this.type = actor.system.type;
+        this.data = actor.system.deflect;
+        this.data.value ??= 0;
+        this.data.natural ??= 0;
+        this.data.override ??= this.data.value ?? 0;
+        this.data.bonus ??= 0;
+        this.mode = Derived.getMode(this.data);
     }
 
     /* --- Statics --- */
 
-    public static async show(actor: CosmereActor) {
-        await new EditCreatureTypeDialog(actor).render(true);
+    public static show(actor: CosmereActor) {
+        void new ConfigureDeflectDialog(actor).render(true);
     }
 
     /* --- Actions --- */
 
-    private static onUpdateType(this: EditCreatureTypeDialog) {
+    private static onUpdateDeflect(this: ConfigureDeflectDialog) {
         void this.actor.update({
-            'system.type': this.type,
+            'system.deflect': this.data,
         });
         void this.close();
     }
@@ -81,7 +89,7 @@ export class EditCreatureTypeDialog extends HandlebarsApplicationMixin(
     /* --- Form --- */
 
     private static onFormEvent(
-        this: EditCreatureTypeDialog,
+        this: ConfigureDeflectDialog,
         event: Event,
         form: HTMLFormElement,
         formData: FormDataExtended,
@@ -90,15 +98,23 @@ export class EditCreatureTypeDialog extends HandlebarsApplicationMixin(
 
         const target = event.target as HTMLInputElement;
 
-        if (formData.object.custom && target.name !== 'primaryType') {
-            this.type.id = CreatureType.Custom;
-            this.type.custom = formData.object.custom as string;
-        } else {
-            this.type.id = formData.object.primaryType as CreatureType;
-            this.type.custom = null;
+        this.mode = formData.get('mode') as Derived.Mode;
+
+        if (target.name !== 'mode') {
+            if (this.mode === Derived.Mode.Override) {
+                this.data.override = Number(formData.object.value ?? 0);
+            } else {
+                this.data.natural = Number(formData.object.natural ?? 0);
+                this.data.bonus = Number(formData.object.bonus ?? 0);
+            }
         }
 
-        this.type.subtype = formData.object.subtype as string;
+        if (isNaN(this.data.override!)) this.data.override = 0;
+        if (isNaN(this.data.natural!)) this.data.natural = 0;
+        if (isNaN(this.data.bonus!)) this.data.bonus = 0;
+
+        // Assign mode
+        Derived.setMode(this.data, this.mode);
 
         // Render
         void this.render(true);
@@ -115,21 +131,13 @@ export class EditCreatureTypeDialog extends HandlebarsApplicationMixin(
     /* --- Context --- */
 
     protected _prepareContext() {
-        // Get list of all configured types
-        const configuredTypes = Object.entries(
-            CONFIG.COSMERE.creatureTypes,
-        ).map(([id, config]) => ({
-            id,
-            ...config,
-            selected: (this.type.id as string) === id,
-        }));
-
         return Promise.resolve({
-            actor: this.actor,
-            type: this.type,
-
-            typeLabel: getTypeLabel(this.type),
-            configuredTypes,
+            ...this.data,
+            mode: this.mode,
+            modes: {
+                ...Derived.Modes,
+                [Derived.Mode.Derived]: 'TYPES.Item.armor',
+            },
         });
     }
 }

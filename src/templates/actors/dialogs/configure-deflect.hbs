@@ -1,26 +1,51 @@
 <form>
+    {{!-- Value --}}
     <div class="form-group">
         <input 
-            name="formula" 
-            {{#if (eq mode 'derived')}}
-            type="text" 
-            value="{{formula}}" 
-            readonly
-            {{else}}
+            name="value" 
             style="text-align: center; font-size: 15pt"
-            type="number"
-            value="{{override}}"
+            type="number" 
             min="0"
             step="1"
+            {{#if (eq mode 'derived')}}
+            value="{{value}}" 
+            readonly
+            {{else}}
+            value="{{override}}"
             {{/if}}
         >
     </div>
+
+    {{!-- Mode --}}
     <div class="form-group">
         <label>{{localize "GENERIC.Mode"}}</label>
         <select name="mode">
             {{selectOptions modes selected=mode localize=true}}
         </select>
     </div>
+
+    {{!-- Natural deflect --}}
+    <div class="form-group">
+        <label>{{localize "COSMERE.Actor.Deflect.Natural.Label"}}</label>
+        <input 
+            name="natural" 
+            {{#if (eq mode 'derived')}}
+            type="number" 
+            value="{{this.natural}}" 
+            min="0" 
+            step="1" 
+            {{else}}
+            type="text"
+            value="—"
+            readonly
+            {{/if}}
+        >
+    </div>
+    <p class="hint">
+        {{localize "COSMERE.Actor.Deflect.Natural.Hint"}}
+    </p>
+
+    {{!-- Bonus --}}
     <div class="form-group">
         <label>{{localize "GENERIC.Bonus"}}</label>
         <input 
@@ -37,9 +62,11 @@
             {{/if}}
         >
     </div>
+
+    {{!-- Submit --}}
     <br>
     <div class="form-group">
-        <button data-action="update-defense" type="submit">
+        <button data-action="update-deflect" type="submit">
             {{localize "GENERIC.Button.Update"}}
         </button>
     </div>

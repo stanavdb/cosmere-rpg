@@ -269,6 +269,7 @@
         }
 
         .deflect {
+            position: relative;
             background: rgb(11 10 19 / 100%);
             width: 2rem;
             display: flex;
@@ -280,6 +281,13 @@
 
             span {
                 margin: -0.1rem 0 0.3rem 0 !important
+            }
+
+            a[data-action="configure-deflect"] {
+                position: absolute;
+                font-size: 6pt;
+                left: 1.2rem;
+                top: 0;
             }
         }
     }

@@ -5,6 +5,7 @@ import { DeepPartial, AnyObject } from '@system/types/utils';
 // Mixins
 import { ComponentHandlebarsApplicationMixin } from '@system/applications/component-system';
 import { TabsApplicationMixin } from '@system/applications/mixins';
+import { getSystemSetting, SETTINGS } from '@src/system/settings';
 
 const { ItemSheetV2 } = foundry.applications.sheets;
 
@@ -286,7 +287,7 @@ export class BaseItemSheet extends TabsApplicationMixin(
             ).fields,
             editable: this.isEditable,
             descHtml: enrichedDescValue,
-            sideTabs: game.settings!.get('cosmere-rpg', 'itemSheetSideTabs'),
+            sideTabs: getSystemSetting(SETTINGS.ITEM_SHEET_SIDE_TABS),
         };
     }
 }

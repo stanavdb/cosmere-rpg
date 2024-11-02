@@ -1,5 +1,6 @@
 import { ActorType, TurnSpeed } from '@src/system/types/cosmere';
 import { CosmereCombatant } from '@src/system/documents/combatant';
+import { SYSTEM_ID } from '@src/system/constants';
 
 /**
  * Overrides default tracker template to implement slow/fast buckets and combatant activation button.
@@ -35,14 +36,11 @@ export class CosmereCombatTracker extends CombatTracker {
             const newTurn: CosmereTurn = {
                 ...turn,
                 turnSpeed: combatant.getFlag(
-                    'cosmere-rpg',
+                    SYSTEM_ID,
                     'turnSpeed',
                 ) as TurnSpeed,
                 type: combatant.actor.type,
-                activated: combatant.getFlag(
-                    'cosmere-rpg',
-                    'activated',
-                ) as boolean,
+                activated: combatant.getFlag(SYSTEM_ID, 'activated') as boolean,
             };
             //strips active player formatting
             newTurn.css = '';
@@ -122,7 +120,7 @@ export class CosmereCombatTracker extends CombatTracker {
             li.dataset.combatantId!,
             {},
         ) as CosmereCombatant;
-        void combatant.setFlag('cosmere-rpg', 'activated', true);
+        void combatant.setFlag(SYSTEM_ID, 'activated', true);
     }
 
     /**
@@ -146,7 +144,7 @@ export class CosmereCombatTracker extends CombatTracker {
             li.data('combatant-id') as string,
             {},
         ) as CosmereCombatant;
-        void combatant.setFlag('cosmere-rpg', 'activated', false);
+        void combatant.setFlag(SYSTEM_ID, 'activated', false);
     }
 
     /**
