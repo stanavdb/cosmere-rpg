@@ -382,18 +382,10 @@ export class CosmereItem<
                 source: this.name,
             }),
         );
-        // We want to store the unmodded damage
-        // Get the flat damage value
-        let unmoddedDamage =
-            roll.terms[0] instanceof foundry.dice.terms.NumericTerm
-                ? roll.terms[0].total
-                : 0;
-        // get any rolled die
-        unmoddedDamage += roll.dice
-            .map((die) => die.total ?? 0)
-            .reduce((sum, die) => sum + die, 0);
-        // store it in the roll
-        rollData.baseRoll = unmoddedDamage;
+        // We want to store the unmodded damage for use in graze calcs
+        // This isn't a particularly perfect solution, but it's functional
+        // only undoing the automatic addition of the selected attribute
+        rollData.baseRoll = roll.total - rollData.mod;
 
         // Roll the dice pool for graze damage silently if set.
         let grazeRoll = undefined;
