@@ -15,8 +15,7 @@ export type DamageRollData<
         attribute: Attribute;
     };
     attribute?: number;
-    grazeOverrideForumla?: string;
-    baseRoll?: string;
+    baseRoll?: number;
 };
 
 export interface DamageRollOptions
@@ -36,6 +35,16 @@ export interface DamageRollOptions
      * @default AdvantageMode.None
      */
     advantageMode?: AdvantageMode;
+
+    /**
+     * Where did this damage come from?
+     */
+    source?: string;
+
+    /**
+     * Nested Roll item for graze damage
+     */
+    graze?: DamageRoll;
 }
 
 export class DamageRoll extends foundry.dice.Roll<DamageRollData> {
@@ -61,6 +70,18 @@ export class DamageRoll extends foundry.dice.Roll<DamageRollData> {
 
     get mod(): number | undefined {
         return this.options.mod;
+    }
+
+    get source(): string | undefined {
+        return this.options.source;
+    }
+
+    get graze(): DamageRoll | undefined {
+        return this.options.graze;
+    }
+
+    set graze(roll: DamageRoll) {
+        this.options.graze = roll;
     }
 
     public get hasMod() {

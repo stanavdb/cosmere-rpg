@@ -331,7 +331,7 @@ export class CosmereItem<
      */
     public async rollDamage(
         options: CosmereItem.RollDamageOptions = {},
-    ): Promise<[DamageRoll, DamageRoll | undefined] | null> {
+    ): Promise<DamageRoll[] | null> {
         if (!this.hasDamage() || !this.system.damage.formula) return null;
 
         // Get the actor to roll for (either assigned through option, the parent of this item, or the first controlled actor)
@@ -371,26 +371,39 @@ export class CosmereItem<
             skillId,
             attributeId,
             actor,
-            this.system.damage.grazeOverrideFormula,
         );
 
         // Perform the roll
         const roll = await damageRoll(
             foundry.utils.mergeObject(options, {
-                formula: this.system.damage.formula,
+                formula: `${this.system.damage.formula}+${rollData.mod}`,
                 damageType: this.system.damage.type,
                 mod: rollData.mod,
                 data: rollData,
+                source: this.name,
             }),
         );
-        rollData.baseRoll = roll.result;
+        // We want to store the unmodded damage
+        // Get the flat damage value
+        let unmoddedDamage =
+            roll.terms[0] instanceof foundry.dice.terms.NumericTerm
+                ? roll.terms[0].total
+                : 0;
+        // get any rolled die
+        unmoddedDamage += roll.dice
+            .map((die) => die.total ?? 0)
+            .reduce((sum, die) => sum + die, 0);
+        // store it in the roll
+        rollData.baseRoll = unmoddedDamage;
 
         // Roll the dice pool for graze damage silently if set.
         let grazeRoll = undefined;
-        if (rollData.grazeOverrideForumla) {
+        const grazeFormula =
+            this.system.damage.grazeOverrideFormula ?? `${rollData.baseRoll}`;
+        if (grazeFormula) {
             grazeRoll = await damageRoll(
                 foundry.utils.mergeObject(options, {
-                    formula: rollData.grazeOverrideForumla,
+                    formula: grazeFormula,
                     damageType: this.system.damage.type,
                     data: rollData,
                 }),
@@ -403,6 +416,8 @@ export class CosmereItem<
                     })),
             );
         }
+        if (!grazeRoll) return null;
+        roll.graze = grazeRoll;
 
         if (roll && options.chatMessage !== false) {
             // Get the speaker
@@ -417,7 +432,7 @@ export class CosmereItem<
         }
 
         // Return the roll
-        return [roll, grazeRoll];
+        return [roll];
     }
 
     /**
@@ -426,7 +441,7 @@ export class CosmereItem<
      */
     public async rollAttack(
         options: CosmereItem.RollAttackOptions = {},
-    ): Promise<[D20Roll, DamageRoll, DamageRoll | undefined] | null> {
+    ): Promise<[D20Roll, DamageRoll[]] | null> {
         if (!this.hasActivation()) return null;
         if (!this.hasDamage() || !this.system.damage.formula) return null;
 
@@ -478,12 +493,7 @@ export class CosmereItem<
                 damageRoll: {
                     ...options.damage,
                     parts: this.system.damage.formula.split(' + '),
-                    data: this.getDamageRollData(
-                        skillId,
-                        attributeId,
-                        actor,
-                        this.system.damage.grazeOverrideFormula,
-                    ),
+                    data: this.getDamageRollData(skillId, attributeId, actor),
                 },
                 defaultAttribute: attributeId,
                 defaultRollMode: options.rollMode,
@@ -520,7 +530,7 @@ export class CosmereItem<
         }))!;
 
         // Roll the damage
-        const [damageRoll, grazeRoll] = (await this.rollDamage({
+        const damageRolls = (await this.rollDamage({
             ...options.damage,
             actor,
             skill: skillId,
@@ -546,12 +556,12 @@ export class CosmereItem<
                 user: game.user!.id,
                 speaker,
                 content: `<p>${flavor}</p>`,
-                rolls: [skillRoll, damageRoll, grazeRoll],
+                rolls: [skillRoll, damageRolls],
             })) as ChatMessage;
         }
 
         // Return the rolls
-        return [skillRoll, damageRoll, grazeRoll];
+        return [skillRoll, damageRolls ?? []];
     }
 
     /**
@@ -560,12 +570,7 @@ export class CosmereItem<
      */
     public async use(
         options: CosmereItem.UseOptions = {},
-    ): Promise<
-        | D20Roll
-        | [D20Roll, DamageRoll]
-        | [D20Roll, DamageRoll, DamageRoll]
-        | null
-    > {
+    ): Promise<D20Roll | [D20Roll, ...DamageRoll[]] | null> {
         if (!this.hasActivation()) return null;
 
         // Set up post roll actions
@@ -724,9 +729,7 @@ export class CosmereItem<
                 if (!attackResult) return null;
 
                 // Add the rolls to the list
-                rolls.push(
-                    ...attackResult.filter((roll) => roll !== undefined),
-                );
+                rolls.push(attackResult[0], ...attackResult[1]);
 
                 // Set the flavor
                 flavor = flavor
@@ -738,15 +741,14 @@ export class CosmereItem<
                       )})`;
             } else {
                 if (hasDamage) {
-                    const [damageRoll, grazeRoll] = (await this.rollDamage({
+                    const damageRolls = await this.rollDamage({
                         ...options,
                         actor,
                         chatMessage: false,
-                    }))!;
-                    if (!damageRoll) return null;
+                    });
+                    if (!damageRolls) return null;
 
-                    rolls.push(damageRoll);
-                    if (grazeRoll) rolls.push(grazeRoll);
+                    rolls.push(...damageRolls);
                 }
 
                 if (this.system.activation.type === ActivationType.SkillTest) {
@@ -789,9 +791,7 @@ export class CosmereItem<
 
             // Return the result
             return hasDamage
-                ? (rolls as
-                      | [D20Roll, DamageRoll]
-                      | [D20Roll, DamageRoll, DamageRoll])
+                ? (rolls as [D20Roll, ...DamageRoll[]])
                 : (rolls[0] as D20Roll);
         } else {
             // NOTE: Use boolean or operator (`||`) here instead of nullish coalescing (`??`),
@@ -957,7 +957,6 @@ export class CosmereItem<
         skillId: Skill | undefined,
         attributeId: Attribute | undefined,
         actor: CosmereActor,
-        grazeOverride: string | undefined,
     ): DamageRollData {
         const skill = skillId ? actor.system.skills[skillId] : undefined;
         const attribute = attributeId
@@ -982,9 +981,6 @@ export class CosmereItem<
                   }
                 : undefined,
             attribute: attribute?.value,
-            // strimming empty strings as per line 778
-            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-            grazeOverrideForumla: grazeOverride || undefined,
         };
     }
 }
