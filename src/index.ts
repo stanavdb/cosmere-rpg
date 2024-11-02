@@ -1,5 +1,6 @@
 import { ActorType, Condition, ItemType } from './system/types/cosmere';
 import { SYSTEM_ID } from './system/constants';
+import { TEMPLATES } from './system/utils/templates';
 import COSMERE from './system/config';
 
 import './style.scss';
@@ -17,7 +18,6 @@ import * as documents from './system/documents';
 import * as dice from './system/dice';
 
 import CosmereAPI from './system/api';
-import { TEMPLATES } from './system/utils';
 
 declare global {
     interface LenientGlobalVariableTypes {

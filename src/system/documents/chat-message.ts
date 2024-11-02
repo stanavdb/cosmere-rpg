@@ -3,7 +3,7 @@ import { D20Roll } from '@system/dice/d20-roll';
 import { DamageRoll } from '@system/dice/damage-roll';
 
 import { CosmereActor } from './actor';
-import { renderSystemTemplate, TEMPLATES } from '../utils';
+import { renderSystemTemplate, TEMPLATES } from '../utils/templates';
 
 const ACTIVITY_CARD_TEMPLATE =
     'systems/cosmere-rpg/templates/chat/activity-card.hbs';

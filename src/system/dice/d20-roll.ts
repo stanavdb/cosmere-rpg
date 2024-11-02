@@ -7,7 +7,8 @@ import { RollConfigurationDialog } from '@system/applications/dialogs/roll-confi
 
 import { PlotDie } from './plot-die';
 import { RollMode } from './types';
-import { hasKey, renderSystemTemplate, TEMPLATES } from '../utils';
+import { hasKey } from '../utils/generic';
+import { renderSystemTemplate, TEMPLATES } from '../utils/templates';
 
 // Constants
 const CONFIGURATION_DIALOG_TEMPLATE =
