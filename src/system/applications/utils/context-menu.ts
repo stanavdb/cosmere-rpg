@@ -33,13 +33,11 @@ export class AppContextMenu {
     private expanded = false;
     private bound = false;
 
-    public constructor(
+    private constructor(
         private parent: AppContextMenu.Parent,
         private anchor: AppContextMenu.Anchor,
         private items: AppContextMenu.Item[],
-    ) {
-        void this.render();
-    }
+    ) {}
 
     /**
      * Utility function to create a context menu
