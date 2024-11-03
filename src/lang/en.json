@@ -583,7 +583,8 @@
                     "GrazeOverride": "Override Graze Damage Calculation",
                     "GrazeShow": "Show New Graze Damage Formula",
                     "GrazeHide": "Hide New Graze Damage Forumla",
-                    "GrazeFormula": "New Formula"
+                    "GrazeFormula": "New Formula",
+                    "GrazeHint": "Formula entered here will be the entirety of the calculation for graze damage. Any die rolls will be rolled separately from the main damage roll. You can access the value of the main roll using @baseRoll or the selected attribute mod with @mod"
                 },
                 "Modality": {
                     "Title": "Modality",
