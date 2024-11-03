@@ -57,26 +57,13 @@ export class AppContextMenu {
         // Create context menu
         const menu = new AppContextMenu(parent, anchor, items);
 
-        // Store the render handler so we can remove it later if needed
-        const renderHandler = async () => {
-            if (parent.element) {
-                await menu.render();
-                menu.bind(...selectors);
-            }
-        };
-
         // Add event listener
-        parent.addEventListener('render', renderHandler);
+        parent.addEventListener('render', async () => {
+            await menu.render();
+            menu.bind(...selectors);
+        });
 
         return menu;
-    }
-
-    public destroy(): void {
-        this.element?.remove();
-        this.element = undefined;
-        this.contextElement = undefined;
-        this.expanded = false;
-        this.bound = false;
     }
 
     public bind(...selectors: string[]): void;
@@ -166,17 +153,6 @@ export class AppContextMenu {
     }
 
     public async render(): Promise<void> {
-        // Check if parent element exists
-        if (!this.parent.element) {
-            console.warn(
-                'Parent element not available during context menu render',
-            );
-            return;
-        }
-
-        // Remove existing element if it exists
-        this.element?.remove();
-
         // Render the element
         this.element = await this.renderElement();
 

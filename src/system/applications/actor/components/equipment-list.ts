@@ -67,7 +67,6 @@ export class ActorEquipmentListComponent extends HandlebarsApplicationComponent<
     static TEMPLATE =
         'systems/cosmere-rpg/templates/actors/components/equipment-list.hbs';
 
-    private contextMenu?: AppContextMenu;
     /**
      * NOTE: Unbound methods is the standard for defining actions
      * within ApplicationV2
@@ -337,10 +336,10 @@ export class ActorEquipmentListComponent extends HandlebarsApplicationComponent<
 
     /* --- Lifecycle --- */
 
-    public _onRender(): void {
+    public _onInitialize(): void {
         if (this.application.isEditable) {
             // Create context menu
-            this.contextMenu = AppContextMenu.create(
+            AppContextMenu.create(
                 this as AppContextMenu.Parent,
                 'right',
                 [
@@ -377,13 +376,6 @@ export class ActorEquipmentListComponent extends HandlebarsApplicationComponent<
                 ],
                 'a[data-action="toggle-actions-controls"]',
             );
-        }
-    }
-
-    public _onDestroy(): void {
-        if (this.contextMenu) {
-            this.contextMenu.destroy();
-            this.contextMenu = undefined;
         }
     }
 }

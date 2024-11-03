@@ -37,8 +37,6 @@ export class ActorEffectsListComponent extends HandlebarsApplicationComponent<
     static TEMPLATE =
         'systems/cosmere-rpg/templates/actors/components/effects-list.hbs';
 
-    private contextMenu?: AppContextMenu;
-
     /**
      * NOTE: Unbound methods is the standard for defining actions
      * within ApplicationV2
@@ -104,10 +102,10 @@ export class ActorEffectsListComponent extends HandlebarsApplicationComponent<
 
     /* --- Lifecycle --- */
 
-    public _onRender(): void {
+    public _onInitialize(): void {
         if (this.application.isEditable) {
             // Create context menu
-            this.contextMenu = AppContextMenu.create(
+            AppContextMenu.create(
                 this as AppContextMenu.Parent,
                 'right',
                 [
@@ -140,12 +138,6 @@ export class ActorEffectsListComponent extends HandlebarsApplicationComponent<
         }
     }
 
-    public _onDestroy(): void {
-        if (this.contextMenu) {
-            this.contextMenu.destroy();
-            this.contextMenu = undefined;
-        }
-    }
     /* --- Helpers --- */
 
     private getEffectFromEvent(event: Event): ActiveEffect | undefined {
