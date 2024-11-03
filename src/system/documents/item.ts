@@ -583,7 +583,7 @@ export class CosmereItem<
                 user: game.user!.id,
                 speaker,
                 content: `<p>${flavor}</p>`,
-                rolls: [skillRoll, damageRolls],
+                rolls: [skillRoll, ...damageRolls],
             })) as ChatMessage;
         }
 
