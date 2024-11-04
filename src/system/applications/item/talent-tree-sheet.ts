@@ -44,8 +44,8 @@ export class TalentTreeItemSheet extends DragDropApplicationMixin(
                     dropSelector: '.container',
                 },
                 {
-                    dragSelector: '.cell:not(.empty)',
-                    dropSelector: '.cell.empty',
+                    dragSelector: '.slot:not(.empty)',
+                    dropSelector: '.slot.empty',
                 },
             ],
         },
@@ -104,7 +104,7 @@ export class TalentTreeItemSheet extends DragDropApplicationMixin(
     private set dragging(value: boolean) {
         this._dragging = value;
         $(this.element)
-            .find('.row')
+            .find('.grid')
             .css('pointer-events', !value ? 'none' : 'auto');
     }
 
@@ -122,11 +122,11 @@ export class TalentTreeItemSheet extends DragDropApplicationMixin(
         // Hide context menu
         this.contextMenu?.hide();
 
-        // Get cell element
-        const cell = $(event.target!).closest('.cell');
+        // Get slot element
+        const slot = $(event.target!).closest('.slot');
 
         // Get id
-        const id = cell.data('id') as string;
+        const id = slot.data('id') as string;
 
         // Get node
         const node = this.item.system.nodes.get(id);
@@ -146,14 +146,14 @@ export class TalentTreeItemSheet extends DragDropApplicationMixin(
     }
 
     protected override _onDragOver(event: DragEvent) {
-        // Check if dragging over container or cell
+        // Check if dragging over container or slot
         if ($(event.target!).hasClass('container')) {
             if (!this.dragging) {
                 this.dragging = true;
             }
         } else {
             // Get element
-            const el = $(event.target!).closest('.cell');
+            const el = $(event.target!).closest('.slot');
 
             // Add dragover class
             el.addClass('dragover');
@@ -169,13 +169,16 @@ export class TalentTreeItemSheet extends DragDropApplicationMixin(
         this.contextMenu?.hide();
 
         // Get element
-        const el = $(event.target!).closest('.cell');
+        const slotEl = $(event.target!).closest('.slot');
 
         // Ensure cell element was found
-        if (!el.length) return;
+        if (!slotEl.length) return;
 
         // Remove dragover class
-        el.removeClass('dragover');
+        slotEl.removeClass('dragover');
+
+        // Get cell element
+        const cellEl = slotEl.closest('.cell');
 
         const data = TextEditor.getDragEventData(event) as unknown as {
             type: string;
@@ -200,8 +203,8 @@ export class TalentTreeItemSheet extends DragDropApplicationMixin(
             return;
 
         // Get target cell position
-        const row = el.data('row') as number;
-        const column = el.data('column') as number;
+        const row = cellEl.data('row') as number;
+        const column = cellEl.data('column') as number;
 
         // Check if we should create a new node
         const shouldCreateNode =
@@ -221,10 +224,7 @@ export class TalentTreeItemSheet extends DragDropApplicationMixin(
                 {
                     [`system.nodes.${nodeId}`]: {
                         id: nodeId,
-                        type:
-                            object.type === ItemType.Talent
-                                ? TalentTree.Node.Type.Talent
-                                : TalentTree.Node.Type.Tree,
+                        type: TalentTree.Node.Type.Icon,
                         item: object,
                         connections: [],
                         position: {
@@ -280,10 +280,10 @@ export class TalentTreeItemSheet extends DragDropApplicationMixin(
             });
 
         $(this.element)
-            .find('.cell')
+            .find('.slot')
             .on('dragleave', (event) => {
                 // Get element
-                const el = $(event.target).closest('.cell');
+                const el = $(event.target).closest('.slot');
 
                 // Remove dragover class
                 el.removeClass('dragover');
@@ -301,8 +301,10 @@ export class TalentTreeItemSheet extends DragDropApplicationMixin(
             this.contextMenu?.hide();
         });
 
-        // Render connections
-        this.renderConnections();
+        setTimeout(() => {
+            // Render connections
+            this.renderConnections();
+        });
     }
 
     protected override async _preFirstRender(
@@ -332,7 +334,7 @@ export class TalentTreeItemSheet extends DragDropApplicationMixin(
                     },
                 },
             ],
-            selectors: ['.cell:not(.empty)'],
+            selectors: ['.slot:not(.empty)'],
             anchor: 'cursor',
             mouseButton: MouseButton.Secondary,
         });
@@ -346,12 +348,18 @@ export class TalentTreeItemSheet extends DragDropApplicationMixin(
         const rows = this.item.system.height;
         const columns = this.item.system.width;
 
+        // Prepare grid template data
+        const gridTemplate = {
+            columns: `${(100 / columns).toFixed(3)}% `.repeat(columns).trim(),
+        };
+
         return {
             ...(await super._prepareContext(options)),
             item: this.item,
             rows,
             columns,
             cells: this.prepareCells(rows, columns),
+            gridTemplate,
         };
     }
 

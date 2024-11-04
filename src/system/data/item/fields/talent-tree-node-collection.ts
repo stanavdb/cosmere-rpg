@@ -66,13 +66,13 @@ class TalentTreeNodeField extends foundry.data.fields.SchemaField {
                     gmOnly: true,
                 }),
                 type: new foundry.data.fields.StringField({
-                    required: true,
-                    nullable: false,
+                    required: false,
+                    nullable: true,
                     blank: false,
-                    initial: TalentTree.Node.Type.Talent,
+                    initial: TalentTree.Node.Type.Icon,
                     choices: [
-                        TalentTree.Node.Type.Talent,
-                        TalentTree.Node.Type.Tree,
+                        TalentTree.Node.Type.Icon,
+                        TalentTree.Node.Type.Text,
                     ],
                     gmOnly: true,
                 }),

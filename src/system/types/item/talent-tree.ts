@@ -2,12 +2,12 @@ import { TalentItem, TalentTreeItem } from '@system/documents/item';
 
 export namespace Node {
     export const enum Type {
-        Talent = 'talent',
-        Tree = 'tree',
+        Icon = 'icon',
+        Text = 'text',
     }
 }
 
-interface BaseNode<T extends Node.Type = Node.Type> {
+export interface Node {
     /**
      * Unique identifier for the node
      */
@@ -16,7 +16,12 @@ interface BaseNode<T extends Node.Type = Node.Type> {
     /**
      * Node type
      */
-    type: T;
+    type: Node.Type;
+
+    /**
+     * Embedded item
+     */
+    item: TalentItem | TalentTreeItem;
 
     /**
      * Connections to other nodes in the tree
@@ -36,19 +41,3 @@ interface BaseNode<T extends Node.Type = Node.Type> {
      */
     isRoot?: boolean;
 }
-
-export interface TalentNode extends BaseNode<Node.Type.Talent> {
-    /**
-     * Embedded talent item
-     */
-    item: TalentItem;
-}
-
-export interface TreeNode extends BaseNode<Node.Type.Tree> {
-    /**
-     * Embedded talent item
-     */
-    item: TalentTreeItem;
-}
-
-export type Node = TalentNode | TreeNode;
