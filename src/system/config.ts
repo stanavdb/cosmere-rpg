@@ -453,6 +453,10 @@ const COSMERE: CosmereRPGConfig = {
                 labelPlural: 'COSMERE.Item.Type.Power.label_plural',
                 desc_placeholder: 'COSMERE.Item.Type.Power.desc_placeholder',
             },
+            [ItemType.TalentTree]: {
+                label: 'COSMERE.Item.Type.TalentTree.label',
+                labelPlural: 'COSMERE.Item.Type.TalentTree.label_plural',
+            },
         },
         activation: {
             types: {

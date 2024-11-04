@@ -358,6 +358,10 @@
                     "label_plural": "Powers",
                     "desc_placeholder": "Edit this to describe the power.",
                     "New": "New {type}"
+                },
+                "TalentTree": {
+                    "label": "Talent Tree",
+                    "label_plural": "Talent Trees"
                 }
             },
             "Weapon": {
@@ -1040,7 +1044,8 @@
             "talent": "Talent",
             "equipment": "Equipment",
             "weapon": "Weapon",
-            "power": "Power"
+            "power": "Power",
+            "talent_tree": "Talent Tree"
         }
     },
     "UNITS": {

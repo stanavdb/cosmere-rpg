@@ -205,8 +205,10 @@ export class CollectionField<
     constructor(
         public readonly model: ElementField,
         options: CollectionFieldOptions = {},
+        context?: foundry.data.fields.DataFieldContext,
+        private CollectionClass: typeof RecordCollection = RecordCollection,
     ) {
-        super(options);
+        super(options, context);
     }
 
     protected override _cleanType(
@@ -224,7 +226,7 @@ export class CollectionField<
         value: unknown,
         options?: foundry.data.fields.DataFieldValidationOptions,
     ): boolean | foundry.data.fields.DataModelValidationFailure | void {
-        if (!(value instanceof RecordCollection))
+        if (!(value instanceof this.CollectionClass))
             throw new Error('must be a RecordCollection');
         const errors = this._validateValues(value, options);
         if (!foundry.utils.isEmpty(errors)) {
@@ -263,31 +265,31 @@ export class CollectionField<
 
     protected override _cast(value: object) {
         const result =
-            value instanceof RecordCollection
+            value instanceof this.CollectionClass
                 ? value
                 : foundry.utils.getType(value) === 'Map'
-                  ? new RecordCollection(
+                  ? new this.CollectionClass(
                         Array.from((value as Map<string, unknown>).entries()),
                     )
                   : foundry.utils.getType(value) === 'Object'
-                    ? new RecordCollection(Object.entries(value))
+                    ? new this.CollectionClass(Object.entries(value))
                     : foundry.utils.getType(value) === 'Array'
-                      ? new RecordCollection(
+                      ? new this.CollectionClass(
                             (value as { _id?: string; id?: string }[]).map(
                                 (v, i) => [v._id ?? v.id ?? i.toString(), v],
                             ),
                         )
-                      : new RecordCollection();
+                      : new this.CollectionClass();
 
         return result;
     }
 
     public override getInitialValue() {
-        return new RecordCollection();
+        return new this.CollectionClass();
     }
 
     public override initialize(value: RecordCollection<unknown>) {
-        if (!value) return new RecordCollection();
+        if (!value) return new this.CollectionClass();
         return foundry.utils.deepClone(value);
     }
 

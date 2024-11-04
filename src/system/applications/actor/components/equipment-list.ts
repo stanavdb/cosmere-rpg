@@ -339,10 +339,9 @@ export class ActorEquipmentListComponent extends HandlebarsApplicationComponent<
     public _onInitialize(): void {
         if (this.application.isEditable) {
             // Create context menu
-            AppContextMenu.create(
-                this as AppContextMenu.Parent,
-                'right',
-                [
+            AppContextMenu.create({
+                parent: this as AppContextMenu.Parent,
+                items: [
                     {
                         name: 'GENERIC.Button.Edit',
                         icon: 'fa-solid fa-pen-to-square',
@@ -374,8 +373,9 @@ export class ActorEquipmentListComponent extends HandlebarsApplicationComponent<
                         },
                     },
                 ],
-                'a[data-action="toggle-actions-controls"]',
-            );
+                selectors: ['a[data-action="toggle-actions-controls"]'],
+                anchor: 'right',
+            });
         }
     }
 }

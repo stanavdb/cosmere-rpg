@@ -1,0 +1,17 @@
+<div class="container">
+    {{#times rows as |row|}}
+        <div class="row">
+            {{#times @root.columns as |column|}}
+                {{#with (lookup (lookup @root.cells row) column) as |node|}}
+                    <div class="cell" data-row="{{row}}" data-column="{{column}}" data-id="{{node.id}}">
+                        <img src="{{node.item.img}}"/>
+                    </div>
+                {{else}}
+                    <div class="cell empty" data-row="{{row}}" data-column="{{column}}"></div>
+                {{/with}}
+            {{/times}}
+        </div>
+    {{/times}}
+
+    <div class="connections"></div>
+</div>

@@ -39,7 +39,9 @@
             "connection": {},
             "goal": {},
 
-            "power": {}
+            "power": {},
+
+            "talent_tree": {}
         }
     },
     "packs": [

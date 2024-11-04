@@ -491,10 +491,9 @@ export class ActorActionsListComponent extends HandlebarsApplicationComponent<
     public _onInitialize(): void {
         if (this.application.isEditable) {
             // Create context menu
-            AppContextMenu.create(
-                this as AppContextMenu.Parent,
-                'right',
-                [
+            AppContextMenu.create({
+                parent: this as AppContextMenu.Parent,
+                items: [
                     /**
                      * NOTE: This is a TEMPORARY context menu option
                      * until we can handle recharging properly.
@@ -543,8 +542,9 @@ export class ActorActionsListComponent extends HandlebarsApplicationComponent<
                         },
                     },
                 ],
-                'a[data-action="toggle-actions-controls"]',
-            );
+                selectors: ['a[data-action="toggle-actions-controls"]'],
+                anchor: 'right',
+            });
         }
     }
 }
