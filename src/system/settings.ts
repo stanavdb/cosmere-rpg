@@ -8,6 +8,10 @@ export const SETTINGS = {
     INTERNAL_LATEST_VERSION: 'latestVersion',
     ITEM_SHEET_SIDE_TABS: 'itemSheetSideTabs',
     ROLL_SKIP_DIALOG_DEFAULT: 'skipRollDialogByDefault',
+    CHAT_ENABLE_OVERLAY_BUTTONS: 'enableOverlayButtons',
+    CHAT_ENABLE_APPLY_BUTTONS: 'enableApplyButtons',
+    CHAT_ALWAYS_SHOW_BUTTONS: 'alwaysShowChatButtons',
+    APPLY_DAMAGE_TO: 'applyDamageTo',
 } as const;
 
 /**
@@ -60,6 +64,52 @@ export function registerSystemSettings() {
             type: Boolean,
             default: option.default,
         });
+    });
+
+    // CHAT SETTINGS
+    const chatOptions = [
+        { name: SETTINGS.CHAT_ENABLE_OVERLAY_BUTTONS, default: true },
+        { name: SETTINGS.CHAT_ENABLE_APPLY_BUTTONS, default: true },
+        { name: SETTINGS.CHAT_ALWAYS_SHOW_BUTTONS, default: true },
+    ];
+
+    chatOptions.forEach((option) => {
+        game.settings!.register(SYSTEM_ID, option.name, {
+            name: game.i18n!.localize(`SETTINGS.${option.name}.name`),
+            hint: game.i18n!.localize(`SETTINGS.${option.name}.hint`),
+            scope: 'client',
+            config: true,
+            type: Boolean,
+            default: option.default,
+            requiresReload: true,
+        });
+    });
+
+    game.settings!.register(SYSTEM_ID, SETTINGS.APPLY_DAMAGE_TO, {
+        name: game.i18n!.localize(`SETTINGS.${SETTINGS.APPLY_DAMAGE_TO}.name`),
+        hint: game.i18n!.localize(`SETTINGS.${SETTINGS.APPLY_DAMAGE_TO}.hint`),
+        scope: 'client',
+        config: true,
+        type: Number,
+        default: 0 as number,
+        requiresReload: true,
+        choices: {
+            0: game.i18n!.localize(
+                `SETTINGS.${SETTINGS.APPLY_DAMAGE_TO}.choices.0`,
+            ),
+            1: game.i18n!.localize(
+                `SETTINGS.${SETTINGS.APPLY_DAMAGE_TO}.choices.1`,
+            ),
+            2: game.i18n!.localize(
+                `SETTINGS.${SETTINGS.APPLY_DAMAGE_TO}.choices.2`,
+            ),
+            3: game.i18n!.localize(
+                `SETTINGS.${SETTINGS.APPLY_DAMAGE_TO}.choices.3`,
+            ),
+            4: game.i18n!.localize(
+                `SETTINGS.${SETTINGS.APPLY_DAMAGE_TO}.choices.4`,
+            ),
+        },
     });
 }
 

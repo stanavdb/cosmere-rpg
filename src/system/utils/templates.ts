@@ -8,9 +8,13 @@ export const TEMPLATES = {
     CHAT_CARD_CONTENT: 'chat/card-content.hbs',
     CHAT_CARD_SECTION: 'chat/card-section.hbs',
     CHAT_CARD_DESCRIPTION: 'chat/card-description.hbs',
+    CHAT_CARD_DAMAGE_BUTTONS: 'chat/card-damage-buttons.hbs',
 
     CHAT_ROLL_D20: 'chat/roll-d20.hbs',
     CHAT_ROLL_TOOLTIP: 'chat/roll-tooltip.hbs',
+
+    CHAT_OVERLAY_D20: 'chat/overlay-d20.hbs',
+    CHAT_OVERLAY_CRIT: 'chat/overlay-crit.hbs',
 
     CHAT_CARD_ROLLS: 'chat/parts/chat-card-rolls.hbs',
     CHAT_CARD_ACTIONS: 'chat/parts/chat-card-actions.hbs',

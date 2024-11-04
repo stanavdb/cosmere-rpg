@@ -4,6 +4,9 @@ import { DamageRoll } from '@system/dice/damage-roll';
 
 import { CosmereActor } from './actor';
 import { renderSystemTemplate, TEMPLATES } from '../utils/templates';
+import { SYSTEM_ID } from '../constants';
+import { AdvantageMode } from '../types/roll';
+import { getSystemSetting, SETTINGS } from '../settings';
 
 const ACTIVITY_CARD_TEMPLATE =
     'systems/cosmere-rpg/templates/chat/activity-card.hbs';
@@ -52,14 +55,11 @@ export class CosmereChatMessage extends ChatMessage {
 
         // Enrich the chat card
         await this.enrichCardHeader(html);
+        await this.enrichCardContent(html);
 
-        if (this.isContentVisible) {
-            await this.enrichCardContent(html);
-
-            html.find('.dice-roll').on('click', (event) =>
-                this.onClickDiceRoll(event),
-            );
-        }
+        html.find('.collapsible').on('click', (event) =>
+            this.onClickCollapsible(event),
+        );
         //await this.enrichChatCard(html);
 
         return html;
@@ -101,15 +101,36 @@ export class CosmereChatMessage extends ChatMessage {
     }
 
     protected async enrichCardContent(html: JQuery) {
+        if (!this.isContentVisible) return;
+        if (!this.hasDamage && !this.hasSkillTest) return;
+
         const content = $(
             await renderSystemTemplate(TEMPLATES.CHAT_CARD_CONTENT, {}),
         );
 
+        //await this.enrichDescription(content);
         await this.enrichSkillTest(content);
         await this.enrichDamage(content);
 
         // Replace content
         html.find('.message-content').replaceWith(content);
+
+        // Setup hover buttons when the message is actually hovered(for optimisation).
+        let hoverSetupComplete = false;
+        content.on('mouseenter', async () => {
+            if (!hoverSetupComplete) {
+                hoverSetupComplete = true;
+                await this.enrichCardOverlay(content);
+            }
+            this.onOverlayHoverStart(content);
+        });
+
+        content.on('mouseleave', () => {
+            this.onOverlayHoverEnd(content);
+        });
+
+        // Run hover end once to ensure all hover buttons are in the correct state.
+        this.onOverlayHoverEnd(content);
     }
 
     protected async enrichSkillTest(html: JQuery) {
@@ -131,23 +152,26 @@ export class CosmereChatMessage extends ChatMessage {
                     attribute:
                         CONFIG.COSMERE.attributes[skill.attribute].labelShort,
                 },
+                content: await d20Roll.getHTML(),
             },
         );
 
-        html.find('.chat-card').append(sectionHTML);
-
-        const rollHTML = await d20Roll.getHTML();
-        const roll = $(rollHTML as unknown as HTMLElement);
-        const tooltip = roll.find('.dice-tooltip');
+        const section = $(sectionHTML as unknown as HTMLElement);
+        const tooltip = section.find('.dice-tooltip');
         this.enrichD20Tooltip(d20Roll, tooltip[0]);
-        tooltip.prepend(roll.find('.dice-formula'));
+        tooltip.prepend(section.find('.dice-formula'));
 
-        const section = html.find('.chat-card-section.skill');
-        section.append(roll);
+        html.find('.chat-card').append(section);
     }
 
     protected async enrichDamage(html: JQuery) {
         if (!this.hasDamage) return;
+
+        const footer = getSystemSetting(SETTINGS.CHAT_ENABLE_APPLY_BUTTONS)
+            ? await renderSystemTemplate(TEMPLATES.CHAT_CARD_DAMAGE_BUTTONS, {
+                  overlay: !getSystemSetting(SETTINGS.CHAT_ALWAYS_SHOW_BUTTONS),
+              })
+            : undefined;
 
         const sectionHTML = await renderSystemTemplate(
             TEMPLATES.CHAT_CARD_SECTION,
@@ -155,8 +179,15 @@ export class CosmereChatMessage extends ChatMessage {
                 type: 'damage',
                 icon: 'fa-solid fa-burst',
                 title: game.i18n!.localize('GENERIC.Damage'),
+                footer,
             },
         );
+
+        const section = $(sectionHTML as unknown as HTMLElement);
+
+        section.find('.apply-buttons button').on('click', (event) => {
+            this.onClickApplyButton(event);
+        });
 
         html.find('.chat-card').append(sectionHTML);
     }
@@ -185,6 +216,35 @@ export class CosmereChatMessage extends ChatMessage {
             </div>
             `;
         html.appendChild(part);
+    }
+
+    /**
+     * Adds overlay buttons to a chat card for retroactively making a roll into a multi roll or a crit.
+     * @param {JQuery} html The object to add overlay buttons to.
+     */
+    protected async enrichCardOverlay(html: JQuery) {
+        if (!getSystemSetting(SETTINGS.CHAT_ENABLE_OVERLAY_BUTTONS)) return;
+
+        const overlayD20 = await renderSystemTemplate(
+            TEMPLATES.CHAT_OVERLAY_D20,
+            {
+                imgAdvantage: `systems/${SYSTEM_ID}/assets/icons/svg/dice/retro-adv.svg`,
+                imgDisadvantage: `systems/${SYSTEM_ID}/assets/icons/svg/dice/retro-dis.svg`,
+            },
+        );
+
+        html.find('.roll-d20 .dice-total').append($(overlayD20));
+        html.find('.overlay-d20 div').on('click', async (event) => {
+            await this.onClickOverlayD20(event);
+        });
+
+        //const overlayCrit = await renderSystemTemplate(TEMPLATES.CHAT_OVERLAY_CRIT, {});
+
+        // html.find('.rsr-damage .dice-total').append($(overlayCrit));
+
+        // html.find(".rsr-overlay-crit div").click(async event => {
+        //     await _processRetroCritButtonEvent(message, event);
+        // });
     }
 
     /**
@@ -222,17 +282,6 @@ export class CosmereChatMessage extends ChatMessage {
                 else delete chatlogHTML.dataset[`modifier${key}`];
             }
         });
-    }
-
-    /**
-     * Handle dice roll expansion.
-     * @param {PointerEvent} event  The triggering event.
-     * @protected
-     */
-    private onClickDiceRoll(event: JQuery.ClickEvent) {
-        event.stopPropagation();
-        const target = event.currentTarget as HTMLElement;
-        target?.classList.toggle('expanded');
     }
 
     protected async enrichChatCard(html: JQuery) {
@@ -460,6 +509,120 @@ export class CosmereChatMessage extends ChatMessage {
     }
 
     /* --- Handlers --- */
+
+    /**
+     * Handles a d20 overlay button click event.
+     * @param {JQuery.ClickEvent} event The originating event of the button click.
+     */
+    private async onClickOverlayD20(event: JQuery.ClickEvent) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const button = event.currentTarget as HTMLElement;
+        const action = button.dataset.action;
+        const state = button.dataset.state;
+
+        if (action === 'retro' && state) {
+            const roll = this.d20Rolls[0];
+
+            const d20BaseTerm = roll.terms.find(
+                (d) => d instanceof foundry.dice.terms.Die && d.faces === 20,
+            ) as foundry.dice.terms.Die;
+
+            if (!d20BaseTerm || d20BaseTerm.number === 2) return;
+
+            const d20Additional = await new Roll(
+                `${2 - d20BaseTerm.number!}d20${d20BaseTerm.modifiers.join('')}`,
+            ).evaluate();
+
+            const modifiers = new Array<
+                keyof (typeof foundry.dice.terms.Die)['MODIFIERS']
+            >();
+            d20BaseTerm.modifiers.forEach((m) =>
+                modifiers.push(
+                    m as keyof (typeof foundry.dice.terms.Die)['MODIFIERS'],
+                ),
+            );
+
+            const d20Forced = new foundry.dice.terms.Die({
+                number: 2,
+                faces: 20,
+                results: [
+                    ...d20BaseTerm.results,
+                    ...d20Additional.dice[0].results,
+                ],
+                modifiers,
+            });
+            d20Forced.keep(state);
+            d20Forced.modifiers.push(state);
+
+            roll.terms[roll.terms.indexOf(d20BaseTerm)] = d20Forced;
+            roll.options.advantageMode =
+                state === 'kh'
+                    ? AdvantageMode.Advantage
+                    : state === 'kl'
+                      ? AdvantageMode.Disadvantage
+                      : AdvantageMode.None;
+
+            void this.update({ rolls: this.rolls });
+        }
+    }
+
+    /**
+     * Handles an apply button click event.
+     * @param {JQuery.ClickEvent} event The originating event of the button click.
+     */
+    private onClickApplyButton(event: JQuery.ClickEvent) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const button = event.currentTarget as HTMLElement;
+        const action = button.dataset.action;
+        const multiplier = button.dataset.multiplier;
+
+        if (action === 'apply-damage' && multiplier) {
+            /* empty */
+        }
+    }
+
+    /**
+     * Handles collapsible sections expansion on click event.
+     * @param {PointerEvent} event  The triggering event.
+     */
+    private onClickCollapsible(event: JQuery.ClickEvent) {
+        event.stopPropagation();
+        const target = event.currentTarget as HTMLElement;
+        target?.classList.toggle('expanded');
+    }
+
+    /**
+     * Handles hover begin events on the given html/jquery object.
+     * @param {JQuery} html The object to handle hover begin events for.
+     * @private
+     */
+    private onOverlayHoverStart(html: JQuery) {
+        const hasPermission = game.user!.isGM || this.isAuthor;
+
+        html.find('.overlay').show();
+        html.find('.overlay-d20').toggle(
+            hasPermission &&
+                this.hasSkillTest &&
+                !(
+                    this.d20Rolls[0].hasAdvantage ||
+                    this.d20Rolls[0].hasDisadvantage
+                ),
+        );
+        html.find('.overlay-crit').toggle(hasPermission && this.hasDamage);
+    }
+
+    /**
+     * Handles hover end events on the given html/jquery object.
+     * @param {JQuery} html The object to handle hover end events for.
+     * @private
+     */
+    private onOverlayHoverEnd(html: JQuery) {
+        html.find('.overlay').attr('style', 'display: none;');
+    }
 
     private onDoGraze() {
         // Get associated actor
