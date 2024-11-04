@@ -1,11 +1,77 @@
 import {
+    Skill,
     EquipmentType,
     WeaponId,
     ArmorId,
     PathType,
+    PowerType,
 } from '@system/types/cosmere';
 
-import { CurrencyConfig } from '@system/types/config';
+import {
+    CurrencyConfig,
+    SkillConfig,
+    PowerTypeConfig,
+} from '@system/types/config';
+
+interface SkillConfigData extends Omit<SkillConfig, 'key'> {
+    /**
+     * Unique id for the skill.
+     */
+    id: string;
+}
+
+export function registerSkill(data: SkillConfigData, force = false) {
+    if (!CONFIG.COSMERE)
+        throw new Error('Cannot access api until after system is initialized.');
+
+    if (data.id in CONFIG.COSMERE.skills && !force)
+        throw new Error('Cannot override existing skill config.');
+
+    if (force) {
+        console.warn('Registering skill with force=true.');
+    }
+
+    // Add to skills config
+    CONFIG.COSMERE.skills[data.id as Skill] = {
+        key: data.id,
+        label: data.label,
+        attribute: data.attribute,
+        core: data.core,
+        hiddenUntilAcquired: data.hiddenUntilAcquired,
+    };
+
+    // Add to attribute's skills list
+    CONFIG.COSMERE.attributes[data.attribute].skills.push(data.id as Skill);
+}
+
+interface PowerTypeConfigData extends PowerTypeConfig {
+    /**
+     * Unique id for the power type.
+     */
+    id: string;
+}
+
+export function registerPowerType(data: PowerTypeConfigData, force = false) {
+    if (!CONFIG.COSMERE)
+        throw new Error('Cannot access api until after system is initialized.');
+
+    if (data.id in CONFIG.COSMERE.power.types && !force)
+        throw new Error('Cannot override existing power type config.');
+
+    if (force) {
+        console.warn('Registering power type with force=true.');
+    }
+
+    if (data.id === 'none') {
+        throw new Error('Cannot register power type with id "none".');
+    }
+
+    // Add to power types
+    CONFIG.COSMERE.power.types[data.id as PowerType] = {
+        label: data.label,
+        plural: data.plural,
+    };
+}
 
 interface EquipmentTypeConfigData {
     id: string;
@@ -197,6 +263,8 @@ export function registerCurrency(data: CurrencyConfigData, force = false) {
 /* --- Default Export --- */
 
 export default {
+    registerSkill,
+    registerPowerType,
     registerEquipmentType,
     registerWeapon,
     registerArmor,

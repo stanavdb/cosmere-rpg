@@ -6,11 +6,6 @@ import { SYSTEM_ID } from '@src/system/constants';
 import { BaseItemSheet } from './base';
 
 export class ArmorItemSheet extends BaseItemSheet {
-    /**
-     * NOTE: Unbound methods is the standard for defining actions and forms
-     * within ApplicationV2
-     */
-
     static DEFAULT_OPTIONS = foundry.utils.mergeObject(
         foundry.utils.deepClone(super.DEFAULT_OPTIONS),
         {

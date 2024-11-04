@@ -164,6 +164,13 @@
         }
     }
 
+    .value {
+        text-align: center;
+        font-size: 18pt;
+        font-weight: bold;
+        margin: 0.25ch;
+    }
+
     /* --- Tabs --- */
 
     .tab[data-tab] {
@@ -933,64 +940,77 @@
             flex-direction: column;
             margin: 0;
             padding: 0;
-
-            .skill {
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-
-                &:hover {
-                    background-color: rgba(0, 0, 0, 0.25);
-                }
-
-                [data-action] {
-                    cursor: pointer;
-                }
-
-                .mod {
-                    width: 2rem;
-                    text-align: center;
-                    margin: 0 0.3rem;
-                }
-
-                .name {
-                    flex: 1;
-                }
-
-                .attribute {
-                    width: 3rem;
-                    text-align: center;
-                    margin: 0 0.3rem;
-                }
-
-                .pip-list {
-                    display: flex;
-                    flex-direction: row;
-                    list-style-type: none;
-                    padding: 0;
-                    margin: 0 0.3rem 0 0;
-
-                    .pip {
-                        > div {
-                            width: 0.65rem;
-                            height: 0.65rem;
-                            border: 1px solid;
-                            border-radius: 50%;
-                            margin: 0.1rem;
-                        }
-
-                        &.active {
-                            > div {
-                                background-color: white;
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 
     app-adversary-skills-group {
         font-size: 9.6pt;
+    }
+
+    app-actor-skill {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        text-shadow: 0 0 0.2rem black;
+
+        &:hover {
+            text-shadow: 0 0 8px var(--color-shadow-primary);
+        }
+
+        [data-action] {
+            cursor: pointer;
+        }
+
+        .mod {
+            width: 2rem;
+            text-align: center;
+            margin: 0 0.3rem;
+
+            .operator {
+                opacity: .5;
+            }
+
+            .val {
+                font-weight: bold;
+            }
+        }
+
+        .name {
+            flex: 1;
+        }
+
+        .attribute {
+            width: 3rem;
+            text-align: center;
+            margin: 0 0.3rem;
+        }
+
+        .pip-list {
+            display: flex;
+            flex-direction: row;
+            list-style-type: none;
+            padding: 0;
+            margin: 0 0.3rem 0 0;
+
+            .pip {
+                > div {
+                    width: 0.65rem;
+                    height: 0.65rem;
+                    border: 1px solid var(--color-dark-6);
+                    border-radius: 50%;
+                    margin: 0.1rem;
+                }
+
+                &.active {
+                    > div {
+                        background-color: white;
+                    }
+                }
+
+                &:not(.active) > div {
+                    opacity: .5;
+                }
+            }
+        }
     }
 }

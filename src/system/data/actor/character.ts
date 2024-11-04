@@ -23,7 +23,7 @@ export interface CharacterActorData extends CommonActorData {
     /* --- Goals, Connections, Purpose, and Obstacle --- */
     purpose: string;
     obstacle: string;
-    goals: GoalData[];
+    goals?: GoalData[];
     connections: ConnectionData[];
 }
 
@@ -76,8 +76,8 @@ export class CharacterActorDataModel extends CommonActorDataModel<CharacterActor
                 }),
                 {
                     required: true,
-                    nullable: false,
-                    initial: [],
+                    nullable: true,
+                    initial: null,
                 },
             ),
             connections: new foundry.data.fields.ArrayField(
