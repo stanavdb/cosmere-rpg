@@ -4,7 +4,14 @@
             {{#times @root.columns as |column|}}
                 <div class="cell" data-row="{{row}}" data-column="{{column}}">
                     {{#with (lookup (lookup @root.cells row) column) as |node|}}
-                        <div class="slot" data-id="{{node.id}}">
+                        <div class="slot" data-id="{{node.id}}" 
+                            data-tooltip="{{inline-partial 
+                                "talent-tree-node-tooltip" 
+                                img=node.item.img
+                                title=node.item.name
+                                description=(lookup @root.enrichedDescriptions node.id)
+                            }}"
+                        >
                             <img src="{{node.item.img}}"/>
                         </div>
                     {{else}}

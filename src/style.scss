@@ -95,7 +95,7 @@ span.document-name {
 span.cosmere-icon,
 em.cosmere-icon,
 i.cosmere-icon {
-    font-family: 'cosmere-dingbats';
+    font-family: 'cosmere-dingbats' !important;
 
     &.complication {
         color: red;

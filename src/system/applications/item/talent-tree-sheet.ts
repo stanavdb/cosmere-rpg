@@ -23,6 +23,7 @@ const ROW_HEIGHT = 65;
 const COLUMN_WIDTH = 65;
 const HEADER_HEIGHT = 36;
 const PADDING = 10;
+const DOCUMENT_UUID_REGEX = /@UUID\[.+\]\{(.*)\}/g;
 
 export class TalentTreeItemSheet extends DragDropApplicationMixin(
     ComponentHandlebarsApplicationMixin(ItemSheetV2),
@@ -360,6 +361,7 @@ export class TalentTreeItemSheet extends DragDropApplicationMixin(
             columns,
             cells: this.prepareCells(rows, columns),
             gridTemplate,
+            enrichedDescriptions: await this.prepareNodeDescriptions(),
         };
     }
 
@@ -375,6 +377,36 @@ export class TalentTreeItemSheet extends DragDropApplicationMixin(
         });
 
         return cells;
+    }
+
+    private async prepareNodeDescriptions() {
+        const descriptions: Record<string, string> = {};
+
+        await Promise.all(
+            this.item.system.nodes
+                .filter((node) => node.item.type === ItemType.Talent)
+                .map(async (node) => {
+                    // Get html
+                    let html = await TextEditor.enrichHTML(
+                        (node.item as TalentItem).system.description?.value ??
+                            '',
+                        {
+                            documents: false,
+                        },
+                    );
+
+                    // Replace UUIDs
+                    const matches = [...html.matchAll(DOCUMENT_UUID_REGEX)];
+                    matches.forEach(
+                        (match) => (html = html.replace(match[0], match[1])),
+                    );
+
+                    // Store
+                    descriptions[node.id] = html;
+                }),
+        );
+
+        return descriptions;
     }
 
     /* --- Helpers --- */

@@ -152,6 +152,17 @@ Handlebars.registerHelper('effect-duration', (effect: ActiveEffect) => {
 });
 
 Handlebars.registerHelper(
+    'inline-partial',
+    (partialName: string, options?: { hash?: AnyObject }) => {
+        return new Handlebars.SafeString(
+            (Handlebars.partials[partialName] as (data?: AnyObject) => string)(
+                options?.hash,
+            ).replace(/"/g, '&quot;'),
+        );
+    },
+);
+
+Handlebars.registerHelper(
     'itemContext',
     (item: CosmereItem, options?: { hash?: ItemContextOptions }) => {
         try {
@@ -490,6 +501,7 @@ export async function preloadHandlebarsTemplates() {
         'systems/cosmere-rpg/templates/item/goal/partials/goal-details-tab.hbs',
         'systems/cosmere-rpg/templates/item/power/partials/power-details-tab.hbs',
         'systems/cosmere-rpg/templates/item/path/partials/path-details-tab.hbs',
+        'systems/cosmere-rpg/templates/item/talent-tree/partials/talent-tree-node-tooltip.hbs',
         'systems/cosmere-rpg/templates/combat/combatant.hbs',
         'systems/cosmere-rpg/templates/chat/parts/roll-details.hbs',
         'systems/cosmere-rpg/templates/chat/parts/chat-card-header.hbs',
