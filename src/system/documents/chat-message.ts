@@ -1,4 +1,4 @@
-import { DamageType } from '@system/types/cosmere';
+import { DamageType, InjuryType } from '@system/types/cosmere';
 import { D20Roll } from '@system/dice/d20-roll';
 import { DamageRoll } from '@system/dice/damage-roll';
 
@@ -54,6 +54,10 @@ export class CosmereChatMessage extends ChatMessage {
 
     public get hasDamage(): boolean {
         return this.damageRolls.length > 0;
+    }
+
+    public get hasInjury(): boolean {
+        return this.getFlag(SYSTEM_ID, 'injury') !== undefined;
     }
 
     /* --- Rendering --- */
@@ -120,6 +124,7 @@ export class CosmereChatMessage extends ChatMessage {
         //await this.enrichDescription(content);
         await this.enrichSkillTest(content);
         await this.enrichDamage(content);
+        await this.enrichInjury(content);
 
         // Replace content
         html.find('.message-content').replaceWith(content);
@@ -201,18 +206,96 @@ export class CosmereChatMessage extends ChatMessage {
         html.find('.chat-card').append(sectionHTML);
     }
 
+    protected async enrichInjury(html: JQuery) {
+        if (!this.hasInjury) return;
+
+        const injury = TableResult.fromSource(
+            this.getFlag(SYSTEM_ID, 'injury.details'),
+        );
+        const injuryRoll = Roll.fromData(
+            this.getFlag(SYSTEM_ID, 'injury.roll'),
+        );
+
+        const data: { type: InjuryType; durationFormula: string } =
+            injury?.getFlag(SYSTEM_ID, 'injury-data');
+        const durationRoll = this.rolls.find(
+            (r) => !(r instanceof D20Roll) && !(r instanceof DamageRoll),
+        );
+
+        if ((data.type as string) === 'ViciousInjury')
+            data.type = InjuryType.ViciousInjury;
+
+        let title;
+        const actor = this.associatedActor?.name ?? 'Actor';
+        switch (data.type) {
+            case InjuryType.Death:
+                title = game.i18n!.format(
+                    'COSMERE.ChatMessage.InjuryDuration.Dead',
+                    { actor },
+                );
+                break;
+            case InjuryType.PermanentInjury:
+                title = game.i18n!.format(
+                    'COSMERE.ChatMessage.InjuryDuration.Permanent',
+                    { actor },
+                );
+                break;
+            default: {
+                title = game.i18n!.format(
+                    'COSMERE.ChatMessage.InjuryDuration.Temporary',
+                    { actor, days: durationRoll?.total ?? 0 },
+                );
+                break;
+            }
+        }
+
+        const sectionHTML = await renderSystemTemplate(
+            TEMPLATES.CHAT_CARD_INJURY,
+            {
+                title,
+                img: injury.img,
+                description: injury.text,
+                formula: injuryRoll?.formula,
+                total: injuryRoll?.total,
+                tooltip: await injuryRoll?.getTooltip(),
+                type: game.i18n!.localize(
+                    CONFIG.COSMERE.injury.types[data.type].label,
+                ),
+            },
+        );
+
+        const section = $(sectionHTML as unknown as HTMLElement);
+        const tooltip = section.find('.dice-tooltip');
+        this.enrichD20Tooltip(injuryRoll, tooltip[0]);
+        tooltip.prepend(section.find('.dice-formula'));
+
+        html.find('.chat-card').append(section);
+    }
+
     /**
      * Augment roll tooltips with some additional information and styling.
      * @param {Roll} roll The roll instance.
      * @param {HTMLElement} html The roll tooltip markup.
      */
     protected enrichD20Tooltip(roll: Roll, html: HTMLElement) {
-        const constant = Number(
-            roll.terms
-                .filter((r) => r instanceof foundry.dice.terms.NumericTerm)
-                .reduce((acc, curr) => acc + curr.number, 0),
-        );
-        if (!constant) return;
+        let previous: unknown;
+        let constant = 0;
+        for (const term of roll.terms) {
+            if (term instanceof foundry.dice.terms.NumericTerm) {
+                if (
+                    previous instanceof foundry.dice.terms.OperatorTerm &&
+                    previous.operator === '-'
+                ) {
+                    constant -= term.number;
+                } else {
+                    constant += term.number;
+                }
+            }
+            previous = term;
+        }
+
+        if (constant === 0) return;
+
         const sign = constant < 0 ? '-' : '+';
         const part = document.createElement('section');
         part.classList.add('tooltip-part', 'constant');

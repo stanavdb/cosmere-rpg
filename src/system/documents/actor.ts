@@ -483,20 +483,20 @@ export class CosmereActor<
 
         // NOTE: Draw function type definition is wrong, must use `any` type as a workaround
         /* eslint-disable @typescript-eslint/no-explicit-any */
-        const results = (
-            await table.draw({
-                roll,
-            } as any)
-        ).results as TableResult[];
+        const draw = await table.draw({
+            roll,
+            displayChat: false,
+        } as any);
         /* eslint-Enable @typescript-eslint/no-explicit-any */
 
         // Get result
-        const result = results[0];
+        const result = draw.results[0] as TableResult;
 
         // Get injury data
         const data: { type: InjuryType; durationFormula: string } =
             result.getFlag(SYSTEM_ID, 'injury-data');
 
+        const rolls = [];
         if (
             data.type !== InjuryType.Death &&
             data.type !== InjuryType.PermanentInjury
@@ -504,22 +504,29 @@ export class CosmereActor<
             // Roll duration
             const durationRoll = new foundry.dice.Roll(data.durationFormula);
             await durationRoll.evaluate();
-
-            // Get speaker
-            const speaker = ChatMessage.getSpeaker({
-                actor: this,
-            }) as ChatSpeakerData;
-
-            // Chat message
-            await ChatMessage.create({
-                user: game.user!.id,
-                speaker,
-                content: `<p>${game.i18n!.localize(
-                    'COSMERE.ChatMessage.InjuryDuration',
-                )} (${game.i18n!.localize('GENERIC.Units.Days')})</p>`,
-                rolls: [durationRoll],
-            });
+            rolls.push(durationRoll);
         }
+
+        const flags = {} as Record<string, any>;
+        flags[SYSTEM_ID] = {
+            message: {
+                type: MESSAGE_TYPES.INJURY,
+            },
+            injury: {
+                details: result,
+                roll: draw.roll,
+            },
+        };
+
+        // Chat message
+        await ChatMessage.create({
+            user: game.user!.id,
+            speaker: ChatMessage.getSpeaker({
+                actor: this,
+            }) as ChatSpeakerData,
+            flags,
+            rolls,
+        });
     }
 
     /**

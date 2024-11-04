@@ -845,12 +845,17 @@
                 "RollAdvantage": "Click to roll with advantage.",
                 "RollDisadvantage": "Click to roll with disadvantage."
             },
+            "InjuryRoll": "Injury Roll",
+            "InjuryDuration": {
+                "Dead": "{actor} has <strong>died</strong>.",
+                "Permanent": "{actor} is <strong>permanently injured</strong>.",
+                "Temporary": "{actor} is injured for <strong>{days} days</strong>."
+            },
             "ApplyDamage": "[actor] takes [amount] damage",
             "ApplyHealing": "[actor] recovers [amount] health",
             "UndoDamage": "Undo damage",
             "UndoHealing": "Undo healing",
             "ViewRollsDetails": "Roll Details",
-            "InjuryDuration": "Injury Duration.",
             "Welcome": "<h2>Welcome to the Cosmere RPG System!</h2> <p>Thank you for trying out the community-developed Cosmere Roleplaying Game system! You're currently using version <strong>[version]</strong>. As this is an early release, some bugs or missing features are to be expected, but your feedback will help us improve the system.</p> <p>If you encounter any issues or have suggestions, we'd love to hear from you! Please report them on our <a href=\"https://github.com/stanavdb/cosmere-rpg/issues\">GitHub Issues page</a>, and be sure to review the <a href=\"https://github.com/stanavdb/cosmere-rpg/blob/main/CONTRIBUTING.md\">contribution guidelines</a> if you'd like to get involved in development. </p> <p>For discussions, updates, and support, join us on the <a href=\"https://discord.gg/B9Zam3qdZt\">Official Cosmere RPG Discord</a> server. You can find us in <em>vtt-discussion > Foundry VTT System Development</em>.</p> <p>We're excited to have you on board and hope you enjoy playing in the Cosmere!</p>"
         }
     },

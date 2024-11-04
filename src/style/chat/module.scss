@@ -118,6 +118,10 @@
                 background: var(--plotweaver-color-off-white-1);
                 overflow: hidden;
 
+                &.critical {
+                    border: 3px double var(--plotweaver-color-opportunity);
+                }
+
                 &.description {
                     .summary {
                         display: flex;
@@ -147,6 +151,11 @@
                                 font-weight: bold;
                                 color: var(--plotweaver-color-dark-1);
                             }
+                            
+                            .subtitle {
+                                font-size: var(--font-size-10);
+                                color: var(--plotweaver-color-dark-6);
+                            }
                     
                             .traits {
                                 font-size: var(--font-size-10);
@@ -164,9 +173,6 @@
                         font-family: var(--plotweaver-font-normal);
                         font-size: var(--font-size-11);
                         padding: 0;
-                        display: grid;
-                        grid-template-rows: 1fr;
-                        transition: all 250ms ease;
 
                         & > .wrapper {
                             display: flex;
@@ -183,10 +189,19 @@
                             }
                         }
                     }
+                }
 
-                    &.collapsed .details {
-                        grid-template-rows: 0fr;
-                        opacity: 0;
+                &.injury {
+                    .summary {
+                        .name-stacked {
+                            .title {
+                                font-size: var(--font-size-13);
+
+                                strong {
+                                    color: var(--plotweaver-color-complication);
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -226,11 +241,7 @@
                             text-transform: uppercase;
                         }
                     }
-                }
-
-                .collapsible {
-                    cursor: pointer;
-                }
+                }                
 
                 .dice-roll {
                     .dice-flavor {
@@ -238,16 +249,14 @@
                     }
 
                     .dice-result {
-                        .roll-d20 {
-                            display: flex;                            
-                            height: 32px;
+                        .dice-roll-injury,
+                        .dice-roll-d20 {
+                            height: 32px;                            
                         }
 
-                        .dice-tooltip-collapser {
-                            display: grid;
-                            grid-template-rows: 0fr;
-                            transition: grid-template-rows 250ms ease;
-                        }                 
+                        .dice-roll-d20 {
+                            display: flex;
+                        }
 
                         .dice-tooltip {
                             flex: auto;
@@ -374,11 +383,21 @@
                                 border-color: var(--plotweaver-color-complication);
                             }
                         }
-                    }                    
+                    }
+                }
+            }            
 
-                    &.expanded .dice-tooltip-collapser {
-                        grid-template-rows: 1fr;
-                    } 
+            .collapsible {
+                cursor: pointer;
+
+                .collapsible-content {
+                    display: grid;
+                    grid-template-rows: 0fr;
+                    transition: grid-template-rows 250ms ease;                    
+                }    
+                
+                &.expanded .collapsible-content {
+                    grid-template-rows: 1fr;
                 }
             }
         }
