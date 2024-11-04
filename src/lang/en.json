@@ -1060,6 +1060,29 @@
         "skipRollDialogByDefault": {
             "name": "Skip Roll Dialog by Default",
             "hint": "If enabled, rolls will skip the roll configuration dialog when clicked, using the default roll configuration. The dialog can still be accessed by holding the 'Skip/Show Dialog' key modifier from the system controls."
+        },
+        "enableOverlayButtons": {
+            "name": "Enable Overlay Buttons",
+            "hint": "When outputting a skill test or damage roll, enable overlay buttons on the chat message that offer additional functionality for the roll."
+        },         
+        "enableApplyButtons": {
+            "name": "Enable Apply Buttons",
+            "hint": "When outputting a damage roll, enable buttons on the chat message that allow for damage or healing to be applied to tokens, or to reduce focus from those tokens."
+        },
+        "alwaysShowApplyButtons": {
+            "name": "Always Show Apply Buttons",
+            "hint": "When outputting a damage roll always show the apply buttons, instead of only on hover."
+        },
+        "applyButtonsTo": {
+            "name": "Apply Button Options",
+            "hint": "Determines which tokens damage, healing, or focus reduction is applied to when applying via the chat card buttons.",
+            "choices": {
+                "0": "Apply to Selected Tokens",
+                "1": "Apply to Targeted Tokens",
+                "2": "Apply to Both",
+                "3": "Prioritise Selected Tokens",
+                "4": "Prioritise Targeted Tokens"
+            }
         }
     },
     "KEYBINDINGS": {
