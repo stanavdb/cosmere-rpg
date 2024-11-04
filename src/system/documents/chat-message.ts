@@ -7,6 +7,7 @@ import { renderSystemTemplate, TEMPLATES } from '../utils/templates';
 import { SYSTEM_ID } from '../constants';
 import { AdvantageMode } from '../types/roll';
 import { getSystemSetting, SETTINGS } from '../settings';
+import { getApplyTargets } from '../utils/generic';
 
 const ACTIVITY_CARD_TEMPLATE =
     'systems/cosmere-rpg/templates/chat/activity-card.hbs';
@@ -18,6 +19,12 @@ interface ChatMessageAction {
     icon: string;
     callback?: () => void;
 }
+
+export const MESSAGE_TYPES = {
+    SKILL: 'skill',
+    ACTION: 'action',
+    INJURY: 'injury',
+} as Record<string, string>;
 
 export class CosmereChatMessage extends ChatMessage {
     /* --- Accessors --- */
@@ -102,7 +109,9 @@ export class CosmereChatMessage extends ChatMessage {
 
     protected async enrichCardContent(html: JQuery) {
         if (!this.isContentVisible) return;
-        if (!this.hasDamage && !this.hasSkillTest) return;
+
+        const type = this.getFlag(SYSTEM_ID, 'message.type') as string;
+        if (!type || !Object.values(MESSAGE_TYPES).includes(type)) return;
 
         const content = $(
             await renderSystemTemplate(TEMPLATES.CHAT_CARD_CONTENT, {}),
@@ -185,8 +194,8 @@ export class CosmereChatMessage extends ChatMessage {
 
         const section = $(sectionHTML as unknown as HTMLElement);
 
-        section.find('.apply-buttons button').on('click', (event) => {
-            this.onClickApplyButton(event);
+        section.find('.apply-buttons button').on('click', async (event) => {
+            await this.onClickApplyButton(event);
         });
 
         html.find('.chat-card').append(sectionHTML);
@@ -572,16 +581,34 @@ export class CosmereChatMessage extends ChatMessage {
      * Handles an apply button click event.
      * @param {JQuery.ClickEvent} event The originating event of the button click.
      */
-    private onClickApplyButton(event: JQuery.ClickEvent) {
+    private async onClickApplyButton(
+        event: JQuery.ClickEvent,
+        forceRolls = null,
+    ) {
         event.preventDefault();
         event.stopPropagation();
 
         const button = event.currentTarget as HTMLElement;
         const action = button.dataset.action;
-        const multiplier = button.dataset.multiplier;
+        const multiplier = Number(button.dataset.multiplier);
 
         if (action === 'apply-damage' && multiplier) {
-            /* empty */
+            const targets = getApplyTargets();
+            if (targets.size === 0) return;
+
+            const damageRolls = forceRolls ?? this.damageRolls;
+
+            const damageToApply = damageRolls.map((r) => ({
+                amount: (r.total ?? 0) * multiplier,
+                type: r.damageType,
+            }));
+
+            await Promise.all(
+                Array.from(targets).map(async (t) => {
+                    const target = t.actor as CosmereActor;
+                    return await target.applyDamage(...damageToApply);
+                }),
+            );
         }
     }
 

@@ -108,3 +108,33 @@ export function isFastForward() {
         (skipByDefault && !skipKeyPressed) || (!skipByDefault && skipKeyPressed)
     );
 }
+
+/**
+ * Gets the current set of tokens that are selected or targeted (or both) depending on the chosen setting.
+ * @returns {Set} A set of tokens that the system considers as current targets.
+ */
+export function getApplyTargets() {
+    const setting = getSystemSetting(SETTINGS.APPLY_BUTTONS_TO) as number;
+
+    const applyToTargeted = setting === 1 || setting >= 2;
+    const applyToSelected = setting === 0 || setting >= 2;
+    const prioritiseTargeted = setting === 4;
+    const prioritiseSelected = setting === 3;
+
+    const selectTokens = applyToSelected
+        ? canvas!.tokens!.controlled
+        : ([] as Token[]);
+    const targetTokens = applyToTargeted
+        ? game.user!.targets
+        : new UserTargets(game.user!);
+
+    if (prioritiseSelected && selectTokens.length > 0) {
+        targetTokens.clear();
+    }
+
+    if (prioritiseTargeted && targetTokens.size > 0) {
+        selectTokens.length = 0;
+    }
+
+    return new Set([...selectTokens, ...targetTokens]);
+}

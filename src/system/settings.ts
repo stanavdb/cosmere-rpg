@@ -10,8 +10,8 @@ export const SETTINGS = {
     ROLL_SKIP_DIALOG_DEFAULT: 'skipRollDialogByDefault',
     CHAT_ENABLE_OVERLAY_BUTTONS: 'enableOverlayButtons',
     CHAT_ENABLE_APPLY_BUTTONS: 'enableApplyButtons',
-    CHAT_ALWAYS_SHOW_BUTTONS: 'alwaysShowChatButtons',
-    APPLY_DAMAGE_TO: 'applyDamageTo',
+    CHAT_ALWAYS_SHOW_BUTTONS: 'alwaysShowApplyButtons',
+    APPLY_BUTTONS_TO: 'applyButtonsTo',
 } as const;
 
 /**
@@ -85,9 +85,9 @@ export function registerSystemSettings() {
         });
     });
 
-    game.settings!.register(SYSTEM_ID, SETTINGS.APPLY_DAMAGE_TO, {
-        name: game.i18n!.localize(`SETTINGS.${SETTINGS.APPLY_DAMAGE_TO}.name`),
-        hint: game.i18n!.localize(`SETTINGS.${SETTINGS.APPLY_DAMAGE_TO}.hint`),
+    game.settings!.register(SYSTEM_ID, SETTINGS.APPLY_BUTTONS_TO, {
+        name: game.i18n!.localize(`SETTINGS.${SETTINGS.APPLY_BUTTONS_TO}.name`),
+        hint: game.i18n!.localize(`SETTINGS.${SETTINGS.APPLY_BUTTONS_TO}.hint`),
         scope: 'client',
         config: true,
         type: Number,
@@ -95,19 +95,19 @@ export function registerSystemSettings() {
         requiresReload: true,
         choices: {
             0: game.i18n!.localize(
-                `SETTINGS.${SETTINGS.APPLY_DAMAGE_TO}.choices.0`,
+                `SETTINGS.${SETTINGS.APPLY_BUTTONS_TO}.choices.0`,
             ),
             1: game.i18n!.localize(
-                `SETTINGS.${SETTINGS.APPLY_DAMAGE_TO}.choices.1`,
+                `SETTINGS.${SETTINGS.APPLY_BUTTONS_TO}.choices.1`,
             ),
             2: game.i18n!.localize(
-                `SETTINGS.${SETTINGS.APPLY_DAMAGE_TO}.choices.2`,
+                `SETTINGS.${SETTINGS.APPLY_BUTTONS_TO}.choices.2`,
             ),
             3: game.i18n!.localize(
-                `SETTINGS.${SETTINGS.APPLY_DAMAGE_TO}.choices.3`,
+                `SETTINGS.${SETTINGS.APPLY_BUTTONS_TO}.choices.3`,
             ),
             4: game.i18n!.localize(
-                `SETTINGS.${SETTINGS.APPLY_DAMAGE_TO}.choices.4`,
+                `SETTINGS.${SETTINGS.APPLY_BUTTONS_TO}.choices.4`,
             ),
         },
     });

@@ -36,6 +36,7 @@ import { d20Roll, D20Roll, D20RollData, DamageRoll } from '@system/dice';
 
 // Dialogs
 import { ShortRestDialog } from '@system/applications/actor/dialogs/short-rest';
+import { MESSAGE_TYPES } from './chat-message';
 
 export type CharacterActor = CosmereActor<CharacterActorDataModel>;
 export type AdversaryActor = CosmereActor<AdversaryActorDataModel>;
@@ -685,17 +686,24 @@ export class CosmereActor<
                 data: data as D20RollData,
                 title: flavor,
                 defaultAttribute: options.attribute ?? skill.attribute,
+                parts: [`@mod`].concat(options.parts ?? []),
                 messageData: {
                     speaker:
                         options.speaker ??
                         (ChatMessage.getSpeaker({
                             actor: this,
                         }) as ChatSpeakerData),
+                    flags: {} as Record<string, any>,
                 },
             },
             options,
         );
-        rollData.parts = [`@mod`].concat(options.parts ?? []);
+
+        rollData.messageData.flags[SYSTEM_ID] = {
+            message: {
+                type: MESSAGE_TYPES.SKILL,
+            },
+        };
 
         // Perform roll
         const roll = await d20Roll(rollData);
