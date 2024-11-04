@@ -222,6 +222,7 @@ export class CosmereChatMessage extends ChatMessage {
             (r) => !(r instanceof D20Roll) && !(r instanceof DamageRoll),
         );
 
+        // Current required because of a bug in the roll table
         if ((data.type as string) === 'ViciousInjury')
             data.type = InjuryType.ViciousInjury;
 
