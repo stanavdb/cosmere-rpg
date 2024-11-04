@@ -5,8 +5,11 @@ import COSMERE from './system/config';
 import './style.scss';
 import './system/hooks';
 
-import { preloadHandlebarsTemplates } from './system/util/handlebars';
-import { registerSystemSettings } from './system/settings';
+import { preloadHandlebarsTemplates } from './system/utils/handlebars';
+import {
+    registerSystemKeybindings,
+    registerSystemSettings,
+} from './system/settings';
 
 import * as applications from './system/applications';
 import * as dataModels from './system/data';
@@ -97,6 +100,7 @@ Hooks.once('init', async () => {
 
     // Register settings
     registerSystemSettings();
+    registerSystemKeybindings();
 });
 
 /**
