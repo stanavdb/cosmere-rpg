@@ -1,0 +1,22 @@
+{{#with (lookup tabsMap "details") as |tab|}}
+
+<div class="tab tab-content {{tab.cssClass}}" data-tab="details" data-group="primary">
+    {{app-item-details-id}}
+    {{app-item-details-type}}
+
+    <div class="form-group">
+        <label>{{localize @root.systemFields.linkedSkills.label}}</label>
+        <div class="form-fields">
+            {{app-multi-value-select
+                name="system.linkedSkills"
+                value=@root.item.system.linkedSkills
+                options=@root.linkedSkillsOptions
+            }}
+        </div>
+    </div>
+    <p class="hint">
+        {{localize @root.systemFields.linkedSkills.hint}}
+    </p>
+</div>
+
+{{/with}}

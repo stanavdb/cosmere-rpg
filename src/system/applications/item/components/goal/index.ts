@@ -1,0 +1,1 @@
+import './rewards-list';

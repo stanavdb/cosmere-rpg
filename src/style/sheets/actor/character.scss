@@ -166,10 +166,9 @@
             position: relative;
             border-radius: 0.3rem;
             margin-bottom: 1rem;
+
             display: flex;
-            flex-direction: row;
-            align-items: center;
-            padding: 0.2rem 1rem;
+            flex-direction: column;
 
             border: 1px solid #463a47;
             overflow: hidden;
@@ -177,40 +176,61 @@
             text-shadow: 0 0 0.5rem black;
             box-shadow: 0 0 0.5rem black;
 
-            cursor: pointer;
-
-            .name {
+            .details {
                 display: flex;
-                flex-direction: column;
-                flex: 1;
+                flex-direction: row;
+                align-items: center;
+                padding: 0.2rem 1rem 0 1rem;
                 z-index: 1;
+                cursor: pointer;
 
-                .label {
-                    font-size: 13pt;
+                .name {
+                    display: flex;
+                    flex-direction: column;
+                    flex: 1;
+                    z-index: 1;
+    
+                    .label {
+                        font-size: 13pt;
+                        font-weight: bold;
+                    }
+    
+                    .item-type {
+                        font-size: 9pt;
+                        opacity: 0.75;
+                    }
+                }
+    
+                .level {
+                    font-size: 14pt;
                     font-weight: bold;
+                    z-index: 1;
+                }
+    
+                .name,
+                .level {
+                    &:hover {
+                        text-shadow: 0 0 8px var(--color-shadow-primary);
+                    }
+                }
+    
+                .controls {
+                    margin-left: 1rem;
+                    z-index: 1;
                 }
 
-                .item-type {
-                    font-size: 9pt;
-                    opacity: 0.75;
+                &:not(:has(+ .skill-list)) {
+                    padding-bottom: 0.2rem;
                 }
             }
 
-            .level {
-                font-size: 14pt;
-                font-weight: bold;
-                z-index: 1;
-            }
-
-            .name,
-            .level {
-                &:hover {
-                    text-shadow: 0 0 8px var(--color-shadow-primary);
-                }
-            }
-
-            .controls {
-                margin-left: 1rem;
+            .skill-list {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                padding-top: 0.8rem;
+                padding-bottom: 0.3rem;
+                background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, .4) 40%);
                 z-index: 1;
             }
 
@@ -218,8 +238,9 @@
                 position: absolute;
                 left: 0;
                 right: 0;
-                opacity: 0.25;
+                opacity: 0.2;
                 top: -6rem;
+                z-index: 0;
             }
 
             &.placeholder {

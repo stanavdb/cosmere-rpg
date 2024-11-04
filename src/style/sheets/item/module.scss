@@ -485,3 +485,23 @@ app-talent-prerequisite-talent-list {
         text-shadow: 0 0 0.2rem black;
     }
 }
+
+app-goal-rewards-list {
+    .col.type {
+        width: 5rem;
+    }
+
+    .col.description {
+        flex: 1;
+    }
+}
+
+app-talent-grant-rules-list {
+    .col.type {
+        width: 5rem;
+    }
+
+    .col.description {
+        flex: 1;
+    }
+}

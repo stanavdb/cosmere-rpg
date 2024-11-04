@@ -600,6 +600,35 @@ namespace foundry {
                 operation: DatabaseCreateOperation,
                 user: documents.BaseUser,
             ): Promise<void>;
+
+            /* --- Database Update Operations --- */
+
+            /**
+             * Pre-process an update operation for a single Document instance. Pre-operation events only occur for the client
+             * which requested the operation.
+             *
+             * @param changes                       The candidate changes to the Document
+             * @param options                       Additional options which modify the update request
+             * @param user                          The User requesting the document update
+             * @returns                             A return value of false indicates the update operation should be cancelled.
+             * @internal
+             */
+            async _preUpdate(
+                changes: object,
+                options: object,
+                user: documents.BaseUser,
+            ): Promise<boolean | void>;
+
+            /**
+             * Post-process an update operation for a single Document instance. Post-operation events occur for all connected
+             * clients.
+             *
+             * @param changed                       The differential data that was changed relative to the documents prior values
+             * @param options                       Additional options which modify the update request
+             * @param userId                        The id of the User requesting the document update
+             * @internal
+             */
+            _onUpdate(changed: object, options: object, userId: string);
         }
 
         interface DataValidationOptions {
@@ -755,7 +784,7 @@ namespace foundry {
              * @param options Options provided to the model constructor
              * @returns Migrated and cleaned source data which will be stored to the model instance
              */
-            _initializeSource(
+            protected _initializeSource(
                 data: object | DataModel,
                 options?: object,
             ): object;
@@ -773,7 +802,7 @@ namespace foundry {
              * This mirrors the workflow of SchemaField#initialize but with some added functionality.
              * @param options Options provided to the model constructor
              */
-            _initialize(options?: object);
+            protected _initialize(options?: object);
 
             /**
              * Reset the state of this data instance back to mirror the contained source data, erasing any changes.

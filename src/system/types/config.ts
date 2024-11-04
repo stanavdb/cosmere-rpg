@@ -29,10 +29,11 @@ import {
     EquipHand,
     PathType,
     EquipmentType,
+    PowerType,
 } from './cosmere';
 import { AdvantageMode } from './roll';
 
-import { Talent } from './item';
+import { Talent, Goal } from './item';
 
 export interface SizeConfig {
     label: string;
@@ -73,7 +74,14 @@ export interface SkillConfig {
     key: string;
     label: string;
     attribute: Attribute;
-    attrLabel: string;
+
+    /**
+     * Whether the skill is a core skill.
+     * Core skills are visible in the skill list on the character sheet.
+     */
+    core?: boolean;
+
+    // TODO: Replace
     hiddenUntilAcquired?: boolean;
 }
 
@@ -218,6 +226,11 @@ export interface TalentTypeConfig {
     label: string;
 }
 
+export interface PowerTypeConfig {
+    label: string;
+    plural: string;
+}
+
 export interface CosmereRPGConfig {
     sizes: Record<Size, SizeConfig>;
     creatureTypes: Record<CreatureType, CreatureTypeConfig>;
@@ -257,11 +270,20 @@ export interface CosmereRPGConfig {
             types: Record<EquipmentType, EquipmentTypeConfig>;
         };
 
+        goal: {
+            rewards: {
+                types: Record<Goal.Reward.Type, string>;
+            };
+        };
+
         talent: {
             types: Record<Talent.Type, TalentTypeConfig>;
             prerequisite: {
                 types: Record<Talent.Prerequisite.Type, string>;
                 modes: Record<Talent.Prerequisite.Mode, string>;
+            };
+            grantRules: {
+                types: Record<Talent.GrantRule.Type, string>;
             };
         };
     };
@@ -291,6 +313,10 @@ export interface CosmereRPGConfig {
 
     attack: {
         types: Record<AttackType, AttackTypeConfig>;
+    };
+
+    power: {
+        types: Record<PowerType, PowerTypeConfig>;
     };
 
     damageTypes: Record<DamageType, DamageTypeConfig>;

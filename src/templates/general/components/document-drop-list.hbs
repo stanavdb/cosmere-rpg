@@ -1,0 +1,31 @@
+<ul>
+    {{#each documents as |doc index|}}
+        <li class="document" data-id="{{doc.uuid}}">
+            <div class="col link">
+                {{{doc.link}}}
+            </div>
+            <div class="col controls">
+                <a data-action="remove-document"
+                    data-tooltip="GENERIC.Button.Remove"
+                >
+                    <i class="fa-solid fa-trash"></i>
+                </a>
+            </div>
+    {{/each}}
+</ul>
+<p>
+    {{localize 
+        (default 
+            placeholder 
+            (localize 
+                "COMPONENT.DocumentDropListComponent.Placeholder" 
+                type=(localize 
+                    (default 
+                        (default subtype type) 
+                        "GENERIC.Document"
+                    )
+                )
+            )
+        )
+    }}
+</p>

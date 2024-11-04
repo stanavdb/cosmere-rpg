@@ -83,6 +83,7 @@ export class TalentItemSheet extends BaseItemSheet {
             ...(await super._prepareContext(options)),
             isPathTalent: this.item.system.type === Talent.Type.Path,
             isAncestryTalent: this.item.system.type === Talent.Type.Ancestry,
+            isPowerTalent: this.item.system.type === Talent.Type.Power,
             hasModality: this.item.system.modality !== null,
         };
     }
