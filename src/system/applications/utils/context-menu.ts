@@ -37,9 +37,7 @@ export class AppContextMenu {
         private parent: AppContextMenu.Parent,
         private anchor: AppContextMenu.Anchor,
         private items: AppContextMenu.Item[],
-    ) {
-        void this.render();
-    }
+    ) {}
 
     /**
      * Utility function to create a context menu
