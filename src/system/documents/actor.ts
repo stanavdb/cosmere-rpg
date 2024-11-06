@@ -460,7 +460,7 @@ export class CosmereActor<
         }
     }
 
-    public async rollInjuryDuration() {
+    public async rollInjury() {
         // Get roll table
         const table = (await fromUuid(
             CONFIG.COSMERE.injury.durationTable,
