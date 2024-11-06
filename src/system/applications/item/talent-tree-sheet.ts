@@ -13,10 +13,11 @@ import { AppContextMenu } from '@system/applications/utils/context-menu';
 
 // Mixins
 import { ComponentHandlebarsApplicationMixin } from '@system/applications/component-system';
-import { DragDropApplicationMixin } from '../mixins';
-import HandlebarsApplicationMixin from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/client-esm/applications/api/handlebars-application.mjs';
+import { DragDropApplicationMixin, EditModeApplicationMixin } from '../mixins';
 
 const { ItemSheetV2 } = foundry.applications.sheets;
+
+type SheetMode = 'view' | 'edit';
 
 // Constants
 const ROW_HEIGHT = 65;
@@ -25,14 +26,9 @@ const HEADER_HEIGHT = 36;
 const PADDING = 10;
 const DOCUMENT_UUID_REGEX = /@UUID\[.+\]\{(.*)\}/g;
 
-export class TalentTreeItemSheet extends DragDropApplicationMixin(
-    ComponentHandlebarsApplicationMixin(ItemSheetV2),
+export class TalentTreeItemSheet extends EditModeApplicationMixin(
+    DragDropApplicationMixin(ComponentHandlebarsApplicationMixin(ItemSheetV2)),
 )<AnyObject> {
-    /**
-     * NOTE: Unbound methods is the standard for defining actions and forms
-     * within ApplicationV2
-     */
-
     static DEFAULT_OPTIONS = foundry.utils.mergeObject(
         foundry.utils.deepClone(super.DEFAULT_OPTIONS),
         {
@@ -112,11 +108,11 @@ export class TalentTreeItemSheet extends DragDropApplicationMixin(
     /* --- Drag Drop --- */
 
     protected override _canDragStart(selector: string): boolean {
-        return true;
+        return this.isEditMode;
     }
 
     protected override _canDragDrop(selector: string): boolean {
-        return true;
+        return this.isEditMode;
     }
 
     protected override _onDragStart(event: DragEvent) {
@@ -357,6 +353,9 @@ export class TalentTreeItemSheet extends DragDropApplicationMixin(
         return {
             ...(await super._prepareContext(options)),
             item: this.item,
+            isEditMode: this.isEditMode,
+            editable: this.isEditable,
+
             rows,
             columns,
             cells: this.prepareCells(rows, columns),

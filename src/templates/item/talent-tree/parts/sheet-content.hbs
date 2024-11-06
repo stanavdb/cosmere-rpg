@@ -5,16 +5,18 @@
                 <div class="cell" data-row="{{row}}" data-column="{{column}}">
                     {{#with (lookup (lookup @root.cells row) column) as |node|}}
                         <div class="slot" data-id="{{node.id}}" 
-                            data-tooltip="{{inline-partial 
-                                "talent-tree-node-tooltip" 
-                                img=node.item.img
-                                title=node.item.name
-                                description=(lookup @root.enrichedDescriptions node.id)
-                            }}"
+                            {{#if (not @root.isEditMode)}}
+                                data-tooltip="{{inline-partial 
+                                    "talent-tree-node-tooltip" 
+                                    img=node.item.img
+                                    title=node.item.name
+                                    description=(lookup @root.enrichedDescriptions node.id)
+                                }}"
+                            {{/if}}
                         >
                             <img src="{{node.item.img}}"/>
                         </div>
-                    {{else}}
+                    {{else if @root.isEditMode}}
                         <div class="slot empty"></div>
                     {{/with}}
                 </div>
