@@ -248,7 +248,7 @@ export class D20Roll extends foundry.dice.Roll<D20RollData> {
         // Show the dialog
         const result = await RollConfigurationDialog.show({
             ...data,
-            parts: ['1d20', ...this.parts],
+            parts: [this.parts],
         });
         if (!result) return null;
 
