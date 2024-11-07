@@ -350,6 +350,12 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
         setTimeout(() => {
             // Render connections
             this.renderConnections();
+
+            // Bind context menu
+            this.contextMenu?.bind(
+                ['.slot:not(.empty)', '.connection'],
+                MouseButton.Secondary,
+            );
         });
     }
 
@@ -362,25 +368,48 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
         // Create context menu
         this.contextMenu ??= AppContextMenu.create({
             parent: this,
-            items: [
+            items: (element) => [
                 {
                     name: 'GENERIC.Button.Remove',
                     icon: 'fa-solid fa-trash',
-                    callback: (element) => {
-                        // Get id
-                        const id = $(element).data('id') as string;
+                    callback: async () => {
+                        if ($(element).hasClass('slot')) {
+                            // Get id
+                            const id = $(element).data('id') as string;
 
-                        // Remove the node (and its connections)
-                        this.item.system.nodes.delete(id);
+                            // Remove the node (and its connections)
+                            this.item.system.nodes.delete(id);
 
-                        // Update
-                        void this.item.update({
-                            [`system.nodes.-=${id}`]: null,
-                        });
+                            // Update
+                            void this.item.update({
+                                [`system.nodes.-=${id}`]: null,
+                            });
+                        } else {
+                            // Get from and to ids
+                            const fromId = $(element).data('from') as string;
+                            const toId = $(element).data('to') as string;
+
+                            // Get from node
+                            const fromNode = this.item.system.nodes.get(fromId);
+                            if (!fromNode) return;
+
+                            // Remove connection
+                            fromNode.connections = fromNode.connections.filter(
+                                (id) => id !== toId,
+                            );
+
+                            // Update
+                            await this.item.update({
+                                [`system.nodes.${fromId}.connections`]:
+                                    fromNode.connections,
+                            });
+
+                            // Render
+                            void this.render(true);
+                        }
                     },
                 },
             ],
-            selectors: ['.slot:not(.empty)'],
             anchor: 'cursor',
             mouseButton: MouseButton.Secondary,
         });
@@ -583,7 +612,7 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
 
         // Create connection
         const connection = $(
-            `<div class="connection"><i class="fa-solid fa-angle-right"></i></div>`,
+            `<div class="connection" data-from="${fromNode.id}" data-to="${toNode.id}"><i class="fa-solid fa-angle-right"></i></div>`,
         );
 
         // Set position

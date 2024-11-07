@@ -28,7 +28,7 @@ export namespace AppContextMenu {
         /**
          * The items to display in the context menu.
          */
-        items: Item[];
+        items: Item[] | ((element: HTMLElement) => Item[]);
 
         /**
          * The selectors to bind the context menu to.
@@ -73,15 +73,26 @@ export class AppContextMenu {
      */
     private contextElement?: HTMLElement;
     private expanded = false;
-    private bound = false;
+    private rendered = false;
 
     private _active = true;
+
+    private items?: AppContextMenu.Item[];
+    private itemsFn?: (element: HTMLElement) => AppContextMenu.Item[];
 
     private constructor(
         private parent: AppContextMenu.Parent,
         private anchor: AppContextMenu.Anchor,
-        private items: AppContextMenu.Item[],
-    ) {}
+        items:
+            | AppContextMenu.Item[]
+            | ((element: HTMLElement) => AppContextMenu.Item[]),
+    ) {
+        if (typeof items === 'function') {
+            this.itemsFn = items;
+        } else {
+            this.items = items;
+        }
+    }
 
     public get element(): HTMLElement | undefined {
         return this._element;
@@ -113,8 +124,7 @@ export class AppContextMenu {
 
         // Add event listener
         if (selectors) {
-            parent.addEventListener('render', async () => {
-                await menu.render();
+            parent.addEventListener('render', () => {
                 menu.bind(selectors, mouseButton);
             });
         }
@@ -128,7 +138,6 @@ export class AppContextMenu {
         param1: string[] | HTMLElement[],
         mouseButton: MouseButton = MouseButton.Primary,
     ): void {
-        if (this.bound) return;
         if (param1.length === 0) return;
 
         const elements: HTMLElement[] = [];
@@ -168,19 +177,26 @@ export class AppContextMenu {
                             : undefined;
 
                     setTimeout(() => {
-                        this.show(element, positioning);
+                        void this.show(element, positioning);
                     });
                 }
             });
         });
-
-        // Set as bound
-        this.bound = true;
     }
 
-    public show(element: HTMLElement, positioning?: Positioning) {
+    public async show(element: HTMLElement, positioning?: Positioning) {
+        // If the context element is different and items are dynamic, always re-render
+        if (element !== this.contextElement && this.itemsFn)
+            this.rendered = false;
+
         // Set the context element
         this.contextElement = element;
+
+        // Get items
+        if (this.itemsFn) this.items = this.itemsFn(this.contextElement);
+
+        // If not rendered yet, render now
+        if (!this.rendered) await this.render();
 
         if (!positioning) {
             // Get element bounds
@@ -224,11 +240,10 @@ export class AppContextMenu {
         $(this._element!).removeClass('expanded');
         $(this._element!).addClass('hidden');
 
-        // Clear context
-        this.contextElement = undefined;
-
         // Unset expanded
         this.expanded = false;
+
+        if (this.itemsFn) this.items = undefined;
     }
 
     public setActive(active: boolean) {
@@ -256,7 +271,7 @@ export class AppContextMenu {
                 );
 
                 // Get the item
-                const item = this.items[index];
+                const item = this.items![index];
 
                 // Trigger the callback
                 if (item.callback) item.callback(this.contextElement!);
@@ -281,7 +296,7 @@ export class AppContextMenu {
 
     private async renderElement(): Promise<HTMLElement> {
         const htmlStr = await renderTemplate(TEMPLATE, {
-            items: this.items.map((item) => ({
+            items: this.items!.map((item) => ({
                 ...item,
                 cssClasses: item.classes?.join(' ') ?? '',
             })),
