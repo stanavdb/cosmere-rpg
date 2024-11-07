@@ -1,6 +1,7 @@
 import { TalentItem, TalentTreeItem } from '@system/documents/item';
 
 export namespace Node {
+    // TODO: Clean up
     export const enum Type {
         Icon = 'icon',
         Text = 'text',
@@ -40,4 +41,9 @@ export interface Node {
      * Derived field indicating if the node is at the root of the tree
      */
     isRoot?: boolean;
+
+    /**
+     * Derived field indicating if the node's item has been obtained
+     */
+    obtained?: boolean | null;
 }

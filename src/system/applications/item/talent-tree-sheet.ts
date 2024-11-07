@@ -17,8 +17,6 @@ import { DragDropApplicationMixin, EditModeApplicationMixin } from '../mixins';
 
 const { ItemSheetV2 } = foundry.applications.sheets;
 
-type SheetMode = 'view' | 'edit';
-
 // Constants
 const ROW_HEIGHT = 65;
 const COLUMN_WIDTH = 65;
@@ -58,8 +56,11 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
         },
     );
 
-    private _dragging = false;
     private contextMenu?: AppContextMenu;
+
+    private _dragging = false;
+    private _draggingNodeId?: string;
+    private _contextNodeIds = new Set<string>();
 
     constructor(
         options: foundry.applications.api.DocumentSheetV2.Configuration,
@@ -88,12 +89,6 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
         return super.document;
     }
 
-    get latestNode(): TalentTree.Node | null {
-        const id: string = this.item.getFlag(SYSTEM_ID, 'latestNode');
-        if (!id) return null;
-        return this.item.system.nodes.get(id) ?? null;
-    }
-
     private get dragging(): boolean {
         return this._dragging;
     }
@@ -103,6 +98,20 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
         $(this.element)
             .find('.grid')
             .css('pointer-events', !value ? 'none' : 'auto');
+    }
+
+    private get contextNodes(): TalentTree.Node[] {
+        return Array.from(this._contextNodeIds).map(
+            (id) => this.item.system.nodes.get(id)!,
+        );
+    }
+
+    private set draggingNode(value: TalentTree.Node | undefined) {
+        this._draggingNodeId = value?.id;
+    }
+
+    private get draggingNode(): TalentTree.Node | undefined {
+        return this.item.system.nodes.get(this._draggingNodeId!);
     }
 
     /* --- Drag Drop --- */
@@ -140,6 +149,9 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
         event.dataTransfer!.setData('isEmbedded', ''); // Mark type
         event.dataTransfer!.setData('source/talent-tree', this.item.id); // Metadata
         event.dataTransfer!.setData('source/node', node.id); // Metadata
+
+        // Set dragging node
+        this.draggingNode = node;
     }
 
     protected override _onDragOver(event: DragEvent) {
@@ -148,12 +160,6 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
             if (!this.dragging) {
                 this.dragging = true;
             }
-        } else {
-            // Get element
-            const el = $(event.target!).closest('.slot');
-
-            // Add dragover class
-            el.addClass('dragover');
         }
     }
 
@@ -230,20 +236,8 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
                         },
                     },
                 },
-                { render: !this.latestNode },
+                { render: this.contextNodes.length === 0 },
             );
-
-            // TODO: Set requirements correctly
-
-            // Create connection from latest node
-            if (this.latestNode) {
-                await this.item.update({
-                    [`system.nodes.${this.latestNode.id}.connections`]: [
-                        ...this.latestNode.connections,
-                        nodeId,
-                    ],
-                });
-            }
         } else {
             // Update node position
             await this.item.update({
@@ -254,14 +248,46 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
             });
         }
 
-        // Mark latest node
-        void this.item.setFlag(SYSTEM_ID, 'latestNode', nodeId);
+        // If we have a context node, connect the two
+        if (this.contextNodes.length > 0) {
+            // TODO: Set requirements correctly
+
+            // Connect nodes
+            await Promise.all(
+                this.contextNodes.map((contextNode) =>
+                    this.item.update({
+                        [`system.nodes.${contextNode.id}.connections`]: [
+                            ...contextNode.connections,
+                            nodeId,
+                        ],
+                    }),
+                ),
+            );
+
+            // Clear context nodes
+            this.clearContextNodes();
+        }
 
         // Reset dragging
         this.dragging = false;
+        this.draggingNode = undefined;
     }
 
     /* --- Lifecycle --- */
+
+    protected override async _renderFrame(
+        options: AnyObject,
+    ): Promise<HTMLElement> {
+        const frame = await super._renderFrame(options);
+
+        // Check if item is on an actor
+        const hasActor = !!this.item.actor;
+
+        // Add class
+        if (hasActor) frame.classList.add('owned');
+
+        return frame;
+    }
 
     protected override _onRender(context: AnyObject, options: AnyObject) {
         super._onRender(context, options);
@@ -284,6 +310,29 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
 
                 // Remove dragover class
                 el.removeClass('dragover');
+            })
+            .on('dragenter', (event) => {
+                // Get element
+                const el = $(event.target).closest('.slot');
+
+                // Add dragover class
+                el.addClass('dragover');
+
+                if (el.hasClass('empty')) return;
+
+                // Get id
+                const id = el.data('id') as string;
+
+                if (this.draggingNode?.id === id) return;
+
+                // Check if node is already in context
+                if (!this.hasContextNode(id)) {
+                    // Add context node
+                    this.addContextNode(id);
+                } else {
+                    // Remove context node
+                    this.removeContextNode(id);
+                }
             });
 
         $(this.element).on('click', (event) => {
@@ -335,6 +384,16 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
             anchor: 'cursor',
             mouseButton: MouseButton.Secondary,
         });
+
+        // Set active
+        this.contextMenu.setActive(this.isEditMode);
+    }
+
+    protected override _onModeChange() {
+        super._onModeChange();
+
+        // Update context menu
+        this.contextMenu?.setActive(this.isEditMode);
     }
 
     /* --- Context --- */
@@ -372,7 +431,8 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
             ) as (TalentTree.Node | null)[][];
 
         this.item.system.nodes.forEach((node) => {
-            cells[node.position.row][node.position.column] = node;
+            const nodeData = foundry.utils.deepClone(node);
+            cells[node.position.row][node.position.column] = nodeData;
         });
 
         return cells;
@@ -409,6 +469,50 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
     }
 
     /* --- Helpers --- */
+
+    private addContextNode(node: TalentTree.Node): void;
+    private addContextNode(nodeId: string): void;
+    private addContextNode(param: TalentTree.Node | string): void {
+        // Get node id
+        const id = typeof param === 'string' ? param : param.id;
+
+        // Add to context
+        this._contextNodeIds.add(id);
+
+        // Get element
+        const el = $(this.element).find(`.slot[data-id="${id}"]`);
+
+        // Add context class
+        el.addClass('context');
+    }
+
+    private removeContextNode(node: TalentTree.Node): void;
+    private removeContextNode(nodeId: string): void;
+    private removeContextNode(param: TalentTree.Node | string): void {
+        // Get node id
+        const id = typeof param === 'string' ? param : param.id;
+
+        // Remove from context
+        this._contextNodeIds.delete(id);
+
+        // Get element
+        const el = $(this.element).find(`.slot[data-id="${id}"]`);
+
+        // Remove context class
+        el.removeClass('context');
+    }
+
+    private clearContextNodes() {
+        // Clear context class
+        $(this.element).find('.slot.context').removeClass('context');
+
+        // Clear context nodes
+        this._contextNodeIds.clear();
+    }
+
+    private hasContextNode(nodeId: string): boolean {
+        return this._contextNodeIds.has(nodeId);
+    }
 
     private renderConnections() {
         this.item.system.nodes

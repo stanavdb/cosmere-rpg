@@ -32,6 +32,20 @@ export function EditModeApplicationMixin<
         public async setMode(mode: SheetMode) {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
             await this.document.setFlag(SYSTEM_ID, 'sheet.mode', mode);
+
+            // Get toggle
+            const toggle = $(this.element).find('#mode-toggle');
+
+            // Update checked status
+            toggle.find('input').prop('checked', this.mode === 'edit');
+
+            // Set mode class
+            $(this.element)
+                .removeClass(`mode-${mode === 'view' ? 'edit' : 'view'}`)
+                .addClass(`mode-${mode}`);
+
+            // Call mode change event
+            this._onModeChange();
         }
 
         /* --- Lifecycle --- */
@@ -59,6 +73,9 @@ export function EditModeApplicationMixin<
                     .on('click', this.onToggleMode.bind(this));
             }
 
+            // Set mode class
+            $(frame).addClass(`mode-${this.mode}`);
+
             return frame;
         }
 
@@ -72,12 +89,13 @@ export function EditModeApplicationMixin<
 
             // Toggle mode
             await this.setMode(this.mode === 'view' ? 'edit' : 'view');
-
-            // Get toggle
-            const toggle = $(this.element).find('#mode-toggle');
-
-            // Update checked status
-            toggle.find('input').prop('checked', this.mode === 'edit');
         }
+
+        /* --- Lifecylce events --- */
+
+        /**
+         * Gets called after the mode has been changed
+         */
+        protected _onModeChange() {}
     };
 }

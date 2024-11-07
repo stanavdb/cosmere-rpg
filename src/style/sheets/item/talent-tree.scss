@@ -33,6 +33,10 @@
         
                     outline: 1px solid transparent;
                     transition: outline-color 0.5s;
+
+                    * {
+                        pointer-events: none;
+                    }
         
                     &.empty {
                         border-style: dotted;
@@ -67,9 +71,6 @@
                 height: 0.3rem;
                 transform-origin: left;
 
-                cursor: pointer;
-                pointer-events: all;
-
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -77,19 +78,65 @@
                 color: #9c0000;
                 font-size: 1rem;
                 text-shadow: 0.1rem 0.1rem 0.5rem BLACK;
-
-                outline: 1px solid transparent;
-                transition: outline-color 0.5s;
-
-                &:hover {
-
-                    box-shadow: 0 0 5px var(--color-shadow-primary);
-                }
-
-                &.selected {
-                    outline: 2px solid var(--color-cool-3);
-                }
             }
         }
+    }
+
+    &.mode-edit {
+        .slot.context {
+            position: relative;
+
+            &::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                box-shadow: inset 0 0 1rem var(--color-light-1);
+                opacity: 1;
+                animation: pulseOpacity 2s infinite;
+            }
+        }
+
+        .slot:not(.empty) {
+            cursor: grab;
+        }
+
+        .connection {
+            cursor: pointer;
+            pointer-events: all;
+
+            outline: 1px solid transparent;
+            transition: outline-color 0.5s;
+
+            &:hover {
+                box-shadow: 0 0 5px var(--color-shadow-primary);
+            }
+
+            &.selected {
+                outline: 2px solid var(--color-cool-3);
+            }
+        }
+    }
+
+    &.owned {
+        &.mode-view {
+            .slot:not(.obtained) {
+                filter: saturate(.2) contrast(0.85) brightness(0.75);
+            }
+        }
+    }
+}
+
+@keyframes pulseOpacity {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
     }
 }

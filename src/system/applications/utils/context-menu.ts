@@ -75,6 +75,8 @@ export class AppContextMenu {
     private expanded = false;
     private bound = false;
 
+    private _active = true;
+
     private constructor(
         private parent: AppContextMenu.Parent,
         private anchor: AppContextMenu.Anchor,
@@ -83,6 +85,10 @@ export class AppContextMenu {
 
     public get element(): HTMLElement | undefined {
         return this._element;
+    }
+
+    public get active(): boolean {
+        return this._active;
     }
 
     /**
@@ -150,7 +156,7 @@ export class AppContextMenu {
 
                 if (this.expanded) this.hide();
 
-                if (shouldShow) {
+                if (shouldShow && this._active) {
                     const rootBounds =
                         this.parent.element.getBoundingClientRect();
                     const positioning =
@@ -223,6 +229,14 @@ export class AppContextMenu {
 
         // Unset expanded
         this.expanded = false;
+    }
+
+    public setActive(active: boolean) {
+        this._active = active;
+
+        if (!this._active) {
+            this.hide();
+        }
     }
 
     public async render(): Promise<void> {
