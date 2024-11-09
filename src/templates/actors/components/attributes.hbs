@@ -10,6 +10,7 @@
         <section class="attributes flexrow">
             {{#with attrGroup.attributes.[0] as |attribute|}}
             <div class="attribute flexcol" data-id="{{attribute.id}}">
+                <div class="border left"></div>
                 <span class="box-title">
                     {{ localize attribute.config.labelShort }}
                 </span>
@@ -46,6 +47,7 @@
 
             {{#with attrGroup.attributes.[1] as |attribute|}}
             <div class="attribute flexcol" data-id="{{attribute.id}}">
+                <div class="border right"></div>
                 <span class="box-title">
                     {{ localize attribute.config.labelShort }}
                 </span>

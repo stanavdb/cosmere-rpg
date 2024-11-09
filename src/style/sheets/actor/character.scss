@@ -55,8 +55,8 @@
                 border: 1px solid var(--plotweaver-color-accent);
 
                 &:read-only {
-                    background: var(--plotweaver-color-base-1);
-                    border: 1px solid var(--plotweaver-color-base-6);
+                    background: var(--plotweaver-color-base-4);
+                    border: none;
                 }
             }
         }
@@ -72,7 +72,7 @@
     }
 
     app-actor-attributes {
-        margin-top: 1rem;
+        margin: 1rem 0;
     }
 
     app-character-expertises {
@@ -107,11 +107,12 @@
     }
 
     app-character-ancestry {
-        display: flex;
-        border-radius: 0.3rem;
+        position: relative;
         margin-bottom: 1rem;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
 
-        border: 1px solid var(--plotweaver-color-base-4);
         background: var(--plotweaver-color-base-1);
 
         .ancestry {
@@ -119,15 +120,29 @@
             flex-direction: column;
             padding: 0.2rem 1rem;
 
+            .border {
+                position: absolute;
+                left: -2px;
+                top: -2px;
+                width: calc(100% + 4px);
+                height: calc(100% + 4px);
+                border-image: url("/systems/cosmere-rpg/assets/icons/ui/border_full_100x100.svg") fill 10 / 100px;
+                filter: var(--plotweaver-color-accent-filter);
+                pointer-events: none;
+            }
+
             .name {
                 font-size: 13pt;
                 font-weight: bold;
                 color: var(--plotweaver-color-off-white);
+                text-transform: uppercase;
             }
 
             .item-type {
                 font-size: 9pt;
                 opacity: 0.75;
+                color: var(--plotweaver-color-accent);
+                text-transform: uppercase;
             }
         }
 
@@ -144,26 +159,38 @@
 
     app-character-paths-list {
         .path {
-            border-radius: 0.3rem;
-            margin-bottom: 0.75rem;
+            position: relative;
+            margin-bottom: 1rem;
             display: flex;
             flex-direction: row;
             align-items: center;
             padding: 0.2rem 1rem;
 
-            border: 1px solid var(--plotweaver-color-base-4);
-            background: var(--plotweaver-color-base-1);
+            background: var(--plotweaver-color-base-2);
+
+            .border {
+                position: absolute;
+                left: -2px;
+                top: -2px;
+                width: calc(100% + 4px);
+                height: calc(100% + 4px);
+                border-image: url("/systems/cosmere-rpg/assets/icons/ui/border_full_100x100.svg") fill 9 / 58px;
+                filter: var(--plotweaver-color-accent-filter);
+                pointer-events: none;
+            }
 
             .name {
                 display: flex;
                 flex-direction: column;
                 flex: 1;
-                color: var(--plotweaver-color-off-white);
+                color: var(--plotweaver-color-accent);
+                text-transform: uppercase;
 
                 .label {
                     font-size: 13pt;
                     font-weight: bold;
-                    color: var(--plotweaver-color-faded);
+                    color: var(--plotweaver-color-off-white);
+                    text-transform: uppercase;
                 }
 
                 .item-type {
@@ -210,10 +237,10 @@
                 margin: 0;
                 padding: 0 0.5rem;
 
-                background: var(--plotweaver-color-sheet);
+                background: var(--plotweaver-color-base-4);
 
                 &:not(.collapsed):not(:first-child):not(:last-child) {
-                    border-bottom: 1px solid var(--plotweaver-color-base-6);
+                    border-bottom: 1px dashed var(--plotweaver-color-base-6);
                 }
 
                 &:not(.details) {
@@ -245,7 +272,7 @@
                 }
 
                 &.new {
-                    background: linear-gradient(var(--plotweaver-color-sheet) 5%, transparent);
+                    background: var(--plotweaver-color-base-2);
                     justify-content: center;
 
                     a {

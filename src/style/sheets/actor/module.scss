@@ -106,25 +106,45 @@
         position: absolute;
 
         left: calc(100% + 2px);
-        top: 15%;
-        gap: 0.5rem;
+        top: 20%;
+        gap: calc(0.75rem + 3px);
 
         > a {
-            width: 2.88867rem;
-            height: 2.5rem;
+            position: relative;
+            width: 32px;
+            height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
 
-            color: var(--plotweaver-color-faded);
+            color: var(--plotweaver-color-accent);
             background: var(--plotweaver-color-sheet);
-            border: 1px solid var(--plotweaver-color-accent);
-            border-top-right-radius: 0.3rem;
-            border-bottom-right-radius: 0.3rem;
+
+            .border {
+                position: absolute;
+                left: -2px;
+                top: -2px;
+                width: calc(100% + 4px);
+                height: calc(100% + 4px);
+                border-image: url("/systems/cosmere-rpg/assets/icons/ui/border_tab_closed.svg") fill 16 / 32px;
+                filter: var(--plotweaver-color-accent-filter);
+                pointer-events: none;
+            }
 
             &.active {
-                color: var(--plotweaver-color-accent);
+                width: 38px;
                 background-color: var(--plotweaver-color-base-4);
+
+                .border {
+                    position: absolute;
+                    left: -2px;
+                    top: -2px;
+                    width: calc(100% + 4px);
+                    height: calc(100% + 4px);
+                    border-image: url("/systems/cosmere-rpg/assets/icons/ui/border_tab_open.svg") fill 19 / 38px;
+                    filter: var(--plotweaver-color-accent-filter);
+                    pointer-events: none;
+                }
             }
         }
     }
@@ -148,16 +168,17 @@
 
             .document-name{
                 text-transform: capitalize;
-                color: var(--plotweaver-color-accent);
+                color: var(--plotweaver-color-off-white);
             }
 
             .details {
                 text-transform: uppercase;
-                color: var(--plotweaver-color-faded);
+                color: var(--plotweaver-color-accent);
                 font-size: 10pt;
                 margin-top: 0.3rem;
 
                 .delim {
+                    color: var(--plotweaver-color-off-white);
                     opacity: 0.5;
                 }
 
@@ -181,31 +202,41 @@
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+                margin-top: -0.5rem;
 
                 .label {
-                    color: var(--plotweaver-color-faded);
+                    color: var(--plotweaver-color-off-white);
                     text-transform: uppercase;
                     font-size: 8pt;
                     z-index: 1;
+                    margin-bottom: 2px;
                 }
 
                 .container {
                     position: relative;
                     display: flex;
-                    align-content: center;
+                    align-items: center;
                     text-align: center;
 
                     background-color: var(--plotweaver-color-sheet);
-                    border-radius: 50%;
-                    width: 3rem;
-                    height: 3rem;
+
+                    width: 58px;
+                    height: 58px;
+
+                    .border {
+                        position: absolute;
+                        left: -2px;
+                        top: -2px;
+                        width: calc(100% + 4px);
+                        height: calc(100% + 4px);
+                        border-image: url("/systems/cosmere-rpg/assets/icons/ui/border_level.svg") fill 29 / 58px;
+                        filter: var(--plotweaver-color-accent-filter);
+                        pointer-events: none;
+                        z-index: 1;
+                    }
 
                     svg {
                         position: absolute;
-                        left: -0.5rem;
-                        top: -0.6rem;
-                        width: 4rem;
-                        height: 4rem;
 
                         path {
                             fill: var(--plotweaver-color-base-4);
@@ -214,9 +245,9 @@
 
                     .value {
                         width: 100%;
-                        padding: 0.3rem;
-                        color: var(--plotweaver-color-accent);
+                        color: var(--plotweaver-color-off-white);
                         z-index: 1;
+                        font-size: 2rem;
                     }
                 }
             }
@@ -263,14 +294,14 @@
                 width: 100%;
 
                 section.skills {
-                    margin: 0 0.25rem;
+                    margin: 0 0.5rem;
                 }
 
                 section.paths {
                     display: flex;
                     flex-direction: column;
                     height: 100%;
-                    margin: 0 0.25rem;
+                    margin: 0 0.5rem;
                 }
             }
         }
@@ -289,7 +320,7 @@ app-actor-details {
     // Actor image and derived statistics
     display: flex;
     flex-direction: column;
-    margin-bottom: 1rem;
+    margin-bottom: 8px;
 
     .portrait-info {
         // Character sheet portrait values
@@ -320,10 +351,10 @@ app-actor-details {
         a.rest {
             // Short and Long Rest buttons
             position: absolute;
-            background: var(--plotweaver-color-accent);
+            background: var(--plotweaver-color-off-white);
             width: 1.3rem;
             height: 1.3rem;
-            color: var(--plotweaver-color-sheet);
+            color: var(--plotweaver-color-black);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -331,13 +362,13 @@ app-actor-details {
             font-size: 9.5pt;
 
             &.short-rest {
-                top: calc(9% - 0.6rem);
-                right: calc(9% - 0.6rem);
+                top: 2px;
+                right: 18px;
             }
 
             &.long-rest {
-                top: calc(18% - 0.6rem);
-                right: calc(2% - 0.6rem);
+                top: 20px;
+                right: 0;
             }
         }
 
@@ -378,7 +409,7 @@ app-actor-details {
                     height: 30px;
 
                     path {
-                        fill: var(--plotweaver-color-base-5);
+                        fill: var(--plotweaver-color-accent);
                     }
                 }
 
@@ -442,7 +473,7 @@ app-actor-resource {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        margin-bottom: 0.5rem;
+        margin-bottom: 8px;
 
         .header {
             display: flex;
@@ -460,21 +491,20 @@ app-actor-resource {
             }
         }
 
-        svg {
+        .border {
             position: absolute;
+            top: calc(1.15rem - 1px);
             width: 100%;
-            height: 2.25rem;
-            z-index: 1;
-            top: 1rem;
-
-            path {
-                fill: var(--plotweaver-color-base-5);
-            }
+            height: 28px;
+            border-image: url("/systems/cosmere-rpg/assets/icons/ui/border_bar.svg") fill 14/180px;
+            filter: var(--plotweaver-color-accent-filter);
+            z-index: 3;
+            pointer-events: none;
         }
 
         .bar {
             width: calc(100% - 3px);
-            height: calc(2.25rem - 5px);
+            height: 24px;
             display: flex;
             position: relative;
             margin: 2px;
@@ -488,7 +518,8 @@ app-actor-resource {
                 z-index: 1;
                 margin-left: 1rem;
                 text-shadow: 0 0 0.3rem black;
-                bottom: 3px;
+                bottom: 4px;
+                font-size: 16pt;
 
                 .delim {
                     font-weight: normal;
@@ -609,9 +640,9 @@ app-actor-attributes {
         height: 100%;
 
         > .label {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
 
-            color: var(--plotweaver-color-accent);
+            color: var(--plotweaver-color-off-white);
             text-align: center;
             font-size: 12pt;
             text-transform: uppercase;
@@ -620,6 +651,34 @@ app-actor-attributes {
 
         .attributes {
             padding: 2.5pt 0;
+
+            .attribute {
+                position: relative;
+                width: 58px;
+                height: 50px;
+
+                .border.right {
+                    position: absolute;
+                    left: -2px;
+                    top: -2px;
+                    width: calc(100% + 4px);
+                    height: calc(100% + 4px);
+                    border-image: url("/systems/cosmere-rpg/assets/icons/ui/border_attribute_right.svg") fill 29 / 58px;
+                    filter: var(--plotweaver-color-accent-filter);
+                    pointer-events: none;
+                }
+
+                .border.left {
+                    position: absolute;
+                    left: -2px;
+                    top: -2px;
+                    width: calc(100% + 4px);
+                    height: calc(100% + 4px);
+                    border-image: url("/systems/cosmere-rpg/assets/icons/ui/border_attribute_left.svg") fill 29 / 58px;
+                    filter: var(--plotweaver-color-accent-filter);
+                    pointer-events: none;
+                }
+            }
         }
 
         > section {
@@ -628,11 +687,10 @@ app-actor-attributes {
     }
 
     .attribute {
-        padding: 0.5ch 0;
-        margin: 0 2.5pt;
+        padding: 8px 0;
 
         .box-title {
-            margin-bottom: -1.6rem;
+            margin-bottom: -23px;
             z-index: 1;
             font-size: 8pt;
 
@@ -641,29 +699,16 @@ app-actor-attributes {
 
         .value {
             display: flex;
+            height: 52px;
+            margin: 0;
+            color: var(--plotweaver-color-off-white);
 
             input {
-                padding-top: 1rem;
-                height: 3rem;
-                font-size: 15pt;
-            }
-        }
-
-        &:first-child {
-            .value input {
-                border-bottom-left-radius: 1rem;
-                color: var(--plotweaver-color-off-white);
-                background-color: var(--plotweaver-color-base-2);
-                border: 1px solid var(--plotweaver-color-base-6);
-            }
-        }
-
-        &:last-child {
-            .value input {
-                border-bottom-right-radius: 1rem;
-                color: var(--plotweaver-color-off-white);
-                background-color: var(--plotweaver-color-base-2);
-                border: 1px solid var(--plotweaver-color-base-6);
+                padding-top: 20px;
+                font-size: 20pt;
+                height: 100%;
+                background-color: var(--plotweaver-color-sheet);
+                border: none;
             }
         }
     }
@@ -693,6 +738,7 @@ app-actor-attributes {
             align-items: center;
             justify-content: center;
             position: relative;
+            margin-top: 1rem;
 
             // approximation for the background
             background-color: var(--plotweaver-color-base-1);
@@ -718,7 +764,28 @@ app-actor-attributes {
 
 app-actor-actions-list,
 app-actor-equipment-list {
-    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    color: var(--plotweaver-color-off-white);
+    overflow: hidden;
+
+    .actions-list {
+        border-radius: 0.3rem;
+
+        .item.header {
+            height: 2rem;
+            background: var(--plotweaver-color-base-1) !important;
+            display: flex;
+            align-items: center;
+            padding: 0 0.5rem;
+        }
+
+        .item.usable,
+        .details.expanded {
+            background: var(--plotweaver-color-base-3);
+        }
+    }
 }
 
 .list-component {
@@ -758,7 +825,7 @@ app-actor-equipment-list {
             }
 
             &:not(:first-child):not(:nth-last-child(2)) {
-                border-bottom: 1px solid #463a47;
+                border-bottom: 1px dashed var(--plotweaver-color-base-6);
 
                 &.expanded {
                     border-bottom-color: transparent;
@@ -998,7 +1065,7 @@ app-actor-equipment-list {
                 padding: 0 0.5rem;
 
                 &:not(:last-child) {
-                    border-bottom: 1px solid #463a47;
+                    border-bottom: 1px dashed var(--plotweaver-color-base-6);
                 }
             }
         }
@@ -1077,7 +1144,7 @@ app-actor-conditions {
 
     .condition {
         color: var(--plotweaver-color-accent);
-        background-color: var(--plotweaver-color-base-1);
+        background-color: var(--plotweaver-color-base-3);
         display: flex;
         height: 2rem;
         align-items: center;
@@ -1129,7 +1196,6 @@ app-actor-equipment-list {
 
     .injuries-list,
     .equipment-list {
-        border: 1px solid var(--plotweaver-color-base-4);
         border-radius: 0.3rem;
 
         .injury.header,
@@ -1142,9 +1208,10 @@ app-actor-equipment-list {
         }
 
         .injury.item,
+        .item,
         .item.usable,
         .details.expanded {
-            background: var(--plotweaver-color-base-1);
+            background: var(--plotweaver-color-base-3) !important;
         }
     }
 }
@@ -1162,74 +1229,19 @@ app-adversary-skills-group {
     &:has(> *) {
         display: flex;
         padding: 0.4rem 0.2rem;
-        margin-bottom: 0.75rem;
+        margin-bottom: calc(1.25rem - 1px);
 
-        border: 1px solid var(--plotweaver-color-base-5);
         background: var(--plotweaver-color-base-1);
-    }
 
-    .skill-decorations {
-        pointer-events: none;
-        position: absolute;
-        top: 0;
-        left: 0;
-
-        width: 100%;
-        height: 100%;
-
-        .top.left {
+        .border {
             position: absolute;
-            width: 10px;
-            height: 10px;
-
-            top: -3px;
             left: -3px;
-
-            path {
-                fill: var(--plotweaver-color-base-5);
-            }
-        }
-
-        .top.right {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            transform: scale(-1, 1);
-
             top: -3px;
-            right: -3px;
-
-            path {
-                fill: var(--plotweaver-color-base-5);
-            }
-        }
-
-        .bot.left {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            transform: scale(1, -1);
-
-            bottom: -3px;
-            left: -3px;
-
-            path {
-                fill: var(--plotweaver-color-base-5);
-            }
-        }
-
-        .bot.right {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            transform: scale(-1, -1);
-
-            bottom: -3px;
-            right: -3px;
-
-            path {
-                fill: var(--plotweaver-color-base-5);
-            }
+            width: calc(100% + 6px);
+            height: calc(100% + 6px);
+            border-image: url("/systems/cosmere-rpg/assets/icons/ui/border_full_100x100.svg") fill 80 / 58px;
+            filter: var(--plotweaver-color-accent-filter);
+            pointer-events: none;
         }
     }
 
@@ -1239,7 +1251,8 @@ app-adversary-skills-group {
         display: flex;
         flex-direction: column;
         margin: 0;
-        padding: 0;
+        padding: 6px 0;
+        gap: 2px;
 
         .skill {
             display: flex;
@@ -1268,6 +1281,7 @@ app-adversary-skills-group {
                 width: 3rem;
                 text-align: center;
                 margin: 0 0.3rem;
+                color: var(--plotweaver-color-accent);
             }
 
             .pip-list {

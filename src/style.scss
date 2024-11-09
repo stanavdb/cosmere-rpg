@@ -16,7 +16,7 @@
     --plotweaver-color-grey-4: #444;
     --plotweaver-color-grey-5: #555;
     --plotweaver-color-white: white;
-    --plotweaver-color-off-white: #fffff0;
+    --plotweaver-color-off-white: #f0f0e0;
 
     --plotweaver-color-health-front: #286f3e;
     --plotweaver-color-health-back: #6b1b2a;
@@ -25,8 +25,9 @@
     --plotweaver-color-invest-front: #3e6abb;
     --plotweaver-color-invest-back: #182845;
 
-    // Defaults main colours:
+    // Themes are not working - once fixed, remove this
     --plotweaver-color-accent: #ffcb74;
+    --plotweaver-color-accent-filter: invert(87%) sepia(11%) saturate(2171%) hue-rotate(332deg) brightness(101%) contrast(102%);
     --plotweaver-color-faded: #f6f6f6;
     --plotweaver-color-sheet: #111111;
 
@@ -42,16 +43,17 @@
     /* ----------------------------------------- */
     &.theme-plotweaver {
         //TO-DO: Replace with Plotweaver colours
-        --plotweaver-color-accent: #c9a760;
-        --plotweaver-color-faded: #5e6c7e;
-        --plotweaver-color-sheet: #132137;
+        --plotweaver-color-accent: #ffcb74;
+        --plotweaver-color-accent-filter: invert(87%) sepia(11%) saturate(2171%) hue-rotate(332deg) brightness(101%) contrast(102%);
+        --plotweaver-color-faded: #f6f6f6;
+        --plotweaver-color-sheet: #111111;
 
-        --plotweaver-color-base-1: #010e2d;
-        --plotweaver-color-base-2: #10213e;
-        --plotweaver-color-base-3: #1b2d49;
-        --plotweaver-color-base-4: #263c5e;
-        --plotweaver-color-base-5: #456a95;
-        --plotweaver-color-base-6: #506684;
+        --plotweaver-color-base-1: #000000;
+        --plotweaver-color-base-2: #1f1f1f;
+        --plotweaver-color-base-3: #2f2f2f;
+        --plotweaver-color-base-4: #3f3f3f;
+        --plotweaver-color-base-5: #4f4f4f;
+        --plotweaver-color-base-6: #5f5f5f;
     }
 
     /* ----------------------------------------- */
