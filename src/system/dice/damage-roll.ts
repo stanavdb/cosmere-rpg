@@ -138,7 +138,6 @@ export class DamageRoll extends foundry.dice.Roll<DamageRollData> {
             }
         });
         this._total = this._evaluateTotal();
-        // roll total doesn't update here!
     }
 
     /* --- Internal Functions --- */
