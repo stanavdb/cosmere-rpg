@@ -385,28 +385,34 @@ export class CosmereItem<
         // We want to store the unmodded damage for use in graze calcs
         // This isn't a particularly perfect solution, but it's functional
         // only undoing the automatic addition of the selected attribute
-        rollData.baseRoll = (roll.total ?? 0) - (rollData.mod ?? 0);
+        const unmoddedRoll = roll.clone();
+        rollData.damage = {
+            total: roll,
+            unmodded: unmoddedRoll,
+            dice: roll.dice,
+        };
+
+        unmoddedRoll.removeTermSafely(
+            (term) =>
+                term instanceof foundry.dice.terms.NumericTerm &&
+                term.total === rollData.mod,
+        );
+        await unmoddedRoll.evaluate();
+        unmoddedRoll.replaceDieResults(roll.dice);
 
         // Roll the dice pool for graze damage silently if set.
-        let grazeRoll = undefined;
         const grazeFormula =
-            this.system.damage.grazeOverrideFormula ?? `${rollData.baseRoll}`;
-        if (grazeFormula) {
-            grazeRoll = await damageRoll(
-                foundry.utils.mergeObject(options, {
-                    formula: grazeFormula,
-                    damageType: this.system.damage.type,
-                    data: rollData,
-                }),
-            );
-            // hide from DSN
-            grazeRoll.dice.forEach(
-                (die) =>
-                    (die.results[0] = Object.assign(die.results[0], {
-                        hidden: true,
-                    })),
-            );
-        }
+            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+            this.system.damage.grazeOverrideFormula || '@damage.unmodded';
+        const usesBaseDamage = grazeFormula.includes('@damage');
+        const grazeRoll = await damageRoll(
+            foundry.utils.mergeObject(options, {
+                formula: grazeFormula,
+                damageType: this.system.damage.type,
+                data: rollData,
+            }),
+        );
+        if (usesBaseDamage) grazeRoll.replaceDieResults(roll.dice);
         if (!grazeRoll) return null;
         roll.graze = grazeRoll;
 

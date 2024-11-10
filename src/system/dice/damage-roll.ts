@@ -1,6 +1,7 @@
 import { DamageType, Skill, Attribute } from '@system/types/cosmere';
 import { CosmereActorRollData } from '@system/documents/actor';
 import { AdvantageMode } from '@system/types/roll';
+import RollTerm from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/client-esm/dice/terms/term.mjs';
 
 export type DamageRollData<
     ActorRollData extends CosmereActorRollData = CosmereActorRollData,
@@ -15,7 +16,11 @@ export type DamageRollData<
         attribute: Attribute;
     };
     attribute?: number;
-    baseRoll?: number;
+    damage?: {
+        total: DamageRoll;
+        unmodded: DamageRoll;
+        dice: foundry.dice.terms.DiceTerm[];
+    };
 };
 
 export interface DamageRollOptions
@@ -100,6 +105,40 @@ export class DamageRoll extends foundry.dice.Roll<DamageRollData> {
      */
     public get hasDisadvantage() {
         return this.options.advantageMode === AdvantageMode.Disadvantage;
+    }
+
+    /* --- Helper Functions --- */
+
+    public removeTermSafely(
+        conditional: (
+            value: RollTerm,
+            index: number,
+            obj: RollTerm[],
+        ) => boolean,
+    ) {
+        this.terms.findSplice(conditional);
+        if (
+            this.terms[this.terms.length - 1] instanceof
+            foundry.dice.terms.OperatorTerm
+        )
+            this.terms.pop();
+        this.resetFormula();
+    }
+
+    public replaceDieResults(sourceDicePool: foundry.dice.terms.DiceTerm[]) {
+        sourceDicePool.forEach((die) => {
+            let numDiceToAlter = die.number ?? 0;
+            while (numDiceToAlter > 0) {
+                const nextDie = this.dice.find(
+                    (newDie) => newDie.faces === die.faces,
+                );
+                if (!nextDie) return;
+                nextDie.results = die.results;
+                numDiceToAlter--;
+            }
+        });
+        this._total = this._evaluateTotal();
+        // roll total doesn't update here!
     }
 
     /* --- Internal Functions --- */
