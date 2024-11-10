@@ -76,14 +76,11 @@ class TalentTreeNodeField extends foundry.data.fields.SchemaField {
                     ],
                     gmOnly: true,
                 }),
-                item: new foundry.data.fields.EmbeddedDocumentField(
-                    CosmereItem as typeof foundry.abstract.Document,
-                    {
-                        required: true,
-                        nullable: false,
-                        gmOnly: true,
-                    },
-                ),
+                uuid: new foundry.data.fields.DocumentUUIDField({
+                    required: true,
+                    nullable: false,
+                    gmOnly: true,
+                }),
                 connections: new foundry.data.fields.ArrayField(
                     /**
                      * DocumentIdField is really just a StringField that validates

@@ -282,9 +282,6 @@ export class AppContextMenu {
 
         // Add element to parent
         this.parent.element.appendChild(this._element);
-
-        // Set as not bound
-        this.bound = false;
     }
 
     public destroy(): void {

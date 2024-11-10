@@ -141,12 +141,12 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
         // Prepare data
         const data = {
             type: 'Item',
-            data: node.item,
+            uuid: node.uuid,
         };
 
         // Set data transfer
         event.dataTransfer!.setData('text/plain', JSON.stringify(data));
-        event.dataTransfer!.setData('isEmbedded', ''); // Mark type
+        event.dataTransfer!.setData('document/item', ''); // Mark the type
         event.dataTransfer!.setData('source/talent-tree', this.item.id); // Metadata
         event.dataTransfer!.setData('source/node', node.id); // Metadata
 
@@ -185,25 +185,17 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
 
         const data = TextEditor.getDragEventData(event) as unknown as {
             type: string;
-        } & ({ uuid: string } | { data: TalentItem | TalentTreeItem });
+            uuid: string;
+        };
 
         // Ensure type is correct
         if (data.type !== 'Item') return;
 
-        // Get object
-        const object: TalentItem | TalentTreeItem =
-            'uuid' in data
-                ? ((
-                      (await fromUuid(data.uuid)) as unknown as CosmereItem
-                  ).toObject() as TalentItem | TalentTreeItem)
-                : data.data;
+        // Get the item
+        const item = (await fromUuid(data.uuid)) as CosmereItem | null;
 
-        // Ensure object type is correct
-        if (
-            object.type !== ItemType.Talent &&
-            object.type !== ItemType.TalentTree
-        )
-            return;
+        // Validate item
+        if (!item || !(item.isTalent() || item.isTalentTree())) return;
 
         // Get target cell position
         const row = cellEl.data('row') as number;
@@ -228,7 +220,7 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
                     [`system.nodes.${nodeId}`]: {
                         id: nodeId,
                         type: TalentTree.Node.Type.Icon,
-                        item: object,
+                        uuid: data.uuid,
                         connections: [],
                         position: {
                             row,
@@ -446,23 +438,26 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
 
             rows,
             columns,
-            cells: this.prepareCells(rows, columns),
+            cells: await this.prepareCells(rows, columns),
             gridTemplate,
             enrichedDescriptions: await this.prepareNodeDescriptions(),
         };
     }
 
-    private prepareCells(rows: number, columns: number) {
+    private async prepareCells(rows: number, columns: number) {
         const cells = new Array(rows)
             .fill(null)
-            .map(() =>
-                new Array(columns).fill(null),
-            ) as (TalentTree.Node | null)[][];
+            .map(() => new Array(columns).fill(null)) as (AnyObject | null)[][];
 
-        this.item.system.nodes.forEach((node) => {
-            const nodeData = foundry.utils.deepClone(node);
-            cells[node.position.row][node.position.column] = nodeData;
-        });
+        await Promise.all(
+            this.item.system.nodes.map(async (node) => {
+                const nodeData = foundry.utils.deepClone(node);
+                cells[node.position.row][node.position.column] = {
+                    ...nodeData,
+                    item: await fromUuid(node.uuid),
+                };
+            }),
+        );
 
         return cells;
     }
@@ -471,27 +466,28 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
         const descriptions: Record<string, string> = {};
 
         await Promise.all(
-            this.item.system.nodes
-                .filter((node) => node.item.type === ItemType.Talent)
-                .map(async (node) => {
-                    // Get html
-                    let html = await TextEditor.enrichHTML(
-                        (node.item as TalentItem).system.description?.value ??
-                            '',
-                        {
-                            documents: false,
-                        },
-                    );
+            this.item.system.nodes.map(async (node) => {
+                // Look up item
+                const item = (await fromUuid(node.uuid)) as CosmereItem | null;
+                if (!item?.isTalent()) return;
 
-                    // Replace UUIDs
-                    const matches = [...html.matchAll(DOCUMENT_UUID_REGEX)];
-                    matches.forEach(
-                        (match) => (html = html.replace(match[0], match[1])),
-                    );
+                // Get html
+                let html = await TextEditor.enrichHTML(
+                    item.system.description?.value ?? '',
+                    {
+                        documents: false,
+                    },
+                );
 
-                    // Store
-                    descriptions[node.id] = html;
-                }),
+                // Replace UUIDs
+                const matches = [...html.matchAll(DOCUMENT_UUID_REGEX)];
+                matches.forEach(
+                    (match) => (html = html.replace(match[0], match[1])),
+                );
+
+                // Store
+                descriptions[node.id] = html;
+            }),
         );
 
         return descriptions;

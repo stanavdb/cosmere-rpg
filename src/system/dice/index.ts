@@ -4,6 +4,7 @@ import { D20Roll, D20RollOptions, D20RollData } from './d20-roll';
 import { DamageRoll, DamageRollOptions, DamageRollData } from './damage-roll';
 import { AdvantageMode } from '../types/roll';
 import { determineConfigurationMode } from '../utils/generic';
+import { RollMode } from './types';
 
 export * from './d20-roll';
 export * from './damage-roll';

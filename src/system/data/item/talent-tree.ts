@@ -69,11 +69,13 @@ export class TalentTreeItemDataModel extends DataModelMixin<
             // Check if the node is a root node
             node.isRoot = !connections.has(node.id);
 
-            if (actor && node.item.type === ItemType.Talent) {
+            // Look up the item for the node
+            const item = fromUuidSync(node.uuid) as CosmereItem | null;
+
+            if (actor && item && item.type === ItemType.Talent) {
                 // Check if the node's item has been obtained
                 node.obtained = actor.items.some(
-                    (item) =>
-                        item.isTalent() && item.system.id === node.item.id,
+                    (item) => item.isTalent() && item.system.id === item.id,
                 );
             } else {
                 node.obtained = null;

@@ -20,9 +20,9 @@ export interface Node {
     type: Node.Type;
 
     /**
-     * Embedded item
+     * The UUID of the item the node refers to
      */
-    item: TalentItem | TalentTreeItem;
+    uuid: string;
 
     /**
      * Connections to other nodes in the tree
