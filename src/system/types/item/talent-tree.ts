@@ -25,25 +25,10 @@ export interface Node {
     uuid: string;
 
     /**
-     * Connections to other nodes in the tree
-     */
-    connections: string[];
-
-    /**
      * Position to render the node in the tree
      */
     position: {
         row: number;
         column: number;
     };
-
-    /**
-     * Derived field indicating if the node is at the root of the tree
-     */
-    isRoot?: boolean;
-
-    /**
-     * Derived field indicating if the node's item has been obtained
-     */
-    obtained?: boolean | null;
 }
