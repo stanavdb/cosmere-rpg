@@ -33,20 +33,6 @@ class NodeRecordCollection extends RecordCollection<TalentTree.Node> {
         // Set the record
         return super.set(id, value);
     }
-
-    public override delete(id: string): boolean {
-        // Remove the record
-        const deleted = super.delete(id);
-
-        // Remove any references to the deleted node
-        if (deleted) {
-            this.forEach((node) => {
-                node.connections = node.connections.filter((c) => c !== id);
-            });
-        }
-
-        return deleted;
-    }
 }
 
 class TalentTreeNodeField extends foundry.data.fields.SchemaField {
@@ -81,24 +67,6 @@ class TalentTreeNodeField extends foundry.data.fields.SchemaField {
                     nullable: false,
                     gmOnly: true,
                 }),
-                connections: new foundry.data.fields.ArrayField(
-                    /**
-                     * DocumentIdField is really just a StringField that validates
-                     * if the value is in the format of a foundry ID.
-                     * It doesn't actually have anything to do with documents.
-                     */
-                    new foundry.data.fields.DocumentIdField({
-                        blank: false,
-                        nullable: false,
-                        gmOnly: true,
-                    }),
-                    {
-                        required: true,
-                        nullable: false,
-                        gmOnly: true,
-                        initial: [],
-                    },
-                ),
                 position: new foundry.data.fields.SchemaField(
                     {
                         row: new foundry.data.fields.NumberField({

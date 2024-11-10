@@ -1,5 +1,5 @@
 import { ItemType } from '@system/types/cosmere';
-import { TalentTree } from '@system/types/item';
+import { Talent, TalentTree } from '@system/types/item';
 import {
     CosmereItem,
     TalentItem,
@@ -195,7 +195,7 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
         const item = (await fromUuid(data.uuid)) as CosmereItem | null;
 
         // Validate item
-        if (!item || !(item.isTalent() || item.isTalentTree())) return;
+        if (!item?.isTalent()) return;
 
         // Get target cell position
         const row = cellEl.data('row') as number;
@@ -242,22 +242,69 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
 
         // If we have a context node, connect the two
         if (this.contextNodes.length > 0) {
-            // TODO: Set requirements correctly
+            // Look up context items
+            const contextItems = (
+                await Promise.all(
+                    this.contextNodes.map(
+                        async (node) =>
+                            (await fromUuid(node.uuid)) as CosmereItem | null,
+                    ),
+                )
+            ).filter((item) => !!item && item.isTalent());
 
-            // Connect nodes
-            await Promise.all(
-                this.contextNodes.map((contextNode) =>
-                    this.item.update({
-                        [`system.nodes.${contextNode.id}.connections`]: [
-                            ...contextNode.connections,
-                            nodeId,
-                        ],
-                    }),
-                ),
+            // Get item talent prerequisites
+            const talentPrerequisites = item.system.prerequisitesArray.filter(
+                (prerequisite) =>
+                    prerequisite.type === Talent.Prerequisite.Type.Talent,
+            );
+
+            // Find an "Any Of" rule
+            let anyOfRule = talentPrerequisites.find(
+                (rule) =>
+                    rule.mode === Talent.Prerequisite.Mode.AnyOf ||
+                    (rule.talents.length === 1 && !rule.mode),
+            );
+
+            // If there isn't one, create it
+            if (!anyOfRule) {
+                anyOfRule = {
+                    id: foundry.utils.randomID(),
+                    type: Talent.Prerequisite.Type.Talent,
+                    mode: Talent.Prerequisite.Mode.AnyOf,
+                    talents: [],
+                };
+
+                // Update the item
+                await item.update(
+                    {
+                        [`system.prerequisites.${anyOfRule.id}`]: anyOfRule,
+                    },
+                    { render: false },
+                );
+            }
+
+            // Add the context items to the rule
+            anyOfRule.talents.push(
+                ...contextItems.map((item) => ({
+                    id: item.system.id,
+                    uuid: item.uuid,
+                    label: item.name,
+                })),
+            );
+
+            // Update the rule
+            await item.update(
+                {
+                    [`system.prerequisites.${anyOfRule.id}`]: anyOfRule,
+                },
+                { diff: false },
             );
 
             // Clear context nodes
             this.clearContextNodes();
+
+            // Render
+            void this.render(true);
         }
 
         // Reset dragging
@@ -339,9 +386,9 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
             this.contextMenu?.hide();
         });
 
-        setTimeout(() => {
+        setTimeout(async () => {
             // Render connections
-            this.renderConnections();
+            await this.renderConnections();
 
             // Bind context menu
             this.contextMenu?.bind(
@@ -381,20 +428,57 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
                             const fromId = $(element).data('from') as string;
                             const toId = $(element).data('to') as string;
 
-                            // Get from node
+                            // Get from nodes
+                            const toNode = this.item.system.nodes.get(toId);
                             const fromNode = this.item.system.nodes.get(fromId);
-                            if (!fromNode) return;
+                            if (!toNode || !fromNode) return;
 
-                            // Remove connection
-                            fromNode.connections = fromNode.connections.filter(
-                                (id) => id !== toId,
+                            // Get items
+                            const fromItem = (await fromUuid(
+                                fromNode.uuid,
+                            )) as CosmereItem | null;
+                            const toItem = (await fromUuid(
+                                toNode.uuid,
+                            )) as CosmereItem | null;
+                            if (!fromItem || !toItem) return;
+                            if (!fromItem.isTalent() || !toItem.isTalent())
+                                return;
+
+                            // Get talent prerequisites
+                            const talentPrerequisites =
+                                toItem.system.prerequisitesArray.filter(
+                                    (prerequisite) =>
+                                        prerequisite.type ===
+                                        Talent.Prerequisite.Type.Talent,
+                                );
+
+                            // Find the prerequisite rule that requires the from node talent
+                            const ruleIndex = talentPrerequisites.findIndex(
+                                (rule) =>
+                                    rule.talents.some(
+                                        (ref) => ref.id === fromItem.system.id,
+                                    ),
                             );
 
-                            // Update
-                            await this.item.update({
-                                [`system.nodes.${fromId}.connections`]:
-                                    fromNode.connections,
-                            });
+                            // Get the rule
+                            const rule = talentPrerequisites[ruleIndex];
+
+                            // Remove the talent from the rule
+                            rule.talents = rule.talents.filter(
+                                (ref) => ref.id !== fromItem.system.id,
+                            );
+
+                            // If the rule is now empty, remove it
+                            if (rule.talents.length === 0) {
+                                await toItem.update({
+                                    [`system.prerequisites.-=${rule.id}`]: null,
+                                });
+                            } else {
+                                await toItem.update({
+                                    [`system.prerequisites.${rule.id}.talents`]:
+                                        rule.talents,
+                                });
+                            }
 
                             // Render
                             void this.render(true);
@@ -539,11 +623,19 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
         return this._contextNodeIds.has(nodeId);
     }
 
-    private renderConnections() {
+    private async renderConnections() {
+        // Get connections
+        const connections = await this.getConnections();
+
+        // Render connections
         this.item.system.nodes
-            .filter((node) => node.connections.length > 0)
+            .filter(
+                (node) =>
+                    connections.has(node.id) &&
+                    connections.get(node.id)!.size > 0,
+            )
             .forEach((node) =>
-                node.connections.forEach((connectionId) => {
+                connections.get(node.id)!.forEach((connectionId) => {
                     // Get connected node
                     const connectedNode =
                         this.item.system.nodes.get(connectionId);
@@ -626,5 +718,82 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
 
         // Append to connections
         connections.append(connection);
+    }
+
+    private async getConnections(): Promise<Map<string, Set<string>>> {
+        // Get the nodes
+        const nodes = this.item.system.nodes;
+
+        // Prepare nodes id map
+        const nodeIdMap = new Map<string, string>(); // Maps item system id to node id
+
+        // Prepare connections
+        const connections = new Map<string, Set<string>>();
+
+        // Process nodes
+        await Promise.all(
+            nodes.map(async (node) => {
+                // Get item
+                const item = (await fromUuid(node.uuid)) as CosmereItem | null;
+                if (!item?.isTalent()) return;
+
+                // Set node id
+                nodeIdMap.set(item.system.id, node.id);
+
+                // Get talent prerequisites
+                const talentPrerequisites =
+                    item.system.prerequisitesArray.filter(
+                        (prerequisite) =>
+                            prerequisite.type ===
+                            Talent.Prerequisite.Type.Talent,
+                    );
+
+                // Process prerequisites
+                await Promise.all(
+                    talentPrerequisites.map(async (rule) => {
+                        // Get required talents
+                        const requiredTalents = (
+                            await Promise.all(
+                                rule.talents.map(
+                                    async (ref) =>
+                                        fromUuid(
+                                            ref.uuid,
+                                        ) as Promise<TalentItem | null>,
+                                ),
+                            )
+                        ).filter((v) => !!v);
+
+                        // Set connections
+                        requiredTalents.forEach((talent) => {
+                            const talentConnections =
+                                connections.get(talent.system.id) ??
+                                connections
+                                    .set(talent.system.id, new Set())
+                                    .get(talent.system.id)!;
+
+                            talentConnections.add(item.system.id);
+                        });
+                    }),
+                );
+            }),
+        );
+
+        // Convert system ids to node ids
+        return new Map(
+            Array.from(connections.entries())
+                .filter(([id]) => nodeIdMap.has(id))
+                .map(([id, nodeItemIds]) => {
+                    // Look up node id
+                    const nodeId = nodeIdMap.get(id)!;
+
+                    // Look up connected node ids
+                    const nodeIds = new Set(
+                        Array.from(nodeItemIds).map((id) => nodeIdMap.get(id)!),
+                    );
+
+                    // Return
+                    return [nodeId, nodeIds] as [string, Set<string>];
+                }),
+        );
     }
 }
