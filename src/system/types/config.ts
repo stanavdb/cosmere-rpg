@@ -294,7 +294,13 @@ export interface CosmereRPGConfig {
     };
 
     damageTypes: Record<DamageType, DamageTypeConfig>;
-
+    unarmedDamageScaling: {
+        strengthRanges: {
+            min: number;
+            max: number;
+            formula: string;
+        }[];
+    };
     cultures: Record<string, CultureConfig>;
     ancestries: Record<string, AncestriesConfig>;
 

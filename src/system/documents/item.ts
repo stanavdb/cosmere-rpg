@@ -968,17 +968,15 @@ export class CosmereItem<
         };
     }
     protected getUnarmedDamageDie(str: number): string {
-        if (str >= 9) {
-            return '2d10';
-        } else if (str >= 7) {
-            return '2d6';
-        } else if (str >= 5) {
-            return '1d8';
-        } else if (str >= 3) {
-            return '1d4';
-        } else {
-            return '1'; // No die roll, just 1 point of impact damage
+        const scaling = CONFIG.COSMERE.unarmedDamageScaling.strengthRanges;
+
+        // Find correct scaling for unarmed damage die based on config range.
+        for (const tier of scaling) {
+            if (str >= tier.min && str <= tier.max) {
+                return tier.formula;
+            }
         }
+        return '1';
     }
 }
 
