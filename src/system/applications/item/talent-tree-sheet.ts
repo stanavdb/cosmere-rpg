@@ -408,6 +408,32 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
         this.contextMenu ??= AppContextMenu.create({
             parent: this,
             items: (element) => [
+                ...($(element).hasClass('slot')
+                    ? [
+                          {
+                              name: 'GENERIC.Button.Edit',
+                              icon: 'fa-solid fa-edit',
+                              callback: async () => {
+                                  // Get id
+                                  const id = $(element).data('id') as string;
+
+                                  // Get node
+                                  const node = this.item.system.nodes.get(id);
+                                  if (!node) return;
+
+                                  // Get item
+                                  const item = (await fromUuid(
+                                      node.uuid,
+                                  )) as CosmereItem | null;
+                                  if (!item) return;
+
+                                  // Edit the item
+                                  item.sheet?.render(true);
+                              },
+                          },
+                      ]
+                    : []),
+
                 {
                     name: 'GENERIC.Button.Remove',
                     icon: 'fa-solid fa-trash',
