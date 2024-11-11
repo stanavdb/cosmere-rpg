@@ -4,6 +4,8 @@ import {
     Attribute,
     ItemConsumeType,
     ActivationType,
+    WeaponId,
+    DamageType,
 } from '@system/types/cosmere';
 import { CosmereActor } from './actor';
 
@@ -348,6 +350,38 @@ export class CosmereItem<
                 game.i18n!.localize('GENERIC.Warning.NoActor'),
             );
             return null;
+        }
+
+        // Check if the item is an unarmed strike
+        if (
+            this.type === ItemType.Weapon &&
+            this.system.id === WeaponId.Unarmed
+        ) {
+            // Retrieve the actor's strength attribute, athletics, and make unarmed formula
+            const strength = actor.system.attributes.str?.value ?? 0;
+            const athletics =
+                Derived.getValue(actor.system.skills.ath?.mod) ?? 0;
+            const unarmedFormula = this.getUnarmedDamageDie(strength);
+
+            // Perform the damage roll using the unarmed formula
+            const roll = await damageRoll({
+                formula: unarmedFormula,
+                damageType: DamageType.Impact,
+                mod: athletics,
+                data: actor.getRollData(),
+            });
+            if (roll && options.chatMessage !== false) {
+                // Get the speaker
+                const speaker =
+                    options.speaker ??
+                    (ChatMessage.getSpeaker({ actor }) as ChatSpeakerData);
+
+                // Create chat message
+                await roll.toMessage({
+                    speaker,
+                });
+            }
+            return roll;
         }
 
         const activatable = this.hasActivation();
@@ -946,6 +980,19 @@ export class CosmereItem<
                 : undefined,
             attribute: attribute?.value,
         };
+    }
+    protected getUnarmedDamageDie(str: number): string {
+        if (str >= 9) {
+            return '2d10';
+        } else if (str >= 7) {
+            return '2d6';
+        } else if (str >= 5) {
+            return '1d8';
+        } else if (str >= 3) {
+            return '1d4';
+        } else {
+            return '1'; // No die roll, just 1 point of impact damage
+        }
     }
 }
 
