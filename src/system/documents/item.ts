@@ -373,6 +373,7 @@ export class CosmereItem<
                 data: actor.getRollData(),
             });
         } else {
+            // Handle non-unarmed strikes
             const activatable = this.hasActivation();
 
             // Get the skill id
@@ -409,6 +410,8 @@ export class CosmereItem<
             const speaker =
                 options.speaker ??
                 (ChatMessage.getSpeaker({ actor }) as ChatSpeakerData);
+
+            // Create chat message
             await roll.toMessage({ speaker });
         }
 
