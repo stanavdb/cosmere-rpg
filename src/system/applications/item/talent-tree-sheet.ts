@@ -197,9 +197,35 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
         // Validate item
         if (!item?.isTalent()) return;
 
+        // Get the item ids for all the nodes in the tree
+        const itemIds = (
+            await Promise.all(
+                this.item.system.nodes.map(async (node) => {
+                    const item = (await fromUuid(
+                        node.uuid,
+                    )) as CosmereItem | null;
+                    return item?.system.id;
+                }),
+            )
+        ).filter((id) => !!id);
+
+        // Ensure the item isn't already present in the tree
+        if (itemIds.includes(item.system.id) && !this.draggingNode) {
+            return ui.notifications.warn(
+                game.i18n!.format('GENERIC.Warning.ItemAlreadyInTree', {
+                    itemId: item.system.id,
+                    name: this.item.name,
+                }),
+            );
+        }
+
         // Get target cell position
         const row = cellEl.data('row') as number;
         const column = cellEl.data('column') as number;
+
+        // Ensure position is valid
+        if (row < 0 || row >= this.item.system.height) return;
+        if (column < 0 || column >= this.item.system.width) return;
 
         // Check if we should create a new node
         const shouldCreateNode =
