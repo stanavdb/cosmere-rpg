@@ -352,6 +352,8 @@ export class CosmereItem<
             return null;
         }
 
+        let roll: DamageRoll | null = null;
+
         // Check if the item is an unarmed strike
         if (
             this.type === ItemType.Weapon &&
@@ -364,69 +366,50 @@ export class CosmereItem<
             const unarmedFormula = this.getUnarmedDamageDie(strength);
 
             // Perform the damage roll using the unarmed formula
-            const roll = await damageRoll({
+            roll = await damageRoll({
                 formula: unarmedFormula,
                 damageType: DamageType.Impact,
                 mod: athletics,
                 data: actor.getRollData(),
             });
-            if (roll && options.chatMessage !== false) {
-                // Get the speaker
-                const speaker =
-                    options.speaker ??
-                    (ChatMessage.getSpeaker({ actor }) as ChatSpeakerData);
+        } else {
+            const activatable = this.hasActivation();
 
-                // Create chat message
-                await roll.toMessage({
-                    speaker,
-                });
-            }
-            return roll;
+            // Get the skill id
+            const skillId =
+                options.skill ??
+                (activatable ? this.system.activation.skill : undefined);
+
+            // Get the attribute id
+            const attributeId =
+                options.attribute ??
+                (activatable ? this.system.activation.attribute : undefined) ??
+                (skillId ? actor.system.skills[skillId]?.attribute : undefined);
+
+            // Set up data
+            const rollData: DamageRollData = this.getDamageRollData(
+                skillId,
+                attributeId,
+                actor,
+            );
+
+            // Perform the roll
+            roll = await damageRoll(
+                foundry.utils.mergeObject(options, {
+                    formula: this.system.damage.formula,
+                    damageType: this.system.damage.type,
+                    mod: rollData.mod,
+                    data: rollData,
+                }),
+            );
         }
 
-        const activatable = this.hasActivation();
-
-        // Get the skill id
-        const skillId =
-            options.skill ??
-            (activatable ? this.system.activation.skill : undefined);
-
-        // Get the skill
-        const skill = skillId ? actor.system.skills[skillId] : undefined;
-
-        // Get the attribute id
-        const attributeId =
-            options.attribute ??
-            (activatable ? this.system.activation.attribute : undefined) ??
-            (skill ? skill.attribute : undefined);
-
-        // Set up data
-        const rollData: DamageRollData = this.getDamageRollData(
-            skillId,
-            attributeId,
-            actor,
-        );
-
-        // Perform the roll
-        const roll = await damageRoll(
-            foundry.utils.mergeObject(options, {
-                formula: this.system.damage.formula,
-                damageType: this.system.damage.type,
-                mod: rollData.mod,
-                data: rollData,
-            }),
-        );
-
+        // Send to chat if there was a roll and chatMessage option is not set to false
         if (roll && options.chatMessage !== false) {
-            // Get the speaker
             const speaker =
                 options.speaker ??
                 (ChatMessage.getSpeaker({ actor }) as ChatSpeakerData);
-
-            // Create chat message
-            await roll.toMessage({
-                speaker,
-            });
+            await roll.toMessage({ speaker });
         }
 
         // Return the roll
