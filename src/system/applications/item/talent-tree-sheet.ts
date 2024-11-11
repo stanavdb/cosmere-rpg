@@ -333,6 +333,11 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
             void this.render(true);
         }
 
+        // Bind to item if it's a new node
+        if (!this.draggingNode) {
+            item.apps[this.id] = this;
+        }
+
         // Reset dragging
         this.dragging = false;
         this.draggingNode = undefined;
@@ -429,6 +434,17 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
         options: AnyObject,
     ) {
         await super._preFirstRender(context, options);
+
+        // Bind to items
+        await Promise.all(
+            this.item.system.nodes.map(async (node) => {
+                // Get item
+                const item = (await fromUuid(node.uuid)) as CosmereItem | null;
+                if (!item) return;
+
+                item.apps[this.id] = this;
+            }),
+        );
 
         // Create context menu
         this.contextMenu ??= AppContextMenu.create({
@@ -551,6 +567,21 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
 
         // Update context menu
         this.contextMenu?.setActive(this.isEditMode);
+    }
+
+    protected override _onClose(options?: AnyObject) {
+        super._onClose(options);
+
+        // Unbind from items
+        this.item.system.nodes.forEach(async (node) => {
+            const item = (await fromUuid(node.uuid)) as CosmereItem | null;
+            if (!item) return;
+
+            delete item.apps[this.id];
+        });
+
+        // Destroy context menu
+        this.contextMenu?.destroy();
     }
 
     /* --- Context --- */
