@@ -4,6 +4,8 @@ import {
     Attribute,
     ItemConsumeType,
     ActivationType,
+    WeaponId,
+    DamageType,
 } from '@system/types/cosmere';
 import { CosmereActor } from './actor';
 
@@ -350,49 +352,67 @@ export class CosmereItem<
             return null;
         }
 
-        const activatable = this.hasActivation();
+        let roll: DamageRoll | null = null;
 
-        // Get the skill id
-        const skillId =
-            options.skill ??
-            (activatable ? this.system.activation.skill : undefined);
+        // Check if the item is an unarmed strike
+        if (
+            this.type === ItemType.Weapon &&
+            this.system.id === WeaponId.Unarmed
+        ) {
+            // Retrieve the actor's strength attribute, athletics, and make unarmed formula
+            const strength = actor.system.attributes.str?.value ?? 0;
+            const athletics =
+                Derived.getValue(actor.system.skills.ath?.mod) ?? 0;
+            const unarmedFormula = this.getUnarmedDamageDie(strength);
 
-        // Get the skill
-        const skill = skillId ? actor.system.skills[skillId] : undefined;
+            // Perform the damage roll using the unarmed formula
+            roll = await damageRoll({
+                formula: unarmedFormula,
+                damageType: DamageType.Impact,
+                mod: athletics,
+                data: actor.getRollData(),
+            });
+        } else {
+            // Handle non-unarmed strikes
+            const activatable = this.hasActivation();
 
-        // Get the attribute id
-        const attributeId =
-            options.attribute ??
-            (activatable ? this.system.activation.attribute : undefined) ??
-            (skill ? skill.attribute : undefined);
+            // Get the skill id
+            const skillId =
+                options.skill ??
+                (activatable ? this.system.activation.skill : undefined);
 
-        // Set up data
-        const rollData: DamageRollData = this.getDamageRollData(
-            skillId,
-            attributeId,
-            actor,
-        );
+            // Get the attribute id
+            const attributeId =
+                options.attribute ??
+                (activatable ? this.system.activation.attribute : undefined) ??
+                (skillId ? actor.system.skills[skillId]?.attribute : undefined);
 
-        // Perform the roll
-        const roll = await damageRoll(
-            foundry.utils.mergeObject(options, {
-                formula: this.system.damage.formula,
-                damageType: this.system.damage.type,
-                mod: rollData.mod,
-                data: rollData,
-            }),
-        );
+            // Set up data
+            const rollData: DamageRollData = this.getDamageRollData(
+                skillId,
+                attributeId,
+                actor,
+            );
 
+            // Perform the roll
+            roll = await damageRoll(
+                foundry.utils.mergeObject(options, {
+                    formula: this.system.damage.formula,
+                    damageType: this.system.damage.type,
+                    mod: rollData.mod,
+                    data: rollData,
+                }),
+            );
+        }
+
+        // Send to chat if there was a roll and chatMessage option is not set to false
         if (roll && options.chatMessage !== false) {
-            // Get the speaker
             const speaker =
                 options.speaker ??
                 (ChatMessage.getSpeaker({ actor }) as ChatSpeakerData);
 
             // Create chat message
-            await roll.toMessage({
-                speaker,
-            });
+            await roll.toMessage({ speaker });
         }
 
         // Return the roll
@@ -946,6 +966,17 @@ export class CosmereItem<
                 : undefined,
             attribute: attribute?.value,
         };
+    }
+    protected getUnarmedDamageDie(str: number): string {
+        const scaling = CONFIG.COSMERE.unarmedDamageScaling.strengthRanges;
+
+        // Find correct scaling for unarmed damage die based on config range.
+        for (const tier of scaling) {
+            if (str >= tier.min && str <= tier.max) {
+                return tier.formula;
+            }
+        }
+        return '1';
     }
 }
 
