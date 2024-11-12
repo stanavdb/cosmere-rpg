@@ -584,7 +584,7 @@
                     "GrazeShow": "Show New Graze Damage Formula",
                     "GrazeHide": "Hide New Graze Damage Forumla",
                     "GrazeFormula": "New Formula",
-                    "GrazeHint": "Formula entered here will be the entirety of the calculation for graze damage. Any die rolls will be rolled separately from the main damage roll. You can access the value of the main roll using @baseRoll or the selected attribute mod with @mod"
+                    "GrazeHint": "Formula entered here will be the entirety of the calculation for graze damage. Any die rolls will be rolled separately from the main damage roll. You can pull in all or part of the main roll using @damage.total/@damage.unmodded/@damage.dice (the latter being the system default) or the selected attribute mod with @mod"
                 },
                 "Modality": {
                     "Title": "Modality",
