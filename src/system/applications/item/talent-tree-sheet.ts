@@ -1,4 +1,3 @@
-import { ItemType } from '@system/types/cosmere';
 import { Talent, TalentTree } from '@system/types/item';
 import {
     CosmereItem,
@@ -15,6 +14,10 @@ import { AppContextMenu } from '@system/applications/utils/context-menu';
 import { ComponentHandlebarsApplicationMixin } from '@system/applications/component-system';
 import { DragDropApplicationMixin, EditModeApplicationMixin } from '../mixins';
 
+// Dialogs
+import { ConfigureTalentTreeDialog } from '@system/applications/item/dialogs/talent-tree/configure-talent-tree';
+import { heading } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/prosemirror/schema/core.mjs';
+
 const { ItemSheetV2 } = foundry.applications.sheets;
 
 // Constants
@@ -27,12 +30,21 @@ const DOCUMENT_UUID_REGEX = /@UUID\[.+\]\{(.*)\}/g;
 export class TalentTreeItemSheet extends EditModeApplicationMixin(
     DragDropApplicationMixin(ComponentHandlebarsApplicationMixin(ItemSheetV2)),
 )<AnyObject> {
+    /**
+     * NOTE: Unbound methods is the standard for defining actions and forms
+     * within ApplicationV2
+     */
+    /* eslint-disable @typescript-eslint/unbound-method */
     static DEFAULT_OPTIONS = foundry.utils.mergeObject(
         foundry.utils.deepClone(super.DEFAULT_OPTIONS),
         {
             classes: [SYSTEM_ID, 'sheet', 'item', 'talent-tree'],
             window: {
                 positioned: true,
+                resizable: false,
+            },
+            actions: {
+                configure: this.onConfigure,
             },
             dragDrop: [
                 {
@@ -45,6 +57,7 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
             ],
         },
     );
+    /* eslint-enable @typescript-eslint/unbound-method */
 
     static PARTS = foundry.utils.mergeObject(
         foundry.utils.deepClone(super.PARTS),
@@ -72,13 +85,7 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
                 window: {
                     title: tree.name,
                 },
-                position: {
-                    width: tree.system.width * COLUMN_WIDTH + PADDING * 2,
-                    height:
-                        tree.system.height * ROW_HEIGHT +
-                        HEADER_HEIGHT +
-                        PADDING * 2,
-                },
+                position: calculatePosition(tree),
             }),
         );
     }
@@ -112,6 +119,24 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
 
     private get draggingNode(): TalentTree.Node | undefined {
         return this.item.system.nodes.get(this._draggingNodeId!);
+    }
+
+    /* --- Actions --- */
+
+    private static async onConfigure(this: TalentTreeItemSheet) {
+        if (await ConfigureTalentTreeDialog.show(this.item)) {
+            // Update position
+            foundry.utils.mergeObject(
+                this.position,
+                calculatePosition(this.item),
+            );
+
+            // Close and re-open
+            await this.close();
+
+            // Re-render
+            void this.render(true);
+        }
     }
 
     /* --- Drag Drop --- */
@@ -344,6 +369,22 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
     }
 
     /* --- Lifecycle --- */
+
+    protected _getHeaderControls(): foundry.applications.api.ApplicationV2.HeaderControlsEntry[] {
+        const controls = super._getHeaderControls();
+
+        if (!controls.some((control) => control.action === 'configure')) {
+            // Add edit button
+            controls.unshift({
+                action: 'configure',
+                label: 'GENERIC.Configure',
+                icon: 'fa-solid fa-edit',
+                ownership: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER,
+            });
+        }
+
+        return controls;
+    }
 
     protected override async _renderFrame(
         options: AnyObject,
@@ -879,4 +920,11 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
                 }),
         );
     }
+}
+
+function calculatePosition(tree: TalentTreeItem) {
+    return {
+        width: tree.system.width * COLUMN_WIDTH + PADDING * 2,
+        height: tree.system.height * ROW_HEIGHT + HEADER_HEIGHT + PADDING * 2,
+    };
 }

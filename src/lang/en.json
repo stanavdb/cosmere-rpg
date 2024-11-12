@@ -512,6 +512,14 @@
                     "Hint": "Identifier of the power this talent belongs to."
                 }
             },
+            "TalentTree": {
+                "Width": {
+                    "Label": "Width"
+                },
+                "Height": {
+                    "Label": "Height"
+                }
+            },
             "Activation": {
                 "Type": {
                     "Action": "Action",
@@ -940,6 +948,12 @@
         },
         "ReleaseNotes": {
             "Title": "Cosmere Roleplaying Game - Release Notes {version}"
+        },
+        "ConfigureTalentTree": {
+            "Title": "Configure Talent Tree: {name}",
+            "Warning": {
+                "OutOfBounds": "The selected bounds would place at least one talent outside the tree."
+            }
         }
     },
     "COMPONENT": {

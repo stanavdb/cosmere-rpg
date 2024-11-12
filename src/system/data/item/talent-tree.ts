@@ -40,12 +40,18 @@ export class TalentTreeItemDataModel extends DataModelMixin<
                 nullable: false,
                 gmOnly: true,
                 initial: 7,
+                min: 3,
+                integer: true,
+                label: 'COSMERE.Item.TalentTree.Width.Label',
             }),
             height: new foundry.data.fields.NumberField({
                 required: true,
                 nullable: false,
                 gmOnly: true,
                 initial: 7,
+                min: 3,
+                integer: true,
+                label: 'COSMERE.Item.TalentTree.Height.Label',
             }),
         });
     }
