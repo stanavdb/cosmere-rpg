@@ -121,13 +121,9 @@ export class DamageRoll extends foundry.dice.Roll<DamageRollData> {
     }
 
     public filterTermsSafely(
-        condition: (
-            value: RollTerm,
-            index: number,
-            obj: RollTerm[],
-        ) => Boolean,
+        condition: (value: RollTerm, index: number, obj: RollTerm[]) => boolean,
     ) {
-        this.terms = this.termd.filter(condition);
+        this.terms = this.terms.filter(condition);
         this.cleanUpTerms();
     }
 

@@ -382,9 +382,8 @@ export class CosmereItem<
                 source: this.name,
             }),
         );
-        // We want to store the unmodded damage for use in graze calcs
-        // This isn't a particularly perfect solution, but it's functional
-        // only undoing the automatic addition of the selected attribute
+
+        // Gather the formula options for graze rolls
         const unmoddedRoll = roll.clone();
         const diceOnlyRoll = roll.clone();
         rollData.damage = {
@@ -392,20 +391,18 @@ export class CosmereItem<
             unmodded: unmoddedRoll,
             dice: diceOnlyRoll,
         };
-
         unmoddedRoll.removeTermSafely(
             (term) =>
                 term instanceof foundry.dice.terms.NumericTerm &&
                 term.total === rollData.mod,
         );
-        await unmoddedRoll.evaluate();
-        unmoddedRoll.replaceDieResults(roll.dice);
+        diceOnlyRoll.filterTermsSafely(
+            (term) =>
+                term instanceof foundry.dice.terms.DiceTerm ||
+                term instanceof foundry.dice.terms.OperatorTerm,
+        );
 
-        diceOnlyRoll.filterTermsSafely((term) => term instanceof foundry.dice.terms.DiceTerm || term instanceof foundry.dice.terms.OperatorTerm);
-        await diceOnlyRoll.evaluate();
-        diceRollOnly.replaceDieResults(roll.dice);
-
-        // Roll the dice pool for graze damage silently if set.
+        // Make the graze pool and roll it
         const grazeFormula =
             // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
             this.system.damage.grazeOverrideFormula || '@damage.dice';
@@ -417,6 +414,7 @@ export class CosmereItem<
                 data: rollData,
             }),
         );
+        // update with results from the basic roll if needed and store for display
         if (usesBaseDamage) grazeRoll.replaceDieResults(roll.dice);
         if (!grazeRoll) return null;
         roll.graze = grazeRoll;
