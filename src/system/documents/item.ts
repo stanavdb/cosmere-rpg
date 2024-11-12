@@ -401,7 +401,7 @@ export class CosmereItem<
         await unmoddedRoll.evaluate();
         unmoddedRoll.replaceDieResults(roll.dice);
 
-        diceOnlyRoll.removeManyTermsSafely((term) => term !instanceof foundry.dice.terms.DiceTerm);
+        diceOnlyRoll.filterTermsSafely((term) => term instanceof foundry.dice.terms.DiceTerm || term instanceof foundry.dice.terms.OperatorTerm);
         await diceOnlyRoll.evaluate();
         diceRollOnly.replaceDieResults(roll.dice);
 
