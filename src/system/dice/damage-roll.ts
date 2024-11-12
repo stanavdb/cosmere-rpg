@@ -19,7 +19,7 @@ export type DamageRollData<
     damage?: {
         total: DamageRoll;
         unmodded: DamageRoll;
-        dice: foundry.dice.terms.DiceTerm[];
+        dice: DamageRoll;
     };
 };
 
@@ -117,7 +117,7 @@ export class DamageRoll extends foundry.dice.Roll<DamageRollData> {
         ) => boolean,
     ) {
         this.terms.findSplice(conditional);
-        if (
+        while (
             this.terms[this.terms.length - 1] instanceof
             foundry.dice.terms.OperatorTerm
         )
