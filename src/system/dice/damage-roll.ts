@@ -117,12 +117,18 @@ export class DamageRoll extends foundry.dice.Roll<DamageRollData> {
         ) => boolean,
     ) {
         this.terms.findSplice(conditional);
-        while (
-            this.terms[this.terms.length - 1] instanceof
-            foundry.dice.terms.OperatorTerm
-        )
-            this.terms.pop();
-        this.resetFormula();
+        this.cleanUpTerms();
+    }
+
+    public filterTermsSafely(
+        condition: (
+            value: RollTerm,
+            index: number,
+            obj: RollTerm[],
+        ) => Boolean,
+    ) {
+        this.terms = this.termd.filter(condition);
+        this.cleanUpTerms();
     }
 
     public replaceDieResults(sourceDicePool: foundry.dice.terms.DiceTerm[]) {
@@ -141,6 +147,15 @@ export class DamageRoll extends foundry.dice.Roll<DamageRollData> {
     }
 
     /* --- Internal Functions --- */
+
+    private cleanUpTerms() {
+        while (
+            this.terms[this.terms.length - 1] instanceof
+            foundry.dice.terms.OperatorTerm
+        )
+            this.terms.pop();
+        this.resetFormula();
+    }
 
     private configureModifiers() {
         // Find the first die term
