@@ -386,10 +386,11 @@ export class CosmereItem<
         // This isn't a particularly perfect solution, but it's functional
         // only undoing the automatic addition of the selected attribute
         const unmoddedRoll = roll.clone();
+        const diceOnlyRoll = roll.clone();
         rollData.damage = {
             total: roll,
             unmodded: unmoddedRoll,
-            dice: roll.dice,
+            dice: diceOnlyRoll,
         };
 
         unmoddedRoll.removeTermSafely(
@@ -400,10 +401,14 @@ export class CosmereItem<
         await unmoddedRoll.evaluate();
         unmoddedRoll.replaceDieResults(roll.dice);
 
+        diceOnlyRoll.removeManyTermsSafely((term) => term !instanceof foundry.dice.terms.DiceTerm);
+        await diceOnlyRoll.evaluate();
+        diceRollOnly.replaceDieResults(roll.dice);
+
         // Roll the dice pool for graze damage silently if set.
         const grazeFormula =
             // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-            this.system.damage.grazeOverrideFormula || '@damage.unmodded';
+            this.system.damage.grazeOverrideFormula || '@damage.dice';
         const usesBaseDamage = grazeFormula.includes('@damage');
         const grazeRoll = await damageRoll(
             foundry.utils.mergeObject(options, {
