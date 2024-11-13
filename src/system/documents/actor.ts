@@ -768,7 +768,9 @@ export class CosmereActor<
     public async useItem(
         item: CosmereItem,
         options?: Omit<CosmereItem.UseOptions, 'actor'>,
-    ): Promise<D20Roll | [D20Roll, DamageRoll] | null> {
+    ): Promise<D20Roll | [D20Roll, ...DamageRoll[]] | null> {
+        // Checks for relevant Active Effects triggers/manual toggles will go here
+        // E.g. permanent/conditional: attack bonuses, damage riders, auto opportunity/complications, etc.
         return item.use({ ...options, actor: this });
     }
 
