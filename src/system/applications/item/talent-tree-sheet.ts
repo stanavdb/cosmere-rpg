@@ -281,192 +281,201 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
 
         event.stopImmediatePropagation();
 
-        // Hide context menu
-        this.contextMenu?.hide();
+        try {
+            // Hide context menu
+            this.contextMenu?.hide();
 
-        // Get element
-        const slotEl = $(event.target!).closest('.slot');
+            // Get element
+            const slotEl = $(event.target!).closest('.slot');
 
-        // Ensure cell element was found
-        if (!slotEl.length) return;
+            // Ensure cell element was found
+            if (!slotEl.length) return;
 
-        // Remove dragover class
-        slotEl.removeClass('dragover');
+            // Remove dragover class
+            slotEl.removeClass('dragover');
 
-        // Get cell element
-        const cellEl = slotEl.closest('.cell');
+            // Get cell element
+            const cellEl = slotEl.closest('.cell');
 
-        const data = TextEditor.getDragEventData(event) as unknown as {
-            type: string;
-            uuid: string;
-        };
+            const data = TextEditor.getDragEventData(event) as unknown as {
+                type: string;
+                uuid: string;
+            };
 
-        // Ensure type is correct
-        if (data.type !== 'Item') return;
+            // Ensure type is correct
+            if (data.type !== 'Item') return;
 
-        // Get the item
-        const item = (await fromUuid(data.uuid)) as CosmereItem | null;
+            // Get the item
+            const item = (await fromUuid(data.uuid)) as CosmereItem | null;
 
-        // Validate item
-        if (!item?.isTalent()) return;
+            // Validate item
+            if (!item?.isTalent()) return;
 
-        // Get the item ids for all the nodes in the tree
-        const itemIds = (
-            await Promise.all(
-                this.item.system.nodes.map(async (node) => {
-                    const item = (await fromUuid(
-                        node.uuid,
-                    )) as CosmereItem | null;
-                    return item?.system.id;
-                }),
-            )
-        ).filter((id) => !!id);
+            // Get the item ids for all the nodes in the tree
+            const itemIds = (
+                await Promise.all(
+                    this.item.system.nodes.map(async (node) => {
+                        const item = (await fromUuid(
+                            node.uuid,
+                        )) as CosmereItem | null;
+                        return item?.system.id;
+                    }),
+                )
+            ).filter((id) => !!id);
 
-        // Ensure the item isn't already present in the tree
-        if (itemIds.includes(item.system.id) && !this.draggingNode) {
-            return ui.notifications.warn(
-                game.i18n!.format('GENERIC.Warning.ItemAlreadyInTree', {
-                    itemId: item.system.id,
-                    name: this.item.name,
-                }),
-            );
-        }
+            // Ensure the item isn't already present in the tree
+            if (itemIds.includes(item.system.id) && !this.draggingNode) {
+                return ui.notifications.warn(
+                    game.i18n!.format('GENERIC.Warning.ItemAlreadyInTree', {
+                        itemId: item.system.id,
+                        name: this.item.name,
+                    }),
+                );
+            }
 
-        // Get target cell position
-        const row = cellEl.data('row') as number;
-        const column = cellEl.data('column') as number;
+            // Get target cell position
+            const row = cellEl.data('row') as number;
+            const column = cellEl.data('column') as number;
 
-        // Ensure position is valid
-        if (row < 0 || row >= this.item.system.height) return;
-        if (column < 0 || column >= this.item.system.width) return;
+            // Ensure position is valid
+            if (row < 0 || row >= this.item.system.height) return;
+            if (column < 0 || column >= this.item.system.width) return;
 
-        // Check if we should create a new node
-        const shouldCreateNode =
-            !event.dataTransfer!.types.includes('source/node');
+            // Check if we should create a new node
+            const shouldCreateNode =
+                !event.dataTransfer!.types.includes('source/node');
 
-        // Get node id (create new one if this isn't an existing node)
-        const nodeId =
-            event.dataTransfer!.getData('source/talent-tree') ===
-                this.item.id &&
-            event.dataTransfer!.types.includes('source/node')
-                ? event.dataTransfer!.getData('source/node')
-                : foundry.utils.randomID();
+            // Get node id (create new one if this isn't an existing node)
+            const nodeId =
+                event.dataTransfer!.getData('source/talent-tree') ===
+                    this.item.id &&
+                event.dataTransfer!.types.includes('source/node')
+                    ? event.dataTransfer!.getData('source/node')
+                    : foundry.utils.randomID();
 
-        if (shouldCreateNode) {
-            // Create new node
-            await this.item.update(
-                {
-                    [`system.nodes.${nodeId}`]: {
-                        id: nodeId,
-                        type: TalentTree.Node.Type.Icon,
-                        uuid: data.uuid,
-                        connections: [],
-                        position: {
+            if (shouldCreateNode) {
+                // Create new node
+                await this.item.update(
+                    {
+                        [`system.nodes.${nodeId}`]: {
+                            id: nodeId,
+                            type: TalentTree.Node.Type.Icon,
+                            uuid: data.uuid,
+                            connections: [],
+                            position: {
+                                row,
+                                column,
+                            },
+                        },
+                    },
+                    { render: false },
+                );
+            } else {
+                // Update node position
+                await this.item.update(
+                    {
+                        [`system.nodes.${nodeId}.position`]: {
                             row,
                             column,
                         },
-                    },
-                },
-                { render: this.contextNodes.length === 0 },
-            );
-        } else {
-            // Update node position
-            await this.item.update({
-                [`system.nodes.${nodeId}.position`]: {
-                    row,
-                    column,
-                },
-            });
-        }
-
-        // Check if user can modify the item
-        const hasPermission = item.testUserPermission(
-            game.user as unknown as foundry.documents.BaseUser,
-            CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER,
-        );
-
-        // Check if the item isn't part of a locked compendium
-        const inLockedCompendium = item.compendium?.locked ?? false;
-
-        // If we have a context node, connect the two
-        if (
-            hasPermission &&
-            !inLockedCompendium &&
-            this.contextNodes.length > 0
-        ) {
-            // Look up context items
-            const contextItems = (
-                await Promise.all(
-                    this.contextNodes.map(
-                        async (node) =>
-                            (await fromUuid(node.uuid)) as CosmereItem | null,
-                    ),
-                )
-            ).filter((item) => !!item && item.isTalent());
-
-            // Get item talent prerequisites
-            const talentPrerequisites = item.system.prerequisitesArray.filter(
-                (prerequisite) =>
-                    prerequisite.type === Talent.Prerequisite.Type.Talent,
-            );
-
-            // Find an "Any Of" rule
-            let anyOfRule = talentPrerequisites.find(
-                (rule) =>
-                    rule.mode === Talent.Prerequisite.Mode.AnyOf ||
-                    (rule.talents.length === 1 && !rule.mode),
-            );
-
-            // If there isn't one, create it
-            if (!anyOfRule) {
-                anyOfRule = {
-                    id: foundry.utils.randomID(),
-                    type: Talent.Prerequisite.Type.Talent,
-                    mode: Talent.Prerequisite.Mode.AnyOf,
-                    talents: [],
-                };
-
-                // Update the item
-                await item.update(
-                    {
-                        [`system.prerequisites.${anyOfRule.id}`]: anyOfRule,
                     },
                     { render: false },
                 );
             }
 
-            // Add the context items to the rule
-            anyOfRule.talents.push(
-                ...contextItems.map((item) => ({
-                    id: item.system.id,
-                    uuid: item.uuid,
-                    label: item.name,
-                })),
+            // Check if user can modify the item
+            const hasPermission = item.testUserPermission(
+                game.user as unknown as foundry.documents.BaseUser,
+                CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER,
             );
 
-            // Update the rule
-            await item.update(
-                {
-                    [`system.prerequisites.${anyOfRule.id}`]: anyOfRule,
-                },
-                { diff: false },
-            );
+            // Check if the item isn't part of a locked compendium
+            const inLockedCompendium = item.compendium?.locked ?? false;
 
-            // Clear context nodes
-            this.clearContextNodes();
+            // If we have a context node, connect the two
+            if (
+                hasPermission &&
+                !inLockedCompendium &&
+                this.contextNodes.length > 0
+            ) {
+                // Look up context items
+                const contextItems = (
+                    await Promise.all(
+                        this.contextNodes.map(
+                            async (node) =>
+                                (await fromUuid(
+                                    node.uuid,
+                                )) as CosmereItem | null,
+                        ),
+                    )
+                ).filter((item) => !!item && item.isTalent());
+
+                // Get item talent prerequisites
+                const talentPrerequisites =
+                    item.system.prerequisitesArray.filter(
+                        (prerequisite) =>
+                            prerequisite.type ===
+                            Talent.Prerequisite.Type.Talent,
+                    );
+
+                // Find an "Any Of" rule
+                let anyOfRule = talentPrerequisites.find(
+                    (rule) =>
+                        rule.mode === Talent.Prerequisite.Mode.AnyOf ||
+                        (rule.talents.length === 1 && !rule.mode),
+                );
+
+                // If there isn't one, create it
+                if (!anyOfRule) {
+                    anyOfRule = {
+                        id: foundry.utils.randomID(),
+                        type: Talent.Prerequisite.Type.Talent,
+                        mode: Talent.Prerequisite.Mode.AnyOf,
+                        talents: [],
+                    };
+
+                    // Update the item
+                    await item.update(
+                        {
+                            [`system.prerequisites.${anyOfRule.id}`]: anyOfRule,
+                        },
+                        { render: false },
+                    );
+                }
+
+                // Add the context items to the rule
+                anyOfRule.talents.push(
+                    ...contextItems.map((item) => ({
+                        id: item.system.id,
+                        uuid: item.uuid,
+                        label: item.name,
+                    })),
+                );
+
+                // Update the rule
+                await item.update(
+                    {
+                        [`system.prerequisites.${anyOfRule.id}`]: anyOfRule,
+                    },
+                    { diff: false },
+                );
+
+                // Clear context nodes
+                this.clearContextNodes();
+            }
+
+            // Bind to item if it's a new node
+            if (!this.draggingNode) {
+                item.apps[this.id] = this;
+            }
+        } finally {
+            // Reset dragging
+            this.dragging = false;
+            this.draggingNode = undefined;
 
             // Render
             void this.render(true);
         }
-
-        // Bind to item if it's a new node
-        if (!this.draggingNode) {
-            item.apps[this.id] = this;
-        }
-
-        // Reset dragging
-        this.dragging = false;
-        this.draggingNode = undefined;
     }
 
     /* --- Lifecycle --- */
