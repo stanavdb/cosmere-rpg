@@ -4,6 +4,7 @@ import {
     TalentItem,
     TalentTreeItem,
 } from '@system/documents/item';
+import { CosmereActor } from '@system/documents/actor';
 import { AnyObject, DeepPartial, MouseButton } from '@system/types/utils';
 import { SYSTEM_ID } from '@src/system/constants';
 
@@ -16,7 +17,6 @@ import { DragDropApplicationMixin, EditModeApplicationMixin } from '../mixins';
 
 // Dialogs
 import { ConfigureTalentTreeDialog } from '@system/applications/item/dialogs/talent-tree/configure-talent-tree';
-import { heading } from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/prosemirror/schema/core.mjs';
 
 const { ItemSheetV2 } = foundry.applications.sheets;
 
@@ -26,6 +26,12 @@ const COLUMN_WIDTH = 65;
 const HEADER_HEIGHT = 36;
 const PADDING = 10;
 const DOCUMENT_UUID_REGEX = /@UUID\[.+\]\{(.*)\}/g;
+
+interface ExtendedNode extends TalentTree.Node {
+    item: TalentItem;
+    obtained: boolean;
+    available: boolean;
+}
 
 export class TalentTreeItemSheet extends EditModeApplicationMixin(
     DragDropApplicationMixin(ComponentHandlebarsApplicationMixin(ItemSheetV2)),
@@ -45,6 +51,7 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
             },
             actions: {
                 configure: this.onConfigure,
+                'pick-talent': this.onPickTalent,
             },
             dragDrop: [
                 {
@@ -71,9 +78,12 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
 
     private contextMenu?: AppContextMenu;
 
+    private _contextActor?: CosmereActor;
     private _dragging = false;
     private _draggingNodeId?: string;
     private _contextNodeIds = new Set<string>();
+
+    private nodes = new Collection<ExtendedNode>();
 
     constructor(
         options: foundry.applications.api.DocumentSheetV2.Configuration,
@@ -88,6 +98,22 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
                 position: calculatePosition(tree),
             }),
         );
+
+        // Get all characters owned by the current user
+        const characters = (game.actors as CosmereActor[]).filter(
+            (actor) =>
+                actor.isCharacter() &&
+                actor.testUserPermission(
+                    game.user as unknown as foundry.documents.BaseUser,
+                    'OWNER',
+                ),
+        );
+
+        // Get user character
+        const userCharacter = game.user!.character as CosmereActor | undefined;
+
+        if (userCharacter || characters.length === 1)
+            this.contextActor = userCharacter ?? characters[0];
     }
 
     /* --- Accessors --- */
@@ -121,6 +147,29 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
         return this.item.system.nodes.get(this._draggingNodeId!);
     }
 
+    private set contextActor(actor: CosmereActor | undefined) {
+        if (actor !== this._contextActor) {
+            if (this._contextActor) {
+                delete this._contextActor.apps[this.id];
+            }
+        }
+
+        this._contextActor = actor;
+
+        if (actor) {
+            $(this.element).addClass('actor-selected');
+
+            // Register this sheet with the actor
+            actor.apps[this.id] = this;
+        } else {
+            $(this.element).removeClass('actor-selected');
+        }
+    }
+
+    private get contextActor(): CosmereActor | undefined {
+        return this._contextActor;
+    }
+
     /* --- Actions --- */
 
     private static async onConfigure(this: TalentTreeItemSheet) {
@@ -137,6 +186,45 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
             // Re-render
             void this.render(true);
         }
+    }
+
+    private static async onPickTalent(this: TalentTreeItemSheet, event: Event) {
+        event.preventDefault();
+
+        // Get slot element
+        const slotEl = $(event.target!).closest('.slot');
+
+        // Get id
+        const id = slotEl.data('id') as string;
+
+        // Get node
+        const node = this.nodes.get(id);
+        if (!node) return;
+
+        // Ensure node is available
+        if (!node.available) return;
+
+        // Get item
+        const item = node.item;
+
+        // Add item to context actor
+        await this.contextActor!.createEmbeddedDocuments('Item', [
+            item.toObject(),
+        ]);
+
+        // Create notification
+        ui.notifications.info(
+            game.i18n!.format(
+                'DIALOG.ConfigureTalentTree.Notification.TalentPicked',
+                {
+                    talent: item.name,
+                    actor: this.contextActor!.name,
+                },
+            ),
+        );
+
+        // Render
+        void this.render(true);
     }
 
     /* --- Drag Drop --- */
@@ -391,11 +479,65 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
     ): Promise<HTMLElement> {
         const frame = await super._renderFrame(options);
 
-        // Check if item is on an actor
-        const hasActor = !!this.item.actor;
+        // Get all characters owned by the current user
+        const characters = (game.actors as CosmereActor[]).filter(
+            (actor) =>
+                actor.isCharacter() &&
+                actor.testUserPermission(
+                    game.user as unknown as foundry.documents.BaseUser,
+                    'OWNER',
+                ),
+        );
 
-        // Add class
-        if (hasActor) frame.classList.add('owned');
+        // Get user character
+        const userCharacter = game.user!.character as CosmereActor | undefined;
+
+        if (characters.length > 1) {
+            $(this.window.title!).after(`
+                <div class="actor-select">
+                    <label>${game.i18n!.localize('Actor')}</label>
+                    <select>
+                        <option value="none" ${!userCharacter ? 'selected' : ''}>${game.i18n!.localize('GENERIC.None')}</option>
+                        ${characters
+                            .map(
+                                (actor) => `
+                                <option value="${actor.id}" ${userCharacter?.id === actor.id ? 'selected' : ''}>
+                                    ${actor.name}
+                                </option>
+                            `,
+                            )
+                            .join('\n')}
+                    </select>
+                </div>
+            `);
+        }
+
+        // Bind to select
+        $(this.window.title!)
+            .parent()
+            .find('.actor-select select')
+            .on('change', (event) => {
+                // Get selected actor
+                const actorId = $(event.target).val() as string;
+
+                // Get actor
+                const actor =
+                    actorId === 'none'
+                        ? undefined
+                        : (game.actors as Collection<CosmereActor>).get(
+                              actorId,
+                          );
+
+                // Set context actor
+                this.contextActor = actor;
+
+                // Render
+                void this.render(true);
+            });
+
+        if (this.contextActor) {
+            $(frame).addClass('actor-selected');
+        }
 
         return frame;
     }
@@ -613,6 +755,11 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
     protected override _onClose(options?: AnyObject) {
         super._onClose(options);
 
+        // Unbind from context actor
+        if (this.contextActor) {
+            delete this.contextActor.apps[this.id];
+        }
+
         // Unbind from items
         this.item.system.nodes.forEach(async (node) => {
             const item = (await fromUuid(node.uuid)) as CosmereItem | null;
@@ -638,6 +785,9 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
             columns: `${(100 / columns).toFixed(3)}% `.repeat(columns).trim(),
         };
 
+        // Extend node data
+        await this.extendNodeData();
+
         return {
             ...(await super._prepareContext(options)),
             item: this.item,
@@ -646,26 +796,22 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
 
             rows,
             columns,
-            cells: await this.prepareCells(rows, columns),
+            cells: this.prepareCells(rows, columns),
             gridTemplate,
             enrichedDescriptions: await this.prepareNodeDescriptions(),
         };
     }
 
-    private async prepareCells(rows: number, columns: number) {
+    private prepareCells(rows: number, columns: number) {
         const cells = new Array(rows)
             .fill(null)
-            .map(() => new Array(columns).fill(null)) as (AnyObject | null)[][];
+            .map(() =>
+                new Array(columns).fill(null),
+            ) as (ExtendedNode | null)[][];
 
-        await Promise.all(
-            this.item.system.nodes.map(async (node) => {
-                const nodeData = foundry.utils.deepClone(node);
-                cells[node.position.row][node.position.column] = {
-                    ...nodeData,
-                    item: await fromUuid(node.uuid),
-                };
-            }),
-        );
+        this.nodes.forEach((node) => {
+            cells[node.position.row][node.position.column] = node;
+        });
 
         return cells;
     }
@@ -752,7 +898,7 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
         const connections = await this.getConnections();
 
         // Render connections
-        this.item.system.nodes
+        this.nodes
             .filter(
                 (node) =>
                     connections.has(node.id) &&
@@ -761,8 +907,7 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
             .forEach((node) =>
                 connections.get(node.id)!.forEach((connectionId) => {
                     // Get connected node
-                    const connectedNode =
-                        this.item.system.nodes.get(connectionId);
+                    const connectedNode = this.nodes.get(connectionId);
                     if (!connectedNode) return;
 
                     this.renderConnection(node, connectedNode);
@@ -770,10 +915,7 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
             );
     }
 
-    private renderConnection(
-        fromNode: TalentTree.Node,
-        toNode: TalentTree.Node,
-    ) {
+    private renderConnection(fromNode: ExtendedNode, toNode: ExtendedNode) {
         // Get container element
         const container = $(this.element).find('.container');
 
@@ -840,13 +982,23 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
         // Set angle
         connection.css('transform', `rotate(${angle}rad)`);
 
+        // Add available class
+        if (fromNode.obtained && toNode.available) {
+            connection.addClass('available');
+        }
+
+        // Add obtained class
+        if (fromNode.obtained && toNode.obtained) {
+            connection.addClass('obtained');
+        }
+
         // Append to connections
         connections.append(connection);
     }
 
     private async getConnections(): Promise<Map<string, Set<string>>> {
         // Get the nodes
-        const nodes = this.item.system.nodes;
+        const nodes = this.nodes;
 
         // Prepare nodes id map
         const nodeIdMap = new Map<string, string>(); // Maps item system id to node id
@@ -918,6 +1070,43 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
                     // Return
                     return [nodeId, nodeIds] as [string, Set<string>];
                 }),
+        );
+    }
+
+    private async extendNodeData(): Promise<void> {
+        this.nodes = new Collection(
+            (
+                await Promise.all(
+                    this.item.system.nodes.map(async (node) => {
+                        // Get item
+                        const item = (await fromUuid(
+                            node.uuid,
+                        )) as TalentItem | null;
+                        if (!item) return null;
+
+                        // Check if the context actor has the talent
+                        const obtained =
+                            this.contextActor?.hasTalent(item.system.id) ??
+                            false;
+
+                        // Check if the context actor can obtain the talent
+                        const available =
+                            !obtained &&
+                            (this.contextActor?.hasTalentPrerequisites(item) ??
+                                false);
+
+                        return [
+                            node.id,
+                            {
+                                ...node,
+                                item,
+                                obtained,
+                                available,
+                            },
+                        ] as [string, ExtendedNode];
+                    }),
+                )
+            ).filter((v) => !!v),
         );
     }
 }

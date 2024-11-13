@@ -167,6 +167,10 @@ export class CosmereActor<
         return this.items.filter((i) => i.isPower());
     }
 
+    public get talents(): TalentItem[] {
+        return this.items.filter((i) => i.isTalent());
+    }
+
     /* --- Type Guards --- */
 
     public isCharacter(): this is CharacterActor {
@@ -929,6 +933,35 @@ export class CosmereActor<
                 (expertise) => expertise.type === type && expertise.id === id,
             ) ?? false
         );
+    }
+
+    /**
+     * Utility function to determine if an actor has a given talent
+     */
+    public hasTalent(id: string): boolean {
+        return this.talents.some((talent) => talent.system.id === id);
+    }
+
+    public hasTalentPrerequisites(talent: TalentItem): boolean {
+        console.log('Has talent prerequisites', talent);
+
+        return talent.system.prerequisitesArray.every((prereq) => {
+            switch (prereq.type) {
+                case Talent.Prerequisite.Type.Talent:
+                    return prereq.mode === Talent.Prerequisite.Mode.AllOf
+                        ? prereq.talents.every((ref) => this.hasTalent(ref.id))
+                        : prereq.talents.some((ref) => this.hasTalent(ref.id));
+                case Talent.Prerequisite.Type.Attribute:
+                    return (
+                        this.getAttributeMod(prereq.attribute) >= prereq.value
+                    );
+                case Talent.Prerequisite.Type.Skill:
+                    return this.system.skills[prereq.skill].rank >= prereq.rank;
+                case Talent.Prerequisite.Type.Level: // TEMP: Until leveling is implemented
+                default:
+                    return true;
+            }
+        });
     }
 
     /* --- Helpers --- */

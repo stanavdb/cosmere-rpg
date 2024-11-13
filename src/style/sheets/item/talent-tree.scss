@@ -1,4 +1,16 @@
 .sheet.item.talent-tree {
+    .window-header {
+        .actor-select {
+            display: flex;
+            align-items: center;
+
+            select {
+                margin-left: 1rem;
+                height: unset;
+            }
+        }
+    }
+
     .window-content {
         padding: 10px
     }
@@ -120,10 +132,16 @@
         }
     }
 
-    &.owned {
+    &.actor-selected {
         &.mode-view {
-            .slot:not(.obtained) {
+            .slot:not(.obtained), .connection:not(.obtained):not(.available) {
                 filter: saturate(.2) contrast(0.85) brightness(0.75);
+            }
+
+            .slot.available {
+                border-style: dashed;
+                border-width: .1rem;
+                cursor: pointer;
             }
         }
     }

@@ -953,6 +953,9 @@
             "Title": "Configure Talent Tree: {name}",
             "Warning": {
                 "OutOfBounds": "The selected bounds would place at least one talent outside the tree."
+            },
+            "Notification": {
+                "TalentPicked": "Added talent {talent} to {actor}"
             }
         }
     },
