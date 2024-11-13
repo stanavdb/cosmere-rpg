@@ -324,7 +324,7 @@ export class CosmereChatMessage extends ChatMessage {
             },
         );
 
-        html.find('.roll-d20 .dice-total').append($(overlayD20));
+        html.find('.dice-roll-d20 .dice-total').append($(overlayD20));
         html.find('.overlay-d20 div').on('click', async (event) => {
             await this.onClickOverlayD20(event);
         });
