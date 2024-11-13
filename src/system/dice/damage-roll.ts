@@ -1,6 +1,7 @@
 import { DamageType, Skill, Attribute } from '@system/types/cosmere';
 import { CosmereActorRollData } from '@system/documents/actor';
 import { AdvantageMode } from '@system/types/roll';
+import RollTerm from '@league-of-foundry-developers/foundry-vtt-types/src/foundry/client-esm/dice/terms/term.mjs';
 
 export type DamageRollData<
     ActorRollData extends CosmereActorRollData = CosmereActorRollData,
@@ -15,6 +16,11 @@ export type DamageRollData<
         attribute: Attribute;
     };
     attribute?: number;
+    damage?: {
+        total: DamageRoll;
+        unmodded: DamageRoll;
+        dice: DamageRoll;
+    };
 };
 
 export interface DamageRollOptions
@@ -34,6 +40,16 @@ export interface DamageRollOptions
      * @default AdvantageMode.None
      */
     advantageMode?: AdvantageMode;
+
+    /**
+     * Where did this damage come from?
+     */
+    source?: string;
+
+    /**
+     * Nested Roll item for graze damage
+     */
+    graze?: DamageRoll;
 }
 
 export class DamageRoll extends foundry.dice.Roll<DamageRollData> {
@@ -61,6 +77,18 @@ export class DamageRoll extends foundry.dice.Roll<DamageRollData> {
         return this.options.mod;
     }
 
+    get source(): string | undefined {
+        return this.options.source;
+    }
+
+    get graze(): DamageRoll | undefined {
+        return this.options.graze;
+    }
+
+    set graze(roll: DamageRoll) {
+        this.options.graze = roll;
+    }
+
     public get hasMod() {
         return this.options.mod !== undefined;
     }
@@ -79,7 +107,51 @@ export class DamageRoll extends foundry.dice.Roll<DamageRollData> {
         return this.options.advantageMode === AdvantageMode.Disadvantage;
     }
 
+    /* --- Helper Functions --- */
+
+    public removeTermSafely(
+        conditional: (
+            value: RollTerm,
+            index: number,
+            obj: RollTerm[],
+        ) => boolean,
+    ) {
+        this.terms.findSplice(conditional);
+        this.cleanUpTerms();
+    }
+
+    public filterTermsSafely(
+        condition: (value: RollTerm, index: number, obj: RollTerm[]) => boolean,
+    ) {
+        this.terms = this.terms.filter(condition);
+        this.cleanUpTerms();
+    }
+
+    public replaceDieResults(sourceDicePool: foundry.dice.terms.DiceTerm[]) {
+        sourceDicePool.forEach((die) => {
+            let numDiceToAlter = die.number ?? 0;
+            while (numDiceToAlter > 0) {
+                const nextDie = this.dice.find(
+                    (newDie) => newDie.faces === die.faces,
+                );
+                if (!nextDie) return;
+                nextDie.results = die.results;
+                numDiceToAlter--;
+            }
+        });
+        this._total = this._evaluateTotal();
+    }
+
     /* --- Internal Functions --- */
+
+    private cleanUpTerms() {
+        while (
+            this.terms[this.terms.length - 1] instanceof
+            foundry.dice.terms.OperatorTerm
+        )
+            this.terms.pop();
+        this.resetFormula();
+    }
 
     private configureModifiers() {
         // Find the first die term

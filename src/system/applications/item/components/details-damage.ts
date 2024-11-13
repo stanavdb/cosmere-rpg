@@ -11,6 +11,20 @@ export class DetailsDamageComponent extends HandlebarsApplicationComponent<
     static TEMPLATE =
         'systems/cosmere-rpg/templates/item/components/details-damage.hbs';
 
+    /* eslint-disable @typescript-eslint/unbound-method */
+    static ACTIONS = {
+        'toggle-graze-collapsed': DetailsDamageComponent.onToggleGrazeCollapsed,
+    };
+    /* eslint-enable @typescript-eslint/unbound-method */
+    private grazeOverrideCollapsed = true;
+
+    /* --- Actions --- */
+
+    private static onToggleGrazeCollapsed(this: DetailsDamageComponent) {
+        this.grazeOverrideCollapsed = !this.grazeOverrideCollapsed;
+        void this.render();
+    }
+
     /* --- Context --- */
 
     public _prepareContext(params: never, context: BaseItemSheetRenderContext) {
@@ -31,9 +45,15 @@ export class DetailsDamageComponent extends HandlebarsApplicationComponent<
         const hasSkill =
             hasSkillTest && this.application.item.system.activation.skill;
 
+        this.grazeOverrideCollapsed = this.application.item.system.damage
+            .grazeOverrideFormula
+            ? this.application.item.system.damage.grazeOverrideFormula === ''
+            : this.grazeOverrideCollapsed;
+
         return {
             hasSkillTest,
             hasSkill,
+            grazeInputCollapsed: this.grazeOverrideCollapsed,
 
             typeSelectOptions: {
                 none: '—',
