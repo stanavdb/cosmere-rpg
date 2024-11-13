@@ -9,8 +9,6 @@ import { AdvantageMode } from '../types/roll';
 import { getSystemSetting, SETTINGS } from '../settings';
 import { getApplyTargets } from '../utils/generic';
 
-const ACTIVITY_CARD_TEMPLATE =
-    'systems/cosmere-rpg/templates/chat/activity-card.hbs';
 const ACTIVITY_CARD_MAX_HEIGHT = 1040;
 const ACTIVITY_CARD_TOTAL_TRANSITION_DURATION = 0.9;
 
@@ -471,7 +469,7 @@ export class CosmereChatMessage extends ChatMessage {
         );
 
         // Render d20 rolls
-        const rollsHtml = await renderTemplate(TEMPLATES.CHAT_CARD_ROLLS, {
+        const rollsHtml = await renderTemplate(TEMPLATES.CHAT_ROLL_D20, {
             rolls: [...d20Rolls, ...remainingRolls],
             damageRolls,
         });
@@ -574,7 +572,7 @@ export class CosmereChatMessage extends ChatMessage {
         }
 
         // Render actions
-        const actionsHtml = await renderTemplate(TEMPLATES.CHAT_CARD_ACTIONS, {
+        const actionsHtml = await renderTemplate(TEMPLATES.CHAT_CARD_CONTENT, {
             hasActions: groups.length > 0,
             groups,
         });
