@@ -379,8 +379,21 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
             });
         }
 
+        // Check if user can modify the item
+        const hasPermission = item.testUserPermission(
+            game.user as unknown as foundry.documents.BaseUser,
+            CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER,
+        );
+
+        // Check if the item isn't part of a locked compendium
+        const inLockedCompendium = item.compendium?.locked ?? false;
+
         // If we have a context node, connect the two
-        if (this.contextNodes.length > 0) {
+        if (
+            hasPermission &&
+            !inLockedCompendium &&
+            this.contextNodes.length > 0
+        ) {
             // Look up context items
             const contextItems = (
                 await Promise.all(
