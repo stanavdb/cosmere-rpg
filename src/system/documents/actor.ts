@@ -956,7 +956,7 @@ export class CosmereActor<
                         this.getAttributeMod(prereq.attribute) >= prereq.value
                     );
                 case Talent.Prerequisite.Type.Skill:
-                    return this.system.skills[prereq.skill].rank >= prereq.rank;
+                    return this.getSkillMod(prereq.skill) >= prereq.rank;
                 case Talent.Prerequisite.Type.Level: // TEMP: Until leveling is implemented
                 default:
                     return true;
