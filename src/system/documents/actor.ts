@@ -943,8 +943,6 @@ export class CosmereActor<
     }
 
     public hasTalentPrerequisites(talent: TalentItem): boolean {
-        console.log('Has talent prerequisites', talent);
-
         return talent.system.prerequisitesArray.every((prereq) => {
             switch (prereq.type) {
                 case Talent.Prerequisite.Type.Talent:
