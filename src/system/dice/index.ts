@@ -136,6 +136,7 @@ export async function damageRoll(
         allowStrings: config.allowStrings,
         maximize: config.maximize,
         minimize: config.minimize,
+        source: config.source,
     });
 
     // Evaluate the roll

@@ -301,6 +301,24 @@ app-item-properties {
     }
 }
 
+app-item-details-damage {
+    .form-group-stacked {
+        .header {
+            display: flex;
+            align-items: center;
+
+            label {
+                font-weight: bold;
+                flex: 2;
+            }
+
+            .controls {
+                margin-right: 0.5rem;
+            }
+        }
+    }
+}
+
 app-item-details-equip {
     .form-group-stacked {
         .header {
