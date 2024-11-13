@@ -556,7 +556,7 @@ export class CosmereChatMessage extends ChatMessage {
                                   'COSMERE.ChatMessage.Action.ApplyGraze',
                               ),
                               icon: 'fa-solid fa-shield-halved',
-                              callback: this.onApplyDamage.bind(this, false),
+                              callback: this.onApplyDamage.bind(this),
                           },
                       ]
                     : []),
@@ -757,7 +757,7 @@ export class CosmereChatMessage extends ChatMessage {
         );
     }
 
-    private onApplyDamage(includeMod = true) {
+    private onApplyDamage() {
         // Get selected actor
         const actor = (game.canvas!.tokens!.controlled?.[0]?.actor ??
             game.user?.character) as CosmereActor | undefined;
@@ -773,13 +773,13 @@ export class CosmereChatMessage extends ChatMessage {
         // Apply damage
         void actor.applyDamage(
             ...damageRolls.map((r) => ({
-                amount: (r.total ?? 0) + (includeMod ? (r.mod ?? 0) : 0),
+                amount: r.total ?? 0,
                 type: r.damageType,
             })),
         );
     }
 
-    private onApplyHealing(includeMod = true) {
+    private onApplyHealing() {
         // Get selected actor
         const actor = (game.canvas!.tokens!.controlled?.[0]?.actor ??
             game.user?.character) as CosmereActor | undefined;
@@ -795,7 +795,7 @@ export class CosmereChatMessage extends ChatMessage {
         // Apply damage
         void actor.applyDamage(
             ...damageRolls.map((r) => ({
-                amount: (r.total ?? 0) + (includeMod ? (r.mod ?? 0) : 0),
+                amount: r.total ?? 0,
                 type: DamageType.Healing,
             })),
         );
