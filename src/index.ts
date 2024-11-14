@@ -98,15 +98,15 @@ Hooks.once('init', async () => {
     // @ts-expect-error see note
     CONFIG.Dice.rolls.push(dice.DamageRoll);
 
-    // Load templates
-    await preloadHandlebarsTemplates();
-
     // Register status effects
     registerStatusEffects();
 
     // Register settings
     registerSystemSettings();
     registerSystemKeybindings();
+
+    // Load templates
+    await preloadHandlebarsTemplates();
 });
 
 Hooks.once('ready', () => {

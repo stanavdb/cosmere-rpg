@@ -139,6 +139,12 @@
                             object-position: top;
                         }
 
+                        & > .cosmere-icon {
+                            font-size: var(--font-size-16);
+                            color: var(--plotweaver-color-opportunity);
+                            padding-right: 0.25rem;
+                        }
+
                         .name-stacked {
                             padding-right: 0.5rem;
                             flex: 1;
@@ -161,7 +167,7 @@
                                 font-size: var(--font-size-10);
                                 color: var(--plotweaver-color-dark-6);
                                 
-                                .expertise {
+                                strong {
                                     color: var(--plotweaver-color-opportunity);
                                     font-weight: 600;
                                 }

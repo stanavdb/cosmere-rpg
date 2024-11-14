@@ -8,6 +8,7 @@ import { SYSTEM_ID } from '../constants';
 import { AdvantageMode } from '../types/roll';
 import { getSystemSetting, SETTINGS } from '../settings';
 import { getApplyTargets } from '../utils/generic';
+import { CosmereItem } from '.';
 
 const ACTIVITY_CARD_MAX_HEIGHT = 1040;
 const ACTIVITY_CARD_TOTAL_TRANSITION_DURATION = 0.9;
@@ -119,7 +120,7 @@ export class CosmereChatMessage extends ChatMessage {
             await renderSystemTemplate(TEMPLATES.CHAT_CARD_CONTENT, {}),
         );
 
-        //await this.enrichDescription(content);
+        this.enrichDescription(content);
         await this.enrichSkillTest(content);
         await this.enrichDamage(content);
         await this.enrichInjury(content);
@@ -143,6 +144,16 @@ export class CosmereChatMessage extends ChatMessage {
 
         // Run hover end once to ensure all hover buttons are in the correct state.
         this.onOverlayHoverEnd(content);
+    }
+
+    protected enrichDescription(html: JQuery) {
+        const description = this.getFlag(
+            SYSTEM_ID,
+            'message.description',
+        ) as string;
+        if (!description) return;
+
+        html.find('.chat-card').append(description);
     }
 
     protected async enrichSkillTest(html: JQuery) {
