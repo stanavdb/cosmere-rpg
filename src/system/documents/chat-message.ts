@@ -8,16 +8,6 @@ import { SYSTEM_ID } from '../constants';
 import { AdvantageMode } from '../types/roll';
 import { getSystemSetting, SETTINGS } from '../settings';
 import { getApplyTargets } from '../utils/generic';
-import { CosmereItem } from '.';
-
-const ACTIVITY_CARD_MAX_HEIGHT = 1040;
-const ACTIVITY_CARD_TOTAL_TRANSITION_DURATION = 0.9;
-
-interface ChatMessageAction {
-    name: string;
-    icon: string;
-    callback?: () => void;
-}
 
 export const MESSAGE_TYPES = {
     SKILL: 'skill',
@@ -26,6 +16,10 @@ export const MESSAGE_TYPES = {
 } as Record<string, string>;
 
 export class CosmereChatMessage extends ChatMessage {
+    private useGraze = false;
+    private totalDamageNormal = 0;
+    private totalDamageGraze = 0;
+
     /* --- Accessors --- */
     public get associatedActor(): CosmereActor | null {
         // NOTE: game.scenes resolves to any type
@@ -190,6 +184,58 @@ export class CosmereChatMessage extends ChatMessage {
     protected async enrichDamage(html: JQuery) {
         if (!this.hasDamage) return;
 
+        const damageRolls = this.damageRolls;
+
+        this.totalDamageNormal = 0;
+        this.totalDamageGraze = 0;
+
+        let tooltipNormalHTML = '';
+        let tooltipGrazeHTML = '';
+
+        const partsNormal = [];
+        const partsGraze = [];
+
+        for (const rollNormal of damageRolls) {
+            const type = rollNormal.damageType
+                ? game.i18n!.localize(
+                      CONFIG.COSMERE.damageTypes[rollNormal.damageType].label,
+                  )
+                : '';
+
+            this.totalDamageNormal += rollNormal.total ?? 0;
+            partsNormal.push(rollNormal.formula);
+            const tooltipNormal = $(await rollNormal.getTooltip());
+            tooltipNormal.find('.label').text(type);
+            tooltipNormalHTML +=
+                tooltipNormal.find('.tooltip-part')[0].outerHTML;
+
+            if (rollNormal.options.graze) {
+                const rollGraze = DamageRoll.fromData(
+                    rollNormal.options
+                        .graze as unknown as foundry.dice.Roll.Data,
+                );
+
+                this.totalDamageGraze += rollGraze.total ?? 0;
+                partsGraze.push(rollGraze.formula);
+                const tooltipGraze = $(await rollGraze.getTooltip());
+                tooltipGraze.find('.label').text(type);
+                tooltipGrazeHTML +=
+                    tooltipGraze.find('.tooltip-part')[0].outerHTML;
+            }
+        }
+
+        const damageHTML = await renderSystemTemplate(
+            TEMPLATES.CHAT_ROLL_DAMAGE,
+            {
+                formulaNormal: partsNormal.join(' + '),
+                formulaGraze: partsGraze.join(' + '),
+                tooltipNormal: tooltipNormalHTML,
+                tooltipGraze: tooltipGrazeHTML,
+                totalNormal: this.totalDamageNormal,
+                totalGraze: this.totalDamageGraze,
+            },
+        );
+
         const footer = getSystemSetting(SETTINGS.CHAT_ENABLE_APPLY_BUTTONS)
             ? await renderSystemTemplate(TEMPLATES.CHAT_CARD_DAMAGE_BUTTONS, {
                   overlay: !getSystemSetting(SETTINGS.CHAT_ALWAYS_SHOW_BUTTONS),
@@ -202,17 +248,22 @@ export class CosmereChatMessage extends ChatMessage {
                 type: 'damage',
                 icon: 'fa-solid fa-burst',
                 title: game.i18n!.localize('GENERIC.Damage'),
+                content: damageHTML,
                 footer,
             },
         );
 
         const section = $(sectionHTML as unknown as HTMLElement);
 
+        section.find('.dice-subtotal').on('click', (event) => {
+            this.onSwitchDamageMode(event);
+        });
+
         section.find('.apply-buttons button').on('click', async (event) => {
             await this.onClickApplyButton(event);
         });
 
-        html.find('.chat-card').append(sectionHTML);
+        html.find('.chat-card').append(section);
     }
 
     protected async enrichInjury(html: JQuery) {
@@ -386,230 +437,6 @@ export class CosmereChatMessage extends ChatMessage {
         });
     }
 
-    protected async enrichChatCard(html: JQuery) {
-        const actor = this.associatedActor;
-
-        const name = this.isContentVisible ? this.alias : this.author.name;
-
-        // Render header
-        const header = await renderTemplate(TEMPLATES.CHAT_CARD_HEADER, {
-            img: this.isContentVisible
-                ? (actor?.img ?? this.author.avatar)
-                : this.author.avatar,
-            name,
-            subtitle: name !== this.author.name ? this.author.name : undefined,
-            timestamp: html.find('.message-timestamp').text(),
-        });
-
-        // Replace header
-        html.find('.message-header').replaceWith(header);
-
-        // Get flags
-        const rolltable = this.getFlag('core', 'RollTable') as
-            | string
-            | undefined;
-
-        // Render rolls
-        if (!rolltable) await this.renderRolls(html);
-
-        // Render actions
-        await this.renderActions(html);
-
-        // Attach activity card listeners
-        html.find('.chat-card.activity .header.description').on(
-            'click',
-            (event) => {
-                // Get element
-                const element = $(event.target).closest('.header.description');
-
-                // Check if the description is collapsed
-                const isCollapsed = element.hasClass('collapsed');
-
-                // Toggle collapsed
-                if (isCollapsed) {
-                    element.removeClass('collapsed');
-                } else {
-                    // Get the description element
-                    const descriptionEl = element.find('.description');
-
-                    // Get the height
-                    const height = descriptionEl.height();
-
-                    // Calculate transition duration
-                    const duration =
-                        (ACTIVITY_CARD_TOTAL_TRANSITION_DURATION /
-                            ACTIVITY_CARD_MAX_HEIGHT) *
-                        height! *
-                        2;
-
-                    // Set max height to height and transition to duration
-                    descriptionEl
-                        .css('margin-top', `.3rem`)
-                        .css('max-height', `${height}px`)
-                        .css('transition', `0s`);
-
-                    setTimeout(() => {
-                        // Change transition
-                        descriptionEl
-                            .css('margin-top', '')
-                            .css('max-height', `0`)
-                            .css('transition', `${duration}s`);
-
-                        // Add collapsed class
-                        element.addClass('collapsed');
-
-                        setTimeout(() => {
-                            // Remove max height and transition
-                            descriptionEl
-                                .css('max-height', '')
-                                .css('transition', '');
-                        }, duration * 1000);
-                    });
-                }
-            },
-        );
-    }
-
-    protected async renderRolls(html: JQuery) {
-        if (!this.isContentVisible) return;
-
-        const d20Rolls = this.rolls.filter((r) => r instanceof D20Roll);
-        const damageRolls = this.rolls.filter((r) => r instanceof DamageRoll);
-        const remainingRolls = this.rolls.filter(
-            (r) => !(r instanceof D20Roll) && !(r instanceof DamageRoll),
-        );
-
-        // Render d20 rolls
-        const rollsHtml = await renderTemplate(TEMPLATES.CHAT_ROLL_D20, {
-            rolls: [...d20Rolls, ...remainingRolls],
-            damageRolls,
-        });
-
-        // Remove existing rolls
-        html.find('.message-content .dice-roll').remove();
-
-        // Append rolls
-        html.find('.message-content').append(rollsHtml);
-
-        // Attach listeners
-        html.find('.dice-total').on('click', (event) => {
-            // Get element
-            const element = $(event.target).closest('.dice-total');
-
-            // Check if dice total has collapsed class
-            if (element.hasClass('collapsed')) element.removeClass('collapsed');
-            else element.addClass('collapsed');
-        });
-
-        html.find('[data-action="undo-damage"]').on('click', (event) => {
-            // Get element
-            const element = $(event.target).closest(
-                '[data-action="undo-damage"]',
-            );
-
-            // Get the actor
-            const actor = this.associatedActor;
-            if (!actor) return;
-
-            // Get the amount
-            const amount = Number(element.data('amount'));
-
-            // Undo damage
-            void actor.applyDamage(
-                { amount: amount, type: DamageType.Healing },
-                { chatMessage: false },
-            );
-
-            // Strikethrough the damage
-            element
-                .closest('.damage-notification')
-                .css('text-decoration', 'line-through');
-
-            // Remove the action
-            element.remove();
-        });
-    }
-
-    protected async renderActions(html: JQuery) {
-        if (!this.isContentVisible) return;
-
-        const hasActions = this.hasDamage;
-        if (!hasActions) return;
-
-        const groups = [] as ChatMessageAction[][];
-
-        if (this.hasDamage) {
-            if (this.isAuthor && this.hasSkillTest) {
-                groups.push([
-                    {
-                        name: game.i18n!.localize(
-                            'COSMERE.ChatMessage.Action.Graze',
-                        ),
-                        icon: 'fa-solid fa-droplet-slash',
-                        callback: this.onDoGraze.bind(this),
-                    },
-                ]);
-            }
-
-            groups.push([
-                {
-                    name: game.i18n!.localize(
-                        'COSMERE.ChatMessage.Action.ApplyDamage',
-                    ),
-                    icon: 'fa-solid fa-heart-crack',
-                    callback: this.onApplyDamage.bind(this),
-                },
-
-                ...(this.hasSkillTest
-                    ? [
-                          {
-                              name: game.i18n!.localize(
-                                  'COSMERE.ChatMessage.Action.ApplyGraze',
-                              ),
-                              icon: 'fa-solid fa-shield-halved',
-                              callback: this.onApplyDamage.bind(this),
-                          },
-                      ]
-                    : []),
-
-                {
-                    name: game.i18n!.localize(
-                        'COSMERE.ChatMessage.Action.ApplyHealing',
-                    ),
-                    icon: 'fa-solid fa-heart-circle-plus',
-                    callback: this.onApplyHealing.bind(this),
-                },
-            ]);
-        }
-
-        // Render actions
-        const actionsHtml = await renderTemplate(TEMPLATES.CHAT_CARD_CONTENT, {
-            hasActions: groups.length > 0,
-            groups,
-        });
-
-        // Append actions
-        html.find('.message-content').append(actionsHtml);
-
-        // Attach listeners
-        html.find('.card-actions .action[data-item]').on('click', (event) => {
-            // Get the index
-            const [groupIndex, index] = (
-                $(event.target)
-                    .closest('.action[data-item]')
-                    .data('item') as string
-            )
-                .split('-')
-                .map(Number) as [number, number];
-
-            // Get the item
-            const item = groups[groupIndex][index];
-
-            // Trigger the callback
-            if (item.callback) item.callback();
-        });
-    }
-
     /* --- Handlers --- */
 
     /**
@@ -670,6 +497,24 @@ export class CosmereChatMessage extends ChatMessage {
         }
     }
 
+    private onSwitchDamageMode(event: JQuery.ClickEvent) {
+        const toggle = $(event.currentTarget as HTMLElement);
+
+        if (toggle.css('opacity') === '0') return;
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        this.useGraze = !this.useGraze;
+        toggle.attr('style', 'opacity: 0;');
+        toggle.siblings('.dice-subtotal').attr('style', '');
+        toggle
+            .siblings('p')
+            .text(
+                this.useGraze ? this.totalDamageGraze : this.totalDamageNormal,
+            );
+    }
+
     /**
      * Handles an apply button click event.
      * @param {JQuery.ClickEvent} event The originating event of the button click.
@@ -685,21 +530,34 @@ export class CosmereChatMessage extends ChatMessage {
         const action = button.dataset.action;
         const multiplier = Number(button.dataset.multiplier);
 
+        const targets = getApplyTargets();
+        if (targets.size === 0) return;
+
         if (action === 'apply-damage' && multiplier) {
-            const targets = getApplyTargets();
-            if (targets.size === 0) return;
-
             const damageRolls = forceRolls ?? this.damageRolls;
-
             const damageToApply = damageRolls.map((r) => ({
-                amount: (r.total ?? 0) * multiplier,
-                type: r.damageType,
+                amount:
+                    (this.useGraze ? (r.graze?.total ?? 0) : (r.total ?? 0)) *
+                    Math.abs(multiplier),
+                type: multiplier < 0 ? DamageType.Healing : r.damageType,
             }));
 
             await Promise.all(
                 Array.from(targets).map(async (t) => {
-                    const target = t.actor as CosmereActor;
+                    const target = (t as Token).actor as CosmereActor;
                     return await target.applyDamage(...damageToApply);
+                }),
+            );
+        }
+
+        if (action === 'reduce-focus') {
+            await Promise.all(
+                Array.from(targets).map(async (t) => {
+                    const target = (t as Token).actor as CosmereActor;
+                    return await target.update({
+                        'system.resources.foc.value':
+                            target.system.resources.foc.value - 1,
+                    });
                 }),
             );
         }
@@ -742,73 +600,5 @@ export class CosmereChatMessage extends ChatMessage {
      */
     private onOverlayHoverEnd(html: JQuery) {
         html.find('.overlay').attr('style', 'display: none;');
-    }
-
-    private onDoGraze() {
-        // Get associated actor
-        const actor = this.associatedActor;
-        if (!actor)
-            return ui.notifications.warn(
-                game.i18n!.localize('GENERIC.Warning.NoActor'),
-            );
-
-        if (actor.system.resources.foc.value === 0)
-            return ui.notifications.warn(
-                game.i18n!.localize('GENERIC.Warning.NoFocus'),
-            );
-
-        // Reduce focus
-        void actor.update({
-            'system.resources.foc.value': actor.system.resources.foc.value - 1,
-        });
-
-        // Notify
-        ui.notifications.info(
-            game.i18n!.localize('GENERIC.Notification.GrazeFocusSpent'),
-        );
-    }
-
-    private onApplyDamage() {
-        // Get selected actor
-        const actor = (game.canvas!.tokens!.controlled?.[0]?.actor ??
-            game.user?.character) as CosmereActor | undefined;
-
-        if (!actor)
-            return ui.notifications.warn(
-                game.i18n!.localize('GENERIC.Warning.NoActor'),
-            );
-
-        // Get damage rolls
-        const damageRolls = this.damageRolls;
-
-        // Apply damage
-        void actor.applyDamage(
-            ...damageRolls.map((r) => ({
-                amount: r.total ?? 0,
-                type: r.damageType,
-            })),
-        );
-    }
-
-    private onApplyHealing() {
-        // Get selected actor
-        const actor = (game.canvas!.tokens!.controlled?.[0]?.actor ??
-            game.user?.character) as CosmereActor | undefined;
-
-        if (!actor)
-            return ui.notifications.warn(
-                game.i18n!.localize('GENERIC.Warning.NoActor'),
-            );
-
-        // Get damage rolls
-        const damageRolls = this.damageRolls;
-
-        // Apply damage
-        void actor.applyDamage(
-            ...damageRolls.map((r) => ({
-                amount: r.total ?? 0,
-                type: DamageType.Healing,
-            })),
-        );
     }
 }

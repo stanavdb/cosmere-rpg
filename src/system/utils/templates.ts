@@ -51,6 +51,7 @@ export const TEMPLATES = {
     CHAT_CARD_DAMAGE_BUTTONS: 'chat/card-damage-buttons.hbs',
 
     CHAT_ROLL_D20: 'chat/roll-d20.hbs',
+    CHAT_ROLL_DAMAGE: 'chat/roll-damage.hbs',
     CHAT_ROLL_TOOLTIP: 'chat/roll-tooltip.hbs',
 
     CHAT_OVERLAY_D20: 'chat/overlay-d20.hbs',

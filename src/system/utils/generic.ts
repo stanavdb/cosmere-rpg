@@ -124,9 +124,7 @@ export function getApplyTargets() {
     const selectTokens = applyToSelected
         ? canvas!.tokens!.controlled
         : ([] as Token[]);
-    const targetTokens = applyToTargeted
-        ? game.user!.targets
-        : new UserTargets(game.user!);
+    const targetTokens = applyToTargeted ? game.user!.targets : new Set();
 
     if (prioritiseSelected && selectTokens.length > 0) {
         targetTokens.clear();

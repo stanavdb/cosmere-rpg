@@ -884,7 +884,8 @@
         "Damage": {
             "Label": "Damage",
             "Apply": "Apply",
-            "Graze": "Graze"
+            "Graze": "Graze",
+            "Full": "Full"
         }
     },
     "ROLLS": {
