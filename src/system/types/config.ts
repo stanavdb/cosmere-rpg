@@ -30,6 +30,7 @@ import {
     PathType,
     EquipmentType,
     PowerType,
+    Theme,
 } from './cosmere';
 import { AdvantageMode } from './roll';
 
@@ -232,6 +233,7 @@ export interface PowerTypeConfig {
 }
 
 export interface CosmereRPGConfig {
+    themes: Record<Theme, string>;
     sizes: Record<Size, SizeConfig>;
     creatureTypes: Record<CreatureType, CreatureTypeConfig>;
     conditions: Record<Condition, ConditionConfig>;

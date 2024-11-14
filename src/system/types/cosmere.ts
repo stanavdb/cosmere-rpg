@@ -282,3 +282,8 @@ export const enum TurnSpeed {
     Fast = 'fast',
     Slow = 'slow',
 }
+
+export const enum Theme {
+    Default = 'default',
+    Stormlight = 'stormlight',
+}

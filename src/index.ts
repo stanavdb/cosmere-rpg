@@ -8,6 +8,7 @@ import './system/hooks';
 
 import { preloadHandlebarsTemplates } from './system/utils/handlebars';
 import {
+    registerDeferredSettings,
     registerSystemKeybindings,
     registerSystemSettings,
 } from './system/settings';
@@ -107,6 +108,11 @@ Hooks.once('init', async () => {
 
     // Load templates
     await preloadHandlebarsTemplates();
+});
+
+Hooks.once('setup', () => {
+    // Register some settings after modules have had a chance to initialize
+    registerDeferredSettings();
 });
 
 Hooks.once('ready', () => {
@@ -239,6 +245,16 @@ function configureFonts() {
                         `systems/${SYSTEM_ID}/assets/fonts/roboto-slab/RobotoSlab-Bold.ttf`,
                     ],
                     weight: 'bold',
+                },
+            ],
+        },
+        'Penumbra Web Pro': {
+            editor: true,
+            fonts: [
+                {
+                    urls: [
+                        `https://fonts.cdnfonts.com/s/56565/PenumbraWebPro-Serif.woff`,
+                    ],
                 },
             ],
         },

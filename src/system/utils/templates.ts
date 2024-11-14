@@ -1,4 +1,5 @@
 import { SYSTEM_ID } from '../constants';
+import { Theme } from '../types/cosmere';
 
 /**
  * Index of identifiers for system templates.
@@ -68,4 +69,26 @@ export function renderSystemTemplate(
     data: object,
 ): Promise<string> {
     return renderTemplate(`systems/${SYSTEM_ID}/templates/${template}`, data);
+}
+
+export const THEME_TAG = 'cosmere-theme';
+
+/**
+ * Set the theme on an element, removing the previous theme class in the process.
+ * @param {HTMLElement} element Body or sheet element on which to set the theme data.
+ * @param {Theme} [theme=Theme.Default] Theme key to set.
+ * @param {string[]} [flags=[]] Additional theming flags to set.
+ */
+export function setTheme(
+    element: HTMLElement,
+    theme: Theme,
+    flags = new Set(),
+) {
+    const previous = Array.from(element.classList).filter((c) =>
+        c.startsWith(THEME_TAG),
+    );
+    element.classList.remove(...previous);
+    element.classList.add(`${THEME_TAG}-${theme}`);
+    element.dataset.theme = theme;
+    element.dataset.themeFlags = Array.from(flags).join(' ');
 }

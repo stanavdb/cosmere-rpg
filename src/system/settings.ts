@@ -1,4 +1,6 @@
 import { SYSTEM_ID } from './constants';
+import { Theme } from './types/cosmere';
+import { setTheme } from './utils/templates';
 
 /**
  * Index of identifiers for system settings.
@@ -12,6 +14,7 @@ export const SETTINGS = {
     CHAT_ENABLE_APPLY_BUTTONS: 'enableApplyButtons',
     CHAT_ALWAYS_SHOW_BUTTONS: 'alwaysShowApplyButtons',
     APPLY_BUTTONS_TO: 'applyButtonsTo',
+    SYSTEM_THEME: 'systemTheme',
 } as const;
 
 /**
@@ -111,6 +114,26 @@ export function registerSystemSettings() {
             ),
         },
     });
+}
+
+/**
+ * Register additional settings after modules have had a chance to initialize to give them a chance to modify choices.
+ */
+export function registerDeferredSettings() {
+    game.settings!.register(SYSTEM_ID, SETTINGS.SYSTEM_THEME, {
+        name: game.i18n!.localize(`SETTINGS.${SETTINGS.SYSTEM_THEME}.name`),
+        hint: game.i18n!.localize(`SETTINGS.${SETTINGS.SYSTEM_THEME}.hint`),
+        scope: 'client',
+        config: true,
+        type: String,
+        default: Theme.Default,
+        choices: {
+            ...CONFIG.COSMERE.themes,
+        },
+        onChange: (s) => setTheme(document.body, s),
+    });
+
+    setTheme(document.body, getSystemSetting(SETTINGS.SYSTEM_THEME) as Theme);
 }
 
 /**

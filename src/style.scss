@@ -52,41 +52,68 @@
     --plotweaver-font-condensed: "Roboto Condensed", sans-serif;
     --plotweaver-font-cosmere-dingbats: "cosmere-dingbats";
 
-    // --font-primary: 'Laski Sans';
-    // --font-h5: 'Laski-Sans';
-
     /* ----------------------------------------- */
     /*  Default Generic Theme                    */
     /* ----------------------------------------- */
-    &.theme-plotweaver {
+    .cosmere-theme-default {
         //TO-DO: Replace with Plotweaver colours
-        --plotweaver-color-accent: #c9a760;
-        --plotweaver-color-faded: #5e6c7e;
-        --plotweaver-color-sheet: #132137;
+        &.theme-dark {
+            --plotweaver-color-accent: #c9a760;
+            --plotweaver-color-faded: #5e6c7e;
+            --plotweaver-color-sheet: #132137;
 
-        --plotweaver-color-base-1: #010e2d;
-        --plotweaver-color-base-2: #10213e;
-        --plotweaver-color-base-3: #1b2d49;
-        --plotweaver-color-base-4: #263c5e;
-        --plotweaver-color-base-5: #456a95;
-        --plotweaver-color-base-6: #506684;
+            --plotweaver-color-base-1: #010e2d;
+            --plotweaver-color-base-2: #10213e;
+            --plotweaver-color-base-3: #1b2d49;
+            --plotweaver-color-base-4: #263c5e;
+            --plotweaver-color-base-5: #456a95;
+            --plotweaver-color-base-6: #506684;
+        }
+
+        &.theme-light {
+            --plotweaver-color-accent: #fff;
+            --plotweaver-color-faded: #fff;
+            --plotweaver-color-sheet: #fff;
+    
+            --plotweaver-color-base-1: #fff;
+            --plotweaver-color-base-2: #fff;
+            --plotweaver-color-base-3: #fff;
+            --plotweaver-color-base-4: #fff;
+            --plotweaver-color-base-5: #fff;
+            --plotweaver-color-base-6: #fff;
+        }
     }
 
     /* ----------------------------------------- */
     /*  Stormlight Archive Theme                 */
     /* ----------------------------------------- */
-    &.theme-stormlight {
+    .cosmere-theme-stormlight {        
         //TO-DO: Move to Stormlight Archive module
-        --plotweaver-color-accent: #c9a760;
-        --plotweaver-color-faded: #5e6c7e;
-        --plotweaver-color-sheet: #132137;
+        &.theme-dark {
+            --plotweaver-color-accent: #c9a760;
+            --plotweaver-color-faded: #5e6c7e;
+            --plotweaver-color-sheet: #132137;
+    
+            --plotweaver-color-base-1: #010e2d;
+            --plotweaver-color-base-2: #10213e;
+            --plotweaver-color-base-3: #1b2d49;
+            --plotweaver-color-base-4: #263c5e;
+            --plotweaver-color-base-5: #456a95;
+            --plotweaver-color-base-6: #506684;
+        }
 
-        --plotweaver-color-base-1: #010e2d;
-        --plotweaver-color-base-2: #10213e;
-        --plotweaver-color-base-3: #1b2d49;
-        --plotweaver-color-base-4: #263c5e;
-        --plotweaver-color-base-5: #456a95;
-        --plotweaver-color-base-6: #506684;
+        &.theme-light {
+            --plotweaver-color-accent: #ff0000;
+            --plotweaver-color-faded: #fff;
+            --plotweaver-color-sheet: #fff;
+    
+            --plotweaver-color-base-1: #fff;
+            --plotweaver-color-base-2: #fff;
+            --plotweaver-color-base-3: #fff;
+            --plotweaver-color-base-4: #fff;
+            --plotweaver-color-base-5: #fff;
+            --plotweaver-color-base-6: #fff;
+        }
     }
 }
 
