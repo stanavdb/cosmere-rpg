@@ -50,7 +50,7 @@
     --plotweaver-font-normal: "Roboto", sans-serif;
     --plotweaver-font-header: "Roboto Slab", serif;
     --plotweaver-font-condensed: "Roboto Condensed", sans-serif;
-    --plotweaver-font-cosmere-dingbats: "cosmere-dingbats";
+    --plotweaver-font-icons: "Cosmere Dingbats";
 
     /* ----------------------------------------- */
     /*  Default Generic Theme                    */
@@ -123,13 +123,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Didact+Gothic&display=swap');
 @import url('https://fonts.cdnfonts.com/css/penumbra-web-pro');
 
-@font-face {
-    font-family: 'cosmere-dingbats';
-    font-style: normal;
-    font-weight: 400;
-    src: url('https://dl.dropboxusercontent.com/scl/fi/9909gen4fd0oveyzfposx/CosmereDingbats-Regular.otf?rlkey=ig6odq9hxyo1st8kt3ujp1czz&st=72qrads3&raw=1');
-}
-
 .application h1,
 span.document-name {
     font-family: 'Penumbra Web Pro';
@@ -156,7 +149,7 @@ span.document-name {
 span.cosmere-icon,
 em.cosmere-icon,
 i.cosmere-icon {
-    font-family: 'cosmere-dingbats';
+    font-family: var(--plotweaver-font-icons);
 
     &.complication {
         color: var(--plotweaver-color-complication);

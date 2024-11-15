@@ -497,6 +497,11 @@ export class CosmereChatMessage extends ChatMessage {
         }
     }
 
+    /**
+     * Handles a click event on the toggle between using graze damage and full damage.
+     * @param {JQuery.ClickEvent} event The originating event of the button click.
+     * @returns
+     */
     private onSwitchDamageMode(event: JQuery.ClickEvent) {
         const toggle = $(event.currentTarget as HTMLElement);
 
