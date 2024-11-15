@@ -194,6 +194,7 @@ export class CosmereChatMessage extends ChatMessage {
 
         const partsNormal = [];
         const partsGraze = [];
+        const types = new Set<string>();
 
         for (const rollNormal of damageRolls) {
             const type = rollNormal.damageType
@@ -201,6 +202,8 @@ export class CosmereChatMessage extends ChatMessage {
                       CONFIG.COSMERE.damageTypes[rollNormal.damageType].label,
                   )
                 : '';
+
+            types.add(type);
 
             this.totalDamageNormal += rollNormal.total ?? 0;
             partsNormal.push(rollNormal.formula);
@@ -250,6 +253,9 @@ export class CosmereChatMessage extends ChatMessage {
                 title: game.i18n!.localize('GENERIC.Damage'),
                 content: damageHTML,
                 footer,
+                damageTypes: Array.from(types)
+                    .sort()
+                    .join(' <i class="cosmere-icon opportunity"></i> '),
             },
         );
 

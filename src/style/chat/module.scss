@@ -247,6 +247,14 @@
                             text-transform: uppercase;
                         }
                     }
+
+                    .types {
+                        font-size: var(--font-size-10);
+                        font-family: var(--plotweaver-font-condensed);
+                        color: var(--plotweaver-color-dark-6) !important;
+                        font-weight: 600;
+                        text-transform: uppercase;
+                    }
                 }                
 
                 .dice-roll {
