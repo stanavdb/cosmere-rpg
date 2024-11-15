@@ -1098,6 +1098,10 @@
                 "3": "Prioritise Selected Tokens",
                 "4": "Prioritise Targeted Tokens"
             }
+        },
+        "systemTheme": {
+            "name": "Preferred System Theme",
+            "hint": "Specify the themed set of colours to use for system documents and interface elements. The selected theme will respect the prefered Dark/Light mode selected in the core settings."
         }
     },
     "KEYBINDINGS": {
