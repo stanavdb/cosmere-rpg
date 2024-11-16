@@ -7,7 +7,7 @@ import { renderSystemTemplate, TEMPLATES } from '../utils/templates';
 import { SYSTEM_ID } from '../constants';
 import { AdvantageMode } from '../types/roll';
 import { getSystemSetting, SETTINGS } from '../settings';
-import { getApplyTargets } from '../utils/generic';
+import { getApplyTargets, getConstantFromRoll } from '../utils/generic';
 
 export const MESSAGE_TYPES = {
     SKILL: 'skill',
@@ -208,7 +208,7 @@ export class CosmereChatMessage extends ChatMessage {
             this.totalDamageNormal += rollNormal.total ?? 0;
             partsNormal.push(rollNormal.formula);
             const tooltipNormal = $(await rollNormal.getTooltip());
-            tooltipNormal.find('.label').text(type);
+            this.enrichDamageTooltip(rollNormal, type, tooltipNormal);
             tooltipNormalHTML +=
                 tooltipNormal.find('.tooltip-part')[0].outerHTML;
 
@@ -221,7 +221,7 @@ export class CosmereChatMessage extends ChatMessage {
                 this.totalDamageGraze += rollGraze.total ?? 0;
                 partsGraze.push(rollGraze.formula);
                 const tooltipGraze = $(await rollGraze.getTooltip());
-                tooltipGraze.find('.label').text(type);
+                this.enrichDamageTooltip(rollGraze, type, tooltipGraze);
                 tooltipGrazeHTML +=
                     tooltipGraze.find('.tooltip-part')[0].outerHTML;
             }
@@ -339,28 +339,31 @@ export class CosmereChatMessage extends ChatMessage {
         html.find('.chat-card').append(section);
     }
 
+    protected enrichDamageTooltip(
+        roll: DamageRoll,
+        type: string,
+        html: JQuery,
+    ) {
+        const constant = getConstantFromRoll(roll);
+        if (constant === 0) return;
+
+        const sign = constant < 0 ? '-' : '+';
+        const newTotal = Number(html.find('.value').text()) + constant;
+
+        html.find('.label').text(type);
+        html.find('.value').text(newTotal);
+        html.find('.dice-rolls').append(
+            `<li class="constant"><span class="sign">${sign}</span>${constant}</li>`,
+        );
+    }
+
     /**
      * Augment roll tooltips with some additional information and styling.
      * @param {Roll} roll The roll instance.
      * @param {HTMLElement} html The roll tooltip markup.
      */
     protected enrichD20Tooltip(roll: Roll, html: HTMLElement) {
-        let previous: unknown;
-        let constant = 0;
-        for (const term of roll.terms) {
-            if (term instanceof foundry.dice.terms.NumericTerm) {
-                if (
-                    previous instanceof foundry.dice.terms.OperatorTerm &&
-                    previous.operator === '-'
-                ) {
-                    constant -= term.number;
-                } else {
-                    constant += term.number;
-                }
-            }
-            previous = term;
-        }
-
+        const constant = getConstantFromRoll(roll);
         if (constant === 0) return;
 
         const sign = constant < 0 ? '-' : '+';
