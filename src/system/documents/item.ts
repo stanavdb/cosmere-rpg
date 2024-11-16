@@ -4,6 +4,9 @@ import {
     Attribute,
     ItemConsumeType,
     ActivationType,
+    WeaponTraitId,
+    ArmorTraitId,
+    ActionCostType,
 } from '@system/types/cosmere';
 import { Goal } from '@system/types/item';
 import { GoalItemData } from '@system/data/item/goal';
@@ -60,7 +63,9 @@ import {
 } from '@system/dice';
 import { AdvantageMode } from '@system/types/roll';
 import { RollMode } from '@system/dice/types';
-import { determineConfigurationMode } from '../utils/generic';
+import { determineConfigurationMode, hasKey } from '../utils/generic';
+import { MESSAGE_TYPES } from './chat-message';
+import { renderSystemTemplate, TEMPLATES } from '../utils/templates';
 
 // Constants
 const CONSUME_CONFIGURATION_DIALOG_TEMPLATE =
@@ -837,12 +842,21 @@ export class CosmereItem<
             this.system.activation.type === ActivationType.SkillTest ||
             hasDamage;
 
-        // Get the speaker
-        const speaker =
-            options.speaker ??
-            (ChatMessage.getSpeaker({ actor }) as ChatSpeakerData);
+        const messageConfig = {
+            user: game.user!.id,
+            speaker:
+                options.speaker ??
+                (ChatMessage.getSpeaker({ actor }) as ChatSpeakerData),
+            rolls: [] as foundry.dice.Roll[],
+            flags: {} as Record<string, unknown>,
+        };
 
-        const descriptionHTML = await this.getEnrichedDescription();
+        messageConfig.flags[SYSTEM_ID] = {
+            message: {
+                type: MESSAGE_TYPES.ACTION,
+                description: await this.getDescriptionHTML(),
+            },
+        };
 
         if (rollRequired) {
             const rolls: foundry.dice.Roll[] = [];
@@ -912,18 +926,10 @@ export class CosmereItem<
                 }
             }
 
+            messageConfig.rolls = rolls;
+
             // Create chat message
-            await ChatMessage.create({
-                user: game.user!.id,
-                speaker,
-                content: await renderTemplate(ACTIVITY_CARD_TEMPLATE, {
-                    item: this,
-                    hasDescription: !!descriptionHTML,
-                    descriptionHTML,
-                    flavor,
-                }),
-                rolls: rolls,
-            });
+            await ChatMessage.create(messageConfig);
 
             // Perform post roll actions
             postRoll.forEach((action) => action());
@@ -940,17 +946,9 @@ export class CosmereItem<
                 this.system.activation.flavor || undefined;
 
             // Create chat message
-            const message = (await ChatMessage.create({
-                user: game.user!.id,
-                speaker,
-                content: await renderTemplate(ACTIVITY_CARD_TEMPLATE, {
-                    item: this,
-                    hasDescription: !!descriptionHTML,
-                    descriptionHTML,
-                    expanded: true,
-                    flavor,
-                }),
-            })) as ChatMessage;
+            const message = (await ChatMessage.create(
+                messageConfig,
+            )) as ChatMessage;
             message.applyRollMode('roll');
 
             // Perform post roll actions
@@ -1056,18 +1054,81 @@ export class CosmereItem<
 
     /* --- Helpers --- */
 
-    protected async getEnrichedDescription(): Promise<string | undefined> {
-        if (!this.hasDescription()) return;
-        if (
-            !(this as CosmereItem<DescriptionItemData>).system.description
-                ?.value
-        )
-            return;
+    protected async getDescriptionHTML(): Promise<string | undefined> {
+        if (!this.hasDescription()) return undefined;
 
-        return await TextEditor.enrichHTML(
-            (this as CosmereItem<DescriptionItemData>).system.description!
-                .value!,
+        const descriptionData = (this as CosmereItem<DescriptionItemData>)
+            .system.description?.value;
+        const description = await TextEditor.enrichHTML(descriptionData ?? '');
+
+        const traitsNormal = [];
+        const traitsExpert = [];
+        const traits = [];
+        if (this.hasTraits()) {
+            for (const [key, value] of Object.entries(this.system.traits)) {
+                if (!value?.active) continue;
+
+                const traitLoc =
+                    CONFIG.COSMERE.traits.weaponTraits[key as WeaponTraitId] ??
+                    CONFIG.COSMERE.traits.armorTraits[key as ArmorTraitId];
+                let label = game.i18n!.localize(traitLoc.label);
+
+                if (value.expertise?.toggleActive) {
+                    label = `<strong>${label}</strong>`;
+                    traitsExpert.push(label);
+                } else {
+                    traitsNormal.push(label);
+                }
+            }
+
+            traits.push(...traitsNormal.sort(), ...traitsExpert.sort());
+        }
+
+        let action;
+        if (
+            this.hasActivation() &&
+            this.system.activation?.cost?.value !== undefined
+        ) {
+            const activation = this.system.activation as Record<
+                string,
+                unknown
+            >;
+            const cost = activation.cost as {
+                type: ActionCostType;
+                value: number;
+            };
+
+            switch (cost.type) {
+                case ActionCostType.Action:
+                    action = `action${Math.min(3, cost.value)}`;
+                    break;
+                case ActionCostType.Reaction:
+                    action = 'reaction';
+                    break;
+                case ActionCostType.Special:
+                    action = 'special';
+                    break;
+                case ActionCostType.FreeAction:
+                    action = 'free';
+                    break;
+                default:
+                    action = 'passive';
+                    break;
+            }
+        }
+
+        const sectionHTML = await renderSystemTemplate(
+            TEMPLATES.CHAT_CARD_DESCRIPTION,
+            {
+                title: this.name,
+                img: this.img,
+                description,
+                traits: traits.join(', '),
+                action,
+            },
         );
+
+        return sectionHTML;
     }
 
     protected getSkillTestRollData(

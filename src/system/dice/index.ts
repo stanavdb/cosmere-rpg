@@ -2,9 +2,8 @@ import { Attribute } from '@system/types/cosmere';
 
 import { D20Roll, D20RollOptions, D20RollData } from './d20-roll';
 import { DamageRoll, DamageRollOptions, DamageRollData } from './damage-roll';
-import { AdvantageMode } from '../types/roll';
 import { determineConfigurationMode } from '../utils/generic';
-import { RollMode } from './types';
+import { AdvantageMode } from '../types/roll';
 
 export * from './d20-roll';
 export * from './damage-roll';
@@ -54,10 +53,7 @@ export interface D20RollConfigration extends D20RollOptions {
      */
     defaultAttribute?: Attribute;
 
-    /**
-     * The roll mode that should be selected by default
-     */
-    defaultRollMode?: RollMode;
+    messageData?: object;
 }
 
 export interface DamageRollConfiguration extends DamageRollOptions {
@@ -91,12 +87,12 @@ export async function d20Roll(
     config.advantageMode = advantageMode;
     config.plotDie = plotDie;
 
-    // Roll parameters
-    const defaultRollMode =
-        config.rollMode ?? game.settings!.get('core', 'rollMode');
-
     // Construct the roll
-    const roll = new D20Roll(config.parts ?? [], config.data, { ...config });
+    const roll = new D20Roll(
+        ['1d20'].concat(config.parts ?? []).join(' + '),
+        config.data,
+        { ...config },
+    );
 
     if (!fastForward) {
         // Prompt dialog to configure the d20 roll
@@ -105,7 +101,9 @@ export async function d20Roll(
                 ? await roll.configureDialog({
                       title: config.title,
                       plotDie: config.plotDie,
-                      defaultRollMode,
+                      defaultRollMode:
+                          config.rollMode ??
+                          game.settings!.get('core', 'rollMode'),
                       defaultAttribute:
                           config.defaultAttribute ??
                           config.data.skill.attribute,
@@ -119,7 +117,7 @@ export async function d20Roll(
     await roll.evaluate();
 
     if (roll && config.chatMessage !== false) {
-        await roll.toMessage();
+        await roll.toMessage(config.messageData, config);
     }
 
     return roll;

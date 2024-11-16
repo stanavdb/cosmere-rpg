@@ -19,6 +19,8 @@ import { Derived } from '@system/data/fields';
 import { AnyObject } from '@src/system/types/utils';
 
 import { ItemContext, ItemContextOptions } from './types';
+import { TEMPLATES } from '../templates';
+import { SYSTEM_ID } from '@src/system/constants';
 
 Handlebars.registerHelper('add', (a: number, b: number) => a + b);
 Handlebars.registerHelper('sub', (a: number, b: number) => a - b);
@@ -478,41 +480,14 @@ Handlebars.registerHelper('damageTypeConfig', (type: DamageType) => {
 });
 
 export async function preloadHandlebarsTemplates() {
-    const partials = [
-        'systems/cosmere-rpg/templates/general/tabs.hbs',
-        'systems/cosmere-rpg/templates/actors/character/partials/char-details-tab.hbs',
-        'systems/cosmere-rpg/templates/actors/character/partials/char-actions-tab.hbs',
-        'systems/cosmere-rpg/templates/actors/character/partials/char-equipment-tab.hbs',
-        'systems/cosmere-rpg/templates/actors/character/partials/char-goals-tab.hbs',
-        'systems/cosmere-rpg/templates/actors/character/partials/char-effects-tab.hbs',
-        'systems/cosmere-rpg/templates/actors/adversary/partials/adv-actions-tab.hbs',
-        'systems/cosmere-rpg/templates/actors/adversary/partials/adv-effects-tab.hbs',
-        'systems/cosmere-rpg/templates/actors/adversary/partials/adv-equipment-tab.hbs',
-        'systems/cosmere-rpg/templates/item/partials/item-description-tab.hbs',
-        'systems/cosmere-rpg/templates/item/partials/item-effects-tab.hbs',
-        'systems/cosmere-rpg/templates/item/partials/item-details-tab.hbs',
-        'systems/cosmere-rpg/templates/item/injury/partials/injury-details-tab.hbs',
-        'systems/cosmere-rpg/templates/item/specialty/partials/specialty-details-tab.hbs',
-        'systems/cosmere-rpg/templates/item/loot/partials/loot-details-tab.hbs',
-        'systems/cosmere-rpg/templates/item/armor/partials/armor-details-tab.hbs',
-        'systems/cosmere-rpg/templates/item/ancestry/partials/ancestry-details-tab.hbs',
-        'systems/cosmere-rpg/templates/item/talent/partials/talent-details-tab.hbs',
-        'systems/cosmere-rpg/templates/item/action/partials/action-details-tab.hbs',
-        'systems/cosmere-rpg/templates/item/goal/partials/goal-details-tab.hbs',
-        'systems/cosmere-rpg/templates/item/power/partials/power-details-tab.hbs',
-        'systems/cosmere-rpg/templates/item/path/partials/path-details-tab.hbs',
-        'systems/cosmere-rpg/templates/item/talent-tree/partials/talent-tree-node-tooltip.hbs',
-        'systems/cosmere-rpg/templates/combat/combatant.hbs',
-        'systems/cosmere-rpg/templates/chat/parts/roll-details.hbs',
-        'systems/cosmere-rpg/templates/chat/parts/chat-card-header.hbs',
-    ];
-    return await loadTemplates(
-        partials.reduce(
-            (partials, path) => {
-                partials[path.split('/').pop()!.replace('.hbs', '')] = path;
-                return partials;
-            },
-            {} as Record<string, string>,
-        ),
+    const templates = Object.values(TEMPLATES).reduce(
+        (partials, path) => {
+            partials[path.split('/').pop()!.replace('.hbs', '')] =
+                `systems/${SYSTEM_ID}/templates/${path}`;
+            return partials;
+        },
+        {} as Record<string, string>,
     );
+
+    return await loadTemplates(templates);
 }

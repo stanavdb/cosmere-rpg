@@ -1,12 +1,12 @@
 import { IMPORTED_RESOURCES } from '@system/constants';
 
 const SIDES: Record<number, string> = {
-    1: `<img class="die-result plot" src="${IMPORTED_RESOURCES.PLOT_DICE_C2_IN_CHAT}" />`,
-    2: `<img class="die-result plot" src="${IMPORTED_RESOURCES.PLOT_DICE_C4_IN_CHAT}" />`,
-    3: `<img class="die-result plot" src="${IMPORTED_RESOURCES.PLOT_DICE_BLANK_IN_CHAT}" />`,
-    4: `<img class="die-result plot" src="${IMPORTED_RESOURCES.PLOT_DICE_BLANK_IN_CHAT}" />`,
-    5: `<img class="die-result plot" src="${IMPORTED_RESOURCES.PLOT_DICE_OP_IN_CHAT}" />`,
-    6: `<img class="die-result plot" src="${IMPORTED_RESOURCES.PLOT_DICE_OP_IN_CHAT}" />`,
+    1: `<img src="${IMPORTED_RESOURCES.PLOT_DICE_C2_IN_CHAT}" />`,
+    2: `<img src="${IMPORTED_RESOURCES.PLOT_DICE_C4_IN_CHAT}" />`,
+    3: '&nbsp;',
+    4: '&nbsp;',
+    5: `<img src="${IMPORTED_RESOURCES.PLOT_DICE_OP_IN_CHAT}" />`,
+    6: `<img src="${IMPORTED_RESOURCES.PLOT_DICE_OP_IN_CHAT}" />`,
 };
 
 export interface PlotDieData
@@ -81,7 +81,9 @@ export class PlotDie extends foundry.dice.terms.DiceTerm {
         return rollResult;
     }
 
-    getResultLabel(result: foundry.dice.terms.DiceTerm.Result): string {
+    override getResultLabel(
+        result: foundry.dice.terms.DiceTerm.Result,
+    ): string {
         return SIDES[result.result];
     }
 }

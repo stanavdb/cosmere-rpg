@@ -31,6 +31,7 @@ import {
     EquipHand,
     EquipmentType,
     PowerType,
+    Theme,
 } from './types/cosmere';
 import { AdvantageMode } from './types/roll';
 
@@ -74,6 +75,11 @@ const COSMERE: CosmereRPGConfig = {
         [CreatureType.Animal]: {
             label: 'COSMERE.Actor.Type.Animal',
         },
+    },
+
+    themes: {
+        [Theme.Default]: 'COSMERE.Theme.Default',
+        [Theme.Stormlight]: 'COSMERE.Theme.Stormlight',
     },
 
     conditions: {
