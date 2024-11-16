@@ -344,13 +344,14 @@ export class CosmereChatMessage extends ChatMessage {
         type: string,
         html: JQuery,
     ) {
+        html.find('.label').text(type);
+
         const constant = getConstantFromRoll(roll);
         if (constant === 0) return;
 
         const sign = constant < 0 ? '-' : '+';
         const newTotal = Number(html.find('.value').text()) + constant;
 
-        html.find('.label').text(type);
         html.find('.value').text(newTotal);
         html.find('.dice-rolls').append(
             `<li class="constant"><span class="sign">${sign}</span>${constant}</li>`,
