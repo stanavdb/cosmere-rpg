@@ -17,6 +17,14 @@ export const SETTINGS = {
     SYSTEM_THEME: 'systemTheme',
 } as const;
 
+export const enum TargetingOptions {
+    SelectedOnly = 0,
+    TargetedOnly = 1,
+    SelectedAndTargeted = 2,
+    PrioritiseSelected = 3,
+    PrioritiseTargeted = 4,
+}
+
 /**
  * Register all of the system's settings.
  */
@@ -94,22 +102,22 @@ export function registerSystemSettings() {
         scope: 'client',
         config: true,
         type: Number,
-        default: 0 as number,
+        default: TargetingOptions.SelectedOnly as number,
         requiresReload: true,
         choices: {
-            0: game.i18n!.localize(
+            [TargetingOptions.SelectedOnly]: game.i18n!.localize(
                 `SETTINGS.${SETTINGS.APPLY_BUTTONS_TO}.choices.0`,
             ),
-            1: game.i18n!.localize(
+            [TargetingOptions.TargetedOnly]: game.i18n!.localize(
                 `SETTINGS.${SETTINGS.APPLY_BUTTONS_TO}.choices.1`,
             ),
-            2: game.i18n!.localize(
+            [TargetingOptions.SelectedAndTargeted]: game.i18n!.localize(
                 `SETTINGS.${SETTINGS.APPLY_BUTTONS_TO}.choices.2`,
             ),
-            3: game.i18n!.localize(
+            [TargetingOptions.PrioritiseSelected]: game.i18n!.localize(
                 `SETTINGS.${SETTINGS.APPLY_BUTTONS_TO}.choices.3`,
             ),
-            4: game.i18n!.localize(
+            [TargetingOptions.PrioritiseTargeted]: game.i18n!.localize(
                 `SETTINGS.${SETTINGS.APPLY_BUTTONS_TO}.choices.4`,
             ),
         },

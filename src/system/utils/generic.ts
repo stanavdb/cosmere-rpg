@@ -3,6 +3,7 @@ import {
     getSystemSetting,
     KEYBINDINGS,
     SETTINGS,
+    TargetingOptions,
 } from '../settings';
 import { AdvantageMode } from '../types/roll';
 
@@ -139,12 +140,18 @@ export function getConstantFromRoll(roll: Roll) {
  * @returns {Set} A set of tokens that the system considers as current targets.
  */
 export function getApplyTargets() {
-    const setting = getSystemSetting(SETTINGS.APPLY_BUTTONS_TO) as number;
+    const setting = getSystemSetting(
+        SETTINGS.APPLY_BUTTONS_TO,
+    ) as TargetingOptions;
 
-    const applyToTargeted = setting === 1 || setting >= 2;
-    const applyToSelected = setting === 0 || setting >= 2;
-    const prioritiseTargeted = setting === 4;
-    const prioritiseSelected = setting === 3;
+    const applyToTargeted =
+        setting === TargetingOptions.TargetedOnly ||
+        setting >= TargetingOptions.SelectedAndTargeted;
+    const applyToSelected =
+        setting === TargetingOptions.SelectedOnly ||
+        setting >= TargetingOptions.SelectedAndTargeted;
+    const prioritiseTargeted = setting === TargetingOptions.PrioritiseTargeted;
+    const prioritiseSelected = setting === TargetingOptions.PrioritiseSelected;
 
     const selectTokens = applyToSelected
         ? canvas!.tokens!.controlled
