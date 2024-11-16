@@ -1,4 +1,6 @@
 import { SYSTEM_ID } from './constants';
+import { Theme } from './types/cosmere';
+import { setTheme } from './utils/templates';
 
 /**
  * Index of identifiers for system settings.
@@ -8,7 +10,20 @@ export const SETTINGS = {
     INTERNAL_LATEST_VERSION: 'latestVersion',
     ITEM_SHEET_SIDE_TABS: 'itemSheetSideTabs',
     ROLL_SKIP_DIALOG_DEFAULT: 'skipRollDialogByDefault',
+    CHAT_ENABLE_OVERLAY_BUTTONS: 'enableOverlayButtons',
+    CHAT_ENABLE_APPLY_BUTTONS: 'enableApplyButtons',
+    CHAT_ALWAYS_SHOW_BUTTONS: 'alwaysShowApplyButtons',
+    APPLY_BUTTONS_TO: 'applyButtonsTo',
+    SYSTEM_THEME: 'systemTheme',
 } as const;
+
+export const enum TargetingOptions {
+    SelectedOnly = 0,
+    TargetedOnly = 1,
+    SelectedAndTargeted = 2,
+    PrioritiseSelected = 3,
+    PrioritiseTargeted = 4,
+}
 
 /**
  * Register all of the system's settings.
@@ -61,6 +76,72 @@ export function registerSystemSettings() {
             default: option.default,
         });
     });
+
+    // CHAT SETTINGS
+    const chatOptions = [
+        { name: SETTINGS.CHAT_ENABLE_OVERLAY_BUTTONS, default: true },
+        { name: SETTINGS.CHAT_ENABLE_APPLY_BUTTONS, default: true },
+        { name: SETTINGS.CHAT_ALWAYS_SHOW_BUTTONS, default: true },
+    ];
+
+    chatOptions.forEach((option) => {
+        game.settings!.register(SYSTEM_ID, option.name, {
+            name: game.i18n!.localize(`SETTINGS.${option.name}.name`),
+            hint: game.i18n!.localize(`SETTINGS.${option.name}.hint`),
+            scope: 'client',
+            config: true,
+            type: Boolean,
+            default: option.default,
+            requiresReload: true,
+        });
+    });
+
+    game.settings!.register(SYSTEM_ID, SETTINGS.APPLY_BUTTONS_TO, {
+        name: game.i18n!.localize(`SETTINGS.${SETTINGS.APPLY_BUTTONS_TO}.name`),
+        hint: game.i18n!.localize(`SETTINGS.${SETTINGS.APPLY_BUTTONS_TO}.hint`),
+        scope: 'client',
+        config: true,
+        type: Number,
+        default: TargetingOptions.SelectedOnly as number,
+        requiresReload: true,
+        choices: {
+            [TargetingOptions.SelectedOnly]: game.i18n!.localize(
+                `SETTINGS.${SETTINGS.APPLY_BUTTONS_TO}.choices.SelectedOnly`,
+            ),
+            [TargetingOptions.TargetedOnly]: game.i18n!.localize(
+                `SETTINGS.${SETTINGS.APPLY_BUTTONS_TO}.choices.TargetedOnly`,
+            ),
+            [TargetingOptions.SelectedAndTargeted]: game.i18n!.localize(
+                `SETTINGS.${SETTINGS.APPLY_BUTTONS_TO}.choices.SelectedAndTargeted`,
+            ),
+            [TargetingOptions.PrioritiseSelected]: game.i18n!.localize(
+                `SETTINGS.${SETTINGS.APPLY_BUTTONS_TO}.choices.PrioritiseSelected`,
+            ),
+            [TargetingOptions.PrioritiseTargeted]: game.i18n!.localize(
+                `SETTINGS.${SETTINGS.APPLY_BUTTONS_TO}.choices.PrioritiseTargeted`,
+            ),
+        },
+    });
+}
+
+/**
+ * Register additional settings after modules have had a chance to initialize to give them a chance to modify choices.
+ */
+export function registerDeferredSettings() {
+    game.settings!.register(SYSTEM_ID, SETTINGS.SYSTEM_THEME, {
+        name: game.i18n!.localize(`SETTINGS.${SETTINGS.SYSTEM_THEME}.name`),
+        hint: game.i18n!.localize(`SETTINGS.${SETTINGS.SYSTEM_THEME}.hint`),
+        scope: 'client',
+        config: true,
+        type: String,
+        default: Theme.Default,
+        choices: {
+            ...CONFIG.COSMERE.themes,
+        },
+        onChange: (s) => setTheme(document.body, s),
+    });
+
+    setTheme(document.body, getSystemSetting(SETTINGS.SYSTEM_THEME) as Theme);
 }
 
 /**

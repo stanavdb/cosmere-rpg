@@ -840,19 +840,32 @@
             "sur": "Survival"
         },
         "ChatMessage": {
-            "Action": {
-                "Graze": "Graze: Reduce Focus",
-                "ApplyDamage": "Apply Damage",
-                "ApplyGraze": "Apply Graze Damage",
-                "ApplyHealing": "Apply Healing"
+            "Buttons": {
+                "DamageFull": "Click to apply full damage to selected token(s).",
+                "DamageHalf": "Click to apply half damage to selected token(s).",
+                "DamageDouble": "Click to apply double damage to selected token(s).",
+                "Healing": "Click to apply healing to selected token(s).",
+                "ReduceFocus": "Click to reduce focus from selected token(s).",
+                "RollCrit": "Click to roll critical damage.",
+                "RollAdvantage": "Click to roll with advantage.",
+                "RollDisadvantage": "Click to roll with disadvantage."
+            },
+            "InjuryRoll": "Injury Roll",
+            "InjuryDuration": {
+                "Dead": "{actor} has <strong>died</strong>.",
+                "Permanent": "{actor} is <strong>permanently injured</strong>.",
+                "Temporary": "{actor} is injured for <strong>{days} days</strong>."
             },
             "ApplyDamage": "[actor] takes [amount] damage",
             "ApplyHealing": "[actor] recovers [amount] health",
             "UndoDamage": "Undo damage",
             "UndoHealing": "Undo healing",
             "ViewRollsDetails": "Roll Details",
-            "InjuryDuration": "Injury Duration.",
-            "Welcome": "<h2>Welcome to the Cosmere RPG System!</h2> <p>Thank you for trying out the community-developed Cosmere Roleplaying Game system! You’re currently using version <strong>[version]</strong>. As this is an early release, some bugs or missing features are to be expected, but your feedback will help us improve the system.</p> <p>If you encounter any issues or have suggestions, we’d love to hear from you! Please report them on our <a href=\"https://github.com/stanavdb/cosmere-rpg/issues\">GitHub Issues page</a>, and be sure to review the <a href=\"https://github.com/stanavdb/cosmere-rpg/blob/main/CONTRIBUTING.md\">contribution guidelines</a> if you’d like to get involved in development. </p> <p>For discussions, updates, and support, join us on the <a href=\"https://discord.gg/B9Zam3qdZt\">Official Cosmere RPG Discord</a> server. You can find us in <em>vtt-discussion > Foundry VTT System Development</em>.</p> <p>We’re excited to have you on board and hope you enjoy playing in the Cosmere!</p>"
+            "Welcome": "<h2>Welcome to the Cosmere RPG System!</h2> <p>Thank you for trying out the community-developed Cosmere Roleplaying Game system! You're currently using version <strong>[version]</strong>. As this is an early release, some bugs or missing features are to be expected, but your feedback will help us improve the system.</p> <p>If you encounter any issues or have suggestions, we'd love to hear from you! Please report them on our <a href=\"https://github.com/stanavdb/cosmere-rpg/issues\">GitHub Issues page</a>, and be sure to review the <a href=\"https://github.com/stanavdb/cosmere-rpg/blob/main/CONTRIBUTING.md\">contribution guidelines</a> if you'd like to get involved in development. </p> <p>For discussions, updates, and support, join us on the <a href=\"https://discord.gg/B9Zam3qdZt\">Official Cosmere RPG Discord</a> server. You can find us in <em>vtt-discussion > Foundry VTT System Development</em>.</p> <p>We're excited to have you on board and hope you enjoy playing in the Cosmere!</p>"
+        },
+        "Theme": {
+            "Default": "Default",
+            "Stormlight": "Stormlight Archive"
         }
     },
     "DICE": {
@@ -871,7 +884,8 @@
         "Damage": {
             "Label": "Damage",
             "Apply": "Apply",
-            "Graze": "Graze"
+            "Graze": "Graze",
+            "Full": "Full"
         }
     },
     "ROLLS": {
@@ -1061,6 +1075,33 @@
         "skipRollDialogByDefault": {
             "name": "Skip Roll Dialog by Default",
             "hint": "If enabled, rolls will skip the roll configuration dialog when clicked, using the default roll configuration. The dialog can still be accessed by holding the 'Skip/Show Dialog' key modifier from the system controls."
+        },
+        "enableOverlayButtons": {
+            "name": "Enable Overlay Buttons",
+            "hint": "When outputting a skill test or damage roll, enable overlay buttons on the chat message that offer additional functionality for the roll."
+        },         
+        "enableApplyButtons": {
+            "name": "Enable Apply Buttons",
+            "hint": "When outputting a damage roll, enable buttons on the chat message that allow for damage or healing to be applied to tokens, or to reduce focus from those tokens."
+        },
+        "alwaysShowApplyButtons": {
+            "name": "Always Show Apply Buttons",
+            "hint": "When outputting a damage roll always show the apply buttons, instead of only on hover."
+        },
+        "applyButtonsTo": {
+            "name": "Apply Button Options",
+            "hint": "Determines which tokens damage, healing, or focus reduction is applied to when applying via the chat card buttons.",
+            "choices": {
+                "SelectedOnly": "Apply to Selected Tokens",
+                "TargetedOnly": "Apply to Targeted Tokens",
+                "SelectedAndTargeted": "Apply to Both",
+                "PrioritiseSelected": "Prioritise Selected Tokens",
+                "PrioritiseTargeted": "Prioritise Targeted Tokens"
+            }
+        },
+        "systemTheme": {
+            "name": "Preferred System Theme",
+            "hint": "Specify the themed set of colours to use for system documents and interface elements. The selected theme will respect the prefered Dark/Light mode selected in the core settings."
         }
     },
     "KEYBINDINGS": {

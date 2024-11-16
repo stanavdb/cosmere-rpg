@@ -3,6 +3,7 @@ import {
     getSystemSetting,
     KEYBINDINGS,
     SETTINGS,
+    TargetingOptions,
 } from '../settings';
 import { AdvantageMode } from '../types/roll';
 
@@ -107,4 +108,63 @@ export function isFastForward() {
     return (
         (skipByDefault && !skipKeyPressed) || (!skipByDefault && skipKeyPressed)
     );
+}
+
+/**
+ * Computes the constant value of a roll (i.e. total of numeric terms).
+ * @param {Roll} roll The roll to calculate the constant total from.
+ * @returns {number} The total constant value.
+ */
+export function getConstantFromRoll(roll: Roll) {
+    let previous: unknown;
+    let constant = 0;
+    for (const term of roll.terms) {
+        if (term instanceof foundry.dice.terms.NumericTerm) {
+            if (
+                previous instanceof foundry.dice.terms.OperatorTerm &&
+                previous.operator === '-'
+            ) {
+                constant -= term.number;
+            } else {
+                constant += term.number;
+            }
+        }
+        previous = term;
+    }
+
+    return constant;
+}
+
+/**
+ * Gets the current set of tokens that are selected or targeted (or both) depending on the chosen setting.
+ * @returns {Set} A set of tokens that the system considers as current targets.
+ */
+export function getApplyTargets() {
+    const setting = getSystemSetting(
+        SETTINGS.APPLY_BUTTONS_TO,
+    ) as TargetingOptions;
+
+    const applyToTargeted =
+        setting === TargetingOptions.TargetedOnly ||
+        setting >= TargetingOptions.SelectedAndTargeted;
+    const applyToSelected =
+        setting === TargetingOptions.SelectedOnly ||
+        setting >= TargetingOptions.SelectedAndTargeted;
+    const prioritiseTargeted = setting === TargetingOptions.PrioritiseTargeted;
+    const prioritiseSelected = setting === TargetingOptions.PrioritiseSelected;
+
+    const selectTokens = applyToSelected
+        ? canvas!.tokens!.controlled
+        : ([] as Token[]);
+    const targetTokens = applyToTargeted ? game.user!.targets : new Set();
+
+    if (prioritiseSelected && selectTokens.length > 0) {
+        targetTokens.clear();
+    }
+
+    if (prioritiseTargeted && targetTokens.size > 0) {
+        selectTokens.length = 0;
+    }
+
+    return new Set([...selectTokens, ...targetTokens]);
 }
