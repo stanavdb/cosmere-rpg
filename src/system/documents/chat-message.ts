@@ -64,7 +64,6 @@ export class CosmereChatMessage extends ChatMessage {
         html.find('.collapsible').on('click', (event) =>
             this.onClickCollapsible(event),
         );
-        //await this.enrichChatCard(html);
 
         return html;
     }
@@ -339,6 +338,13 @@ export class CosmereChatMessage extends ChatMessage {
         html.find('.chat-card').append(section);
     }
 
+    /**
+     * Augment damage roll tooltips with some additional information and styling.
+     * @param {DamageRoll} roll The roll instance.
+     * @param {string} type The type of the damage as a string.
+     * @param {JQuery} html The roll tooltip markup.
+     * @returns
+     */
     protected enrichDamageTooltip(
         roll: DamageRoll,
         type: string,
@@ -359,7 +365,7 @@ export class CosmereChatMessage extends ChatMessage {
     }
 
     /**
-     * Augment roll tooltips with some additional information and styling.
+     * Augment d20 roll tooltips with some additional information and styling.
      * @param {Roll} roll The roll instance.
      * @param {HTMLElement} html The roll tooltip markup.
      */
