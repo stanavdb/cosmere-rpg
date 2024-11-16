@@ -1059,11 +1059,8 @@ export class CosmereItem<
         const traitsNormal = [];
         const traitsExpert = [];
         const traits = [];
-        if (this.system.traits) {
-            for (const [key, value] of Object.entries(
-                this.system.traits as TraitsItemData,
-            )) {
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        if (this.hasTraits()) {
+            for (const [key, value] of Object.entries(this.system.traits)) {
                 if (!value?.active) continue;
 
                 const traitLoc =
@@ -1071,7 +1068,6 @@ export class CosmereItem<
                     CONFIG.COSMERE.traits.armorTraits[key as ArmorTraitId];
                 let label = game.i18n!.localize(traitLoc.label);
 
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                 if (value.expertise?.toggleActive) {
                     label = `<strong>${label}</strong>`;
                     traitsExpert.push(label);
@@ -1084,8 +1080,10 @@ export class CosmereItem<
         }
 
         let action;
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        if (this.system.activation?.cost?.value !== undefined) {
+        if (
+            this.hasActivation() &&
+            this.system.activation?.cost?.value !== undefined
+        ) {
             const activation = this.system.activation as Record<
                 string,
                 unknown

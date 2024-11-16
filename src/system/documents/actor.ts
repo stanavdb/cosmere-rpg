@@ -693,7 +693,6 @@ export class CosmereActor<
                 data: data as D20RollData,
                 title: flavor,
                 defaultAttribute: options.attribute ?? skill.attribute,
-                parts: [`@mod`].concat(options.parts ?? []),
                 messageData: {
                     speaker:
                         options.speaker ??
@@ -706,6 +705,7 @@ export class CosmereActor<
             options,
         );
 
+        rollData.parts = [`@mod`].concat(options.parts ?? []);
         rollData.messageData.flags[SYSTEM_ID] = {
             message: {
                 type: MESSAGE_TYPES.SKILL,
