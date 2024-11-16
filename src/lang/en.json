@@ -1092,11 +1092,11 @@
             "name": "Apply Button Options",
             "hint": "Determines which tokens damage, healing, or focus reduction is applied to when applying via the chat card buttons.",
             "choices": {
-                "0": "Apply to Selected Tokens",
-                "1": "Apply to Targeted Tokens",
-                "2": "Apply to Both",
-                "3": "Prioritise Selected Tokens",
-                "4": "Prioritise Targeted Tokens"
+                "SelectedOnly": "Apply to Selected Tokens",
+                "TargetedOnly": "Apply to Targeted Tokens",
+                "SelectedAndTargeted": "Apply to Both",
+                "PrioritiseSelected": "Prioritise Selected Tokens",
+                "PrioritiseTargeted": "Prioritise Targeted Tokens"
             }
         },
         "systemTheme": {

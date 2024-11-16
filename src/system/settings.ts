@@ -106,19 +106,19 @@ export function registerSystemSettings() {
         requiresReload: true,
         choices: {
             [TargetingOptions.SelectedOnly]: game.i18n!.localize(
-                `SETTINGS.${SETTINGS.APPLY_BUTTONS_TO}.choices.0`,
+                `SETTINGS.${SETTINGS.APPLY_BUTTONS_TO}.choices.SelectedOnly`,
             ),
             [TargetingOptions.TargetedOnly]: game.i18n!.localize(
-                `SETTINGS.${SETTINGS.APPLY_BUTTONS_TO}.choices.1`,
+                `SETTINGS.${SETTINGS.APPLY_BUTTONS_TO}.choices.TargetedOnly`,
             ),
             [TargetingOptions.SelectedAndTargeted]: game.i18n!.localize(
-                `SETTINGS.${SETTINGS.APPLY_BUTTONS_TO}.choices.2`,
+                `SETTINGS.${SETTINGS.APPLY_BUTTONS_TO}.choices.SelectedAndTargeted`,
             ),
             [TargetingOptions.PrioritiseSelected]: game.i18n!.localize(
-                `SETTINGS.${SETTINGS.APPLY_BUTTONS_TO}.choices.3`,
+                `SETTINGS.${SETTINGS.APPLY_BUTTONS_TO}.choices.PrioritiseSelected`,
             ),
             [TargetingOptions.PrioritiseTargeted]: game.i18n!.localize(
-                `SETTINGS.${SETTINGS.APPLY_BUTTONS_TO}.choices.4`,
+                `SETTINGS.${SETTINGS.APPLY_BUTTONS_TO}.choices.PrioritiseTargeted`,
             ),
         },
     });
