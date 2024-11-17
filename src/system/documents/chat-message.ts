@@ -226,7 +226,7 @@ export class CosmereChatMessage extends ChatMessage {
         const tray = $(trayHTML as unknown as HTMLElement);
 
         tray.find('li.target').on('click', (event) => {
-            this.onClickTarget(event);
+            void this.onClickTarget(event);
         });
 
         html.find('.chat-card').append(tray);
