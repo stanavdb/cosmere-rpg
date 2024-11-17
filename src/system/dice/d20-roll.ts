@@ -400,6 +400,14 @@ export class D20Roll extends foundry.dice.Roll<D20RollData> {
         });
     }
 
+    /**
+     * Recalculates the roll total from the current (potentially modified) terms.
+     * @returns {number} The new total of the roll.
+     */
+    public resetTotal(): number {
+        return (this._total = this._evaluateTotal());
+    }
+
     /* --- Internal Functions --- */
 
     private configureModifiers() {

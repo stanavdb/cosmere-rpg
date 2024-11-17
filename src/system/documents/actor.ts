@@ -37,6 +37,7 @@ import { d20Roll, D20Roll, D20RollData, DamageRoll } from '@system/dice';
 // Dialogs
 import { ShortRestDialog } from '@system/applications/actor/dialogs/short-rest';
 import { MESSAGE_TYPES } from './chat-message';
+import { getTargetDescriptors } from '../utils/generic';
 
 export type CharacterActor = CosmereActor<CharacterActorDataModel>;
 export type AdversaryActor = CosmereActor<AdversaryActorDataModel>;
@@ -713,6 +714,7 @@ export class CosmereActor<
         rollData.messageData.flags[SYSTEM_ID] = {
             message: {
                 type: MESSAGE_TYPES.SKILL,
+                targets: getTargetDescriptors(),
             },
         };
 

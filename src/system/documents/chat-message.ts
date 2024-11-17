@@ -7,7 +7,11 @@ import { renderSystemTemplate, TEMPLATES } from '../utils/templates';
 import { SYSTEM_ID } from '../constants';
 import { AdvantageMode } from '../types/roll';
 import { getSystemSetting, SETTINGS } from '../settings';
-import { getApplyTargets, getConstantFromRoll } from '../utils/generic';
+import {
+    getApplyTargets,
+    getConstantFromRoll,
+    TargetDescriptor,
+} from '../utils/generic';
 
 export const MESSAGE_TYPES = {
     SKILL: 'skill',
@@ -117,6 +121,7 @@ export class CosmereChatMessage extends ChatMessage {
         await this.enrichSkillTest(content);
         await this.enrichDamage(content);
         await this.enrichInjury(content);
+        await this.enrichTestTargets(content);
 
         // Replace content
         html.find('.message-content').replaceWith(content);
@@ -178,6 +183,48 @@ export class CosmereChatMessage extends ChatMessage {
         tooltip.prepend(section.find('.dice-formula'));
 
         html.find('.chat-card').append(section);
+    }
+
+    protected async enrichTestTargets(html: JQuery) {
+        if (!this.hasSkillTest) return;
+
+        const targets = this.getFlag(
+            SYSTEM_ID,
+            'message.targets',
+        ) as TargetDescriptor[];
+        if (!targets || targets.length === 0) return;
+
+        const d20Roll = this.d20Rolls[0];
+
+        const success = '<i class="fa-solid fa-check success"></i>';
+        const failure = '<i class="fa-solid fa-times failure"></i>';
+
+        const targetData = [];
+        for (const target of targets) {
+            targetData.push({
+                name: target.name,
+                phyDef: target.def.phy,
+                phyIcon:
+                    (d20Roll.total ?? 0) >= target.def.phy ? success : failure,
+                cogDef: target.def.cog,
+                cogIcon:
+                    (d20Roll.total ?? 0) >= target.def.cog ? success : failure,
+                spiDef: target.def.spi,
+                spiIcon:
+                    (d20Roll.total ?? 0) >= target.def.spi ? success : failure,
+            });
+        }
+
+        const trayHTML = await renderSystemTemplate(
+            TEMPLATES.CHAT_CARD_TRAY_TARGETS,
+            {
+                targets: targetData,
+            },
+        );
+
+        const tray = $(trayHTML as unknown as HTMLElement);
+
+        html.find('.chat-card').append(tray);
     }
 
     protected async enrichDamage(html: JQuery) {
@@ -508,6 +555,9 @@ export class CosmereChatMessage extends ChatMessage {
                     : state === 'kl'
                       ? AdvantageMode.Disadvantage
                       : AdvantageMode.None;
+
+            roll.resetFormula();
+            roll.resetTotal();
 
             void this.update({ rolls: this.rolls });
         }
