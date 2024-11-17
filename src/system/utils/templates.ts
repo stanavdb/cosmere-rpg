@@ -41,6 +41,8 @@ export const TEMPLATES = {
     ITEM_GOAL_DETAILS_TAB: 'item/goal/partials/goal-details-tab.hbs',
     ITEM_POWER_DETAILS_TAB: 'item/power/partials/power-details-tab.hbs',
     ITEM_PATH_DETAILS_TAB: 'item/path/partials/path-details-tab.hbs',
+    ITEM_TALENT_TREE_NODE_TOOLTIP:
+        'item/talent-tree/partials/talent-tree-node-tooltip.hbs',
 
     //CHAT
     CHAT_CARD_HEADER: 'chat/card-header.hbs',

@@ -21,6 +21,8 @@ import { GoalItemDataModel } from './goal';
 
 import { PowerItemDataModel } from './power';
 
+import { TalentTreeItemDataModel } from './talent-tree';
+
 export const config: Record<
     ItemType,
     typeof foundry.abstract.TypeDataModel<
@@ -47,6 +49,8 @@ export const config: Record<
     [ItemType.Goal]: GoalItemDataModel,
 
     [ItemType.Power]: PowerItemDataModel,
+
+    [ItemType.TalentTree]: TalentTreeItemDataModel,
 };
 
 export * from './weapon';
@@ -64,3 +68,4 @@ export * from './connection';
 export * from './trait';
 export * from './goal';
 export * from './power';
+export * from './talent-tree';

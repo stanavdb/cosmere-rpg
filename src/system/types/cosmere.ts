@@ -276,6 +276,8 @@ export const enum ItemType {
     Goal = 'goal',
 
     Power = 'power',
+
+    TalentTree = 'talent_tree',
 }
 
 export const enum TurnSpeed {

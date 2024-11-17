@@ -149,7 +149,7 @@ span.document-name {
 span.cosmere-icon,
 em.cosmere-icon,
 i.cosmere-icon {
-    font-family: var(--plotweaver-font-icons);
+    font-family: var(--plotweaver-font-icons) !important;
 
     &.complication {
         color: var(--plotweaver-color-complication);

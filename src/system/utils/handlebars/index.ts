@@ -154,6 +154,17 @@ Handlebars.registerHelper('effect-duration', (effect: ActiveEffect) => {
 });
 
 Handlebars.registerHelper(
+    'inline-partial',
+    (partialName: string, options?: { hash?: AnyObject }) => {
+        return new Handlebars.SafeString(
+            (Handlebars.partials[partialName] as (data?: AnyObject) => string)(
+                options?.hash,
+            ).replace(/"/g, '&quot;'),
+        );
+    },
+);
+
+Handlebars.registerHelper(
     'itemContext',
     (item: CosmereItem, options?: { hash?: ItemContextOptions }) => {
         try {

@@ -259,6 +259,8 @@ namespace foundry {
             readonly system: Schema;
 
             get flags(): Record<string, any>;
+            get pack(): string | undefined;
+            get compendium(): CompendiumCollection<Document> | undefined;
 
             /**
              * The canonical name of this Document type, for example "Actor".
