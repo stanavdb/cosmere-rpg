@@ -203,6 +203,7 @@ export class CosmereChatMessage extends ChatMessage {
         for (const target of targets) {
             targetData.push({
                 name: target.name,
+                uuid: target.uuid,
                 phyDef: target.def.phy,
                 phyIcon:
                     (d20Roll.total ?? 0) >= target.def.phy ? success : failure,
@@ -223,6 +224,10 @@ export class CosmereChatMessage extends ChatMessage {
         );
 
         const tray = $(trayHTML as unknown as HTMLElement);
+
+        tray.find('li.target').on('click', (event) => {
+            this.onClickTarget(event);
+        });
 
         html.find('.chat-card').append(tray);
     }
@@ -642,6 +647,31 @@ export class CosmereChatMessage extends ChatMessage {
         event.stopPropagation();
         const target = event.currentTarget as HTMLElement;
         target?.classList.toggle('expanded');
+    }
+
+    /**
+     * Handle target selection and panning.
+     * @param {Event} event The triggering event.
+     * @returns {Promise} A promise that resolves once the canvas pan has completed.
+     * @protected
+     */
+    private async onClickTarget(event: JQuery.ClickEvent) {
+        event.stopPropagation();
+        const uuid = (event.currentTarget as HTMLElement).dataset.uuid;
+
+        if (!uuid) return;
+
+        const actor = fromUuidSync(uuid) as CosmereActor;
+        const token = actor?.getActiveTokens()[0] as Token;
+
+        if (!token) return;
+
+        const releaseOthers = !event.shiftKey;
+        if (token.controlled) token.release();
+        else {
+            token.control({ releaseOthers });
+            return game.canvas!.animatePan(token.center);
+        }
     }
 
     /**

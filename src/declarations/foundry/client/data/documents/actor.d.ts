@@ -30,7 +30,9 @@ declare class Actor<
 
     get items(): Collection<I>;
     get effects(): Collection<ActiveEffect>;
+    get isToken(): boolean;
     get appliedEffects(): ActiveEffect[];
+    get token(): TokenDocument;
 
     /**
      * Return a data object which defines the data schema against which dice rolls can be evaluated.
@@ -54,6 +56,19 @@ declare class Actor<
         statusId: string,
         options?: Actor.ToggleStatusEffectOptions,
     ): Promise<ActiveEffect | boolean | undefined>;
+
+    /**
+     * Retrieve an Array of active tokens which represent this Actor in the current canvas Scene. 
+     * If the canvas is not currently active, or there are no linked actors, the returned Array will be empty. 
+     * If the Actor is a synthetic token actor, only the exact Token which it represents will be returned.
+     * @param linked Limit results to Tokens which are linked to the Actor. Otherwise, return all Tokens even those which are not linked.
+     * @param document Return the Document instance rather than the PlaceableObject
+     * @returns An array of Token instances in the current Scene which reference this Actor.
+     */
+    public getActiveTokens(
+        linked?: boolean,
+        document?: boolean
+    ): (TokenDocument | Token)[];
 
     /**
      * Get all ActiveEffects that may apply to this Actor.

@@ -13,7 +13,7 @@
             </div>
             <ul class="target-list">
                 {{#each targets}}
-                <li class="target">
+                <li class="target" data-uuid="{{this.uuid}}">
                     <span class="name">{{this.name}}</span>
                     <span class="result">{{this.phyDef}} {{{this.phyIcon}}}</span>
                     <span class="result">{{this.cogDef}} {{{this.cogIcon}}}</span>
