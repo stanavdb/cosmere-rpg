@@ -862,6 +862,9 @@
                 "RollAdvantage": "Click to roll with advantage.",
                 "RollDisadvantage": "Click to roll with disadvantage."
             },
+            "Trays": {
+                "Targets": "Targets"
+            },
             "InjuryRoll": "Injury Roll",
             "InjuryDuration": {
                 "Dead": "{actor} has <strong>died</strong>.",

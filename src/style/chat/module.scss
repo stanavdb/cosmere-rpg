@@ -477,14 +477,110 @@
                 }
             }            
 
+            .chat-card-tray {
+                & > label {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 0.25rem;
+                    font-size: var(--font-size-11);
+                    font-family: var(--plotweaver-font-normal);
+                    font-weight: bold;
+                    text-transform: uppercase;
+
+                    & > span {
+                        flex: none;
+                    }
+
+                    & > i:first-of-type {
+                        color: var(--plotweaver-color-light-2);
+                    }
+                }
+
+                & > label::before,
+                & > label::after {
+                    content: "";
+                    flex-basis: 50%;
+                    border-top: 1px dotted var(--plotweaver-color-dark-6);
+                    align-self: center;
+                }
+
+                .target-headers {
+                    color: var(--plotweaver-color-light-2);
+                    font-size: var(--font-size-10);
+                    font-family: var(--plotweaver-font-condensed);
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-end;
+                    margin-top: 0.25rem;
+
+                    & > span {
+                        width: 15%;
+                        text-align: center;
+                    }
+                }
+
+                .target-list {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.25rem;
+                    list-style: none;
+                    padding: 0;
+                    margin: 0.25rem 0;
+
+                    .target {
+                        display: flex;
+                        align-items: center;
+                        cursor: pointer;
+                        font-size: var(--font-size-13);
+                        font-family: var(--plotweaver-font-normal);
+                        font-weight: bold;
+
+                        .name {
+                            color: var(--plotweaver-color-dark-1);
+                            width: 55%;
+                        }
+
+                        .result {                            
+                            color: var(--plotweaver-color-dark-4);
+                            width: 15%;
+                            text-align: center;
+
+                            .success {
+                                color: var(--plotweaver-color-health-front)
+                            }
+
+                            .failure {
+                                color: var(--plotweaver-color-complication)
+                            }
+                        }
+                    }
+                }
+            }
+
             .collapsible {
                 cursor: pointer;
 
                 .collapsible-content {
                     display: grid;
                     grid-template-rows: 0fr;
-                    transition: grid-template-rows 250ms ease;                    
-                }    
+                    transition: grid-template-rows 250ms ease;
+
+                    & > .wrapper {
+                        overflow: hidden;
+                    }
+                }
+
+                .fa-caret-down {
+                    transform: rotate(-90deg);
+                    transition: all 250ms ease;
+                }
+
+                &.expanded .fa-caret-down {
+                    transform: rotate(0deg);
+                }
                 
                 &.expanded .collapsible-content {
                     grid-template-rows: 1fr;

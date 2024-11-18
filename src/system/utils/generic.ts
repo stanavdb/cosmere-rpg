@@ -1,3 +1,4 @@
+import { CosmereActor } from '../documents';
 import {
     getSystemKeybinding,
     getSystemSetting,
@@ -167,4 +168,50 @@ export function getApplyTargets() {
     }
 
     return new Set([...selectTokens, ...targetTokens]);
+}
+
+export interface TargetDescriptor {
+    /**
+     * The UUID of the target.
+     */
+    uuid: string;
+
+    /**
+     * The target's name.
+     */
+    name: string;
+
+    /**
+     * The target's image.
+     */
+    img: string;
+
+    /**
+     * The target's defense values.
+     */
+    def: {
+        phy: number;
+        cog: number;
+        spi: number;
+    };
+}
+
+/**
+ * Grab the targeted tokens and return relevant information on them.
+ * @returns {TargetDescriptor[]}
+ */
+export function getTargetDescriptors() {
+    const targets = new Map();
+    for (const token of game.user!.targets) {
+        const { name, img, system, uuid } = (token.actor as CosmereActor) ?? {};
+        const phy = system.defenses.phy.value.value ?? 10;
+        const cog = system.defenses.cog.value.value ?? 10;
+        const spi = system.defenses.spi.value.value ?? 10;
+
+        if (uuid) {
+            targets.set(uuid, { name, img, uuid, def: { phy, cog, spi } });
+        }
+    }
+
+    return Array.from(targets.values());
 }

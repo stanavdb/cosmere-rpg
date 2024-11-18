@@ -7,7 +7,11 @@ import { renderSystemTemplate, TEMPLATES } from '../utils/templates';
 import { SYSTEM_ID } from '../constants';
 import { AdvantageMode } from '../types/roll';
 import { getSystemSetting, SETTINGS } from '../settings';
-import { getApplyTargets, getConstantFromRoll } from '../utils/generic';
+import {
+    getApplyTargets,
+    getConstantFromRoll,
+    TargetDescriptor,
+} from '../utils/generic';
 
 export const MESSAGE_TYPES = {
     SKILL: 'skill',
@@ -117,6 +121,7 @@ export class CosmereChatMessage extends ChatMessage {
         await this.enrichSkillTest(content);
         await this.enrichDamage(content);
         await this.enrichInjury(content);
+        await this.enrichTestTargets(content);
 
         // Replace content
         html.find('.message-content').replaceWith(content);
@@ -178,6 +183,53 @@ export class CosmereChatMessage extends ChatMessage {
         tooltip.prepend(section.find('.dice-formula'));
 
         html.find('.chat-card').append(section);
+    }
+
+    protected async enrichTestTargets(html: JQuery) {
+        if (!this.hasSkillTest) return;
+
+        const targets = this.getFlag(
+            SYSTEM_ID,
+            'message.targets',
+        ) as TargetDescriptor[];
+        if (!targets || targets.length === 0) return;
+
+        const d20Roll = this.d20Rolls[0];
+
+        const success = '<i class="fa-solid fa-check success"></i>';
+        const failure = '<i class="fa-solid fa-times failure"></i>';
+
+        const targetData = [];
+        for (const target of targets) {
+            targetData.push({
+                name: target.name,
+                uuid: target.uuid,
+                phyDef: target.def.phy,
+                phyIcon:
+                    (d20Roll.total ?? 0) >= target.def.phy ? success : failure,
+                cogDef: target.def.cog,
+                cogIcon:
+                    (d20Roll.total ?? 0) >= target.def.cog ? success : failure,
+                spiDef: target.def.spi,
+                spiIcon:
+                    (d20Roll.total ?? 0) >= target.def.spi ? success : failure,
+            });
+        }
+
+        const trayHTML = await renderSystemTemplate(
+            TEMPLATES.CHAT_CARD_TRAY_TARGETS,
+            {
+                targets: targetData,
+            },
+        );
+
+        const tray = $(trayHTML as unknown as HTMLElement);
+
+        tray.find('li.target').on('click', (event) => {
+            void this.onClickTarget(event);
+        });
+
+        html.find('.chat-card').append(tray);
     }
 
     protected async enrichDamage(html: JQuery) {
@@ -509,6 +561,9 @@ export class CosmereChatMessage extends ChatMessage {
                       ? AdvantageMode.Disadvantage
                       : AdvantageMode.None;
 
+            roll.resetFormula();
+            roll.resetTotal();
+
             void this.update({ rolls: this.rolls });
         }
     }
@@ -592,6 +647,31 @@ export class CosmereChatMessage extends ChatMessage {
         event.stopPropagation();
         const target = event.currentTarget as HTMLElement;
         target?.classList.toggle('expanded');
+    }
+
+    /**
+     * Handle target selection and panning.
+     * @param {Event} event The triggering event.
+     * @returns {Promise} A promise that resolves once the canvas pan has completed.
+     * @protected
+     */
+    private async onClickTarget(event: JQuery.ClickEvent) {
+        event.stopPropagation();
+        const uuid = (event.currentTarget as HTMLElement).dataset.uuid;
+
+        if (!uuid) return;
+
+        const actor = fromUuidSync(uuid) as CosmereActor;
+        const token = actor?.getActiveTokens()[0] as Token;
+
+        if (!token) return;
+
+        const releaseOthers = !event.shiftKey;
+        if (token.controlled) token.release();
+        else {
+            token.control({ releaseOthers });
+            return game.canvas!.animatePan(token.center);
+        }
     }
 
     /**
