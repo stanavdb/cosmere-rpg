@@ -988,7 +988,7 @@ export class TalentTreeItemSheet extends EditModeApplicationMixin(
 
         // Create connection
         const connection = $(
-            `<div class="connection" data-from="${fromNode.id}" data-to="${toNode.id}"><i class="fa-solid fa-angle-right"></i></div>`,
+            `<div class="connection" data-from="${fromNode.id}" data-to="${toNode.id}"></div>`,
         );
 
         // Set position

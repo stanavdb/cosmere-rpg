@@ -402,7 +402,8 @@
                 "Trait": {
                     "Cumbersome": "Cumbersome",
                     "Dangerous": "Dangerous",
-                    "Presentable": "Presentable"
+                    "Presentable": "Presentable",
+                    "Unique": "Unique"
                 },
                 "Deflect": "Deflect"
             },

@@ -171,6 +171,7 @@ export const enum ArmorTraitId {
     Cumbersome = 'cumbersome',
     Dangerous = 'dangerous',
     Presentable = 'presentable',
+    Unique = 'unique',
 }
 
 export const enum AdversaryRole {

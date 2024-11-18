@@ -483,7 +483,10 @@ export class CosmereItem<
         // Perform the roll
         const roll = await damageRoll(
             foundry.utils.mergeObject(options, {
-                formula: `${this.system.damage.formula}+${rollData.mod}`,
+                formula:
+                    rollData.mod !== undefined
+                        ? `${this.system.damage.formula} + ${rollData.mod}`
+                        : this.system.damage.formula,
                 damageType: this.system.damage.type,
                 mod: rollData.mod,
                 data: rollData,

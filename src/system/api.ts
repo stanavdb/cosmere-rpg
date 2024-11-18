@@ -5,12 +5,14 @@ import {
     ArmorId,
     PathType,
     PowerType,
+    ActionType,
 } from '@system/types/cosmere';
 
 import {
     CurrencyConfig,
     SkillConfig,
     PowerTypeConfig,
+    ActionTypeConfig,
 } from '@system/types/config';
 
 interface SkillConfigData extends Omit<SkillConfig, 'key'> {
@@ -70,6 +72,52 @@ export function registerPowerType(data: PowerTypeConfigData, force = false) {
     CONFIG.COSMERE.power.types[data.id as PowerType] = {
         label: data.label,
         plural: data.plural,
+    };
+}
+
+interface PathTypeConfigData {
+    id: string;
+    label: string;
+}
+
+export function registerPathType(data: PathTypeConfigData, force = false) {
+    if (!CONFIG.COSMERE)
+        throw new Error('Cannot access api until after system is initialized.');
+
+    if (data.id in CONFIG.COSMERE.armors && !force)
+        throw new Error('Cannot override existing path type config.');
+
+    if (force) {
+        console.warn('Registering path type with force=true.');
+    }
+
+    // Add to path config
+    CONFIG.COSMERE.paths.types[data.id as PathType] = {
+        label: data.label,
+    };
+}
+
+interface ActionTypeConfigData extends ActionTypeConfig {
+    id: string;
+}
+
+export function registerActionType(data: ActionTypeConfigData, force = false) {
+    if (!CONFIG.COSMERE)
+        throw new Error('Cannot access api until after system is initialized.');
+
+    if (data.id in CONFIG.COSMERE.action.types && !force)
+        throw new Error('Cannot override existing action type config.');
+
+    if (force) {
+        console.warn('Registering action type with force=true.');
+    }
+
+    // Add to action types
+    CONFIG.COSMERE.action.types[data.id as ActionType] = {
+        label: data.label,
+        labelPlural: data.labelPlural,
+        hasMode: data.hasMode,
+        subtitle: data.subtitle,
     };
 }
 
@@ -196,28 +244,6 @@ export function registerAncestry(data: AncestryConfigData, force = false) {
     };
 }
 
-interface PathTypeConfigData {
-    id: string;
-    label: string;
-}
-
-export function registerPathType(data: PathTypeConfigData, force = false) {
-    if (!CONFIG.COSMERE)
-        throw new Error('Cannot access api until after system is initialized.');
-
-    if (data.id in CONFIG.COSMERE.armors && !force)
-        throw new Error('Cannot override existing path type config.');
-
-    if (force) {
-        console.warn('Registering path type with force=true.');
-    }
-
-    // Add to path config
-    CONFIG.COSMERE.paths.types[data.id as PathType] = {
-        label: data.label,
-    };
-}
-
 interface CurrencyConfigData extends CurrencyConfig {
     id: string;
 }
@@ -266,10 +292,11 @@ export default {
     registerSkill,
     registerPowerType,
     registerEquipmentType,
+    registerPathType,
+    registerActionType,
     registerWeapon,
     registerArmor,
     registerCulture,
     registerAncestry,
-    registerPathType,
     registerCurrency,
 };

@@ -459,10 +459,15 @@
                 }
             }
 
+            &:first-child, &:last-child {
+                .value input {
+                    font-weight: bold;
+                }
+            }
+
             &:first-child {
                 .value input {
                     border-bottom-left-radius: 1rem;
-                    font-weight: bold;
                 }
             }
 

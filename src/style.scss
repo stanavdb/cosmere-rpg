@@ -25,8 +25,10 @@
     --plotweaver-color-off-white-2: #f0f0e0;
 
     --plotweaver-color-complication: #ab3d38;
+    --plotweaver-color-complication-text: #ab3d38;
     --plotweaver-color-complication-background: #ffdddd;
     --plotweaver-color-opportunity: #1e3c60;
+    --plotweaver-color-opportunity-text: #7fa4e9;
     --plotweaver-color-opportunity-background: #dde5ff;
     --plotweaver-color-parchment: #f1ebe8;
 
@@ -151,12 +153,20 @@ em.cosmere-icon,
 i.cosmere-icon {
     font-family: var(--plotweaver-font-icons) !important;
 
+    &.complication-color {
+        color: var(--plotweaver-color-complication-text);
+    }
+
     &.complication {
         color: var(--plotweaver-color-complication);
 
         &::after {
             content: 'C';
         }
+    }
+
+    &.opportunity-color {
+        color: var(--plotweaver-color-opportunity-text);
     }
 
     &.opportunity {

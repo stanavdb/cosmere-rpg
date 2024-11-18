@@ -699,6 +699,9 @@ const COSMERE: CosmereRPGConfig = {
             [ArmorTraitId.Presentable]: {
                 label: 'COSMERE.Item.Armor.Trait.Presentable',
             },
+            [ArmorTraitId.Unique]: {
+                label: 'COSMERE.Item.Armor.Trait.Unique',
+            },
         },
     },
 

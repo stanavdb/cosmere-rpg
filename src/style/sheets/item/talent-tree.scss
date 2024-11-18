@@ -90,6 +90,10 @@
                 color: #9c0000;
                 font-size: 1rem;
                 text-shadow: 0.1rem 0.1rem 0.5rem BLACK;
+
+                &.obtained, &.available {
+                    z-index: 1;
+                }
             }
         }
     }
