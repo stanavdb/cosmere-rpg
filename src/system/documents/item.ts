@@ -63,7 +63,11 @@ import {
 } from '@system/dice';
 import { AdvantageMode } from '@system/types/roll';
 import { RollMode } from '@system/dice/types';
-import { determineConfigurationMode, hasKey } from '../utils/generic';
+import {
+    determineConfigurationMode,
+    getTargetDescriptors,
+    hasKey,
+} from '../utils/generic';
 import { MESSAGE_TYPES } from './chat-message';
 import { renderSystemTemplate, TEMPLATES } from '../utils/templates';
 
@@ -858,6 +862,7 @@ export class CosmereItem<
             message: {
                 type: MESSAGE_TYPES.ACTION,
                 description: await this.getDescriptionHTML(),
+                targets: getTargetDescriptors(),
             },
         };
 
