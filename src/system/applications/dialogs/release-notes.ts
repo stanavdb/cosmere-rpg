@@ -13,8 +13,9 @@ export class ReleaseNotesDialog extends HandlebarsApplicationMixin(
             },
             position: {
                 width: 800,
+                height: 1000,
             },
-            classes: ['cosmere', 'dialog'],
+            classes: ['cosmere', 'dialog', 'release-notes'],
         },
     );
 
