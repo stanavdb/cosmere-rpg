@@ -2,15 +2,15 @@
     "id": "cosmere-rpg",
     "title": "Cosmere Roleplaying Game",
     "description": "A community-developed system for playing the Cosmere Roleplaying Game, by Dragonsteel Entertainment and Brotherwise Games.",
-    "version": "0.1.1",
+    "version": "0.2.0",
     "compatibility": {
         "minimum": "12",
         "verified": "12"
     },
     "authors": [
         {
-            "name": "Stan",
-            "discord": "stanvdb"
+            "name": "The Metalworks",
+            "url": "https://github.com/the-metalworks"
         }
     ],
     "esmodules": ["index.js"],
@@ -66,7 +66,7 @@
         "distance": 5,
         "units": "ft"
     },
-    "url": "https://github.com/stanavdb/cosmere-rpg",
-    "manifest": "https://raw.githubusercontent.com/stanavdb/cosmere-rpg/main/src/system.json",
-    "download": "https://github.com/stanavdb/cosmere-rpg/releases/download/release-0.1.1/cosmere-rpg-release-0.1.1.zip"
+    "url": "https://github.com/the-metalworks/cosmere-rpg",
+    "manifest": "https://raw.githubusercontent.com/the-metalworks/cosmere-rpg/main/src/system.json",
+    "download": "https://github.com/the-metalworks/cosmere-rpg/releases/download/release-0.2.0/cosmere-rpg-release-0.2.0.zip"
 }
