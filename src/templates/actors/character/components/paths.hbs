@@ -2,31 +2,52 @@
 <div class="path" 
     data-id="{{path.id}}"
 >
-    <div class="name"
-        data-action="view"
-    >
-        <span class="label">{{path.name}}</span>
-        <span class="item-type">{{localize path.typeLabel}} Path</span>
-    </div>
-    <div class="level"
-        data-action="view"
-    >
-        {{path.level}}
-    </div>
-    {{#if @root.isEditMode}}
-    <div class="controls">
-        <a data-action="remove"
-            data-tooltip="GENERIC.Button.Remove"
+    {{!-- Details --}}
+    <div class="details">
+        <div class="name"
+            data-action="view"
         >
-            <i class="fa-solid fa-xmark"></i>
-        </a>
+            <span class="label">{{path.name}}</span>
+            <span class="item-type">{{localize path.typeLabel}} Path</span>
+        </div>
+
+        <div class="level"
+            data-action="view"
+        >
+            {{path.level}}
+        </div>
+
+        {{#if @root.isEditMode}}
+            <div class="controls">
+                <a data-action="remove"
+                    data-tooltip="GENERIC.Button.Remove"
+                >
+                    <i class="fa-solid fa-xmark"></i>
+                </a>
+            </div>
+        {{/if}}
     </div>
+
+    {{!-- Skills --}}
+    {{#if (gt path.skills.length 0)}}
+        <ul class="skill-list">
+            {{#each path.skills as |skill|}}
+                <li class="skill" data-id="{{skill.id}}">
+                    {{app-actor-skill 
+                        skill=skill.id 
+                        readonly=(not @root.isEditMode)
+                        pips=true
+                    }}
+                </li>
+            {{/each}}
+        </ul>
     {{/if}}
 
+    {{!-- Background image --}}
     {{#if img}}
-    <div class="background-img">
-        <img src="{{img}}">
-    </div>
+        <div class="background-img">
+            <img src="{{img}}">
+        </div>
     {{/if}}
 </div>
 {{/each}}

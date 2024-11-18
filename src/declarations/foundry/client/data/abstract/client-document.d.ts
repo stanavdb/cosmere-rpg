@@ -10,6 +10,8 @@ declare function _ClientDocumentMixin<
 >(base: BaseClass): Mixin<BaseClass, typeof ClientDocument>;
 
 declare class ClientDocument {
+    readonly uuid: string;
+
     /**
      * A collection of Application instances which should be re-rendered whenever this document is updated.
      * The keys of this object are the application ids and the values are Application instances. Each

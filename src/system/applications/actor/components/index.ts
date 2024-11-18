@@ -8,6 +8,7 @@ import './injuries-list';
 import './resource';
 import './search-bar';
 import './skills-group';
+import './skill';
 
 import './character';
 import './adversary';

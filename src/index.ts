@@ -1,12 +1,17 @@
 import { ActorType, Condition, ItemType } from './system/types/cosmere';
-
+import { SYSTEM_ID } from './system/constants';
+import { TEMPLATES } from './system/utils/templates';
 import COSMERE from './system/config';
 
 import './style.scss';
 import './system/hooks';
 
-import { preloadHandlebarsTemplates } from './system/util/handlebars';
-import { registerSettings } from './system/settings';
+import { preloadHandlebarsTemplates } from './system/utils/handlebars';
+import {
+    registerDeferredSettings,
+    registerSystemKeybindings,
+    registerSystemSettings,
+} from './system/settings';
 
 import * as applications from './system/applications';
 import * as dataModels from './system/data';
@@ -50,7 +55,12 @@ Hooks.once('init', async () => {
 
     CONFIG.Token.documentClass = documents.CosmereTokenDocument;
 
+    Roll.TOOLTIP_TEMPLATE = `systems/${SYSTEM_ID}/templates/${TEMPLATES.CHAT_ROLL_TOOLTIP}`;
+
     CONFIG.ActiveEffect.legacyTransferral = false;
+
+    // Add fonts
+    configureFonts();
 
     Actors.unregisterSheet('core', ActorSheet);
     registerActorSheet(ActorType.Character, applications.actor.CharacterSheet);
@@ -73,6 +83,12 @@ Hooks.once('init', async () => {
     registerItemSheet(ItemType.Talent, applications.item.TalentItemSheet);
     registerItemSheet(ItemType.Equipment, applications.item.EquipmentItemSheet);
     registerItemSheet(ItemType.Weapon, applications.item.WeaponItemSheet);
+    registerItemSheet(ItemType.Goal, applications.item.GoalItemSheet);
+    registerItemSheet(ItemType.Power, applications.item.PowerItemSheet);
+    registerItemSheet(
+        ItemType.TalentTree,
+        applications.item.TalentTreeItemSheet,
+    );
 
     CONFIG.Dice.types.push(dice.PlotDie);
     CONFIG.Dice.terms.p = dice.PlotDie;
@@ -87,14 +103,25 @@ Hooks.once('init', async () => {
     // @ts-expect-error see note
     CONFIG.Dice.rolls.push(dice.DamageRoll);
 
-    // Load templates
-    await preloadHandlebarsTemplates();
-
     // Register status effects
     registerStatusEffects();
 
     // Register settings
-    registerSettings();
+    registerSystemSettings();
+    registerSystemKeybindings();
+
+    // Load templates
+    await preloadHandlebarsTemplates();
+});
+
+Hooks.once('setup', () => {
+    // Register some settings after modules have had a chance to initialize
+    registerDeferredSettings();
+});
+
+Hooks.once('ready', () => {
+    // Chat message listeners
+    documents.CosmereChatMessage.activateListeners();
 });
 
 /**
@@ -127,7 +154,7 @@ function registerActorSheet(
     type: ActorType,
     sheet: typeof foundry.applications.api.ApplicationV2<any, any, any>,
 ) {
-    Actors.registerSheet('cosmere-rpg', sheet as any, {
+    Actors.registerSheet(SYSTEM_ID, sheet as any, {
         types: [type],
         makeDefault: true,
         label: `TYPES.Actor.${type}`,
@@ -138,10 +165,112 @@ function registerItemSheet(
     type: ItemType,
     sheet: typeof foundry.applications.api.ApplicationV2<any, any, any>,
 ) {
-    Items.registerSheet('cosmere-rpg', sheet as any, {
+    Items.registerSheet(SYSTEM_ID, sheet as any, {
         types: [type],
         makeDefault: true,
         label: `TYPES.Item.${type}`,
     });
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */
+
+/**
+ * Configure additional system fonts.
+ */
+function configureFonts() {
+    Object.assign(CONFIG.fontDefinitions, {
+        Roboto: {
+            editor: true,
+            fonts: [
+                {
+                    urls: [
+                        `systems/${SYSTEM_ID}/assets/fonts/roboto/Roboto-Regular.woff2`,
+                    ],
+                },
+                {
+                    urls: [
+                        `systems/${SYSTEM_ID}/assets/fonts/roboto/Roboto-Bold.woff2`,
+                    ],
+                    weight: 'bold',
+                },
+                {
+                    urls: [
+                        `systems/${SYSTEM_ID}/assets/fonts/roboto/Roboto-Italic.woff2`,
+                    ],
+                    style: 'italic',
+                },
+                {
+                    urls: [
+                        `systems/${SYSTEM_ID}/assets/fonts/roboto/Roboto-BoldItalic.woff2`,
+                    ],
+                    weight: 'bold',
+                    style: 'italic',
+                },
+            ],
+        },
+        'Roboto Condensed': {
+            editor: true,
+            fonts: [
+                {
+                    urls: [
+                        `systems/${SYSTEM_ID}/assets/fonts/roboto-condensed/RobotoCondensed-Regular.woff2`,
+                    ],
+                },
+                {
+                    urls: [
+                        `systems/${SYSTEM_ID}/assets/fonts/roboto-condensed/RobotoCondensed-Bold.woff2`,
+                    ],
+                    weight: 'bold',
+                },
+                {
+                    urls: [
+                        `systems/${SYSTEM_ID}/assets/fonts/roboto-condensed/RobotoCondensed-Italic.woff2`,
+                    ],
+                    style: 'italic',
+                },
+                {
+                    urls: [
+                        `systems/${SYSTEM_ID}/assets/fonts/roboto-condensed/RobotoCondensed-BoldItalic.woff2`,
+                    ],
+                    weight: 'bold',
+                    style: 'italic',
+                },
+            ],
+        },
+        'Roboto Slab': {
+            editor: true,
+            fonts: [
+                {
+                    urls: [
+                        `systems/${SYSTEM_ID}/assets/fonts/roboto-slab/RobotoSlab-Regular.ttf`,
+                    ],
+                },
+                {
+                    urls: [
+                        `systems/${SYSTEM_ID}/assets/fonts/roboto-slab/RobotoSlab-Bold.ttf`,
+                    ],
+                    weight: 'bold',
+                },
+            ],
+        },
+        'Penumbra Web Pro': {
+            editor: true,
+            fonts: [
+                {
+                    urls: [
+                        `https://fonts.cdnfonts.com/s/56565/PenumbraWebPro-Serif.woff`,
+                    ],
+                },
+            ],
+        },
+        'Cosmere Dingbats': {
+            editor: true,
+            fonts: [
+                {
+                    urls: [
+                        `https://dl.dropboxusercontent.com/scl/fi/9909gen4fd0oveyzfposx/CosmereDingbats-Regular.otf?rlkey=ig6odq9hxyo1st8kt3ujp1czz&st=72qrads3&raw=1`,
+                    ],
+                },
+            ],
+        },
+    });
+}

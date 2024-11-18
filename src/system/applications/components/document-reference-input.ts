@@ -80,7 +80,7 @@ export class DocumentReferenceInputComponent extends DragDropComponentMixin(
     }
 
     public get readonly() {
-        return this.params?.readonly !== false;
+        return this.params?.readonly === true;
     }
 
     public get value() {

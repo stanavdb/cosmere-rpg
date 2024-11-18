@@ -1,5 +1,6 @@
 import { ActionItem } from '@system/documents/item';
 import { DeepPartial } from '@system/types/utils';
+import { SYSTEM_ID } from '@src/system/constants';
 
 // Base
 import { BaseItemSheet } from './base';
@@ -8,7 +9,7 @@ export class ActionItemSheet extends BaseItemSheet {
     static DEFAULT_OPTIONS = foundry.utils.mergeObject(
         foundry.utils.deepClone(super.DEFAULT_OPTIONS),
         {
-            classes: ['cosmere-rpg', 'sheet', 'item', 'action'],
+            classes: [SYSTEM_ID, 'sheet', 'item', 'action'],
             position: {
                 width: 550,
             },

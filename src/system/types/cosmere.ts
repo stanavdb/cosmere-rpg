@@ -99,6 +99,10 @@ export const enum PathType {
     Heroic = 'heroic',
 }
 
+export const enum PowerType {
+    None = 'none',
+}
+
 /**
  * The categories of weapon available
  */
@@ -167,6 +171,7 @@ export const enum ArmorTraitId {
     Cumbersome = 'cumbersome',
     Dangerous = 'dangerous',
     Presentable = 'presentable',
+    Unique = 'unique',
 }
 
 export const enum AdversaryRole {
@@ -269,9 +274,20 @@ export const enum ItemType {
 
     Injury = 'injury',
     Connection = 'connection',
+    Goal = 'goal',
+
+    Power = 'power',
+
+    TalentTree = 'talent_tree',
 }
 
 export const enum TurnSpeed {
     Fast = 'fast',
     Slow = 'slow',
+}
+
+export const enum Theme {
+    Default = 'default',
+    //TODO: Move to stormlight module
+    Stormlight = 'stormlight',
 }

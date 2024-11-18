@@ -67,6 +67,24 @@ export class CharacterPathsComponent extends HandlebarsApplicationComponent<
                 id: path.id,
                 img: path.img,
                 typeLabel: CONFIG.COSMERE.paths.types[path.system.type].label,
+                skills: path.system.linkedSkills
+                    .filter(
+                        (skillId) =>
+                            this.application.actor.system.skills[skillId]
+                                .unlocked === true,
+                    )
+                    .map((skillId) => ({
+                        id: skillId,
+                        label: CONFIG.COSMERE.skills[skillId].label,
+                        attribute: CONFIG.COSMERE.skills[skillId].attribute,
+                        attributeLabel:
+                            CONFIG.COSMERE.attributes[
+                                CONFIG.COSMERE.skills[skillId].attribute
+                            ].label,
+                        rank: this.application.actor.system.skills[skillId]
+                            .rank,
+                        mod: this.application.actor.system.skills[skillId].mod,
+                    })),
                 level: this.application.actor.system.level.paths[
                     path.system.id
                 ],

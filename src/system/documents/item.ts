@@ -4,8 +4,17 @@ import {
     Attribute,
     ItemConsumeType,
     ActivationType,
+    WeaponTraitId,
+    ArmorTraitId,
+    ActionCostType,
 } from '@system/types/cosmere';
+import { Goal } from '@system/types/item';
+import { GoalItemData } from '@system/data/item/goal';
+import { DeepPartial } from '@system/types/utils';
+
 import { CosmereActor } from './actor';
+
+import { SYSTEM_ID } from '../constants';
 
 import { Derived } from '@system/data/fields';
 
@@ -27,6 +36,9 @@ import {
     TraitItemDataModel,
     LootItemDataModel,
     EquipmentItemDataModel,
+    GoalItemDataModel,
+    PowerItemDataModel,
+    TalentTreeItemDataModel,
 } from '@system/data/item';
 
 import { ActivatableItemData } from '@system/data/item/mixins/activatable';
@@ -51,6 +63,13 @@ import {
 } from '@system/dice';
 import { AdvantageMode } from '@system/types/roll';
 import { RollMode } from '@system/dice/types';
+import {
+    determineConfigurationMode,
+    getTargetDescriptors,
+    hasKey,
+} from '../utils/generic';
+import { MESSAGE_TYPES } from './chat-message';
+import { renderSystemTemplate, TEMPLATES } from '../utils/templates';
 
 // Constants
 const CONSUME_CONFIGURATION_DIALOG_TEMPLATE =
@@ -140,6 +159,18 @@ export class CosmereItem<
         return this.type === ItemType.Equipment;
     }
 
+    public isGoal(): this is GoalItem {
+        return this.type === ItemType.Goal;
+    }
+
+    public isPower(): this is PowerItem {
+        return this.type === ItemType.Power;
+    }
+
+    public isTalentTree(): this is CosmereItem<TalentTreeItemDataModel> {
+        return this.type === ItemType.TalentTree;
+    }
+
     /* --- Mixin type guards --- */
 
     /**
@@ -216,7 +247,7 @@ export class CosmereItem<
     /* --- Accessors --- */
 
     public get isFavorite(): boolean {
-        return this.getFlag('cosmere-rpg', 'favorites.isFavorite');
+        return this.getFlag(SYSTEM_ID, 'favorites.isFavorite');
     }
 
     /**
@@ -237,13 +268,93 @@ export class CosmereItem<
         const modalityId = this.system.modality;
 
         // Check actor modality flag
-        const activeMode = this.actor.getFlag(
-            'cosmere-rpg',
-            `mode.${modalityId}`,
-        );
+        const activeMode = this.actor.getFlag(SYSTEM_ID, `mode.${modalityId}`);
 
         // Check if the actor has the mode active
         return activeMode === this.system.id;
+    }
+
+    /* --- Lifecycle --- */
+
+    override _onUpdate(_changes: object, options: object, userId: string) {
+        super._onUpdate(_changes, options, userId);
+
+        if (game.user?.id !== userId) return;
+
+        if (this.isGoal()) {
+            const changes: { system?: DeepPartial<GoalItemData> } = _changes;
+
+            if (changes.system?.level === 3) {
+                this.handleGoalComplete();
+            }
+        }
+    }
+
+    /* --- Event handlers --- */
+
+    protected handleGoalComplete() {
+        // Ensure the item is a goal
+        if (!this.isGoal()) return;
+
+        // Ensure actor is set
+        if (!this.actor) return;
+
+        // Get the rewards
+        const rewards = this.system.rewards;
+
+        // Handle rewards
+        rewards.forEach(async (reward) => {
+            if (reward.type === Goal.Reward.Type.SkillRanks) {
+                await this.actor!.modifySkillRank(reward.skill, reward.ranks);
+
+                // Notification
+                ui.notifications.info(
+                    game.i18n!.format(
+                        'GENERIC.Notification.IncreasedSkillRank',
+                        {
+                            skill: CONFIG.COSMERE.skills[reward.skill].label,
+                            amount: reward.ranks,
+                            actor: this.actor!.name,
+                        },
+                    ),
+                );
+            } else if (reward.type === Goal.Reward.Type.Items) {
+                reward.items.forEach(async (itemUUID) => {
+                    // Get the item
+                    const item = (await fromUuid(
+                        itemUUID,
+                    )) as unknown as CosmereItem;
+
+                    // Get the id
+                    const id = item.hasId() ? item.system.id : null;
+
+                    // Ensure the item is not already embedded
+                    if (
+                        id &&
+                        this.actor!.items.some(
+                            (i) => i.hasId() && i.system.id === id,
+                        )
+                    )
+                        return;
+
+                    // Add the item to the actor
+                    await this.actor!.createEmbeddedDocuments('Item', [
+                        item.toObject(),
+                    ]);
+
+                    // Notification
+                    ui.notifications.info(
+                        game.i18n!.format('GENERIC.Notification.AddedItem', {
+                            type: game.i18n!.localize(
+                                `TYPES.Item.${item.type}`,
+                            ),
+                            item: item.name,
+                            actor: this.actor!.name,
+                        }),
+                    );
+                });
+            }
+        });
     }
 
     /* --- Roll & Usage utilities --- */
@@ -331,7 +442,7 @@ export class CosmereItem<
      */
     public async rollDamage(
         options: CosmereItem.RollDamageOptions = {},
-    ): Promise<DamageRoll | null> {
+    ): Promise<DamageRoll[] | null> {
         if (!this.hasDamage() || !this.system.damage.formula) return null;
 
         // Get the actor to roll for (either assigned through option, the parent of this item, or the first controlled actor)
@@ -376,12 +487,52 @@ export class CosmereItem<
         // Perform the roll
         const roll = await damageRoll(
             foundry.utils.mergeObject(options, {
-                formula: this.system.damage.formula,
+                formula:
+                    rollData.mod !== undefined
+                        ? `${this.system.damage.formula} + ${rollData.mod}`
+                        : this.system.damage.formula,
                 damageType: this.system.damage.type,
                 mod: rollData.mod,
                 data: rollData,
+                source: this.name,
             }),
         );
+
+        // Gather the formula options for graze rolls
+        const unmoddedRoll = roll.clone();
+        const diceOnlyRoll = roll.clone();
+        rollData.damage = {
+            total: roll,
+            unmodded: unmoddedRoll,
+            dice: diceOnlyRoll,
+        };
+        unmoddedRoll.removeTermSafely(
+            (term) =>
+                term instanceof foundry.dice.terms.NumericTerm &&
+                term.total === rollData.mod,
+        );
+        diceOnlyRoll.filterTermsSafely(
+            (term) =>
+                term instanceof foundry.dice.terms.DiceTerm ||
+                term instanceof foundry.dice.terms.OperatorTerm,
+        );
+
+        // Make the graze pool and roll it
+        const grazeFormula =
+            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+            this.system.damage.grazeOverrideFormula || '@damage.dice';
+        const usesBaseDamage = grazeFormula.includes('@damage');
+        const grazeRoll = await damageRoll(
+            foundry.utils.mergeObject(options, {
+                formula: grazeFormula,
+                damageType: this.system.damage.type,
+                data: rollData,
+            }),
+        );
+        // update with results from the basic roll if needed and store for display
+        if (usesBaseDamage) grazeRoll.replaceDieResults(roll.dice);
+        if (!grazeRoll) return null;
+        roll.graze = grazeRoll;
 
         if (roll && options.chatMessage !== false) {
             // Get the speaker
@@ -396,7 +547,7 @@ export class CosmereItem<
         }
 
         // Return the roll
-        return roll;
+        return [roll];
     }
 
     /**
@@ -405,7 +556,7 @@ export class CosmereItem<
      */
     public async rollAttack(
         options: CosmereItem.RollAttackOptions = {},
-    ): Promise<[D20Roll, DamageRoll] | null> {
+    ): Promise<[D20Roll, DamageRoll[]] | null> {
         if (!this.hasActivation()) return null;
         if (!this.hasDamage() || !this.system.damage.formula) return null;
 
@@ -425,29 +576,63 @@ export class CosmereItem<
             return null;
         }
 
-        // Get skill to use
-        const skillId = options.skill ?? this.system.activation.skill;
-        if (!skillId) return null;
-        const skill = actor.system.skills[skillId];
+        // Get the skill to use during the skill test
+        const skillTestSkillId =
+            options.skillTest?.skill ?? this.system.activation.skill;
+        if (!skillTestSkillId) return null;
 
-        // Get the attribute
-        let attributeId =
-            options.attribute ??
+        // Get the skill to use during the damage roll
+        const damageSkillId =
+            options.damage?.skill ??
+            this.system.damage.skill ??
+            skillTestSkillId;
+
+        // Get the attribute to use during the skill test
+        let skillTestAttributeId =
+            options.skillTest?.attribute ??
             this.system.activation.attribute ??
-            skill.attribute;
+            actor.system.skills[skillTestSkillId].attribute;
+
+        // Get the attribute to use during the damage roll
+        const damageAttributeId =
+            options.damage?.attribute ??
+            this.system.damage.attribute ??
+            actor.system.skills[damageSkillId].attribute;
+
+        options.skillTest ??= {};
+        options.damage ??= {};
+
+        // Handle key modifiers
+        const { fastForward, advantageMode, plotDie } =
+            determineConfigurationMode(
+                options.configurable,
+                options.skillTest.advantageMode
+                    ? options.skillTest.advantageMode ===
+                          AdvantageMode.Advantage
+                    : undefined,
+                options.skillTest.advantageMode
+                    ? options.skillTest.advantageMode ===
+                          AdvantageMode.Disadvantage
+                    : undefined,
+                options.skillTest.plotDie,
+            );
+
+        // Replace config values with key modified values
+        options.skillTest.advantageMode = advantageMode;
+        options.skillTest.plotDie = plotDie;
 
         // Perform configuration
-        if (options.configurable !== false) {
+        if (!fastForward && options.configurable !== false) {
             const attackConfig = await AttackConfigurationDialog.show({
                 title: `${this.name} (${game.i18n!.localize(
-                    CONFIG.COSMERE.skills[skillId].label,
+                    CONFIG.COSMERE.skills[skillTestSkillId].label,
                 )})`,
                 skillTest: {
                     ...options.skillTest,
                     parts: ['@mod'].concat(options.skillTest?.parts ?? []),
                     data: this.getSkillTestRollData(
-                        skillId,
-                        attributeId,
+                        skillTestSkillId,
+                        skillTestAttributeId,
                         actor,
                     ),
                     plotDie:
@@ -457,26 +642,28 @@ export class CosmereItem<
                 damageRoll: {
                     ...options.damage,
                     parts: this.system.damage.formula.split(' + '),
-                    data: this.getDamageRollData(skillId, attributeId, actor),
+                    data: this.getDamageRollData(
+                        skillTestSkillId,
+                        skillTestAttributeId,
+                        actor,
+                    ),
                 },
-                defaultAttribute: attributeId,
+                defaultAttribute: skillTestAttributeId,
                 defaultRollMode: options.rollMode,
             });
 
             // If the dialog was closed, exit out of rolls
             if (!attackConfig) return null;
 
-            attributeId = attackConfig.attribute;
+            skillTestAttributeId = attackConfig.attribute;
             options.rollMode = attackConfig.rollMode;
 
-            options.skillTest ??= {};
             options.skillTest.plotDie = attackConfig.skillTest.plotDie;
             options.skillTest.advantageMode =
                 attackConfig.skillTest.advantageMode;
             options.skillTest.advantageModePlot =
                 attackConfig.skillTest.advantageModePlot;
 
-            options.damage ??= {};
             options.damage.advantageMode =
                 attackConfig.damageRoll.advantageMode;
         }
@@ -485,8 +672,8 @@ export class CosmereItem<
         const skillRoll = (await this.roll({
             ...options.skillTest,
             actor,
-            skill: skillId,
-            attribute: attributeId,
+            skill: skillTestSkillId,
+            attribute: skillTestAttributeId,
             rollMode: options.rollMode,
             speaker: options.speaker,
             configurable: false,
@@ -494,11 +681,11 @@ export class CosmereItem<
         }))!;
 
         // Roll the damage
-        const damageRoll = (await this.rollDamage({
+        const damageRolls = (await this.rollDamage({
             ...options.damage,
             actor,
-            skill: skillId,
-            attribute: attributeId,
+            skill: damageSkillId,
+            attribute: damageAttributeId,
             rollMode: options.rollMode,
             speaker: options.speaker,
             chatMessage: false,
@@ -520,12 +707,12 @@ export class CosmereItem<
                 user: game.user!.id,
                 speaker,
                 content: `<p>${flavor}</p>`,
-                rolls: [skillRoll, damageRoll],
+                rolls: [skillRoll, ...damageRolls],
             })) as ChatMessage;
         }
 
         // Return the rolls
-        return [skillRoll, damageRoll];
+        return [skillRoll, damageRolls ?? []];
     }
 
     /**
@@ -534,7 +721,7 @@ export class CosmereItem<
      */
     public async use(
         options: CosmereItem.UseOptions = {},
-    ): Promise<D20Roll | [D20Roll, DamageRoll] | null> {
+    ): Promise<D20Roll | [D20Roll, ...DamageRoll[]] | null> {
         if (!this.hasActivation()) return null;
 
         // Set up post roll actions
@@ -662,12 +849,22 @@ export class CosmereItem<
             this.system.activation.type === ActivationType.SkillTest ||
             hasDamage;
 
-        // Get the speaker
-        const speaker =
-            options.speaker ??
-            (ChatMessage.getSpeaker({ actor }) as ChatSpeakerData);
+        const messageConfig = {
+            user: game.user!.id,
+            speaker:
+                options.speaker ??
+                (ChatMessage.getSpeaker({ actor }) as ChatSpeakerData),
+            rolls: [] as foundry.dice.Roll[],
+            flags: {} as Record<string, unknown>,
+        };
 
-        const descriptionHTML = await this.getEnrichedDescription();
+        messageConfig.flags[SYSTEM_ID] = {
+            message: {
+                type: MESSAGE_TYPES.ACTION,
+                description: await this.getDescriptionHTML(),
+                targets: getTargetDescriptors(),
+            },
+        };
 
         if (rollRequired) {
             const rolls: foundry.dice.Roll[] = [];
@@ -693,7 +890,7 @@ export class CosmereItem<
                 if (!attackResult) return null;
 
                 // Add the rolls to the list
-                rolls.push(...attackResult);
+                rolls.push(attackResult[0], ...attackResult[1]);
 
                 // Set the flavor
                 flavor = flavor
@@ -705,14 +902,14 @@ export class CosmereItem<
                       )})`;
             } else {
                 if (hasDamage) {
-                    const damageRoll = await this.rollDamage({
+                    const damageRolls = await this.rollDamage({
                         ...options,
                         actor,
                         chatMessage: false,
                     });
-                    if (!damageRoll) return null;
+                    if (!damageRolls) return null;
 
-                    rolls.push(damageRoll);
+                    rolls.push(...damageRolls);
                 }
 
                 if (this.system.activation.type === ActivationType.SkillTest) {
@@ -737,25 +934,17 @@ export class CosmereItem<
                 }
             }
 
+            messageConfig.rolls = rolls;
+
             // Create chat message
-            await ChatMessage.create({
-                user: game.user!.id,
-                speaker,
-                content: await renderTemplate(ACTIVITY_CARD_TEMPLATE, {
-                    item: this,
-                    hasDescription: !!descriptionHTML,
-                    descriptionHTML,
-                    flavor,
-                }),
-                rolls: rolls,
-            });
+            await ChatMessage.create(messageConfig);
 
             // Perform post roll actions
             postRoll.forEach((action) => action());
 
             // Return the result
             return hasDamage
-                ? (rolls as [D20Roll, DamageRoll])
+                ? (rolls as [D20Roll, ...DamageRoll[]])
                 : (rolls[0] as D20Roll);
         } else {
             // NOTE: Use boolean or operator (`||`) here instead of nullish coalescing (`??`),
@@ -765,17 +954,9 @@ export class CosmereItem<
                 this.system.activation.flavor || undefined;
 
             // Create chat message
-            const message = (await ChatMessage.create({
-                user: game.user!.id,
-                speaker,
-                content: await renderTemplate(ACTIVITY_CARD_TEMPLATE, {
-                    item: this,
-                    hasDescription: !!descriptionHTML,
-                    descriptionHTML,
-                    expanded: true,
-                    flavor,
-                }),
-            })) as ChatMessage;
+            const message = (await ChatMessage.create(
+                messageConfig,
+            )) as ChatMessage;
             message.applyRollMode('roll');
 
             // Perform post roll actions
@@ -860,7 +1041,7 @@ export class CosmereItem<
         await this.update(
             {
                 flags: {
-                    'cosmere-rpg': {
+                    SYSTEM_ID: {
                         favorites: {
                             isFavorite: true,
                             sort: index,
@@ -874,25 +1055,88 @@ export class CosmereItem<
 
     public async clearFavorite() {
         await Promise.all([
-            this.unsetFlag('cosmere-rpg', 'favorites.isFavorite'),
-            this.unsetFlag('cosmere-rpg', 'favorites.sort'),
+            this.unsetFlag(SYSTEM_ID, 'favorites.isFavorite'),
+            this.unsetFlag(SYSTEM_ID, 'favorites.sort'),
         ]);
     }
 
     /* --- Helpers --- */
 
-    protected async getEnrichedDescription(): Promise<string | undefined> {
-        if (!this.hasDescription()) return;
-        if (
-            !(this as CosmereItem<DescriptionItemData>).system.description
-                ?.value
-        )
-            return;
+    protected async getDescriptionHTML(): Promise<string | undefined> {
+        if (!this.hasDescription()) return undefined;
 
-        return await TextEditor.enrichHTML(
-            (this as CosmereItem<DescriptionItemData>).system.description!
-                .value!,
+        const descriptionData = (this as CosmereItem<DescriptionItemData>)
+            .system.description?.value;
+        const description = await TextEditor.enrichHTML(descriptionData ?? '');
+
+        const traitsNormal = [];
+        const traitsExpert = [];
+        const traits = [];
+        if (this.hasTraits()) {
+            for (const [key, value] of Object.entries(this.system.traits)) {
+                if (!value?.active) continue;
+
+                const traitLoc =
+                    CONFIG.COSMERE.traits.weaponTraits[key as WeaponTraitId] ??
+                    CONFIG.COSMERE.traits.armorTraits[key as ArmorTraitId];
+                let label = game.i18n!.localize(traitLoc.label);
+
+                if (value.expertise?.toggleActive) {
+                    label = `<strong>${label}</strong>`;
+                    traitsExpert.push(label);
+                } else {
+                    traitsNormal.push(label);
+                }
+            }
+
+            traits.push(...traitsNormal.sort(), ...traitsExpert.sort());
+        }
+
+        let action;
+        if (
+            this.hasActivation() &&
+            this.system.activation?.cost?.value !== undefined
+        ) {
+            const activation = this.system.activation as Record<
+                string,
+                unknown
+            >;
+            const cost = activation.cost as {
+                type: ActionCostType;
+                value: number;
+            };
+
+            switch (cost.type) {
+                case ActionCostType.Action:
+                    action = `action${Math.min(3, cost.value)}`;
+                    break;
+                case ActionCostType.Reaction:
+                    action = 'reaction';
+                    break;
+                case ActionCostType.Special:
+                    action = 'special';
+                    break;
+                case ActionCostType.FreeAction:
+                    action = 'free';
+                    break;
+                default:
+                    action = 'passive';
+                    break;
+            }
+        }
+
+        const sectionHTML = await renderSystemTemplate(
+            TEMPLATES.CHAT_CARD_DESCRIPTION,
+            {
+                title: this.name,
+                img: this.img,
+                description,
+                traits: traits.join(', '),
+                action,
+            },
         );
+
+        return sectionHTML;
     }
 
     protected getSkillTestRollData(
@@ -1041,6 +1285,8 @@ export namespace CosmereItem {
     export interface RollAttackOptions
         extends Omit<
             RollOptions,
+            | 'skill'
+            | 'attribute'
             | 'parts'
             | 'opportunity'
             | 'complication'
@@ -1050,6 +1296,8 @@ export namespace CosmereItem {
         > {
         skillTest?: Pick<
             RollOptions,
+            | 'skill'
+            | 'attribute'
             | 'parts'
             | 'opportunity'
             | 'complication'
@@ -1057,7 +1305,7 @@ export namespace CosmereItem {
             | 'advantageMode'
             | 'advantageModePlot'
         >;
-        damage?: Pick<RollOptions, 'advantageMode'>;
+        damage?: Pick<RollOptions, 'advantageMode' | 'skill' | 'attribute'>;
     }
 
     export interface UseOptions extends RollOptions {
@@ -1088,3 +1336,6 @@ export type ActionItem = CosmereItem<ActionItemDataModel>;
 export type TalentItem = CosmereItem<TalentItemDataModel>;
 export type EquipmentItem = CosmereItem<EquipmentItemDataModel>;
 export type WeaponItem = CosmereItem<WeaponItemDataModel>;
+export type GoalItem = CosmereItem<GoalItemDataModel>;
+export type PowerItem = CosmereItem<PowerItemDataModel>;
+export type TalentTreeItem = CosmereItem<TalentTreeItemDataModel>;

@@ -30,7 +30,9 @@ declare class Actor<
 
     get items(): Collection<I>;
     get effects(): Collection<ActiveEffect>;
+    get isToken(): boolean;
     get appliedEffects(): ActiveEffect[];
+    get token(): TokenDocument;
 
     /**
      * Return a data object which defines the data schema against which dice rolls can be evaluated.
@@ -56,6 +58,19 @@ declare class Actor<
     ): Promise<ActiveEffect | boolean | undefined>;
 
     /**
+     * Retrieve an Array of active tokens which represent this Actor in the current canvas Scene. 
+     * If the canvas is not currently active, or there are no linked actors, the returned Array will be empty. 
+     * If the Actor is a synthetic token actor, only the exact Token which it represents will be returned.
+     * @param linked Limit results to Tokens which are linked to the Actor. Otherwise, return all Tokens even those which are not linked.
+     * @param document Return the Document instance rather than the PlaceableObject
+     * @returns An array of Token instances in the current Scene which reference this Actor.
+     */
+    public getActiveTokens(
+        linked?: boolean,
+        document?: boolean
+    ): (TokenDocument | Token)[];
+
+    /**
      * Get all ActiveEffects that may apply to this Actor.
      * If CONFIG.ActiveEffect.legacyTransferral is true, this is equivalent to actor.effects.contents.
      * If CONFIG.ActiveEffect.legacyTransferral is false, this will also return all the transferred ActiveEffects on any
@@ -77,16 +92,16 @@ declare class Actor<
     /**
      * Handle how changes to a Token attribute bar are applied to the Actor.
      * This allows for game systems to override this behavior and deploy special logic.
-     * @param {string} attribute    The attribute path
-     * @param {number} value        The target attribute value
-     * @param {boolean} isDelta     Whether the number represents a relative change (true) or an absolute change (false)
-     * @param {boolean} isBar       Whether the new value is part of an attribute bar, or just a direct value
-     * @returns {Promise<documents.Actor>}  The updated Actor document
+     * @param attribute     The attribute path
+     * @param value         The target attribute value
+     * @param isDelta       Whether the number represents a relative change (true) or an absolute change (false)
+     * @param isBar         Whether the new value is part of an attribute bar, or just a direct value
+     * @returns             The updated Actor document
      */
     public async modifyTokenAttribute(
-        attribute,
-        value,
-        isDelta,
-        isBar,
+        attribute: string,
+        value: number,
+        isDelta: boolean,
+        isBar: boolean,
     ): Promise<Actor | undefined>;
 }

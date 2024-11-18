@@ -16,16 +16,9 @@ export class DetailsIdComponent extends HandlebarsApplicationComponent<
         return Promise.resolve({
             ...context,
             hasId: this.application.item.hasId(),
-            note: game
-                .i18n!.localize('COSMERE.Item.Sheet.Identifier.Description')
-                .replace(
-                    '[type]',
-                    game
-                        .i18n!.localize(
-                            `TYPES.Item.${this.application.item.type}`,
-                        )
-                        .toLowerCase(),
-                ),
+            type: game
+                .i18n!.localize(`TYPES.Item.${this.application.item.type}`)
+                .toLowerCase(),
         });
     }
 }

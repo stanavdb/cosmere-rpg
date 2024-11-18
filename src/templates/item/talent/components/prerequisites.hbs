@@ -42,6 +42,8 @@
                 <span>{{rule.rank}}+</span>
             {{else if (eq rule.type "connection")}}
                 <span>{{rule.description}}</span>
+            {{else if (eq rule.type "level")}}
+                <span>{{rule.level}}+</span>
             {{/if}}
         </div>
         <div class="col controls flexrow">

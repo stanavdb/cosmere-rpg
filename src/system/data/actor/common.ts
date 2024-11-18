@@ -12,13 +12,22 @@ import {
     Condition,
 } from '@system/types/cosmere';
 import { CosmereActor } from '@system/documents/actor';
-import { CosmereItem } from '@system/documents';
-import { ArmorItemDataModel } from '@system/data/item/armor';
+import { ArmorItem } from '@system/documents';
 
 // Fields
 import { DerivedValueField, Derived } from '../fields/derived-value-field';
 
 interface DeflectData extends Derived<number> {
+    /**
+     * The natural deflect value for this actor.
+     * This value is used when deflect cannot be derived from its source, or
+     * when the natural value is higher than the derived value.
+     */
+    natural?: number;
+
+    /**
+     * The source of the deflect value
+     */
     source?: DeflectSource;
 }
 
@@ -74,7 +83,18 @@ export interface CommonActorData {
     >;
     skills: Record<
         Skill,
-        { attribute: Attribute; rank: number; mod: Derived<number> }
+        {
+            attribute: Attribute;
+            rank: number;
+            mod: Derived<number>;
+
+            /**
+             * Derived field describing whether this skill is unlocked or not.
+             * This field is only present for non-core skills.
+             * Core skills are always unlocked.
+             */
+            unlocked?: boolean;
+        }
     >;
     injuries: Derived<number>;
     injuryRollBonus: number;
@@ -175,6 +195,14 @@ export class CommonActorDataModel<
                 }),
                 {
                     additionalFields: {
+                        natural: new foundry.data.fields.NumberField({
+                            required: false,
+                            nullable: true,
+                            integer: true,
+                            initial: 0,
+                            label: 'COSMERE.Deflect.Natural.Label',
+                            hint: 'COSMERE.Deflect.Natural.Hint',
+                        }),
                         source: new foundry.data.fields.StringField({
                             initial: DeflectSource.Armor,
                             choices: Object.keys(
@@ -388,6 +416,18 @@ export class CommonActorDataModel<
                                 initial: 0,
                             }),
                         ),
+
+                        // Only present for non-core skills
+                        ...(!skills[key].core
+                            ? {
+                                  unlocked:
+                                      new foundry.data.fields.BooleanField({
+                                          required: true,
+                                          nullable: false,
+                                          initial: false,
+                                      }),
+                              }
+                            : {}),
                     });
 
                     return schemas;
@@ -539,22 +579,44 @@ export class CommonActorDataModel<
             this.skills[skill].mod.value = attrValue + rank;
         });
 
+        // Derive non-core skill unlocks
+        (Object.keys(this.skills) as Skill[]).forEach((skill) => {
+            if (CONFIG.COSMERE.skills[skill].core) return;
+
+            // Check if the actor has a power that unlocks this skill
+            const unlocked = this.parent.powers.some(
+                (power) => power.system.skill === skill,
+            );
+
+            // Set unlocked status
+            this.skills[skill].unlocked = unlocked;
+        });
+
         // Get deflect source, defaulting to armor
         const source = this.deflect.source ?? DeflectSource.Armor;
 
         // Derive deflect value
         if (source === DeflectSource.Armor) {
-            // Find equipped armor
+            // Get natural deflect value
+            const natural = this.deflect.natural ?? 0;
+
+            // Find equipped armor with the highest deflect value
             const armor = this.parent.items
-                .filter((item) => item.type === ItemType.Armor)
-                .map(
-                    (item) =>
-                        item as unknown as CosmereItem<ArmorItemDataModel>,
-                )
-                .find((item) => item.system.equipped);
+                .filter((item) => item.isArmor())
+                .filter((item) => item.system.equipped)
+                .reduce(
+                    (highest, item) =>
+                        !highest || item.system.deflect > highest.system.deflect
+                            ? item
+                            : highest,
+                    null as ArmorItem | null,
+                );
+
+            // Get armor deflect value
+            const armorDeflect = armor?.system.deflect ?? 0;
 
             // Derive deflect
-            this.deflect.value = armor?.system.deflect ?? 0;
+            this.deflect.value = Math.max(natural, armorDeflect);
         }
 
         // Movement

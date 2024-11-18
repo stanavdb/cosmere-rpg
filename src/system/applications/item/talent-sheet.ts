@@ -1,6 +1,7 @@
 import { Talent } from '@system/types/item';
 import { TalentItem } from '@system/documents/item';
 import { DeepPartial } from '@system/types/utils';
+import { SYSTEM_ID } from '@src/system/constants';
 
 // Base
 import { BaseItemSheet } from './base';
@@ -14,7 +15,7 @@ export class TalentItemSheet extends BaseItemSheet {
     static DEFAULT_OPTIONS = foundry.utils.mergeObject(
         foundry.utils.deepClone(super.DEFAULT_OPTIONS),
         {
-            classes: ['cosmere-rpg', 'sheet', 'item', 'talent'],
+            classes: [SYSTEM_ID, 'sheet', 'item', 'talent'],
             position: {
                 width: 550,
             },
@@ -82,6 +83,7 @@ export class TalentItemSheet extends BaseItemSheet {
             ...(await super._prepareContext(options)),
             isPathTalent: this.item.system.type === Talent.Type.Path,
             isAncestryTalent: this.item.system.type === Talent.Type.Ancestry,
+            isPowerTalent: this.item.system.type === Talent.Type.Power,
             hasModality: this.item.system.modality !== null,
         };
     }

@@ -5,9 +5,9 @@ import { ConstructorOf } from '@system/types/utils';
 import { ConfigureMovementRateDialog } from '@system/applications/actor/dialogs/configure-movement-rate';
 import { ConfigureSensesRangeDialog } from '@system/applications/actor/dialogs/configure-senses-range';
 import { ConfigureRecoveryDieDialog } from '@system/applications/actor/dialogs/configure-recovery-die';
+import { ConfigureDeflectDialog } from '@system/applications/actor/dialogs/configure-deflect';
 
 // Component imports
-// import { HandlebarsApplicationComponent } from '../../mixins/component-handlebars-application-mixin';
 import { HandlebarsApplicationComponent } from '@system/applications/component-system';
 import { BaseActorSheet, BaseActorSheetRenderContext } from '../base';
 import { CosmereActor } from '@src/system/documents';
@@ -29,6 +29,7 @@ export class ActorDetailsComponent extends HandlebarsApplicationComponent<
         'configure-movement-rate': this.onConfigureMovementRate,
         'configure-senses-range': this.onConfigureSensesRange,
         'configure-recovery': this.onConfigureRecovery,
+        'configure-deflect': this.onConfigureDeflect,
         'edit-img': this.onEditImg,
     };
     /* eslint-enable @typescript-eslint/unbound-method */
@@ -49,6 +50,10 @@ export class ActorDetailsComponent extends HandlebarsApplicationComponent<
 
     private static onConfigureSensesRange(this: ActorDetailsComponent) {
         void ConfigureSensesRangeDialog.show(this.application.actor);
+    }
+
+    private static onConfigureDeflect(this: ActorDetailsComponent) {
+        void ConfigureDeflectDialog.show(this.application.actor);
     }
 
     private static onConfigureRecovery(this: ActorDetailsComponent) {

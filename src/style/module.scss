@@ -3,3 +3,45 @@
 @import './style/sidebar/combat.scss';
 @import './style/dialog.scss';
 @import './style/components.scss';
+
+.application {
+    p.notes,
+    p.hint {
+        color: #efe6d8bf;
+    }
+
+    .controls-dropdown.free {
+        border-radius: 4px;
+    }
+}
+
+#tooltip .talenttip {
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+
+        height: 3rem;
+
+        h4 {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0;
+            text-shadow: 0 0 0.5rem black;
+        }
+
+        .bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: blur(5px);
+            z-index: -1;
+        }
+    }
+}

@@ -203,11 +203,25 @@ declare namespace foundry {
                 initialize(value: any, model: object, options?: object): any;
 
                 /**
+                 * Export the current value of the field into a serializable object.
+                 * @param value                   The initialized value of the field
+                 * @returns                       An exported representation of the field
+                 */
+                toObject(value: any): any;
+
+                /**
                  * Recursively traverse a schema and retrieve a field specification by a given path
                  * @param path  The field path as an array of strings
                  * @internal
                  */
                 _getField(path: string[]): DataField;
+
+                /**
+                 * Cast a non-default value to ensure it is the correct type for the field
+                 * @param value       The provided non-default value
+                 * @returns           The standardized value
+                 */
+                protected _cast(value: any): any;
             }
 
             class SchemaField extends DataField {

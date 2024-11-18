@@ -1,3 +1,5 @@
+@import './talent-tree.scss';
+
 .sheet.item {
     max-height: 800px;
 
@@ -108,11 +110,6 @@
 
     .description-content-flat {
         flex-direction: column;
-    }
-
-    p.notes,
-    p.hint {
-        color: #efe6d8bf;
     }
 
     fieldset:not(:first-child) {
@@ -304,6 +301,24 @@ app-item-properties {
     }
 }
 
+app-item-details-damage {
+    .form-group-stacked {
+        .header {
+            display: flex;
+            align-items: center;
+
+            label {
+                font-weight: bold;
+                flex: 2;
+            }
+
+            .controls {
+                margin-right: 0.5rem;
+            }
+        }
+    }
+}
+
 app-item-details-equip {
     .form-group-stacked {
         .header {
@@ -488,5 +503,25 @@ app-talent-prerequisite-talent-list {
         font-style: italic;
         opacity: 0.7;
         text-shadow: 0 0 0.2rem black;
+    }
+}
+
+app-goal-rewards-list {
+    .col.type {
+        width: 5rem;
+    }
+
+    .col.description {
+        flex: 1;
+    }
+}
+
+app-talent-grant-rules-list {
+    .col.type {
+        width: 5rem;
+    }
+
+    .col.description {
+        flex: 1;
     }
 }

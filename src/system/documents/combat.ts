@@ -1,3 +1,4 @@
+import { SYSTEM_ID } from '../constants';
 import { CosmereCombatant } from './combatant';
 
 export class CosmereCombat extends Combat {
@@ -10,7 +11,7 @@ export class CosmereCombat extends Combat {
     resetActivations() {
         for (const combatant of this.turns) {
             void combatant.setFlag(
-                'cosmere-rpg',
+                SYSTEM_ID,
                 'activated',
                 combatant.isDefeated ? true : false,
             );
