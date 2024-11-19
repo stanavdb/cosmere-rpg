@@ -109,6 +109,10 @@ export class CosmereChatMessage extends ChatMessage {
             .find('.message-metadata')
             .find('.message-delete');
         if (!game.user!.isGM) deleteButton?.remove();
+
+        html.find('.message-repeat').on('click', (event) => {
+            void this.onClickRepeat(event);
+        });
     }
 
     protected async enrichCardContent(html: JQuery) {
@@ -593,6 +597,26 @@ export class CosmereChatMessage extends ChatMessage {
             .text(
                 this.useGraze ? this.totalDamageGraze : this.totalDamageNormal,
             );
+    }
+
+    /**
+     * Handles a repeat button click event.
+     * @param {JQuery.ClickEvent} event The originating event of the button click.
+     */
+    private async onClickRepeat(event: JQuery.ClickEvent) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const clone = await Promise.all(
+            this.rolls.map(async (roll) => await roll.reroll()),
+        );
+
+        void ChatMessage.create({
+            user: game.user!.id,
+            speaker: this.speaker,
+            flags: this.flags,
+            rolls: clone,
+        });
     }
 
     /**
