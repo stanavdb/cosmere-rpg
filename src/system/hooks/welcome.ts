@@ -1,6 +1,12 @@
 // Dialogs
 import { ReleaseNotesDialog } from '@system/applications/dialogs/release-notes';
-import { SYSTEM_ID } from '../constants';
+import {
+    SYSTEM_ID,
+    METALWORKS_DISCORD_INVITE,
+    GITHUB_ISSUES_URL,
+    GITHUB_CONTRIBUTING_URL,
+    AUTHOR_NAME,
+} from '@system/constants';
 import { getSystemSetting, SETTINGS } from '../settings';
 
 Hooks.on('ready', async () => {
@@ -13,9 +19,20 @@ Hooks.on('ready', async () => {
 
     // Display the welcome message
     await ChatMessage.create({
-        content: game
-            .i18n!.localize('COSMERE.ChatMessage.Welcome')
-            .replace('[version]', version),
+        content: game.i18n!.format('COSMERE.ChatMessage.Welcome', {
+            version,
+            discordLink: METALWORKS_DISCORD_INVITE,
+            issuesLink: GITHUB_ISSUES_URL,
+            contributingLink: GITHUB_CONTRIBUTING_URL,
+        }),
+        speaker: {
+            alias: AUTHOR_NAME,
+        },
+        flags: {
+            [SYSTEM_ID]: {
+                headerImg: `systems/${SYSTEM_ID}/assets/icons/the-metalworks.png`,
+            },
+        },
     });
 
     // Mark the setting so the message doesn't appear again

@@ -57,6 +57,10 @@ export class CosmereChatMessage extends ChatMessage {
         return this.getFlag(SYSTEM_ID, 'injury') !== undefined;
     }
 
+    public get headerImg(): string | undefined {
+        return this.getFlag(SYSTEM_ID, 'headerImg');
+    }
+
     /* --- Rendering --- */
     public override async getHTML(): Promise<JQuery> {
         const html = await super.getHTML();
@@ -79,7 +83,7 @@ export class CosmereChatMessage extends ChatMessage {
         let name;
 
         if (this.isContentVisible) {
-            img = actor?.img ?? this.author.avatar;
+            img = this.headerImg ?? actor?.img ?? this.author.avatar;
             name = this.alias;
         } else {
             img = this.author.avatar;
