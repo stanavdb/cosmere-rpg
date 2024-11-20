@@ -580,19 +580,14 @@ export class CosmereChatMessage extends ChatMessage {
     private onSwitchDamageMode(event: JQuery.ClickEvent) {
         const toggle = $(event.currentTarget as HTMLElement);
 
-        if (toggle.css('opacity') === '0') return;
+        if (toggle.hasClass('active')) return;
 
         event.preventDefault();
         event.stopPropagation();
 
         this.useGraze = !this.useGraze;
-        toggle.attr('style', 'opacity: 0;');
-        toggle.siblings('.dice-subtotal').attr('style', '');
-        toggle
-            .siblings('p')
-            .text(
-                this.useGraze ? this.totalDamageGraze : this.totalDamageNormal,
-            );
+        toggle.addClass('active');
+        toggle.siblings('.dice-subtotal').removeClass('active');
     }
 
     /**
