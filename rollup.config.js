@@ -43,6 +43,7 @@ export default {
         markdownParser({
             targets: [
                 { src: 'src/release-notes.md', dest: 'build/' },
+                { src: 'src/patch-notes.md', dest: 'build/' },
             ],
         }),
     ],
