@@ -7,7 +7,7 @@ import {
     GITHUB_CONTRIBUTING_URL,
     AUTHOR_NAME,
 } from '@system/constants';
-import { getSystemSetting, SETTINGS } from '../settings';
+import { getSystemSetting, setSystemSetting, SETTINGS } from '../settings';
 
 Hooks.on('ready', async () => {
     // Ensure this message is only displayed when creating a new world
@@ -71,6 +71,9 @@ Hooks.on('ready', async () => {
         });
 
         // Record the latest version of the system
-        await game.settings!.set(SYSTEM_ID, 'latestVersion', currentVersion);
+        await setSystemSetting(
+            SETTINGS.INTERNAL_LATEST_VERSION,
+            currentVersion,
+        );
     }
 });
