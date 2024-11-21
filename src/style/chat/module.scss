@@ -30,7 +30,7 @@
             img {
                 border: 0;
 
-                &:hover {                    
+                &:hover {
                     cursor: pointer;
                     filter: var(--plotweaver-shadow-svg);
                 }
@@ -139,10 +139,15 @@
                             object-position: top;
                         }
 
-                        & > .cosmere-icon {
+                        & > .icon {
                             font-size: var(--font-size-16);
                             color: var(--plotweaver-color-opportunity);
                             padding-right: 0.25rem;
+
+                            &.clickable:hover {
+                                cursor: pointer;
+                                filter: var(--plotweaver-shadow-svg);
+                            }
                         }
 
                         .name-stacked {
@@ -205,6 +210,20 @@
 
                                 strong {
                                     color: var(--plotweaver-color-complication);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                &.healing {
+                    .summary {
+                        .name-stacked {
+                            .title {
+                                font-size: var(--font-size-13);
+
+                                strong {
+                                    color: var(--plotweaver-color-health-front);
                                 }
                             }
                         }
