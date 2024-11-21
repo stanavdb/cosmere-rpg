@@ -53,7 +53,7 @@
             "flags": {
                 "cosmere-rpg": {
                     "injury-data": {
-                        "type": "ViciousInjury",
+                        "type": "vicious_injury",
                         "durationFormula": "6d6"
                     }
                 }
