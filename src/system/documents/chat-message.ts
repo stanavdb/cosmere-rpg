@@ -261,8 +261,7 @@ export class CosmereChatMessage extends ChatMessage {
             const tooltipNormal = $(await rollNormal.getTooltip());
             this.enrichDamageTooltip(rollNormal, type, tooltipNormal);
             tooltipNormalHTML +=
-                tooltipNormal.find('.tooltip-part')[0].outerHTML;
-
+                tooltipNormal.find('.tooltip-part')[0]?.outerHTML || ``;
             if (rollNormal.options.graze) {
                 const rollGraze = DamageRoll.fromData(
                     rollNormal.options
@@ -274,7 +273,7 @@ export class CosmereChatMessage extends ChatMessage {
                 const tooltipGraze = $(await rollGraze.getTooltip());
                 this.enrichDamageTooltip(rollGraze, type, tooltipGraze);
                 tooltipGrazeHTML +=
-                    tooltipGraze.find('.tooltip-part')[0].outerHTML;
+                    tooltipGraze.find('.tooltip-part')[0]?.outerHTML || '';
             }
         }
 

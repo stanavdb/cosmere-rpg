@@ -518,9 +518,14 @@ export class CosmereItem<
         );
 
         // Make the graze pool and roll it
+        const defaultGraze = roll.terms.every(
+            (term) => !(term instanceof foundry.dice.terms.DiceTerm),
+        )
+            ? '0'
+            : '@damage.dice';
         const grazeFormula =
             // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-            this.system.damage.grazeOverrideFormula || '@damage.dice';
+            this.system.damage.grazeOverrideFormula || defaultGraze;
         const usesBaseDamage = grazeFormula.includes('@damage');
         const grazeRoll = await damageRoll(
             foundry.utils.mergeObject(options, {
