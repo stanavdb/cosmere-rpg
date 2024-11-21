@@ -50,6 +50,11 @@ export interface DamageRollOptions
      * Nested Roll item for graze damage
      */
     graze?: DamageRoll;
+
+    /**
+     * Indicates if the damage should be a critical
+     */
+    critical?: boolean;
 }
 
 export class DamageRoll extends foundry.dice.Roll<DamageRollData> {
@@ -105,6 +110,13 @@ export class DamageRoll extends foundry.dice.Roll<DamageRollData> {
      */
     public get hasDisadvantage() {
         return this.options.advantageMode === AdvantageMode.Disadvantage;
+    }
+
+    /**
+     * Whether or not the damage roll is a critical hit
+     */
+    public get isCritical() {
+        return this.options.critical === true;
     }
 
     /* --- Helper Functions --- */

@@ -36,6 +36,19 @@
                 }
             }
         }
+
+        &.overlay-crit {
+            &.left {
+                justify-content: flex-start;
+                margin-right: 25%;
+
+            }
+
+            &.right {
+                justify-content: flex-end;
+                margin-left: 25%;
+            }
+        }
     }
 
     .message-header {
@@ -446,10 +459,8 @@
                             align-items: center;
                         }
 
-                        .dice-subtotal {
-                            border-right: 1px solid var(--plotweaver-color-light-4);
+                        .dice-subtotal {                            
                             transition: all 200ms ease;
-
                             padding: 0 0.5rem;
                             font-weight: 600;
                             display: flex;
@@ -469,10 +480,6 @@
                                 text-transform: uppercase;
                             }
 
-                            &:last-child {
-                                border-right: 0;
-                            }
-
                             &.active {
                                 padding: 0;
                                 font-weight: bold;
@@ -480,12 +487,14 @@
                                 flex-direction: column;
                                 width: 80%;
 
-                                &.pad-left {                                    
+                                &.left {                                    
                                     padding-left: 20%;
+                                    border-right: 1px solid var(--plotweaver-color-light-4);
                                 }
 
-                                &.pad-right {
+                                &.right {
                                     padding-right: 20%;
+                                    border-left: 1px solid var(--plotweaver-color-light-4);
                                 }
 
                                 .value {
@@ -498,6 +507,10 @@
                                     display: none;
                                 }
                             }
+                        }                        
+
+                        .dice-total.opportunity .dice-subtotal.active .value {
+                            color: var(--plotweaver-color-opportunity);
                         }
                     }
                 }
