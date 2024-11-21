@@ -7,6 +7,8 @@
             <span class="subtitle">{{{subtitle}}}</span>
             {{/if}}
         </div>
+        {{#if undo}}
         <span class="icon clickable" data-action="undo" data-tooltip="{{localize tooltip}}"><i class="fas fa-rotate-left"></i></span>
+        {{/if}}
     </header>
 </section>

@@ -610,7 +610,7 @@ export class CosmereActor<
                     damage,
                     deflected,
                     target: this.uuid,
-                    undo: health,
+                    undo: true,
                 },
             };
 

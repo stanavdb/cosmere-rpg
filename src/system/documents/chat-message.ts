@@ -410,7 +410,7 @@ export class CosmereChatMessage extends ChatMessage {
             damage: number;
             deflected: number;
             target: string;
-            undo: number;
+            undo: boolean;
         };
 
         const actor = (await fromUuid(target)) as unknown as CosmereActor;
@@ -441,15 +441,28 @@ export class CosmereChatMessage extends ChatMessage {
                 tooltip: isHealing
                     ? 'COSMERE.ChatMessage.UndoHealing'
                     : 'COSMERE.ChatMessage.UndoDamage',
+                undo,
             },
         );
 
         const section = $(sectionHTML as unknown as HTMLElement);
 
-        section.find('.icon.clickable').on('click', (event) => {
-            void actor.update({
-                'system.resources.hea.value': undo,
-            });
+        section.find('.icon.clickable').on('click', async (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const button = event.currentTarget;
+            const action = button.dataset.action;
+
+            if (action === 'undo') {
+                await actor.update({
+                    'system.resources.hea.value':
+                        actor.system.resources[Resource.Health].value + damage,
+                });
+
+                await this.setFlag(SYSTEM_ID, 'taken.undo', false);
+                void this.update({ flags: this.flags });
+            }
         });
 
         html.find('.chat-card').append(section);
