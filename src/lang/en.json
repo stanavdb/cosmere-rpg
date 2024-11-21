@@ -1036,7 +1036,9 @@
             "Edit": "Edit",
             "Save": "Save",
             "Cancel": "Cancel",
-            "Update": "Update"
+            "Update": "Update",
+            "RemoveFavorite": "Remove Favorite",
+            "Favorite":  "Favorite"
         },
         "Notification": {
             "GrazeFocusSpent": "Reduced focus by 1",

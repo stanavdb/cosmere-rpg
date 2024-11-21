@@ -493,55 +493,76 @@ export class ActorActionsListComponent extends HandlebarsApplicationComponent<
             // Create context menu
             AppContextMenu.create({
                 parent: this as AppContextMenu.Parent,
-                items: [
-                    /**
-                     * NOTE: This is a TEMPORARY context menu option
-                     * until we can handle recharging properly.
-                     */
-                    {
-                        name: 'COSMERE.Item.Activation.Uses.Recharge.Label',
-                        icon: 'fa-solid fa-rotate-left',
-                        callback: (element) => {
-                            const item = AppUtils.getItemFromElement(
-                                element,
-                                this.application.actor,
-                            );
-                            if (!item) return;
+                items: (element) => {
+                    // Get item id
+                    const itemId = $(element)
+                        .closest('.item[data-item-id]')
+                        .data('item-id') as string;
 
-                            void item.recharge();
-                        },
-                    },
-                    {
-                        name: 'GENERIC.Button.Edit',
-                        icon: 'fa-solid fa-pen-to-square',
-                        callback: (element) => {
-                            const item = AppUtils.getItemFromElement(
-                                element,
-                                this.application.actor,
-                            );
-                            if (!item) return;
+                    // Get item
+                    const item = this.application.actor.items.get(itemId)!;
 
-                            void item.sheet?.render(true);
-                        },
-                    },
-                    {
-                        name: 'GENERIC.Button.Remove',
-                        icon: 'fa-solid fa-trash',
-                        callback: (element) => {
-                            const item = AppUtils.getItemFromElement(
-                                element,
-                                this.application.actor,
-                            );
-                            if (!item) return;
+                    // Check if actor is character
+                    const isCharacter = this.application.actor.isCharacter();
 
-                            // Remove the item
-                            void this.application.actor.deleteEmbeddedDocuments(
-                                'Item',
-                                [item.id],
-                            );
+                    // Check if item is favorited
+                    const isFavorite = item.isFavorite;
+
+                    return [
+                        /**
+                         * NOTE: This is a TEMPORARY context menu option
+                         * until we can handle recharging properly.
+                         */
+                        {
+                            name: 'COSMERE.Item.Activation.Uses.Recharge.Label',
+                            icon: 'fa-solid fa-rotate-left',
+                            callback: () => {
+                                void item.recharge();
+                            },
                         },
-                    },
-                ],
+
+                        // Favorite (only for characters)
+                        isCharacter
+                            ? isFavorite
+                                ? {
+                                      name: 'GENERIC.Button.RemoveFavorite',
+                                      icon: 'fa-solid fa-star',
+                                      callback: () => {
+                                          void item.clearFavorite();
+                                      },
+                                  }
+                                : {
+                                      name: 'GENERIC.Button.Favorite',
+                                      icon: 'fa-solid fa-star',
+                                      callback: () => {
+                                          void item.markFavorite(
+                                              this.application.actor.favorites
+                                                  .length,
+                                          );
+                                      },
+                                  }
+                            : null,
+
+                        {
+                            name: 'GENERIC.Button.Edit',
+                            icon: 'fa-solid fa-pen-to-square',
+                            callback: () => {
+                                void item.sheet?.render(true);
+                            },
+                        },
+                        {
+                            name: 'GENERIC.Button.Remove',
+                            icon: 'fa-solid fa-trash',
+                            callback: () => {
+                                // Remove the item
+                                void this.application.actor.deleteEmbeddedDocuments(
+                                    'Item',
+                                    [item.id],
+                                );
+                            },
+                        },
+                    ].filter((i) => !!i);
+                },
                 selectors: ['a[data-action="toggle-actions-controls"]'],
                 anchor: 'right',
             });

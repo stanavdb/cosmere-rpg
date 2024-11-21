@@ -341,38 +341,64 @@ export class ActorEquipmentListComponent extends HandlebarsApplicationComponent<
             // Create context menu
             AppContextMenu.create({
                 parent: this as AppContextMenu.Parent,
-                items: [
-                    {
-                        name: 'GENERIC.Button.Edit',
-                        icon: 'fa-solid fa-pen-to-square',
-                        callback: (element) => {
-                            const item = AppUtils.getItemFromElement(
-                                element,
-                                this.application.actor,
-                            );
-                            if (!item) return;
+                items: (element) => {
+                    // Get item id
+                    const itemId = $(element)
+                        .closest('.item[data-item-id]')
+                        .data('item-id') as string;
 
-                            void item.sheet?.render(true);
-                        },
-                    },
-                    {
-                        name: 'GENERIC.Button.Remove',
-                        icon: 'fa-solid fa-trash',
-                        callback: (element) => {
-                            const item = AppUtils.getItemFromElement(
-                                element,
-                                this.application.actor,
-                            );
-                            if (!item) return;
+                    // Get item
+                    const item = this.application.actor.items.get(itemId)!;
 
-                            // Remove the item
-                            void this.application.actor.deleteEmbeddedDocuments(
-                                'Item',
-                                [item.id],
-                            );
+                    // Check if actor is character
+                    const isCharacter = this.application.actor.isCharacter();
+
+                    // Check if item is favorited
+                    const isFavorite = item.isFavorite;
+
+                    return [
+                        // Favorite (only for characters)
+                        isCharacter
+                            ? isFavorite
+                                ? {
+                                      name: 'GENERIC.Button.RemoveFavorite',
+                                      icon: 'fa-solid fa-star',
+                                      callback: () => {
+                                          void item.clearFavorite();
+                                      },
+                                  }
+                                : {
+                                      name: 'GENERIC.Button.Favorite',
+                                      icon: 'fa-solid fa-star',
+                                      callback: () => {
+                                          void item.markFavorite(
+                                              this.application.actor.favorites
+                                                  .length,
+                                          );
+                                      },
+                                  }
+                            : null,
+
+                        {
+                            name: 'GENERIC.Button.Edit',
+                            icon: 'fa-solid fa-pen-to-square',
+                            callback: () => {
+                                void item.sheet?.render(true);
+                            },
                         },
-                    },
-                ],
+                        {
+                            name: 'GENERIC.Button.Remove',
+                            icon: 'fa-solid fa-trash',
+                            callback: () => {
+                                // Remove the item
+                                void this.application.actor.deleteEmbeddedDocuments(
+                                    'Item',
+                                    [item.id],
+                                );
+                            },
+                        },
+                    ].filter((i) => !!i);
+                },
                 selectors: ['a[data-action="toggle-actions-controls"]'],
                 anchor: 'right',
             });
