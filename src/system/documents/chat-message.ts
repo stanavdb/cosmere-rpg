@@ -17,7 +17,7 @@ export const MESSAGE_TYPES = {
     SKILL: 'skill',
     ACTION: 'action',
     INJURY: 'injury',
-    TAKEN: 'taken',
+    DAMAGE_TAKEN: 'taken',
 } as Record<string, string>;
 
 export class CosmereChatMessage extends ChatMessage {
@@ -59,7 +59,9 @@ export class CosmereChatMessage extends ChatMessage {
     }
 
     public get hasDamageTaken(): boolean {
-        return this.getFlag(SYSTEM_ID, MESSAGE_TYPES.TAKEN) !== undefined;
+        return (
+            this.getFlag(SYSTEM_ID, MESSAGE_TYPES.DAMAGE_TAKEN) !== undefined
+        );
     }
 
     public get headerImg(): string | undefined {
@@ -403,23 +405,31 @@ export class CosmereChatMessage extends ChatMessage {
     protected async enrichDamageTaken(html: JQuery) {
         if (!this.hasDamageTaken) return;
 
-        const { damage, deflected, target, undo } = this.getFlag(
-            SYSTEM_ID,
-            'taken',
-        ) as {
-            damage: number;
-            deflected: number;
-            target: string;
-            undo: boolean;
-        };
+        const { damageTotal, damageDeflect, damageIgnore, target, undo } =
+            this.getFlag(SYSTEM_ID, MESSAGE_TYPES.DAMAGE_TAKEN) as {
+                damageTotal: number;
+                damageDeflect: number;
+                damageIgnore: number;
+                target: string;
+                undo: boolean;
+            };
 
         const actor = (await fromUuid(target)) as unknown as CosmereActor;
 
-        // Get total damage
-        const totalDamage = damage + deflected;
+        if (!actor) return;
 
         // Whether or not the damage is actually healing
-        const isHealing = totalDamage < 0;
+        const isHealing = damageTotal < 0;
+
+        const calculationDeflect =
+            damageDeflect > 0
+                ? `${damageDeflect} - ${actor.deflect} <i class='fas fa-shield-halved'></i>`
+                : undefined;
+        const calculationIgnore =
+            damageIgnore > 0
+                ? `${damageIgnore} <i class='fas fa-shield-slash'></i>`
+                : undefined;
+        const calculation = `${calculationDeflect ?? ''}${calculationDeflect && calculationIgnore ? ' + ' : ''}${calculationIgnore ?? ''}`;
 
         const sectionHTML = await renderSystemTemplate(
             TEMPLATES.CHAT_CARD_DAMAGE_TAKEN,
@@ -430,13 +440,13 @@ export class CosmereChatMessage extends ChatMessage {
                     : 'icons/skills/wounds/injury-stitched-flesh-red.webp',
                 title: game.i18n!.format(
                     `COSMERE.ChatMessage.${isHealing ? 'ApplyHealing' : 'ApplyDamage'}`,
-                    { actor: actor.name, amount: Math.abs(damage) },
+                    { actor: actor.name, amount: Math.abs(damageTotal) },
                 ),
                 subtitle: isHealing
                     ? undefined
                     : game.i18n!.format(
                           'COSMERE.ChatMessage.DamageCalculation',
-                          { damage: totalDamage, deflect: deflected },
+                          { calculation },
                       ),
                 tooltip: isHealing
                     ? 'COSMERE.ChatMessage.UndoHealing'
@@ -457,7 +467,8 @@ export class CosmereChatMessage extends ChatMessage {
             if (action === 'undo') {
                 await actor.update({
                     'system.resources.hea.value':
-                        actor.system.resources[Resource.Health].value + damage,
+                        actor.system.resources[Resource.Health].value +
+                        damageTotal,
                 });
 
                 await this.setFlag(SYSTEM_ID, 'taken.undo', false);

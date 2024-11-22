@@ -557,38 +557,35 @@ export class CosmereActor<
         // Get health resource
         const health = this.system.resources[Resource.Health].value;
 
-        let damage = 0;
-        let deflected = 0;
+        let damageDeflect = 0;
+        let damageIgnore = 0;
+        let healing = 0;
+
         instances.forEach((instance) => {
             // Get damage config
             const damageConfig = instance.type
                 ? CONFIG.COSMERE.damageTypes[instance.type]
                 : { ignoreDeflect: false };
 
-            let amount = Math.floor(instance.amount);
-            if (!damageConfig.ignoreDeflect && deflected < this.deflect) {
-                // Apply deflect with carry over across multi damage types
-                const remainingDeflect = this.deflect - deflected;
-                const afterDeflect = amount - remainingDeflect;
-                const carryOver = Math.min(0, afterDeflect);
-
-                amount = Math.max(0, afterDeflect);
-
-                deflected += remainingDeflect + carryOver;
-            }
+            const amount = Math.floor(instance.amount);
 
             if (instance.type === DamageType.Healing) {
-                amount *= -1;
+                healing += amount;
+                return;
             }
 
-            // Add to running total
-            damage += amount;
+            if (damageConfig.ignoreDeflect) {
+                damageIgnore += amount;
+            } else {
+                damageDeflect += amount;
+            }
         });
 
-        // Apply damage
-        const newHealth = Math.max(0, health - damage);
+        const damageTotal =
+            damageIgnore + Math.max(0, damageDeflect - this.deflect) - healing;
 
-        // Update health
+        // Apply damage
+        const newHealth = Math.max(0, health - damageTotal);
         await this.update({
             'system.resources.hea.value': newHealth,
         });
@@ -604,11 +601,12 @@ export class CosmereActor<
 
             messageConfig.flags[SYSTEM_ID] = {
                 message: {
-                    type: MESSAGE_TYPES.TAKEN,
+                    type: MESSAGE_TYPES.DAMAGE_TAKEN,
                 },
                 taken: {
-                    damage,
-                    deflected,
+                    damageTotal,
+                    damageDeflect,
+                    damageIgnore,
                     target: this.uuid,
                     undo: true,
                 },

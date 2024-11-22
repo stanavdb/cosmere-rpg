@@ -874,7 +874,7 @@
             },
             "ApplyDamage": "{actor} takes <strong>{amount} damage</strong>.",
             "ApplyHealing": "{actor} recovers <strong>{amount} health</strong>.",
-            "DamageCalculation": "Damage Calculation: {damage} - {deflect} <i class='fas fa-shield-halved'></i>",
+            "DamageCalculation": "Damage Calculation: {calculation}",
             "UndoDamage": "Click to undo damage taken.",
             "UndoHealing": "Click to undo healing.",
             "ViewRollsDetails": "Roll Details",
