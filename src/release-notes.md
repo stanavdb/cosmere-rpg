@@ -1,5 +1,5 @@
-### Release 0.2.0  
-We’re thrilled to share **v0.2.0**, which brings exciting new features, improvements, and bug fixes to the system.
+### Release 0.2
+We’re thrilled to share **v0.2**, which brings exciting new features, improvements, and bug fixes to the system.
 
 #### Radiant Paths Are Here!  
 Radiant paths have arrived, introducing surges and key features to support other Investiture systems. This update brings the iconic powers of the Knights Radiant to life while laying the groundwork for the wider Cosmere.
