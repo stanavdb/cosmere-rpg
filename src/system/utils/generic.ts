@@ -119,6 +119,7 @@ export function isFastForward() {
 export function getConstantFromRoll(roll: Roll) {
     let previous: unknown;
     let constant = 0;
+
     for (const term of roll.terms) {
         if (term instanceof foundry.dice.terms.NumericTerm) {
             if (
@@ -129,7 +130,12 @@ export function getConstantFromRoll(roll: Roll) {
             } else {
                 constant += term.number;
             }
+        } else if (term instanceof foundry.dice.terms.FunctionTerm) {
+            if (typeof term.total === 'number') {
+                constant += term.total;
+            }
         }
+
         previous = term;
     }
 

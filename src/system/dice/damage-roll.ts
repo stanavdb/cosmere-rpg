@@ -107,6 +107,36 @@ export class DamageRoll extends foundry.dice.Roll<DamageRollData> {
         return this.options.advantageMode === AdvantageMode.Disadvantage;
     }
 
+    public get hasDice() {
+        return this.dice.length > 0;
+    }
+
+    /* --- Functions --- */
+
+    public override async getTooltip(): Promise<string> {
+        const tooltip = await super.getTooltip();
+        if (tooltip) return tooltip;
+
+        // Get dice terms
+        const parts = [
+            {
+                formula: this.formula,
+                total: this.total,
+                rolls: [], // There are no dice, otherwise the default tooltip would have been returned
+            },
+        ];
+
+        // Render the template
+        const rendered = await renderTemplate(
+            foundry.dice.Roll.TOOLTIP_TEMPLATE,
+            {
+                parts,
+            },
+        );
+
+        return rendered;
+    }
+
     /* --- Helper Functions --- */
 
     public removeTermSafely(

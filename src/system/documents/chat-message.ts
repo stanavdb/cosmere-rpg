@@ -277,8 +277,7 @@ export class CosmereChatMessage extends ChatMessage {
             const tooltipNormal = $(await rollNormal.getTooltip());
             this.enrichDamageTooltip(rollNormal, type, tooltipNormal);
             tooltipNormalHTML +=
-                tooltipNormal.find('.tooltip-part')[0].outerHTML;
-
+                tooltipNormal.find('.tooltip-part')[0]?.outerHTML || ``;
             if (rollNormal.options.graze) {
                 const rollGraze = DamageRoll.fromData(
                     rollNormal.options
@@ -290,7 +289,7 @@ export class CosmereChatMessage extends ChatMessage {
                 const tooltipGraze = $(await rollGraze.getTooltip());
                 this.enrichDamageTooltip(rollGraze, type, tooltipGraze);
                 tooltipGrazeHTML +=
-                    tooltipGraze.find('.tooltip-part')[0].outerHTML;
+                    tooltipGraze.find('.tooltip-part')[0]?.outerHTML || '';
             }
         }
 
@@ -510,9 +509,17 @@ export class CosmereChatMessage extends ChatMessage {
         const sign = constant < 0 ? '-' : '+';
         const newTotal = Number(html.find('.value').text()) + constant;
 
-        html.find('.value').text(newTotal);
+        if (roll.hasDice) html.find('.value').text(newTotal);
+
         html.find('.dice-rolls').append(
-            `<li class="constant"><span class="sign">${sign}</span>${constant}</li>`,
+            `<li class="constant">
+                ${
+                    roll.hasDice || constant < 0
+                        ? `<span class="sign">${sign}</span>`
+                        : ''
+                }
+                ${constant}
+            </li>`,
         );
     }
 
