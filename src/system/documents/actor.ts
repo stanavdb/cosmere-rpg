@@ -604,6 +604,7 @@ export class CosmereActor<
                     type: MESSAGE_TYPES.DAMAGE_TAKEN,
                 },
                 taken: {
+                    health,
                     damageTotal,
                     damageDeflect,
                     damageIgnore,

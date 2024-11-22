@@ -405,14 +405,21 @@ export class CosmereChatMessage extends ChatMessage {
     protected async enrichDamageTaken(html: JQuery) {
         if (!this.hasDamageTaken) return;
 
-        const { damageTotal, damageDeflect, damageIgnore, target, undo } =
-            this.getFlag(SYSTEM_ID, MESSAGE_TYPES.DAMAGE_TAKEN) as {
-                damageTotal: number;
-                damageDeflect: number;
-                damageIgnore: number;
-                target: string;
-                undo: boolean;
-            };
+        const {
+            health,
+            damageTotal,
+            damageDeflect,
+            damageIgnore,
+            target,
+            undo,
+        } = this.getFlag(SYSTEM_ID, MESSAGE_TYPES.DAMAGE_TAKEN) as {
+            health: number;
+            damageTotal: number;
+            damageDeflect: number;
+            damageIgnore: number;
+            target: string;
+            undo: boolean;
+        };
 
         const actor = (await fromUuid(target)) as unknown as CosmereActor;
 
@@ -457,24 +464,28 @@ export class CosmereChatMessage extends ChatMessage {
 
         const section = $(sectionHTML as unknown as HTMLElement);
 
-        section.find('.icon.clickable').on('click', async (event) => {
-            event.preventDefault();
-            event.stopPropagation();
+        if (game.user!.isGM || this.isAuthor) {
+            section.find('.icon.clickable').on('click', async (event) => {
+                event.preventDefault();
+                event.stopPropagation();
 
-            const button = event.currentTarget;
-            const action = button.dataset.action;
+                const button = event.currentTarget;
+                const action = button.dataset.action;
 
-            if (action === 'undo') {
-                await actor.update({
-                    'system.resources.hea.value':
-                        actor.system.resources[Resource.Health].value +
-                        damageTotal,
-                });
+                if (action === 'undo') {
+                    await actor.update({
+                        'system.resources.hea.value':
+                            actor.system.resources[Resource.Health].value +
+                            (health > damageTotal ? damageTotal : health),
+                    });
 
-                await this.setFlag(SYSTEM_ID, 'taken.undo', false);
-                void this.update({ flags: this.flags });
-            }
-        });
+                    await this.setFlag(SYSTEM_ID, 'taken.undo', false);
+                    void this.update({ flags: this.flags });
+                }
+            });
+        } else {
+            section.find('.icon.clickable').remove();
+        }
 
         html.find('.chat-card').append(section);
     }
