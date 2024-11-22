@@ -409,9 +409,17 @@ export class CosmereChatMessage extends ChatMessage {
         const sign = constant < 0 ? '-' : '+';
         const newTotal = Number(html.find('.value').text()) + constant;
 
-        html.find('.value').text(newTotal);
+        if (roll.hasDice) html.find('.value').text(newTotal);
+
         html.find('.dice-rolls').append(
-            `<li class="constant"><span class="sign">${sign}</span>${constant}</li>`,
+            `<li class="constant">
+                ${
+                    roll.hasDice || constant < 0
+                        ? `<span class="sign">${sign}</span>`
+                        : ''
+                }
+                ${constant}
+            </li>`,
         );
     }
 
