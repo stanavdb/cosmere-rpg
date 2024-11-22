@@ -50,6 +50,7 @@ export const TEMPLATES = {
     CHAT_CARD_SECTION: 'chat/card-section.hbs',
     CHAT_CARD_DESCRIPTION: 'chat/card-description.hbs',
     CHAT_CARD_INJURY: 'chat/card-injury.hbs',
+    CHAT_CARD_DAMAGE_TAKEN: 'chat/card-damage-taken.hbs',
     CHAT_CARD_DAMAGE_BUTTONS: 'chat/card-damage-buttons.hbs',
 
     CHAT_CARD_TRAY_TARGETS: 'chat/card-tray-targets.hbs',

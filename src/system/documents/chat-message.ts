@@ -1,4 +1,4 @@
-import { DamageType, InjuryType } from '@system/types/cosmere';
+import { DamageType, InjuryType, Resource } from '@system/types/cosmere';
 import { D20Roll } from '@system/dice/d20-roll';
 import { DamageRoll } from '@system/dice/damage-roll';
 
@@ -17,6 +17,7 @@ export const MESSAGE_TYPES = {
     SKILL: 'skill',
     ACTION: 'action',
     INJURY: 'injury',
+    DAMAGE_TAKEN: 'taken',
 } as Record<string, string>;
 
 export class CosmereChatMessage extends ChatMessage {
@@ -54,7 +55,13 @@ export class CosmereChatMessage extends ChatMessage {
     }
 
     public get hasInjury(): boolean {
-        return this.getFlag(SYSTEM_ID, 'injury') !== undefined;
+        return this.getFlag(SYSTEM_ID, MESSAGE_TYPES.INJURY) !== undefined;
+    }
+
+    public get hasDamageTaken(): boolean {
+        return (
+            this.getFlag(SYSTEM_ID, MESSAGE_TYPES.DAMAGE_TAKEN) !== undefined
+        );
     }
 
     public get headerImg(): string | undefined {
@@ -129,6 +136,7 @@ export class CosmereChatMessage extends ChatMessage {
         await this.enrichSkillTest(content);
         await this.enrichDamage(content);
         await this.enrichInjury(content);
+        await this.enrichDamageTaken(content);
         await this.enrichTestTargets(content);
 
         // Replace content
@@ -390,6 +398,94 @@ export class CosmereChatMessage extends ChatMessage {
         const tooltip = section.find('.dice-tooltip');
         this.enrichD20Tooltip(injuryRoll, tooltip[0]);
         tooltip.prepend(section.find('.dice-formula'));
+
+        html.find('.chat-card').append(section);
+    }
+
+    protected async enrichDamageTaken(html: JQuery) {
+        if (!this.hasDamageTaken) return;
+
+        const {
+            health,
+            damageTotal,
+            damageDeflect,
+            damageIgnore,
+            target,
+            undo,
+        } = this.getFlag(SYSTEM_ID, MESSAGE_TYPES.DAMAGE_TAKEN) as {
+            health: number;
+            damageTotal: number;
+            damageDeflect: number;
+            damageIgnore: number;
+            target: string;
+            undo: boolean;
+        };
+
+        const actor = (await fromUuid(target)) as unknown as CosmereActor;
+
+        if (!actor) return;
+
+        // Whether or not the damage is actually healing
+        const isHealing = damageTotal < 0;
+
+        const calculationDeflect =
+            damageDeflect > 0
+                ? `${damageDeflect} - ${actor.deflect} <i class='fas fa-shield-halved'></i>`
+                : undefined;
+        const calculationIgnore =
+            damageIgnore > 0
+                ? `${damageIgnore} <i class='fas fa-shield-slash'></i>`
+                : undefined;
+        const calculation = `${calculationDeflect ?? ''}${calculationDeflect && calculationIgnore ? ' + ' : ''}${calculationIgnore ?? ''}`;
+
+        const sectionHTML = await renderSystemTemplate(
+            TEMPLATES.CHAT_CARD_DAMAGE_TAKEN,
+            {
+                type: isHealing ? 'healing' : 'injury',
+                img: isHealing
+                    ? 'icons/magic/life/cross-beam-green.webp'
+                    : 'icons/skills/wounds/injury-stitched-flesh-red.webp',
+                title: game.i18n!.format(
+                    `COSMERE.ChatMessage.${isHealing ? 'ApplyHealing' : 'ApplyDamage'}`,
+                    { actor: actor.name, amount: Math.abs(damageTotal) },
+                ),
+                subtitle: isHealing
+                    ? undefined
+                    : game.i18n!.format(
+                          'COSMERE.ChatMessage.DamageCalculation',
+                          { calculation },
+                      ),
+                tooltip: isHealing
+                    ? 'COSMERE.ChatMessage.UndoHealing'
+                    : 'COSMERE.ChatMessage.UndoDamage',
+                undo,
+            },
+        );
+
+        const section = $(sectionHTML as unknown as HTMLElement);
+
+        if (game.user!.isGM || this.isAuthor) {
+            section.find('.icon.clickable').on('click', async (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+
+                const button = event.currentTarget;
+                const action = button.dataset.action;
+
+                if (action === 'undo') {
+                    await actor.update({
+                        'system.resources.hea.value':
+                            actor.system.resources[Resource.Health].value +
+                            (health > damageTotal ? damageTotal : health),
+                    });
+
+                    await this.setFlag(SYSTEM_ID, 'taken.undo', false);
+                    void this.update({ flags: this.flags });
+                }
+            });
+        } else {
+            section.find('.icon.clickable').remove();
+        }
 
         html.find('.chat-card').append(section);
     }
