@@ -1,4 +1,4 @@
-import { DamageType, InjuryType } from '@system/types/cosmere';
+import { DamageType, InjuryType, Resource } from '@system/types/cosmere';
 import { D20Roll } from '@system/dice/d20-roll';
 import { DamageRoll } from '@system/dice/damage-roll';
 
@@ -17,6 +17,7 @@ export const MESSAGE_TYPES = {
     SKILL: 'skill',
     ACTION: 'action',
     INJURY: 'injury',
+    DAMAGE_TAKEN: 'taken',
 } as Record<string, string>;
 
 export class CosmereChatMessage extends ChatMessage {
@@ -54,7 +55,13 @@ export class CosmereChatMessage extends ChatMessage {
     }
 
     public get hasInjury(): boolean {
-        return this.getFlag(SYSTEM_ID, 'injury') !== undefined;
+        return this.getFlag(SYSTEM_ID, MESSAGE_TYPES.INJURY) !== undefined;
+    }
+
+    public get hasDamageTaken(): boolean {
+        return (
+            this.getFlag(SYSTEM_ID, MESSAGE_TYPES.DAMAGE_TAKEN) !== undefined
+        );
     }
 
     public get headerImg(): string | undefined {
@@ -129,6 +136,7 @@ export class CosmereChatMessage extends ChatMessage {
         await this.enrichSkillTest(content);
         await this.enrichDamage(content);
         await this.enrichInjury(content);
+        await this.enrichDamageTaken(content);
         await this.enrichTestTargets(content);
 
         // Replace content
@@ -269,8 +277,7 @@ export class CosmereChatMessage extends ChatMessage {
             const tooltipNormal = $(await rollNormal.getTooltip());
             this.enrichDamageTooltip(rollNormal, type, tooltipNormal);
             tooltipNormalHTML +=
-                tooltipNormal.find('.tooltip-part')[0].outerHTML;
-
+                tooltipNormal.find('.tooltip-part')[0]?.outerHTML || ``;
             if (rollNormal.options.graze) {
                 const rollGraze = DamageRoll.fromData(
                     rollNormal.options
@@ -282,7 +289,7 @@ export class CosmereChatMessage extends ChatMessage {
                 const tooltipGraze = $(await rollGraze.getTooltip());
                 this.enrichDamageTooltip(rollGraze, type, tooltipGraze);
                 tooltipGrazeHTML +=
-                    tooltipGraze.find('.tooltip-part')[0].outerHTML;
+                    tooltipGraze.find('.tooltip-part')[0]?.outerHTML || '';
             }
         }
 
@@ -351,10 +358,6 @@ export class CosmereChatMessage extends ChatMessage {
             (r) => !(r instanceof D20Roll) && !(r instanceof DamageRoll),
         );
 
-        // Current required because of a bug in the roll table
-        if ((data.type as string) === 'ViciousInjury')
-            data.type = InjuryType.ViciousInjury;
-
         let title;
         const actor = this.associatedActor?.name ?? 'Actor';
         switch (data.type) {
@@ -402,6 +405,94 @@ export class CosmereChatMessage extends ChatMessage {
         html.find('.chat-card').append(section);
     }
 
+    protected async enrichDamageTaken(html: JQuery) {
+        if (!this.hasDamageTaken) return;
+
+        const {
+            health,
+            damageTotal,
+            damageDeflect,
+            damageIgnore,
+            target,
+            undo,
+        } = this.getFlag(SYSTEM_ID, MESSAGE_TYPES.DAMAGE_TAKEN) as {
+            health: number;
+            damageTotal: number;
+            damageDeflect: number;
+            damageIgnore: number;
+            target: string;
+            undo: boolean;
+        };
+
+        const actor = (await fromUuid(target)) as unknown as CosmereActor;
+
+        if (!actor) return;
+
+        // Whether or not the damage is actually healing
+        const isHealing = damageTotal < 0;
+
+        const calculationDeflect =
+            damageDeflect > 0
+                ? `${damageDeflect} - ${actor.deflect} <i class='fas fa-shield-halved'></i>`
+                : undefined;
+        const calculationIgnore =
+            damageIgnore > 0
+                ? `${damageIgnore} <i class='fas fa-shield-slash'></i>`
+                : undefined;
+        const calculation = `${calculationDeflect ?? ''}${calculationDeflect && calculationIgnore ? ' + ' : ''}${calculationIgnore ?? ''}`;
+
+        const sectionHTML = await renderSystemTemplate(
+            TEMPLATES.CHAT_CARD_DAMAGE_TAKEN,
+            {
+                type: isHealing ? 'healing' : 'injury',
+                img: isHealing
+                    ? 'icons/magic/life/cross-beam-green.webp'
+                    : 'icons/skills/wounds/injury-stitched-flesh-red.webp',
+                title: game.i18n!.format(
+                    `COSMERE.ChatMessage.${isHealing ? 'ApplyHealing' : 'ApplyDamage'}`,
+                    { actor: actor.name, amount: Math.abs(damageTotal) },
+                ),
+                subtitle: isHealing
+                    ? undefined
+                    : game.i18n!.format(
+                          'COSMERE.ChatMessage.DamageCalculation',
+                          { calculation },
+                      ),
+                tooltip: isHealing
+                    ? 'COSMERE.ChatMessage.UndoHealing'
+                    : 'COSMERE.ChatMessage.UndoDamage',
+                undo,
+            },
+        );
+
+        const section = $(sectionHTML as unknown as HTMLElement);
+
+        if (game.user!.isGM || this.isAuthor) {
+            section.find('.icon.clickable').on('click', async (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+
+                const button = event.currentTarget;
+                const action = button.dataset.action;
+
+                if (action === 'undo') {
+                    await actor.update({
+                        'system.resources.hea.value':
+                            actor.system.resources[Resource.Health].value +
+                            (health > damageTotal ? damageTotal : health),
+                    });
+
+                    await this.setFlag(SYSTEM_ID, 'taken.undo', false);
+                    void this.update({ flags: this.flags });
+                }
+            });
+        } else {
+            section.find('.icon.clickable').remove();
+        }
+
+        html.find('.chat-card').append(section);
+    }
+
     /**
      * Augment damage roll tooltips with some additional information and styling.
      * @param {DamageRoll} roll The roll instance.
@@ -422,9 +513,17 @@ export class CosmereChatMessage extends ChatMessage {
         const sign = constant < 0 ? '-' : '+';
         const newTotal = Number(html.find('.value').text()) + constant;
 
-        html.find('.value').text(newTotal);
+        if (roll.hasDice) html.find('.value').text(newTotal);
+
         html.find('.dice-rolls').append(
-            `<li class="constant"><span class="sign">${sign}</span>${constant}</li>`,
+            `<li class="constant">
+                ${
+                    roll.hasDice || constant < 0
+                        ? `<span class="sign">${sign}</span>`
+                        : ''
+                }
+                ${constant}
+            </li>`,
         );
     }
 

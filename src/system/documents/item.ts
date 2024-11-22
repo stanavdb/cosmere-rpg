@@ -517,11 +517,29 @@ export class CosmereItem<
                 term instanceof foundry.dice.terms.OperatorTerm,
         );
 
-        // Make the graze pool and roll it
+        // Ensure there is at least one term in the unmodded roll
+        if (unmoddedRoll.terms.length === 0) {
+            unmoddedRoll.terms.push(
+                new foundry.dice.terms.NumericTerm({ number: 0 }),
+            );
+            unmoddedRoll.resetFormula();
+        }
+
+        // Ensure there is at least one term in the dice only roll
+        if (diceOnlyRoll.terms.length === 0) {
+            diceOnlyRoll.terms.push(
+                new foundry.dice.terms.NumericTerm({ number: 0 }),
+            );
+            diceOnlyRoll.resetFormula();
+        }
+
+        // Get the graze formula
         const grazeFormula =
             // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
             this.system.damage.grazeOverrideFormula || '@damage.dice';
+
         const usesBaseDamage = grazeFormula.includes('@damage');
+
         const grazeRoll = await damageRoll(
             foundry.utils.mergeObject(options, {
                 formula: grazeFormula,
@@ -529,9 +547,10 @@ export class CosmereItem<
                 data: rollData,
             }),
         );
+
         // update with results from the basic roll if needed and store for display
         if (usesBaseDamage) grazeRoll.replaceDieResults(roll.dice);
-        if (!grazeRoll) return null;
+
         roll.graze = grazeRoll;
 
         if (roll && options.chatMessage !== false) {

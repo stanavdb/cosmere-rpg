@@ -200,6 +200,15 @@ export function getSystemSetting(settingKey: string) {
 }
 
 /**
+ * Set a specific setting value for the provided key.
+ * @param settingKey  The identifier of the setting to set.
+ * @param value The value to set the setting to.
+ */
+export function setSystemSetting<T = unknown>(settingKey: string, value: T) {
+    return game.settings!.set(SYSTEM_ID, settingKey, value);
+}
+
+/**
  * Retrieves an array of keybinding values for the provided key.
  * @param {string} keybindingKey The identifier of the keybinding to retrieve.
  * @returns {Array<object>} The value of the keybindings associated with the given key.
