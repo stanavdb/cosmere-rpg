@@ -2,7 +2,7 @@
     <header class="summary">
         <img src="{{img}}">
         <div class="name-stacked">
-            <span class="title">{{{title}}}</span>
+            <span class="title {{#unless undo}}undone{{/unless}}">{{{title}}}</span>
             {{#if subtitle}}
             <span class="subtitle">{{{subtitle}}}</span>
             {{/if}}

@@ -161,6 +161,12 @@
                                 font-size: var(--font-size-14);
                                 font-weight: bold;
                                 color: var(--plotweaver-color-dark-1);
+
+                                &.undone {
+                                    strong {
+                                        text-decoration: line-through;
+                                    }
+                                }
                             }
                             
                             .subtitle {
