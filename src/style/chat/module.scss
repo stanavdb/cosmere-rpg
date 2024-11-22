@@ -30,7 +30,7 @@
             img {
                 border: 0;
 
-                &:hover {                    
+                &:hover {
                     cursor: pointer;
                     filter: var(--plotweaver-shadow-svg);
                 }
@@ -139,10 +139,15 @@
                             object-position: top;
                         }
 
-                        & > .cosmere-icon {
+                        & > .icon {
                             font-size: var(--font-size-16);
                             color: var(--plotweaver-color-opportunity);
                             padding-right: 0.25rem;
+
+                            &.clickable:hover {
+                                cursor: pointer;
+                                filter: var(--plotweaver-shadow-svg);
+                            }
                         }
 
                         .name-stacked {
@@ -156,6 +161,12 @@
                                 font-size: var(--font-size-14);
                                 font-weight: bold;
                                 color: var(--plotweaver-color-dark-1);
+
+                                &.undone {
+                                    strong {
+                                        text-decoration: line-through;
+                                    }
+                                }
                             }
                             
                             .subtitle {
@@ -205,6 +216,20 @@
 
                                 strong {
                                     color: var(--plotweaver-color-complication);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                &.healing {
+                    .summary {
+                        .name-stacked {
+                            .title {
+                                font-size: var(--font-size-13);
+
+                                strong {
+                                    color: var(--plotweaver-color-health-front);
                                 }
                             }
                         }
@@ -418,8 +443,9 @@
                         .dice-total {
                             font-weight: bold;
                             font-size: var(--font-size-24);
-                            padding: 0;
                             font-family: var(--plotweaver-font-normal);
+                            color: var(--plotweaver-color-dark-1);
+                            padding: 0;
                             position: relative;
 
                             &.ignored {
@@ -446,6 +472,9 @@
                         }
 
                         .dice-subtotal {
+                            border-right: 1px solid var(--plotweaver-color-light-4);
+                            transition: all 200ms ease;
+
                             padding: 0 0.5rem;
                             font-weight: 600;
                             display: flex;
@@ -465,12 +494,34 @@
                                 text-transform: uppercase;
                             }
 
-                            &.right {
-                                border-left: 1px solid var(--plotweaver-color-light-4);
+                            &:last-child {
+                                border-right: 0;
                             }
 
-                            &.left {
-                                border-right: 1px solid var(--plotweaver-color-light-4);
+                            &.active {
+                                padding: 0;
+                                font-weight: bold;
+                                display: flex;
+                                flex-direction: column;
+                                width: 80%;
+
+                                &.pad-left {                                    
+                                    padding-left: 20%;
+                                }
+
+                                &.pad-right {
+                                    padding-right: 20%;
+                                }
+
+                                .value {
+                                    color: var(--plotweaver-color-dark-1);
+                                    font-size: var(--font-size-24);
+                                    font-family: var(--plotweaver-font-normal);
+                                }
+
+                                .label {
+                                    display: none;
+                                }
                             }
                         }
                     }
@@ -600,7 +651,7 @@
         position: static;
 
         button {
-            width: 44px;
+            width: 46px;
             height: 22px;
             font-size: var(--font-size-14);
             font-weight: 600;

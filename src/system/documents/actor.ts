@@ -555,81 +555,66 @@ export class CosmereActor<
         ) as ApplyDamageOptions;
 
         // Get health resource
-        const health = this.system.resources[Resource.Health];
+        const health = this.system.resources[Resource.Health].value;
 
-        let damage = 0;
-        let deflected = 0;
+        let damageDeflect = 0;
+        let damageIgnore = 0;
+        let healing = 0;
+
         instances.forEach((instance) => {
             // Get damage config
             const damageConfig = instance.type
                 ? CONFIG.COSMERE.damageTypes[instance.type]
                 : { ignoreDeflect: false };
 
-            let amount = instance.amount;
-            if (!damageConfig.ignoreDeflect) {
-                // Apply deflect
-                amount = Math.max(0, amount - this.deflect);
-                deflected += this.deflect;
-            }
+            const amount = Math.floor(instance.amount);
 
             if (instance.type === DamageType.Healing) {
-                amount = -amount;
+                healing += amount;
+                return;
             }
 
-            // Add to running total
-            damage += amount;
+            if (damageConfig.ignoreDeflect) {
+                damageIgnore += amount;
+            } else {
+                damageDeflect += amount;
+            }
         });
 
-        // Get total damage
-        const totalDamage = damage + deflected;
-
-        // Whether or not the damage is actually healing
-        const isHealing = totalDamage < 0;
+        const damageTotal =
+            damageIgnore + Math.max(0, damageDeflect - this.deflect) - healing;
 
         // Apply damage
-        const newHealth = Math.max(0, health.value - damage);
-
-        // Update health
+        const newHealth = Math.max(0, health - damageTotal);
         await this.update({
             'system.resources.hea.value': newHealth,
         });
 
         if (chatMessage) {
-            // Chat message
-            let flavor = game
-                .i18n!.localize(
-                    isHealing
-                        ? 'COSMERE.ChatMessage.ApplyHealing'
-                        : 'COSMERE.ChatMessage.ApplyDamage',
-                )
-                .replace('[actor]', this.name)
-                .replace('[amount]', Math.abs(damage).toString());
-
-            if (!isHealing && deflected > 0) {
-                flavor += ` (${totalDamage} - <i class="deflect fa-solid fa-shield"></i>${deflected})`;
-            }
-
-            // Chat message
-            await ChatMessage.create({
+            const messageConfig = {
                 user: game.user!.id,
                 speaker: ChatMessage.getSpeaker({
                     actor: this,
                 }) as ChatSpeakerData,
-                content: `<span class="damage-notification">
-                    ${flavor}.
-                    <a class="action" 
-                        data-action="undo-damage" 
-                        data-amount="${damage}"
-                        data-tooltip="${
-                            isHealing
-                                ? 'COSMERE.ChatMessage.UndoHealing'
-                                : 'COSMERE.ChatMessage.UndoDamage'
-                        }"
-                    >
-                        <i class="fa-solid fa-rotate-left"></i>
-                    </a>
-                </span>`,
-            });
+                flags: {} as Record<string, unknown>,
+            };
+
+            messageConfig.flags[SYSTEM_ID] = {
+                message: {
+                    type: MESSAGE_TYPES.DAMAGE_TAKEN,
+                },
+                taken: {
+                    health,
+                    damageTotal,
+                    damageDeflect,
+                    damageIgnore,
+                    target: this.uuid,
+                    undo: true,
+                },
+            };
+
+            // Create chat message
+            await ChatMessage.create(messageConfig);
         }
     }
 

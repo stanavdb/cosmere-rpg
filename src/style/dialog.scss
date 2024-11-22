@@ -61,7 +61,9 @@ dialog.application.roll-configuration {
 }
 
 .dialog.application.release-notes {
+    max-height: 1000px;
+
     .window-content {
-        overflow: scroll;
+        overflow: auto;
     }
 }

@@ -172,10 +172,6 @@ export class CharacterGoalsListComponent extends HandlebarsApplicationComponent<
         // Ensure controls dropdown is closed
         this.controlsDropdownExpanded = false;
 
-        // Get the goals
-        const goals = this.application.actor.system.goals;
-        if (!goals) return;
-
         // Create goal
         const goal = (await Item.create(
             {
@@ -190,8 +186,10 @@ export class CharacterGoalsListComponent extends HandlebarsApplicationComponent<
             { parent: this.application.actor },
         )) as GoalItem;
 
-        // Show item sheet
-        void goal.sheet?.render(true);
+        setTimeout(() => {
+            // Edit the goal
+            this.editGoal(goal.id);
+        });
     }
 
     /* --- Context --- */
@@ -224,6 +222,56 @@ export class CharacterGoalsListComponent extends HandlebarsApplicationComponent<
                 expanded: this.controlsDropdownExpanded,
                 position: this.controlsDropdownPosition,
             },
+        });
+    }
+
+    /* --- Helpers --- */
+
+    private editGoal(id: string) {
+        // Get goal element
+        const element = $(this.element!).find(`.goal[data-id="${id}"]`);
+
+        // Get span element
+        const span = element.find('span.title');
+
+        // Hide span title
+        span.addClass('inactive');
+
+        // Get input element
+        const input = element.find('input.title');
+
+        // Show
+        input.removeClass('inactive');
+
+        setTimeout(() => {
+            // Focus input
+            input.trigger('select');
+
+            // Add event handler
+            input.on('focusout', async () => {
+                // Remove handler
+                input.off('focusout');
+
+                // Get the goal
+                const goal = this.application.actor.items.get(id) as GoalItem;
+
+                // Update the connection
+                await goal.update({
+                    name: input.val(),
+                });
+
+                // Render
+                void this.render();
+            });
+
+            input.on('keypress', (event) => {
+                if (event.which !== 13) return; // Enter key
+
+                event.preventDefault();
+                event.stopPropagation();
+
+                input.trigger('focusout');
+            });
         });
     }
 }

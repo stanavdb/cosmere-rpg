@@ -1060,7 +1060,7 @@ export class CosmereItem<
         await this.update(
             {
                 flags: {
-                    SYSTEM_ID: {
+                    [SYSTEM_ID]: {
                         favorites: {
                             isFavorite: true,
                             sort: index,
