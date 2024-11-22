@@ -12,13 +12,13 @@
                 </div>
             </div>
         </div>
-        <div class="dice-roll-damage">            
-            <h4 class="dice-total">
-                <div class="dice-subtotal pad-left active">
+        <div class="dice-roll-damage">
+            <h4 class="dice-total {{#if critical}}opportunity{{/if}}">
+                <div class="dice-subtotal left active">
                     <span class="label">{{localize "DICE.Damage.Full"}}</span>
                     <span class="value">{{totalNormal}}</span>
                 </div>
-                <div class="dice-subtotal pad-right ">
+                <div class="dice-subtotal right ">
                     <span class="label">{{localize "DICE.Damage.Graze"}}</span>
                     <span class="value">{{totalGraze}}</span>
                 </div>

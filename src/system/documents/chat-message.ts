@@ -293,6 +293,8 @@ export class CosmereChatMessage extends ChatMessage {
             }
         }
 
+        const critical = damageRolls.some((d) => d.isCritical);
+
         const damageHTML = await renderSystemTemplate(
             TEMPLATES.CHAT_ROLL_DAMAGE,
             {
@@ -302,6 +304,7 @@ export class CosmereChatMessage extends ChatMessage {
                 tooltipGraze: tooltipGrazeHTML,
                 totalNormal: this.totalDamageNormal,
                 totalGraze: this.totalDamageGraze,
+                critical,
             },
         );
 
@@ -319,6 +322,7 @@ export class CosmereChatMessage extends ChatMessage {
                 title: game.i18n!.localize('GENERIC.Damage'),
                 content: damageHTML,
                 footer,
+                critical,
                 damageTypes: Array.from(types)
                     .sort()
                     .join(' <i class="cosmere-icon opportunity"></i> '),
@@ -566,13 +570,17 @@ export class CosmereChatMessage extends ChatMessage {
             await this.onClickOverlayD20(event);
         });
 
-        //const overlayCrit = await renderSystemTemplate(TEMPLATES.CHAT_OVERLAY_CRIT, {});
+        const overlayCrit = await renderSystemTemplate(
+            TEMPLATES.CHAT_OVERLAY_CRIT,
+            {
+                imgCrit: `systems/${SYSTEM_ID}/assets/icons/svg/dice/retro-crit.svg`,
+            },
+        );
 
-        // html.find('.rsr-damage .dice-total').append($(overlayCrit));
-
-        // html.find(".rsr-overlay-crit div").click(async event => {
-        //     await _processRetroCritButtonEvent(message, event);
-        // });
+        html.find('.dice-roll-damage .dice-total').append($(overlayCrit));
+        html.find('.overlay-crit div').on('click', async (event) => {
+            await this.onClickOverlayCrit(event);
+        });
     }
 
     /**
@@ -676,6 +684,61 @@ export class CosmereChatMessage extends ChatMessage {
     }
 
     /**
+     * Handles a crit overlay button click event.
+     * @param {JQuery.ClickEvent} event The originating event of the button click.
+     */
+    private async onClickOverlayCrit(event: JQuery.ClickEvent) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const button = event.currentTarget as HTMLElement;
+        const action = button.dataset.action;
+
+        if (action === 'retro') {
+            const clone = await Promise.all(
+                this.rolls.map(async (roll) => {
+                    if (!(roll instanceof DamageRoll)) return roll;
+
+                    const crit = await new DamageRoll(roll.formula, roll.data, {
+                        damageType: roll.damageType,
+                        mod: roll.mod,
+                        source: roll.source,
+                        advantageMode:
+                            roll.options.advantageMode ?? AdvantageMode.None,
+                        maximize: true,
+                        minimize: false,
+                        critical: true,
+                    }).evaluate({ maximize: true });
+
+                    if (roll.graze) {
+                        const graze = await new DamageRoll(
+                            roll.graze.formula,
+                            roll.graze.data,
+                            {
+                                damageType: roll.graze.damageType,
+                                mod: roll.graze.mod,
+                                source: roll.graze.source,
+                                advantageMode:
+                                    roll.graze.options.advantageMode ??
+                                    AdvantageMode.None,
+                                maximize: true,
+                                minimize: false,
+                                critical: true,
+                            },
+                        ).evaluate({ maximize: true });
+
+                        crit.graze = graze;
+                    }
+
+                    return crit;
+                }),
+            );
+
+            void this.update({ rolls: clone });
+        }
+    }
+
+    /**
      * Handles a click event on the toggle between using graze damage and full damage.
      * @param {JQuery.ClickEvent} event The originating event of the button click.
      * @returns
@@ -691,6 +754,18 @@ export class CosmereChatMessage extends ChatMessage {
         this.useGraze = !this.useGraze;
         toggle.addClass('active');
         toggle.siblings('.dice-subtotal').removeClass('active');
+
+        if (toggle.siblings('.overlay-crit').first().hasClass('left')) {
+            toggle
+                .siblings('.overlay-crit.left')
+                .removeClass('left')
+                .addClass('right');
+        } else if (toggle.siblings('.overlay-crit').first().hasClass('right')) {
+            toggle
+                .siblings('.overlay-crit.right')
+                .removeClass('right')
+                .addClass('left');
+        }
     }
 
     /**
@@ -813,7 +888,11 @@ export class CosmereChatMessage extends ChatMessage {
                     this.d20Rolls[0].hasDisadvantage
                 ),
         );
-        html.find('.overlay-crit').toggle(hasPermission && this.hasDamage);
+        html.find('.overlay-crit').toggle(
+            hasPermission &&
+                this.hasDamage &&
+                this.damageRolls.every((r) => !r.isCritical),
+        );
     }
 
     /**
