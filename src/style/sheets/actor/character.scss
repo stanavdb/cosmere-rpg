@@ -2,7 +2,7 @@
 
 .sheet.actor.character {
     border: 3px solid var(--plotweaver-color-accent);
-    background: linear-gradient(var(--plotweaver-color-sheet) 35%, transparent);
+    background: var(--plotweaver-color-sheet);
 
     .minimized {
         border: none;
@@ -55,12 +55,12 @@
     .tab[data-tab='goals'] {
         .details-text {
             .label {
-                color: var(--plotweaver-color-off-white);
+                color: var(--plotweaver-color-off-white-1);
                 opacity: 0.5;
             }
 
             textarea {
-                color: var(--plotweaver-color-off-white);
+                color: var(--plotweaver-color-off-white-1);
                 margin-top: 0.5rem;
                 background: var(--plotweaver-color-base-3);
                 padding: 0.3rem 0.5rem;
@@ -98,7 +98,7 @@
 
             .title {
                 flex: 1;
-                color: var(--plotweaver-color-off-white);
+                color: var(--plotweaver-color-off-white-1);
             }
         }
 
@@ -110,8 +110,8 @@
             gap: 0.25rem;
 
             .expertise {
-                color: var(--plotweaver-color-off-white);
-                border: 1px solid var(--plotweaver-color-off-white);
+                color: var(--plotweaver-color-off-white-1);
+                border: 1px solid var(--plotweaver-color-off-white-1);
                 padding: 0.15rem 0.6rem;
                 border-radius: 1rem;
                 margin: 0.2rem;
@@ -137,6 +137,7 @@
             flex: 1;
             z-index: 1;
             cursor: pointer;
+            padding: 0.2rem 1rem 0.1rem 1rem;
 
             .border {
                 position: absolute;
@@ -144,15 +145,84 @@
                 top: -2px;
                 width: calc(100% + 4px);
                 height: calc(100% + 4px);
-                border-image: url("/systems/cosmere-rpg/assets/icons/ui/border_full_100x100.svg") fill 10 / 100px;
-                filter: var(--plotweaver-color-accent-filter);
                 pointer-events: none;
+                border-image: none;
+                filter: none;
+
+                .corner{
+                    position: absolute;
+                    width: 10px;
+                    height: 10px;
+
+                    &.top {
+                        top: 0;
+
+                        &.right {
+                            right: 0;
+                            transform: scale(-1, 1);
+                        }
+                    }
+
+                    &.bot {
+                        bottom: 0;
+                        transform: scale(1, -1);
+
+                        &.right {
+                            right: 0;
+                            transform: scale(-1, -1);
+                        }
+                    }
+
+                    &.left {
+                        left: 0;
+                    }
+
+                    path {
+                        fill: var(--plotweaver-color-accent);
+                    }
+                }
+
+                .block {
+                    position: absolute;
+                    width: 10px;
+                    height: 10px;
+
+                    &.top {
+                        top: 0;
+                        right: 9px;
+                        width: calc(100% - 18px);
+                    }
+
+                    &.bot {
+                        bottom: 0;
+                        right: 9px;
+                        width: calc(100% - 18px);
+                        transform: scale(1, -1);
+                    }
+
+                    &.right {
+                        right: 0;
+                        top: 9px;
+                        height: calc(100% - 18px);
+                        transform: scale(-1, 1);
+                    }
+
+                    &.left {
+                        left: 0;
+                        top: 9px;
+                        height: calc(100% - 18px);
+                    }
+
+                    path {
+                        fill: var(--plotweaver-color-accent);
+                    }
+                }
             }
 
             .name {
                 font-size: 13pt;
                 font-weight: bold;
-                color: var(--plotweaver-color-off-white);
+                color: var(--plotweaver-color-off-white-1);
                 text-transform: uppercase;
             }
 
@@ -169,19 +239,23 @@
         }
 
         .controls {
-            margin-left: 1rem;
+            margin-right: 1rem;
             z-index: 1;
         }
 
         .background-img {
             position: absolute;
+            width: 100%;
+            height: 100%;
             left: 0;
             right: 0;
             opacity: 0.25;
-            top: -6rem;
+            overflow: hidden;
 
             img {
+                position: relative;
                 width: 100%;
+                top: -6rem;
             }
         }
 
@@ -215,33 +289,102 @@
                 top: -2px;
                 width: calc(100% + 4px);
                 height: calc(100% + 4px);
-                border-image: url("/systems/cosmere-rpg/assets/icons/ui/border_full_100x100.svg") fill 9 / 58px;
-                filter: var(--plotweaver-color-accent-filter);
                 pointer-events: none;
+                border-image: none;
+                filter: none;
+
+                .corner{
+                    position: absolute;
+                    width: 10px;
+                    height: 10px;
+
+                    &.top {
+                        top: 0;
+
+                        &.right {
+                            right: 0;
+                            transform: scale(-1, 1);
+                        }
+                    }
+
+                    &.bot {
+                        bottom: 0;
+                        transform: scale(1, -1);
+
+                        &.right {
+                            right: 0;
+                            transform: scale(-1, -1);
+                        }
+                    }
+
+                    &.left {
+                        left: 0;
+                    }
+
+                    path {
+                        fill: var(--plotweaver-color-accent);
+                    }
+                }
+
+                .block {
+                    position: absolute;
+                    width: 10px;
+                    height: 10px;
+
+                    &.top {
+                        top: 0;
+                        right: 9px;
+                        width: calc(100% - 18px);
+                    }
+
+                    &.bot {
+                        bottom: 0;
+                        right: 9px;
+                        width: calc(100% - 18px);
+                        transform: scale(1, -1);
+                    }
+
+                    &.right {
+                        right: 0;
+                        top: 9px;
+                        height: calc(100% - 18px);
+                        transform: scale(-1, 1);
+                    }
+
+                    &.left {
+                        left: 0;
+                        top: 9px;
+                        height: calc(100% - 18px);
+                    }
+
+                    path {
+                        fill: var(--plotweaver-color-accent);
+                    }
+                }
             }
 
             .details {
-              display: flex;
-              flex-direction: row;
-              align-items: center;
-              padding: 0.2rem 1rem 0 1rem;
-              z-index: 1;
-              cursor: pointer;
-
-              .name {
                 display: flex;
-                flex-direction: column;
-                flex: 1;
+                flex-direction: row;
+                align-items: center;
+                padding: 0.2rem 1rem 0 1rem;
                 z-index: 1;
-                color: var(--plotweaver-color-accent);
-                text-transform: uppercase;
+                cursor: pointer;
 
-                .label {
-                  font-size: 13pt;
-                  font-weight: bold;
-                  color: var(--plotweaver-color-off-white);
-                  text-transform: uppercase;
-                }
+                .name {
+                    display: flex;
+                    flex-direction: column;
+                    flex: 1;
+                    z-index: 1;
+                    color: var(--plotweaver-color-accent);
+                    text-transform: uppercase;
+
+                    .label {
+                        font-size: 13pt;
+                        font-weight: bold;
+                        color: var(--plotweaver-color-off-white-1);
+                        text-transform: uppercase;
+                    }
 
                     .item-type {
                         font-size: 9pt;
@@ -284,11 +427,18 @@
 
             .background-img {
                 position: absolute;
+                width: 100%;
+                height: 100%;
                 left: 0;
                 right: 0;
-                opacity: 0.2;
-                top: -6rem;
-                z-index: 0;
+                opacity: 0.25;
+                overflow: hidden;
+
+                img {
+                    position: relative;
+                    width: 100%;
+                    top: -6rem;
+                }
             }
         }
     }

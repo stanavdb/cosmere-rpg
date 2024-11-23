@@ -94,6 +94,7 @@
         //TO-DO: Move to Stormlight Archive module
         &.theme-dark {
             --plotweaver-color-accent: #c9a760;
+            --plotweaver-color-accent-filter: invert(83%) sepia(4%) saturate(4272%) hue-rotate(356deg) brightness(85%) contrast(83%);
             --plotweaver-color-faded: #5e6c7e;
             --plotweaver-color-sheet: #132137;
 

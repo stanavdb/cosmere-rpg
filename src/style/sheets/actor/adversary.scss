@@ -2,7 +2,7 @@
 
 .sheet.actor.adversary {
     border: 3px solid var(--plotweaver-color-accent);
-    background: linear-gradient(var(--plotweaver-color-sheet) 35%, transparent);
+    background: var(--plotweaver-color-sheet);
 
     .decorations {
         position: absolute;
@@ -66,18 +66,6 @@
 
             path {
                 fill: var(--plotweaver-color-accent);
-            }
-        }
-    }
-
-    nav {
-        left: 100%;
-
-        > a {
-            border: 1px solid var(--plotweaver-color-accent);
-
-            &.active {
-                left: 2px;
             }
         }
     }
@@ -146,6 +134,7 @@
         section {
             min-height: 0;
             overflow-y: auto;
+            padding: 3px;
         }
     }
 
@@ -181,9 +170,84 @@
                 top: -3px;
                 width: calc(100% + 6px);
                 height: calc(100% + 6px);
-                border-image: url("/systems/cosmere-rpg/assets/icons/ui/border_full_100x100.svg") fill 80 / 58px;
-                filter: var(--plotweaver-color-accent-filter);
                 pointer-events: none;
+                border-image: none;
+                filter: none;
+
+                .corner{
+                    position: absolute;
+                    width: 10px;
+                    height: 10px;
+
+                    &.top {
+                        top: 0;
+
+                        &.right {
+                            right: 0;
+                            transform: scale(-1, 1);
+                        }
+                    }
+
+                    &.bot {
+                        bottom: 0;
+                        transform: scale(1, -1);
+
+                        &.right {
+                            right: 0;
+                            transform: scale(-1, -1);
+                        }
+                    }
+
+                    &.left {
+                        left: 0;
+                    }
+
+                    path {
+                        fill: var(--plotweaver-color-accent);
+                    }
+                }
+
+                .block {
+                    position: absolute;
+                    width: 10px;
+                    height: 10px;
+
+                    &.top {
+                        top: 0;
+                        right: 9px;
+                        width: calc(100% - 18px);
+                    }
+
+                    &.bot {
+                        bottom: 0;
+                        right: 9px;
+                        width: calc(100% - 18px);
+                        transform: scale(1, -1);
+                    }
+
+                    &.right {
+                        right: 0;
+                        top: 9px;
+                        height: calc(100% - 18px);
+                        transform: scale(-1, 1);
+                    }
+
+                    &.left {
+                        left: 0;
+                        top: 9px;
+                        height: calc(100% - 18px);
+                    }
+
+                    path {
+                        fill: var(--plotweaver-color-accent);
+                    }
+                }
+            }
+        }
+
+        app-actor-skill {
+            .name {
+                white-space: nowrap;
             }
         }
     }

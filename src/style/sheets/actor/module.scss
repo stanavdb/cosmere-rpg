@@ -111,11 +111,14 @@
 
         > a {
             position: relative;
-            width: 32px;
+            width: 34px;
             height: 36px;
+            left: -1px;
+
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: 0s;
 
             color: var(--plotweaver-color-accent);
             background: var(--plotweaver-color-sheet);
@@ -132,8 +135,9 @@
             }
 
             &.active {
-                width: 38px;
+                width: 39px;
                 background-color: var(--plotweaver-color-base-4);
+                left: 1px;
 
                 .border {
                     position: absolute;
@@ -141,9 +145,31 @@
                     top: -2px;
                     width: calc(100% + 4px);
                     height: calc(100% + 4px);
-                    border-image: url("/systems/cosmere-rpg/assets/icons/ui/border_tab_open.svg") fill 19 / 38px;
                     filter: var(--plotweaver-color-accent-filter);
                     pointer-events: none;
+                }
+            }
+
+            label {
+                position: absolute;
+                z-index: 1;
+                padding: 3px;
+                top: 85%;
+
+                visibility: hidden;
+                text-shadow: none;
+            }
+
+            &:hover {
+                label {
+                    transition-delay: 1s;
+                    visibility: visible;
+                    padding: 3px;
+
+                    color: var(--plotweaver-color-off-white-1);
+                    background-color: var(--plotweaver-color-sheet);
+                    border: 1px solid var(--plotweaver-color-faded);
+                    border-radius: 3px;
                 }
             }
         }
@@ -163,12 +189,12 @@
                 text-align: left;
                 font-size: inherit;
                 background-color: var(--plotweaver-color-base-3);
-                color: var(--plotweaver-color-off-white);
+                color: var(--plotweaver-color-off-white-1);
             }
 
             .document-name{
                 text-transform: capitalize;
-                color: var(--plotweaver-color-off-white);
+                color: var(--plotweaver-color-off-white-1);
             }
 
             .details {
@@ -178,7 +204,7 @@
                 margin-top: 0.3rem;
 
                 .delim {
-                    color: var(--plotweaver-color-off-white);
+                    color: var(--plotweaver-color-off-white-1);
                     opacity: 0.5;
                 }
 
@@ -205,7 +231,7 @@
                 margin-top: -0.5rem;
 
                 .label {
-                    color: var(--plotweaver-color-off-white);
+                    color: var(--plotweaver-color-off-white-1);
                     text-transform: uppercase;
                     font-size: 8pt;
                     z-index: 1;
@@ -244,10 +270,12 @@
                     }
 
                     .value {
-                        width: 100%;
-                        color: var(--plotweaver-color-off-white);
+                        color: var(--plotweaver-color-off-white-1);
                         z-index: 1;
                         font-size: 2rem;
+
+                        margin-left: 2px;
+                        margin-bottom: 2px;
                     }
                 }
             }
@@ -311,7 +339,7 @@
         text-align: center;
         font-size: 18pt;
         font-weight: bold;
-        margin: 0.25ch;
+        width: 100%;
     }
 
     /* --- Tabs --- */
@@ -325,10 +353,10 @@
 
 .application {
     app-actor-details {
-      // Actor image and derived statistics
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 8px;
+        // Actor image and derived statistics
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 8px;
 
         .portrait-info {
             // Character sheet portrait values
@@ -356,103 +384,106 @@
                 }
             }
 
-        a.rest {
-            // Short and Long Rest buttons
-            position: absolute;
-            background: var(--plotweaver-color-off-white);
-            width: 1.3rem;
-            height: 1.3rem;
-            color: var(--plotweaver-color-black);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            font-size: 9.5pt;
+            a.rest {
+                // Short and Long Rest buttons
+                position: absolute;
+                width: 1.3rem;
+                height: 1.3rem;
 
-            &.short-rest {
-                top: 2px;
-                right: 18px;
+                color: var(--plotweaver-color-black);
+                background-color: var(--plotweaver-color-off-white-1);
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                font-size: 9.5pt;
+
+                &.short-rest {
+                    top: 2px;
+                    right: 18px;
+                }
+
+                &.long-rest {
+                    top: 20px;
+                    right: 0;
+                }
             }
 
-            &.long-rest {
-                top: 20px;
-                right: 0;
+            .deflect {
+                position: absolute;
+                top: calc(100% - 1rem);
+            }
+        }
+
+        .derived-statistics {
+            // Movement, Recover and Sense derived statistics
+            margin-top: 1.75rem;
+            gap: 0.25rem;
+
+            .derived-stat {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                &.movement,
+                &.senses {
+                    transform: translateY(-1.20rem);
+                }
+
+                .container {
+                    width: 54px;
+                    height: 26px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 0.1rem 0.4rem;
+
+                    background-color: var(--plotweaver-color-sheet);
+
+                    svg {
+                        position: absolute;
+                        width: 58px;
+                        height: 30px;
+                        pointer-events: none;
+
+                        path {
+                            fill: var(--plotweaver-color-accent);
+                        }
+                    }
+
+                    .value {
+                        color: var(--plotweaver-color-off-white-1);
+                        font-size: 14pt;
+                    }
+
+                    .unit {
+                        color: var(--plotweaver-color-faded);
+                        text-transform: uppercase;
+                        font-size: 8pt;
+                    }
+                }
+
+                .label {
+                    text-transform: uppercase;
+                    font-size: 9pt;
+                    margin-top: 0.1rem;
+                }
             }
         }
 
         .deflect {
-            position: absolute;
-            top: calc(100% - 1rem);
-        }
-    }
-
-    .derived-statistics {
-        // Movement, Recover and Sense derived statistics
-        margin-top: 1.75rem;
-        gap: 0.25rem;
-
-        .derived-stat {
+            // Deflect shield
             display: flex;
-            flex-direction: column;
             align-items: center;
+            justify-content: center;
+            background-color: var(--plotweaver-color-sheet); // url("/systems/cosmere-rpg/assets/icons/ui/border_deflect.svg");
 
-            &.movement,
-            &.senses {
-                transform: translateY(-1.20rem);
-            }
-
-            .container {
-                width: 54px;
-                height: 26px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 0.1rem 0.4rem;
-
-                background-color: var(--plotweaver-color-sheet);
-
-                svg {
-                    position: absolute;
-                    width: 58px;
-                    height: 30px;
-
-                    path {
-                        fill: var(--plotweaver-color-accent);
-                    }
-                }
-
-                .value {
-                    color: var(--plotweaver-color-off-white);
-                    font-size: 14pt;
-                }
-
-                .unit {
-                    color: var(--plotweaver-color-faded);
-                    text-transform: uppercase;
-                    font-size: 8pt;
-                }
-            }
-
-            .label {
-                text-transform: uppercase;
-                font-size: 9pt;
-                margin-top: 0.1rem;
-            }
-        }
-    }
-
-    .deflect {
-        // Deflect shield
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: var(--plotweaver-color-sheet); // url("/systems/cosmere-rpg/assets/icons/ui/border_deflect.svg");
-
-        // Approximation of background
-        width: calc(2rem - 3px);
-        height: calc(2.25rem - 3px);
-        border-bottom-left-radius: 50%;
-        border-bottom-right-radius: 50%;
+            // Approximation of background
+            width: calc(2rem - 3px);
+            height: calc(2.25rem - 3px);
+            border-bottom-left-radius: 50%;
+            border-bottom-right-radius: 50%;
 
             span {
                 margin: -0.1rem 0 0.3rem 0 !important
@@ -463,19 +494,19 @@
                 font-size: 6pt;
                 left: 1.2rem;
                 top: 0;
-        }
+            }
 
-        svg {
-            position: absolute;
-            width: 32px;
-            height: 38px;
+            svg {
+                position: absolute;
+                width: 32px;
+                height: 38px;
 
-            path {
-                fill: var(--plotweaver-color-accent);
+                path {
+                    fill: var(--plotweaver-color-accent);
+                }
             }
         }
     }
-}
 
     app-actor-resource {
         display: flex;
@@ -492,6 +523,7 @@
                 display: flex;
                 align-items: center;
                 width: 100%;
+                height: 18px;
                 padding-right: 0.5rem;
 
                 .label {
@@ -500,13 +532,13 @@
                     text-transform: uppercase;
                     font-size: 8pt;
                     margin-left: 0.6rem;
-                    height: 17px;
+                    height: 18px;
                 }
             }
 
             .border {
                 position: absolute;
-                top: calc(1.15rem - 1px);
+                top: 18px;
                 width: 100%;
                 height: 28px;
                 border-image: url("/systems/cosmere-rpg/assets/icons/ui/border_bar.svg") fill 14/180px;
@@ -530,8 +562,9 @@
                     position: relative;
                     z-index: 1;
                     margin-left: 1rem;
+                    text-align: left;
                     text-shadow: 0 0 0.3rem black;
-                    bottom: 4px;
+                    bottom: 3px;
                     font-size: 16pt;
 
                     .delim {
@@ -580,19 +613,6 @@
 
                     .inner-bar {
                         background: var(--plotweaver-color-health-front);
-                }
-
-                .inner-bar:after {
-                    content: "";
-                    display: block;
-                    width: 25%;
-                    height: 100%;
-                    position: relative;
-                    left: 100%;
-                    top: 50%;
-                    transform: translateY(-50%);
-                    background: linear-gradient(90deg, var(--plotweaver-color-health-front), transparent);
-                    pointer-events: none;
                     }
                 }
             }
@@ -603,19 +623,6 @@
 
                     .inner-bar {
                         background: var(--plotweaver-color-focus-front);
-                }
-
-                .inner-bar:after {
-                    content: "";
-                    display: block;
-                    width: 25%;
-                    height: 100%;
-                    position: relative;
-                    left: 100%;
-                    top: 50%;
-                    transform: translateY(-50%);
-                    background: linear-gradient(90deg, var(--plotweaver-color-focus-front), transparent);
-                    pointer-events: none;
                     }
                 }
             }
@@ -626,19 +633,6 @@
 
                     .inner-bar {
                         background: var(--plotweaver-color-invest-front);
-                }
-
-                .inner-bar:after {
-                    content: "";
-                    display: block;
-                    width: 25%;
-                    height: 100%;
-                    position: relative;
-                    left: 100%;
-                    top: 50%;
-                    transform: translateY(-50%);
-                    background: linear-gradient(90deg, var(--plotweaver-color-invest-front), transparent);
-                    pointer-events: none;
                     }
                 }
             }
@@ -655,44 +649,42 @@
             > .label {
                 margin-bottom: 0.25rem;
 
-            color: var(--plotweaver-color-off-white);
-            text-align: center;
-            font-size: 12pt;
-            text-transform: uppercase;
-            font-weight: bold;
-        }
+                color: var(--plotweaver-color-off-white-1);
+                text-align: center;
+                font-size: 12pt;
+                text-transform: uppercase;
+                font-weight: bold;
+            }
 
-        .attributes {
-            padding: 2.5pt 0;
+            .attributes {
+                .attribute {
+                    position: relative;
+                    width: 58px;
+                    height: 50px;
 
-            .attribute {
-                position: relative;
-                width: 58px;
-                height: 50px;
+                    .border.right {
+                        position: absolute;
+                        top: 0;
+                        width: 58px;
+                        height: 54px;
 
-                .border.right {
-                    position: absolute;
-                    left: -2px;
-                    top: -2px;
-                    width: calc(100% + 4px);
-                    height: calc(100% + 4px);
-                    border-image: url("/systems/cosmere-rpg/assets/icons/ui/border_attribute_right.svg") fill 29 / 58px;
-                    filter: var(--plotweaver-color-accent-filter);
-                    pointer-events: none;
-                }
+                        border-image: url("/systems/cosmere-rpg/assets/icons/ui/border_attribute_right.svg") fill 20 / 58px;
+                        filter: var(--plotweaver-color-accent-filter);
+                        pointer-events: none;
+                    }
 
-                .border.left {
-                    position: absolute;
-                    left: -2px;
-                    top: -2px;
-                    width: calc(100% + 4px);
-                    height: calc(100% + 4px);
-                    border-image: url("/systems/cosmere-rpg/assets/icons/ui/border_attribute_left.svg") fill 29 / 58px;
-                    filter: var(--plotweaver-color-accent-filter);
-                    pointer-events: none;
+                    .border.left {
+                        position: absolute;
+                        top: 0;
+                        width: 58px;
+                        height: 54px;
+
+                        border-image: url("/systems/cosmere-rpg/assets/icons/ui/border_attribute_left.svg") fill 20 / 58px;
+                        filter: var(--plotweaver-color-accent-filter);
+                        pointer-events: none;
+                    }
                 }
             }
-        }
 
             > section {
                 margin-bottom: 0.5rem;
@@ -702,19 +694,21 @@
         .attribute {
             padding: 8px 0;
 
-        .box-title {
-            margin-bottom: -1.2rem;
-            z-index: 1;
-            font-size: 8pt;
+            .box-title {
+                width: 58px;
+                margin-bottom: -1.2rem;
+                z-index: 1;
+                font-size: 8pt;
 
-            color: var(--plotweaver-color-faded);
-        }
+                color: var(--plotweaver-color-faded);
+            }
 
             .value {
                 display: flex;
-                height: 52px;
-                margin: 0;
-                color: var(--plotweaver-color-off-white);
+                width: 52px;
+                height: 48px;
+                margin-left: 3px;
+                color: var(--plotweaver-color-off-white-1);
 
                 input {
                     padding-top: 20px;
@@ -731,22 +725,6 @@
                     font-weight: bold;
                 }
             }
-
-            &:first-child {
-                .value input {
-                    border-bottom-left-radius: 1rem;
-                }
-            }
-
-            &:last-child {
-                .box-title {
-                    margin-bottom: -1.4rem;
-                }
-
-                .value input {
-                    border-bottom-right-radius: 1rem;
-                }
-            }
         }
 
         .defense {
@@ -755,38 +733,35 @@
             justify-content: center;
             align-items: center;
 
-            flex: unset;
-            margin-top: -0.5rem;
+            svg {
+                position: absolute;
+                width: 40px;
+                height: 50px;
+                margin-top: 2px;
+                pointer-events: none;
 
-        svg {
-            position: absolute;
-            width: 40px;
-            height: 50px;
-            margin-top: 2px;
-
-            path {
-                fill: var(--plotweaver-color-accent)
+                path {
+                    fill: var(--plotweaver-color-accent)
+                }
             }
-        }
 
             .defense-box {
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 position: relative;
-            margin-top: 1rem;
+                margin-top: 1rem;
 
-                // approximation for the background
-            background-color: var(--plotweaver-color-base-1);
-            border-bottom-left-radius: 50%;
-            border-bottom-right-radius: 50%;
-            padding-bottom: 0.2rem;
-            width: calc(40px - 0.2rem);
+                    // approximation for the background
+                background-color: var(--plotweaver-color-base-1);
+                border-bottom-left-radius: 50%;
+                border-bottom-right-radius: 50%;
+                padding-bottom: 0.2rem;
+                width: calc(40px - 0.2rem);
                 height: calc(50px - 0.2rem);
 
                 .value {
                     font-size: 13pt;
-                    padding-bottom: 0.35rem;
                 }
 
                 > a {
@@ -805,7 +780,7 @@
         display: flex;
             flex-direction: column;
 
-        color: var(--plotweaver-color-off-white);
+        color: var(--plotweaver-color-off-white-1);
         overflow: hidden;
 
         .actions-list {
@@ -1134,7 +1109,7 @@
             input {
                 // gets overwritten
                 padding-left: 2rem !important;
-                color: var(--plotweaver-color-off-white) !important;
+                color: var(--plotweaver-color-off-white-1) !important;
                 background-color: var(--plotweaver-color-base-1) !important;
 
                 &::placeholder {
@@ -1200,7 +1175,7 @@
 
             &:not(.active) > a {
                 opacity: 0.3;
-            color: var(--plotweaver-color-off-white);
+            color: var(--plotweaver-color-off-white-1);
 
                 &:hover {
                     opacity: 1;
@@ -1227,66 +1202,66 @@
     }
 
     app-actor-injuries-list,
-app-actor-equipment-list {
-    display: flex;
-    flex-direction: column;
+    app-actor-equipment-list {
+        display: flex;
+        flex-direction: column;
 
-    color: var(--plotweaver-color-off-white);
-    overflow: hidden;
+        color: var(--plotweaver-color-off-white-1);
+        overflow: hidden;
 
-    .injuries-list,
-    .equipment-list {
-        border-radius: 0.3rem;
+        .injuries-list,
+        .equipment-list {
+            border-radius: 0.3rem;
 
-        .injury.header,
-        .item.header {
-            height: 2rem;
-            background: var(--plotweaver-color-base-1) !important;
-            display: flex;
-            align-items: center;
-            padding: 0 0.5rem;
-        }
+            .injury.header,
+            .item.header {
+                height: 2rem;
+                background: var(--plotweaver-color-base-1) !important;
+                display: flex;
+                align-items: center;
+                padding: 0 0.5rem;
+            }
 
-        .injury.item,
-        .item,
-        .item.usable,
-        .details.expanded {
-            background: var(--plotweaver-color-base-3) !important;
+            .injury.item,
+            .item,
+            .item.usable,
+            .details.expanded {
+                background: var(--plotweaver-color-base-3) !important;
+            }
         }
     }
-}
 
-app-actor-effects-list {
-    .effects-list:not(.editable) {
-        pointer-events: none;
+    app-actor-effects-list {
+        .effects-list:not(.editable) {
+            pointer-events: none;
+        }
     }
-}
 
     app-actor-skills-group,
     app-adversary-skills-group {
         position: relative;
 
-    &:has(> *) {
-        display: flex;
-        padding: 0.4rem 0.2rem;
-        margin-bottom: calc(1.25rem - 1px);
+        &:has(> *) {
+            display: flex;
+            padding: 0.4rem 0.2rem;
+            margin-bottom: calc(1.25rem - 1px);
 
-            background: var(--plotweaver-color-base-1);
+                background: var(--plotweaver-color-base-1);
 
-        .border {
-            position: absolute;
-            left: -3px;
-            top: -3px;
-            width: calc(100% + 6px);
-            height: calc(100% + 6px);
-            border-image: url("/systems/cosmere-rpg/assets/icons/ui/border_full_100x100.svg") fill 80 / 58px;
-            filter: var(--plotweaver-color-accent-filter);
-            pointer-events: none;
-        }
+            .border {
+                position: absolute;
+                left: -3px;
+                top: -3px;
+                width: calc(100% + 6px);
+                height: calc(100% + 6px);
+                border-image: url("/systems/cosmere-rpg/assets/icons/ui/border_full_100x100.svg") fill 80 / 58px;
+                filter: var(--plotweaver-color-accent-filter);
+                pointer-events: none;
+            }
         }
 
         .skill-list {
-            color: var(--plotweaver-color-off-white);
+            color: var(--plotweaver-color-off-white-1);
             flex: 1;
             display: flex;
             flex-direction: column;
