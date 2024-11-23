@@ -22,12 +22,12 @@
         </select>
     </div>
     <div class="form-group">
-        <labe>{{localize "GENERIC.Bonus"}}</labe>
+        <label>{{localize "GENERIC.Bonus"}}</label>
         <input 
             name="bonus" 
             {{#if (eq mode 'derived')}}
             type="number" 
-            value="{{bonus}}" 
+            value="{{this.bonus}}" 
             min="0" 
             step="1" 
             {{else}}

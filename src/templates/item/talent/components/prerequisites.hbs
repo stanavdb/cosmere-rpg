@@ -25,15 +25,25 @@
         </div>
         <div class="col description">
             {{#if (eq rule.type "talent")}}
-            <span>{{default rule.label rule.talent}}</span>
+                {{#if (gt rule.talents.length 1)}}
+                    <span>{{localize rule.modeLabel}}:</span>
+                {{/if}}
+                {{#each rule.talents as |ref|}}
+                    {{{ref.link}}}
+                    {{#if (not @last)}}
+                        <span>,</span>
+                    {{/if}}
+                {{/each}}
             {{else if (eq rule.type "attribute")}}
-            <span>{{localize (concat "COSMERE.Attribute." rule.attribute)}}</span>
-            <span>{{rule.value}}+</span>
+                <span>{{localize (concat "COSMERE.Attribute." rule.attribute)}}</span>
+                <span>{{rule.value}}+</span>
             {{else if (eq rule.type "skill")}}
-            <span>{{localize (concat "COSMERE.Skill." rule.skill)}}</span>
-            <span>{{rule.rank}}+</span>
+                <span>{{localize (concat "COSMERE.Skill." rule.skill)}}</span>
+                <span>{{rule.rank}}+</span>
             {{else if (eq rule.type "connection")}}
-            <span>{{rule.description}}</span>
+                <span>{{rule.description}}</span>
+            {{else if (eq rule.type "level")}}
+                <span>{{rule.level}}+</span>
             {{/if}}
         </div>
         <div class="col controls flexrow">

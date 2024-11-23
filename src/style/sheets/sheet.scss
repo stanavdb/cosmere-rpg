@@ -27,14 +27,7 @@
     font-weight: bold;
 }
 
-.sheet {
-    .value {
-        text-align: center;
-        font-size: 18pt;
-        font-weight: bold;
-        margin: 0.25ch;
-    }
-
+.application.sheet {
     .form-group input::placeholder {
         opacity: 0.5 !important;
     }

@@ -5,6 +5,7 @@ import { DeepPartial, AnyObject } from '@system/types/utils';
 // Mixins
 import { ComponentHandlebarsApplicationMixin } from '@system/applications/component-system';
 import { TabsApplicationMixin } from '@system/applications/mixins';
+import { getSystemSetting, SETTINGS } from '@src/system/settings';
 
 const { ItemSheetV2 } = foundry.applications.sheets;
 
@@ -36,9 +37,11 @@ export class BaseItemSheet extends TabsApplicationMixin(
         {
             description: {
                 label: 'COSMERE.Item.Sheet.Tabs.Description',
+                icon: '<i class="fa-solid fa-feather-pointed"></i>',
             },
             effects: {
                 label: 'COSMERE.Item.Sheet.Tabs.Effects',
+                icon: '<i class="fa-solid fa-bolt"></i>',
             },
         },
     );
@@ -55,6 +58,9 @@ export class BaseItemSheet extends TabsApplicationMixin(
         form: HTMLFormElement,
         formData: FormDataExtended,
     ) {
+        if (event instanceof SubmitEvent) return;
+        if (!('name' in event.target!)) return;
+
         if (this.item.isPhysical() && 'system.price.unit' in formData.object) {
             // Get currency id
             const [currencyId, denominationId] = (
@@ -235,6 +241,21 @@ export class BaseItemSheet extends TabsApplicationMixin(
             });
         }
 
+        if (this.item.hasModality()) {
+            // Get modality enabled
+            const modalityEnabled = formData.get('modalityEnabled') === 'true';
+
+            // Set modality
+            if (modalityEnabled && this.item.system.modality === null) {
+                formData.set('system.modality', '<id>');
+            } else if (!modalityEnabled && this.item.system.modality !== null) {
+                formData.set('system.modality', null);
+            }
+
+            // Remove modality enabled
+            formData.delete('modalityEnabled');
+        }
+
         // Update the document
         void this.item.update(formData.object);
     }
@@ -244,10 +265,29 @@ export class BaseItemSheet extends TabsApplicationMixin(
     public async _prepareContext(
         options: DeepPartial<foundry.applications.api.ApplicationV2.RenderOptions>,
     ) {
+        let enrichedDescValue = undefined;
+        if (this.item.hasDescription()) {
+            if (
+                this.item.system.description!.value ===
+                CONFIG.COSMERE.items.types[this.item.type].desc_placeholder
+            ) {
+                this.item.system.description!.value = game.i18n!.localize(
+                    this.item.system.description!.value!,
+                );
+            }
+            enrichedDescValue = await TextEditor.enrichHTML(
+                this.item.system.description!.value!,
+            );
+        }
         return {
             ...(await super._prepareContext(options)),
             item: this.item,
+            systemFields: (
+                this.item.system.schema as foundry.data.fields.SchemaField
+            ).fields,
             editable: this.isEditable,
+            descHtml: enrichedDescValue,
+            sideTabs: getSystemSetting(SETTINGS.ITEM_SHEET_SIDE_TABS),
         };
     }
 }

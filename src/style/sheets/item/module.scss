@@ -1,4 +1,50 @@
+@import './talent-tree.scss';
+
 .sheet.item {
+    max-height: 800px;
+
+    &.side-tabs {
+        overflow: visible;
+
+        .window-content {
+            overflow: visible;
+        }
+
+        .sheet-header {
+            border-bottom: 1px solid var(--plotweaver-color-grey-5);
+        }
+
+        nav {
+            border: none;
+            flex-direction: column;
+            position: absolute;
+            left: 100%;
+            top: 15%;
+
+            > a {
+                background: rgba(11, 10, 19, 0.9);
+                width: 2.88867rem;
+                height: 2.5rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 1px solid #302831;
+                border-top-right-radius: 0.3rem;
+                border-bottom-right-radius: 0.3rem;
+
+                &.active {
+                    background-color: rgb(45 41 77 / 90%);
+                }
+            }
+        }
+    }
+
+    &:not(.minimized) > .window-header {
+        .window-title {
+            visibility: hidden;
+        }
+    }
+
     .sheet-content {
         display: flex;
         flex-direction: column;
@@ -6,9 +52,9 @@
 
     .sheet-header {
         position: relative;
+        padding-bottom: 0.5rem;
 
         .document-name {
-            font-weight: bold;
             font-size: 20pt;
             cursor: pointer;
             margin-right: 4rem;
@@ -17,6 +63,10 @@
                 font-weight: inherit;
                 font-size: inherit;
             }
+        }
+
+        img {
+            cursor: pointer;
         }
 
         .document-type {
@@ -29,13 +79,27 @@
         }
     }
 
+    nav {
+        a {
+            label {
+                margin-left: 0.3rem;
+            }
+        }
+    }
+
     .tab-body {
         flex: 1;
         display: flex;
+        margin-top: 0.5rem;
 
         .tab {
-            height: 100%;
             width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        table {
+            margin: 0;
         }
     }
 
@@ -44,8 +108,12 @@
         width: 100%;
     }
 
-    p.notes {
-        color: #efe6d8bf;
+    .description-content-flat {
+        flex-direction: column;
+    }
+
+    fieldset:not(:first-child) {
+        margin-top: 0.5rem;
     }
 
     .form-group {
@@ -88,6 +156,12 @@
     &.weapon {
         min-height: 500px;
     }
+
+    &.weapon {
+        app-prose-mirror-editor {
+            min-height: 300px;
+        }
+    }
 }
 
 /* --- Tabs ---*/
@@ -114,6 +188,10 @@
         width: 20px;
         height: 20px;
     }
+}
+
+.tab:not([data-tab='description']) {
+    max-width: max(80ch, 80%);
 }
 
 /* --- Components ---*/
@@ -187,10 +265,6 @@ app-item-effects-list {
     }
 }
 
-app-prose-mirror-editor {
-    flex: 1;
-}
-
 app-item-properties {
     .properties-list {
         height: 100%;
@@ -222,6 +296,24 @@ app-item-properties {
                 font-size: 0.75rem;
                 padding: 0;
                 background: none;
+            }
+        }
+    }
+}
+
+app-item-details-damage {
+    .form-group-stacked {
+        .header {
+            display: flex;
+            align-items: center;
+
+            label {
+                font-weight: bold;
+                flex: 2;
+            }
+
+            .controls {
+                margin-right: 0.5rem;
             }
         }
     }
@@ -334,5 +426,102 @@ app-talent-prerequisites {
                 border-bottom-right-radius: 0.3rem;
             }
         }
+    }
+}
+
+app-ancestry-advancement-talent-list {
+    display: block;
+    border-radius: 0.3rem;
+    outline: 1px solid transparent;
+    transition: outline-color 0.5s;
+
+    ul.talent-list {
+        li {
+            .col.name {
+                flex: 1;
+            }
+
+            .col.level {
+                width: 10rem;
+                text-align: center;
+            }
+
+            &.drop .col {
+                text-align: center;
+                font-style: italic;
+                opacity: 0.5;
+            }
+        }
+    }
+
+    &.dragover {
+        outline: 2px solid var(--color-cool-3);
+        box-shadow: 0 0 5px var(--color-shadow-primary);
+
+        ul.talent-list li.drop .col {
+            opacity: 1;
+        }
+    }
+}
+
+app-ancestry-bonus-talents {
+    .list-table {
+        .col.quantity,
+        .col.level {
+            flex: 1;
+            text-align: center;
+        }
+
+        .col.restrictions {
+            flex: 3;
+        }
+    }
+}
+
+app-talent-prerequisite-talent-list {
+    display: block;
+    border: 1px dashed #d3d3d342;
+    padding: 0 0.5rem;
+    border-radius: 0.3rem;
+
+    ul {
+        .talent {
+            display: flex;
+            align-items: center;
+
+            .link {
+                flex: 1;
+                display: flex;
+                justify-content: center;
+            }
+        }
+    }
+
+    p {
+        text-align: center;
+        font-size: 10pt;
+        font-style: italic;
+        opacity: 0.7;
+        text-shadow: 0 0 0.2rem black;
+    }
+}
+
+app-goal-rewards-list {
+    .col.type {
+        width: 5rem;
+    }
+
+    .col.description {
+        flex: 1;
+    }
+}
+
+app-talent-grant-rules-list {
+    .col.type {
+        width: 5rem;
+    }
+
+    .col.description {
+        flex: 1;
     }
 }

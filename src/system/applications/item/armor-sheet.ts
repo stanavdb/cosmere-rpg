@@ -1,19 +1,15 @@
 import { ArmorItem } from '@system/documents/item';
 import { DeepPartial } from '@system/types/utils';
+import { SYSTEM_ID } from '@src/system/constants';
 
 // Base
 import { BaseItemSheet } from './base';
 
 export class ArmorItemSheet extends BaseItemSheet {
-    /**
-     * NOTE: Unbound methods is the standard for defining actions and forms
-     * within ApplicationV2
-     */
-
     static DEFAULT_OPTIONS = foundry.utils.mergeObject(
         foundry.utils.deepClone(super.DEFAULT_OPTIONS),
         {
-            classes: ['cosmere-rpg', 'sheet', 'item', 'armor'],
+            classes: [SYSTEM_ID, 'sheet', 'item', 'armor'],
             position: {
                 width: 730,
                 height: 500,
@@ -30,6 +26,7 @@ export class ArmorItemSheet extends BaseItemSheet {
         {
             details: {
                 label: 'COSMERE.Item.Sheet.Tabs.Details',
+                icon: '<i class="fa-solid fa-circle-info"></i>',
                 sortIndex: 15,
             },
         },

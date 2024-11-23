@@ -6,5 +6,9 @@ import './details-equip';
 import './details-activation';
 import './details-attack';
 import './details-damage';
+import './details-modality';
 import './properties';
-import './talent-prerequisites';
+
+import './talent';
+import './ancestry';
+import './goal';

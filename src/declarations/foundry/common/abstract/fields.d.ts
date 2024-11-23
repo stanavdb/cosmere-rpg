@@ -203,11 +203,25 @@ declare namespace foundry {
                 initialize(value: any, model: object, options?: object): any;
 
                 /**
+                 * Export the current value of the field into a serializable object.
+                 * @param value                   The initialized value of the field
+                 * @returns                       An exported representation of the field
+                 */
+                toObject(value: any): any;
+
+                /**
                  * Recursively traverse a schema and retrieve a field specification by a given path
                  * @param path  The field path as an array of strings
                  * @internal
                  */
                 _getField(path: string[]): DataField;
+
+                /**
+                 * Cast a non-default value to ensure it is the correct type for the field
+                 * @param value       The provided non-default value
+                 * @returns           The standardized value
+                 */
+                protected _cast(value: any): any;
             }
 
             class SchemaField extends DataField {
@@ -326,6 +340,69 @@ declare namespace foundry {
             class SetField extends ArrayField {}
 
             class HTMLField extends StringField {}
+
+            /**
+             * A subclass of {@link ObjectField} which embeds some other DataModel definition as an inner object.
+             */
+            class EmbeddedDataField extends SchemaField {
+                constructor(
+                    model: typeof foundry.data.DataModel,
+                    options?: DataFieldOptions,
+                    context?: DataFieldContext,
+                );
+            }
+
+            /**
+             * A subclass of {@link ArrayField} which supports an embedded Document collection.
+             * Invalid elements will be dropped from the collection during validation rather than failing for the field entirely.
+             */
+            class EmbeddedCollectionField extends ArrayField {
+                constructor(
+                    element: typeof foundry.abstract.Document,
+                    options?: DataFieldOptions,
+                    context?: DataFieldContext,
+                );
+            }
+
+            /**
+             * A subclass of {@link EmbeddedDataField} which supports a single embedded Document.
+             */
+            class EmbeddedDocumentField extends EmbeddedDataField {
+                constructor(
+                    model: typeof foundry.abstract.Document,
+                    options?: DataFieldOptions,
+                    context?: DataFieldContext,
+                );
+            }
+
+            /**
+             * A subclass of {@link StringField} which provides the primary _id for a Document.
+             * The field may be initially null, but it must be non-null when it is saved to the database.
+             */
+            class DocumentIdField extends StringField {}
+
+            interface DocumentUUIDFieldOptions extends StringFieldOptions {
+                /**
+                 * A specific document type in CONST.ALL_DOCUMENT_TYPES required by this field
+                 */
+                type?: string;
+
+                /**
+                 * Does this field require (or prohibit) embedded documents?
+                 */
+                embedded?: boolean;
+            }
+
+            /**
+             * A subclass of {@link StringField} which supports referencing some other Document by its UUID.
+             * This field may not be blank, but may be null to indicate that no UUID is referenced.
+             */
+            class DocumentUUIDField extends StringField {
+                constructor(
+                    options?: DocumentUUIDFieldOptions,
+                    context?: DataFieldContext,
+                );
+            }
         }
     }
 }

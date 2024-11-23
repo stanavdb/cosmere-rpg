@@ -1,5 +1,6 @@
 import { WeaponItem } from '@system/documents/item';
 import { DeepPartial } from '@system/types/utils';
+import { SYSTEM_ID } from '@src/system/constants';
 
 // Base
 import { BaseItemSheet } from './base';
@@ -8,7 +9,7 @@ export class WeaponItemSheet extends BaseItemSheet {
     static DEFAULT_OPTIONS = foundry.utils.mergeObject(
         foundry.utils.deepClone(super.DEFAULT_OPTIONS),
         {
-            classes: ['cosmere-rpg', 'sheet', 'item', 'weapon'],
+            classes: [SYSTEM_ID, 'sheet', 'item', 'weapon'],
             position: {
                 width: 730,
             },
@@ -24,6 +25,7 @@ export class WeaponItemSheet extends BaseItemSheet {
         {
             details: {
                 label: 'COSMERE.Item.Sheet.Tabs.Details',
+                icon: '<i class="fa-solid fa-circle-info"></i>',
                 sortIndex: 15,
             },
         },
@@ -35,6 +37,7 @@ export class WeaponItemSheet extends BaseItemSheet {
             'sheet-content': {
                 template:
                     'systems/cosmere-rpg/templates/item/parts/sheet-content.hbs',
+                scrollable: ['.tab-body'],
             },
         },
     );

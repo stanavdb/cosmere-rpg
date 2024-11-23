@@ -4,7 +4,7 @@ import { ConstructorOf } from '@system/types/utils';
 import { EditCreatureTypeDialog } from '@system/applications/actor/dialogs/edit-creature-type';
 
 // Utils
-import ActorUtils from '@system/util/actor';
+import { getTypeLabel } from '@src/system/utils/actor';
 
 // Component imports
 import { HandlebarsApplicationComponent } from '@system/applications/component-system';
@@ -65,7 +65,7 @@ export class AdversaryHeaderComponent extends HandlebarsApplicationComponent<
             roleLabel:
                 CONFIG.COSMERE.adversary.roles[context.actor.system.role].label,
             sizeLabel: CONFIG.COSMERE.sizes[context.actor.system.size].label,
-            typeLabel: ActorUtils.getTypeLabel(context.actor.system.type),
+            typeLabel: getTypeLabel(context.actor.system.type),
         });
     }
 }

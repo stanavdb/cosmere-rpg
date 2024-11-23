@@ -45,11 +45,30 @@
     </p>
     {{/if}}
 
+    {{!-- Power talent fields --}}
+    {{#if @root.isPowerTalent}}
+        {{formGroup @root.systemFields.power
+            value=@root.item.system.power
+            localize=true
+            blank="GENERIC.None"
+        }}
+    {{/if}}
+
     {{!-- Prerequisites --}}
     <h5>{{localize "COSMERE.Item.Sheet.Talent.Prerequisites.Label"}}</h5>
     {{app-talent-prerequisites}}
 
     {{app-item-details-activation}}
+    {{app-item-details-damage}}
+
+    {{!-- Grant rules --}}
+    <h5>{{localize @root.systemFields.grantRules.label}}</h5>
+    {{app-talent-grant-rules-list}}
+    <p class="hint">
+        {{localize @root.systemFields.grantRules.hint}}
+    </p>
+
+    {{app-item-details-modality}}
 </div>
 
 {{/with}}

@@ -1,0 +1,24 @@
+<form>
+    {{formGroup schema.fields.type value=type localize=true}}
+
+    {{#if (eq type "skill-ranks")}}
+        {{formGroup schema.fields.skill value=skill localize=true blank=false}}
+        {{formGroup schema.fields.ranks value=ranks localize=true}}
+    {{else if (eq type "items")}}
+        <div class="form-group">
+            {{app-document-drop-list
+                name="items"
+                value=items
+                type="Item"
+            }}
+        </div>
+    {{/if}}
+
+    {{!-- Submit --}}
+    <br>
+    <div class="form-group">
+        <button data-action="update" type="submit">
+            {{localize "GENERIC.Button.Update"}}
+        </button>
+    </div>
+</form>

@@ -145,6 +145,18 @@ export function registerComponent(
             </${selector}>
         `);
     });
+
+    if (componentCls.FORM_ASSOCIATED) {
+        customElements.define(
+            selector,
+            class extends HTMLElement {
+                static formAssociated = true;
+
+                public value: unknown;
+                public name: string | undefined;
+            },
+        );
+    }
 }
 
 /* --- Helpers --- */
@@ -253,6 +265,13 @@ export function deregisterApplicationInstance(
     >,
 ) {
     delete applicationInstances[application.id];
+
+    // Remove all components that belonged to this application
+    Object.keys(componentRegistry).forEach((componentRef) => {
+        if (componentRef.startsWith(application.id)) {
+            delete componentRegistry[componentRef];
+        }
+    });
 }
 
 export function getComponentInstance(componentRef: string) {
@@ -291,8 +310,8 @@ export async function renderComponent(
 
     // Render
     const content = await renderTemplate(ComponentClass.TEMPLATE, {
-        ...context,
         ...instance,
+        ...context,
         __application: instance.application,
         __componentRef: componentRef,
         partId: instance.partId,

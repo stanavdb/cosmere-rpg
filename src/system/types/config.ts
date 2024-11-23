@@ -29,8 +29,12 @@ import {
     EquipHand,
     PathType,
     EquipmentType,
+    PowerType,
+    Theme,
 } from './cosmere';
 import { AdvantageMode } from './roll';
+
+import { Talent, Goal } from './item';
 
 export interface SizeConfig {
     label: string;
@@ -71,7 +75,14 @@ export interface SkillConfig {
     key: string;
     label: string;
     attribute: Attribute;
-    attrLabel: string;
+
+    /**
+     * Whether the skill is a core skill.
+     * Core skills are visible in the skill list on the character sheet.
+     */
+    core?: boolean;
+
+    // TODO: Replace
     hiddenUntilAcquired?: boolean;
 }
 
@@ -183,6 +194,7 @@ export interface DamageTypeConfig {
 export interface ItemTypeConfig {
     label: string;
     labelPlural: string;
+    desc_placeholder?: string;
 }
 
 export interface EquipTypeConfig {
@@ -215,7 +227,13 @@ export interface TalentTypeConfig {
     label: string;
 }
 
+export interface PowerTypeConfig {
+    label: string;
+    plural: string;
+}
+
 export interface CosmereRPGConfig {
+    themes: Record<Theme, string>;
     sizes: Record<Size, SizeConfig>;
     creatureTypes: Record<CreatureType, CreatureTypeConfig>;
     conditions: Record<Condition, ConditionConfig>;
@@ -253,6 +271,23 @@ export interface CosmereRPGConfig {
         equipment: {
             types: Record<EquipmentType, EquipmentTypeConfig>;
         };
+
+        goal: {
+            rewards: {
+                types: Record<Goal.Reward.Type, string>;
+            };
+        };
+
+        talent: {
+            types: Record<Talent.Type, TalentTypeConfig>;
+            prerequisite: {
+                types: Record<Talent.Prerequisite.Type, string>;
+                modes: Record<Talent.Prerequisite.Mode, string>;
+            };
+            grantRules: {
+                types: Record<Talent.GrantRule.Type, string>;
+            };
+        };
     };
 
     weaponTypes: Record<WeaponType, WeaponTypeConfig>;
@@ -282,9 +317,11 @@ export interface CosmereRPGConfig {
         types: Record<AttackType, AttackTypeConfig>;
     };
 
-    damageTypes: Record<DamageType, DamageTypeConfig>;
+    power: {
+        types: Record<PowerType, PowerTypeConfig>;
+    };
 
-    talentTypes: Record<string, TalentTypeConfig>;
+    damageTypes: Record<DamageType, DamageTypeConfig>;
 
     cultures: Record<string, CultureConfig>;
     ancestries: Record<string, AncestriesConfig>;

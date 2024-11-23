@@ -127,6 +127,12 @@
                 "Deflect": "Deflect",
                 "NoObscuredSense": "Unaffected by Obscured Senses."
             },
+            "Deflect": {
+                "Natural": {
+                    "Label": "Natural Deflect",
+                    "Hint": "Natural deflect is used when no armor is worn, or when the natural deflect is higher than the worn armor."
+                }
+            },
             "Size": {
                 "Small": "Small",
                 "Medium": "Medium",
@@ -155,7 +161,10 @@
                     "Consume": "Cost",
                     "Uses": "Uses",
                     "Use": "Use action",
-                    "Strike": "Strike"
+                    "Strike": "Strike",
+                    "BaseSectionName": "{type} Actions",
+                    "MiscSectionName": "Miscellaneous Actions",
+                    "NewItem": "Add Action"
                 },
                 "Equipment": {
                     "Quantity": "Quantity",
@@ -197,12 +206,14 @@
                 "Favorites": "Favorites",
                 "DropFavorite": "Drop Favorite",
                 "AncestryPlaceholder": "Add Ancestry",
+                "CulturePlaceholder": "Add Culture",
                 "PathPlaceholder": "Add Path",
                 "ShortRest": "Short rest",
                 "LongRest": "Long rest",
                 "ToggleShowSkills": "Show skills without ranks",
                 "ToggleCollapseSkills": "Hide skills without ranks",
                 "ConfigureDefense": "Configure Defense",
+                "ConfigureDeflect": "Configure Deflect",
                 "ConfigureMovement": "Configure Movement Rate",
                 "ConfigureSensesRange": "Configure Senses Range",
                 "ConfigureRecovery": "Configure Recovery Die",
@@ -245,7 +256,7 @@
                     }
                 },
                 "Skills": {
-                    "AdjustTooltip": "Left Click to increase [skill]'s Rank.<br>Right Click to decrease [skill]'s Rank."
+                    "AdjustTooltip": "Left Click to increase {skill}'s Rank.<br>Right Click to decrease {skill}'s Rank."
                 }
             }
         },
@@ -267,55 +278,90 @@
             "Type": {
                 "Weapon": {
                     "label": "Weapon",
-                    "label_plural": "Weapons"
+                    "label_plural": "Weapons",
+                    "desc_placeholder": "Edit this to describe what this weapon is & how it looks.",
+                    "New": "New Weapon"
                 },
                 "Armor": {
                     "label": "Armor",
-                    "label_plural": "Armor"
+                    "label_plural": "Armor",
+                    "desc_placeholder": "Edit this to describe what this armor is & how it looks.",
+                    "New": "New Armor"
                 },
                 "Equipment": {
                     "label": "Equipment",
-                    "label_plural": "Equipment"
+                    "label_plural": "Equipment",
+                    "desc_placeholder": "Edit this to describe what this piece of equipment is & how it looks.",
+                    "New": "New Equipment"
                 },
                 "Loot": {
                     "label": "Loot",
-                    "label_plural": "Loot"
+                    "label_plural": "Loot",
+                    "desc_placeholder": "Edit this to describe the item.",
+                    "New": "New Loot"
                 },
                 "Ancestry": {
                     "label": "Ancestry",
-                    "label_plural": "Ancestries"
+                    "label_plural": "Ancestries",
+                    "desc_placeholder": "Edit this to define a potential heritage for a character. Also include any special rules text for players to read."
                 },
                 "Culture": {
                     "label": "Culture",
-                    "label_plural": "Cultures"
+                    "label_plural": "Cultures",
+                    "desc_placeholder": "Edit this to define one of the many cultures in the setting. Also include any special rules text for players to read."
                 },
                 "Path": {
                     "label": "Path",
-                    "label_plural": "Paths"
+                    "label_plural": "Paths",
+                    "desc_placeholder": "Edit this to describe this the sorts of characters this progression path represents."
                 },
                 "Specialty": {
                     "label": "Specialty",
-                    "label_plural": "Specialties"
+                    "label_plural": "Specialties",
+                    "desc_placeholder": "Edit this to describe the unique subset of characters this specialty represents."
                 },
                 "Talent": {
                     "label": "Talent",
-                    "label_plural": "Talents"
+                    "label_plural": "Talents",
+                    "desc_placeholder": "Edit this to describe what this Talent does.",
+                    "New": "New Talent"
                 },
                 "Action": {
                     "label": "Action",
-                    "label_plural": "Actions"
+                    "label_plural": "Actions",
+                    "desc_placeholder": "Edit this to describe what this action is and does.",
+                    "New": "New Action"
                 },
                 "Trait": {
                     "label": "Trait",
-                    "label_plural": "Traits"
+                    "label_plural": "Traits",
+                    "desc_placeholder": "Edit this to describe this trait.",
+                    "New": "New Trait"
                 },
                 "Injury": {
                     "label": "Injury",
-                    "label_plural": "Injuries"
+                    "label_plural": "Injuries",
+                    "desc_placeholder": "Edit this to describe how this injury affects a character."
                 },
                 "Connection": {
                     "label": "Connection",
-                    "label_plural": "Connections"
+                    "label_plural": "Connections",
+                    "desc_placeholder": "Edit this to create a description of the NPC and how they are connected to the character."
+                },
+                "Goal": {
+                    "label": "Goal",
+                    "label_plural": "Goals",
+                    "desc_placeholder": "Edit this to describe the goal."
+                },
+                "Power": {
+                    "label": "Power",
+                    "label_plural": "Powers",
+                    "desc_placeholder": "Edit this to describe the power.",
+                    "New": "New {type}"
+                },
+                "TalentTree": {
+                    "label": "Talent Tree",
+                    "label_plural": "Talent Trees"
                 }
             },
             "Weapon": {
@@ -356,7 +402,8 @@
                 "Trait": {
                     "Cumbersome": "Cumbersome",
                     "Dangerous": "Dangerous",
-                    "Presentable": "Presentable"
+                    "Presentable": "Presentable",
+                    "Unique": "Unique"
                 },
                 "Deflect": "Deflect"
             },
@@ -370,7 +417,108 @@
                     "Basic": {
                         "label": "Basic Action",
                         "label_plural": "Basic Actions"
+                    },
+                    "Ancestry": {
+                        "label": "Ancestry Action",
+                        "label_plural": "Ancestry Actions"
                     }
+                },
+                "Ancestry": {
+                    "Label": "Ancestry Identifier",
+                    "Hint": "Identifier of the Ancenstry this action belongs to. (e.g. \"human\")"
+                }
+            },
+            "Goal": {
+                "Level": {
+                    "Label": "Progress"
+                },
+                "Reward": {
+                    "Type": {
+                        "Items": "Items",
+                        "SkillRanks": "Skill Ranks",
+                        "Label": "Type"
+                    },
+                    "Skill": {
+                        "Label": "Skill"
+                    },
+                    "Ranks": {
+                        "Label": "Ranks"
+                    },
+                    "Items": {
+                        "Label": "Items"
+                    },
+                    "Validation": {
+                        "MissingSkillOrRanks": "Must set a Skill and Ranks",
+                        "MissingItems": "Must set Items"
+                    }
+                }
+            },
+            "Power": {
+                "Identifier": {
+                    "Hint": "Used to uniquely identify this power. Should be the same as the identifier of the associated skill, unless a custom skill is used."
+                },
+                "CustomSkill": {
+                    "Label": "Use custom skill?",
+                    "Hint": "If checked, configure a custom skill instead of the skill matching this power's identifier."
+                },
+                "Skill": {
+                    "Label": "Skill",
+                    "Hint": "The skill associated with this power. Gaining this power grants the character access to this skill."
+                },
+                "Notification": {
+                    "PowerExists": "A power with identifier \"{identifier}\" already exists on {actor}."
+                }
+            },
+            "Path": {
+                "LinkedSkills": {
+                    "Label": "Linked Skills",
+                    "Hint": "These skills are displayed alongside the path in the character sheet."
+                }
+            },
+            "Talent": {
+                "Type": {
+                    "Ancestry": "Ancestry",
+                    "Path": "Path",
+                    "Power": "Power"
+                },
+                "Prerequisite": {
+                    "Type": {
+                        "Talent": "Talent",
+                        "Attribute": "Attribute",
+                        "Skill": "Skill",
+                        "Connection": "Connection",
+                        "Level": "Level"
+                    },
+                    "Mode": {
+                        "AnyOf": "Any of",
+                        "AllOf": "All of"
+                    },
+                    "Level": {
+                        "Label": "Level"
+                    }
+                },
+                "GrantRule": {
+                    "Label": "On Obtain",
+                    "Hint": "These rules are applied when the talent is obtained.",
+                    "Type": {
+                        "Items": "Grant Items",
+                        "Label": "Type"
+                    },
+                    "Items": {
+                        "Label": "Items"
+                    }
+                },
+                "Power": {
+                    "Label": "Power Identifier",
+                    "Hint": "Identifier of the power this talent belongs to."
+                }
+            },
+            "TalentTree": {
+                "Width": {
+                    "Label": "Width"
+                },
+                "Height": {
+                    "Label": "Height"
                 }
             },
             "Activation": {
@@ -403,7 +551,9 @@
                         "PerScene": "Per scene"
                     },
                     "Per": "Per"
-                }
+                },
+                "Opportunity": "Opportunity Threshold",
+                "Complication": "Complication Threshold"
             },
             "Injuries": {
                 "Name": {
@@ -452,8 +602,13 @@
                     "Label": "Unequipped"
                 }
             },
+            "Modality": {
+                "Label": "Modality Identifier",
+                "Hint": "Identifier of the modality this talent belongs to. (e.g. \"stance\")"
+            },
             "AttackFlavor": "[actor] attacks with their [item].",
             "Sheet": {
+                "Basics": "Basics",
                 "Tabs": {
                     "Description": "Description",
                     "Effects": "Effects",
@@ -461,13 +616,34 @@
                 },
                 "Identifier": {
                     "Label": "Identifier",
-                    "Description": "Used to uniquely identify this [type]. Identifier can only contain letters (a-z), numbers (0-9), dashes (-), and underscores (_)."
+                    "Hint": "Used to uniquely identify this {type}. Identifier can only contain letters (a-z), numbers (0-9), dashes (-), and underscores (_)."
                 },
                 "Type": "Type",
                 "Injury": {
                     "Duration": "Duration",
                     "InitialDuration": "Initial",
                     "RemainingDuration": "Remaining"
+                },
+                "Ancestry": {
+                    "Size": "Size",
+                    "Advancement": "Advancement",
+                    "FreePath": "Free Path",
+                    "FreeTalents": "Free Talents",
+                    "BonusTalents": "Bonus Talents",
+                    "Restrictions": "Restrictions",
+                    "PathReferencePlaceholder": "Drop a Path here to set a free path",
+                    "TalentIdDescription": "The identifier column should hold the identifier of the talent item you want characters with this Ancestry to have access to. The path identifier can only contain letters (a-z), numbers (0-9), dashes (-), and underscores (_).",
+                    "Component": {
+                        "AdvancementTalentList": {
+                            "DropTalent": "Drop a Talent here to add it to the list",
+                            "Warning": {
+                                "WrongType": "The dropped Document must be of type Talent"
+                            }
+                        },
+                        "BonusTalents": {
+                            "Add": "New Rule"
+                        }
+                    }
                 },
                 "Specialty": {
                     "PathId": "Path Identifier",
@@ -512,7 +688,16 @@
                 },
                 "Damage": {
                     "Title": "Damage",
-                    "Formula": "Damage Formula"
+                    "Formula": "Damage Formula",
+                    "GrazeOverride": "Override Graze Damage Calculation",
+                    "GrazeShow": "Show New Graze Damage Formula",
+                    "GrazeHide": "Hide New Graze Damage Forumla",
+                    "GrazeFormula": "New Formula",
+                    "GrazeHint": "Formula entered here will be the entirety of the calculation for graze damage. Any die rolls will be rolled separately from the main damage roll. You can pull in all or part of the main roll using @damage.total/@damage.unmodded/@damage.dice (the latter being the system default) or the selected attribute mod with @mod"
+                },
+                "Modality": {
+                    "Title": "Modality",
+                    "HasModality": "Has Modality?"
                 },
                 "Talent": {
                     "PathId": "Path Identifier",
@@ -541,7 +726,21 @@
                         "SkillRankPlaceholder": "Minimum Skill Rank",
                         "Connection": "Connection",
                         "ConnectionDescription": "Description",
-                        "ConnectionDescriptionPlaceholder": "Connection Description"
+                        "ConnectionDescriptionPlaceholder": "Connection Description",
+                        "DropTalents": "Drop Talents here to add them to the list."
+                    },
+                    "GrantRules": {
+                        "Description": "Description",
+                        "Create": "New rule",
+                        "Edit": "Edit rule",
+                        "Delete": "Remove rule"
+                    }
+                },
+                "Goal": {
+                    "Reward": {
+                        "Title": "Rewards",
+                        "Create": "New Reward",
+                        "SkillRanksDescriptionValue": "{ranks} ranks in {skill}"
                     }
                 }
             }
@@ -564,20 +763,6 @@
             "Types": {
                 "Heroic": {
                     "Label": "Heroic"
-                }
-            }
-        },
-        "Talent": {
-            "Type": {
-                "Ancestry": "Ancestry",
-                "Path": "Path"
-            },
-            "Prerequisite": {
-                "Type": {
-                    "Talent": "Talent",
-                    "Attribute": "Attribute",
-                    "Skill": "Skill",
-                    "Connection": "Connection"
                 }
             }
         },
@@ -622,6 +807,21 @@
                 "Edit": "Edit Effect",
                 "Delete": "Remove Effect",
                 "ToggleActive": "Toggle Active"
+            },
+            "Talents": {
+                "Label": "Talents",
+                "AcquiredAtLevel": "Acquired at Level",
+                "Add": "New Talent",
+                "Edit": "Edit Talent",
+                "Delete": "Remove Talent",
+                "Cancel": "Discard Changes",
+                "Submit": "Finish Editing"
+            },
+            "TalentPicks": {
+                "Edit": "Edit",
+                "Delete": "Remove",
+                "Cancel": "Discard Changes",
+                "Submit": "Finish Editing"
             }
         },
         "Attribute": {
@@ -653,17 +853,36 @@
             "sur": "Survival"
         },
         "ChatMessage": {
-            "Action": {
-                "Graze": "Graze: Reduce Focus",
-                "ApplyDamage": "Apply Damage",
-                "ApplyGraze": "Apply Graze Damage",
-                "ApplyHealing": "Apply Healing"
+            "Buttons": {
+                "DamageFull": "Click to apply full damage to selected token(s).",
+                "DamageHalf": "Click to apply half damage to selected token(s).",
+                "DamageDouble": "Click to apply double damage to selected token(s).",
+                "Healing": "Click to apply healing to selected token(s).",
+                "ReduceFocus": "Click to reduce focus from selected token(s).",
+                "RollCrit": "Click to roll critical damage.",
+                "RollAdvantage": "Click to roll with advantage.",
+                "RollDisadvantage": "Click to roll with disadvantage."
             },
-            "ApplyDamage": "[actor] takes [amount] damage",
-            "ApplyHealing": "[actor] recovers [amount] health",
+            "Trays": {
+                "Targets": "Targets"
+            },
+            "InjuryRoll": "Injury Roll",
+            "InjuryDuration": {
+                "Dead": "{actor} has <strong>died</strong>.",
+                "Permanent": "{actor} is <strong>permanently injured</strong>.",
+                "Temporary": "{actor} is injured for <strong>{days} days</strong>."
+            },
+            "ApplyDamage": "{actor} takes <strong>{amount} damage</strong>.",
+            "ApplyHealing": "{actor} recovers <strong>{amount} health</strong>.",
+            "DamageCalculation": "Damage Calculation: {calculation}",
+            "UndoDamage": "Click to undo damage taken.",
+            "UndoHealing": "Click to undo healing.",
             "ViewRollsDetails": "Roll Details",
-            "InjuryDuration": "Injury Duration.",
-            "Welcome": "<h2>Welcome to the Cosmere RPG System!</h2> <p>Thank you for trying out the community-developed Cosmere Roleplaying Game system! You’re currently using version <strong>[version]</strong>. As this is an early release, some bugs or missing features are to be expected, but your feedback will help us improve the system.</p> <p>If you encounter any issues or have suggestions, we’d love to hear from you! Please report them on our <a href=\"https://github.com/stanavdb/cosmere-rpg/issues\">GitHub Issues page</a>, and be sure to review the <a href=\"https://github.com/stanavdb/cosmere-rpg/blob/main/CONTRIBUTING.md\">contribution guidelines</a> if you’d like to get involved in development. </p> <p>For discussions, updates, and support, join us on the <a href=\"https://discord.gg/B9Zam3qdZt\">Official Cosmere RPG Discord</a> server. You can find us in <em>vtt-discussion > Foundry VTT System Development</em>.</p> <p>We’re excited to have you on board and hope you enjoy playing in the Cosmere!</p>"
+            "Welcome": "<h2>Welcome to the Cosmere RPG System!</h2> <p>Thank you for trying out the community-developed Cosmere Roleplaying Game system! You're currently using version <strong>{version}</strong>. As this is an early release, some bugs or missing features are to be expected, but your feedback will help us improve the system. </p> <p>For discussions, updates, and support, join us on the <a href=\"{discordLink}\">Metalworks Discord</a> server.</p> <p>If you encounter any issues or have suggestions, we'd love to hear from you! Please report them on our <a href=\"{issuesLink}\">GitHub Issues page</a> or on the <a href=\"{discordLink}\">Metalworks Discord</a>. Be sure to review the <a href=\"{contributingLink}\">contribution guidelines</a> if you'd like to get involved in development. </p> <p>We're excited to have you on board and hope you enjoy playing in the Cosmere!</p>"
+        },
+        "Theme": {
+            "Default": "Default",
+            "Stormlight": "Stormlight Archive"
         }
     },
     "DICE": {
@@ -682,7 +901,8 @@
         "Damage": {
             "Label": "Damage",
             "Apply": "Apply",
-            "Graze": "Graze"
+            "Graze": "Graze",
+            "Full": "Full"
         }
     },
     "ROLLS": {
@@ -722,6 +942,9 @@
         "ConfigureRecoveryDie": {
             "Title": "Configure Recovery Die: {actor}"
         },
+        "ConfigureDeflect": {
+            "Title": "Configure Deflect: {actor}"
+        },
         "EditTalentPrerequisite": {
             "Title": "Edit Prerequisite"
         },
@@ -733,12 +956,58 @@
                     "Dice": "Dice"
                 }
             }
+        },
+        "EditBonusTalentsRule": {
+            "Title": "Edit Bonus Talents Rule",
+            "Quantity": "Amount",
+            "Warning": {
+                "DuplicateLevel": "A rule for level {level} already exists"
+            }
+        },
+        "EditGrantRule": {
+            "Title": "Edit Rule"
+        },
+        "EditGoalReward": {
+            "Title": "Edit Reward"
+        },
+        "ReleaseNotes": {
+            "Title": "Cosmere Roleplaying Game - Release Notes"
+        },
+        "ConfigureTalentTree": {
+            "Title": "Configure Talent Tree: {name}",
+            "Warning": {
+                "OutOfBounds": "The selected bounds would place at least one talent outside the tree."
+            },
+            "Notification": {
+                "TalentPicked": "Added talent {talent} to {actor}"
+            }
+        }
+    },
+    "COMPONENT": {
+        "DocumentReferenceInput": {
+            "Placeholder": "Drop a {type} here to create a reference",
+            "Warning": {
+                "WrongType": "The dropped Document must be of type {type}",
+                "WrongSubtype": "The dropped {type} must be of type {subtype}"
+            }
+        },
+        "DocumentDropListComponent": {
+            "Placeholder": "Drop a {type} here to add it to the list",
+            "Warning": {
+                "DocumentAlreadyInList": "The dropped {type} is already in the list",
+                "WrongType": "The dropped Document must be of type {type}",
+                "WrongSubtype": "The dropped {type} must be of type {subtype}"
+            }
+        },
+        "MultiValueSelect": {
+            "DefaultPlaceholder": "Select an option"
         }
     },
     "GENERIC": {
         "Unknown": "Unknown",
         "None": "None",
         "Default": "Default",
+        "Document": "Document",
         "Formula": "Formula",
         "Value": "Value",
         "Skill": "Skill",
@@ -755,6 +1024,12 @@
         "Mode": "Mode",
         "Turns": "Turns",
         "Rounds": "Rounds",
+        "Clear": "Clear",
+        "Name": "Name",
+        "Level": "Level",
+        "Add": "Add",
+        "Type": "Type",
+        "Description": "Description",
         "Button": {
             "Roll": "Roll",
             "Continue": "Continue",
@@ -762,10 +1037,14 @@
             "Edit": "Edit",
             "Save": "Save",
             "Cancel": "Cancel",
-            "Update": "Update"
+            "Update": "Update",
+            "RemoveFavorite": "Remove Favorite",
+            "Favorite":  "Favorite"
         },
         "Notification": {
-            "GrazeFocusSpent": "Reduced focus by 1"
+            "GrazeFocusSpent": "Reduced focus by 1",
+            "AddedItem": "Added {type} \"{item}\" to {actor}",
+            "IncreasedSkillRank": "Increased {actor}'s {skill} rank by {amount}"
         },
         "Warning": {
             "NotImplemented": "Sorry! [action] is not implemented yet",
@@ -774,7 +1053,10 @@
             "NotEnoughUses": "Cannot consume, not enough uses left",
             "ItemConsumeResourceNotConfigured": "The resource selected to be consumed is not configured on this item",
             "NoDuplicateExpertises": "Cannot create duplicate expertise",
-            "NoFocus": "Not enough focus to perform this action"
+            "NoFocus": "Not enough focus to perform this action",
+            "TalentCannotBePrerequisiteOfItself": "A talent cannot be a prerequisite of itself",
+            "DuplicatePrerequisiteTalentRef": "A talent with id {talentId} already exists ({talentName})",
+            "ItemAlreadyInTree": "An item with id \"{itemId}\" already exists in the {name} talent tree"
         },
         "DerivedValue": {
             "Mode": {
@@ -793,8 +1075,10 @@
         },
         "Item": {
             "culture": "Culture",
+            "ancestry": "Ancestry",
             "path": "Path",
             "connection": "Connection",
+            "goal": "Goal",
             "injury": "Injury",
             "specialty": "Specialty",
             "loot": "Loot",
@@ -803,12 +1087,57 @@
             "action": "Action",
             "talent": "Talent",
             "equipment": "Equipment",
-            "weapon": "Weapon"
+            "weapon": "Weapon",
+            "power": "Power",
+            "talent_tree": "Talent Tree"
         }
     },
     "UNITS": {
         "Distance": {
             "Feet": "Feet"
         }
+    },
+    "SETTINGS": {
+        "itemSheetSideTabs": {
+            "name": "Vertical Side Tabs for Item Sheets",
+            "hint": "If enabled, item sheets use vertical tabs down the right-hand side, similar to the character sheet, instead of the default in-line horizontal ones."
+        },
+        "skipRollDialogByDefault": {
+            "name": "Skip Roll Dialog by Default",
+            "hint": "If enabled, rolls will skip the roll configuration dialog when clicked, using the default roll configuration. The dialog can still be accessed by holding the 'Skip/Show Dialog' key modifier from the system controls."
+        },
+        "enableOverlayButtons": {
+            "name": "Enable Overlay Buttons",
+            "hint": "When outputting a skill test or damage roll, enable overlay buttons on the chat message that offer additional functionality for the roll."
+        },         
+        "enableApplyButtons": {
+            "name": "Enable Apply Buttons",
+            "hint": "When outputting a damage roll, enable buttons on the chat message that allow for damage or healing to be applied to tokens, or to reduce focus from those tokens."
+        },
+        "alwaysShowApplyButtons": {
+            "name": "Always Show Apply Buttons",
+            "hint": "When outputting a damage roll always show the apply buttons, instead of only on hover."
+        },
+        "applyButtonsTo": {
+            "name": "Apply Button Options",
+            "hint": "Determines which tokens damage, healing, or focus reduction is applied to when applying via the chat card buttons.",
+            "choices": {
+                "SelectedOnly": "Apply to Selected Tokens",
+                "TargetedOnly": "Apply to Targeted Tokens",
+                "SelectedAndTargeted": "Apply to Both",
+                "PrioritiseSelected": "Prioritise Selected Tokens",
+                "PrioritiseTargeted": "Prioritise Targeted Tokens"
+            }
+        },
+        "systemTheme": {
+            "name": "Preferred System Theme",
+            "hint": "Specify the themed set of colours to use for system documents and interface elements. The selected theme will respect the prefered Dark/Light mode selected in the core settings."
+        }
+    },
+    "KEYBINDINGS": {
+        "skipDialogDefault": "Skip/Show Dialog",
+        "skipDialogAdvantage": "Skip Dialog with Advantage",
+        "skipDialogDisadvantage": "Skip Dialog with Disadvantage",
+        "skipDialogRaiseStakes": "Skip Dialog with Raise Stakes"
     }
 }

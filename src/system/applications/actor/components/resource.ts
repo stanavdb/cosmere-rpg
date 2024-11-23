@@ -83,7 +83,7 @@ export class ActorResourceComponent extends HandlebarsApplicationComponent<
         const actor = this.application.actor;
 
         // Roll injury
-        void actor.rollInjuryDuration();
+        void actor.rollInjury();
     }
 
     /* --- Context --- */

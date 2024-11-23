@@ -30,9 +30,12 @@ import {
     PathType,
     EquipHand,
     EquipmentType,
-    TalentType,
+    PowerType,
+    Theme,
 } from './types/cosmere';
 import { AdvantageMode } from './types/roll';
+
+import { Talent, Goal } from './types/item';
 
 const COSMERE: CosmereRPGConfig = {
     sizes: {
@@ -72,6 +75,11 @@ const COSMERE: CosmereRPGConfig = {
         [CreatureType.Animal]: {
             label: 'COSMERE.Actor.Type.Animal',
         },
+    },
+
+    themes: {
+        [Theme.Default]: 'COSMERE.Theme.Default',
+        [Theme.Stormlight]: 'COSMERE.Theme.Stormlight',
     },
 
     conditions: {
@@ -255,111 +263,111 @@ const COSMERE: CosmereRPGConfig = {
             key: Skill.Agility,
             label: 'COSMERE.Actor.Skill.Agility',
             attribute: Attribute.Speed,
-            attrLabel: 'COSMERE.Actor.Attribute.Speed.short',
+            core: true,
         },
         [Skill.Athletics]: {
             key: Skill.Athletics,
             label: 'COSMERE.Actor.Skill.Athletics',
             attribute: Attribute.Strength,
-            attrLabel: 'COSMERE.Actor.Attribute.Strength.short',
+            core: true,
         },
         [Skill.HeavyWeapons]: {
             key: Skill.HeavyWeapons,
             label: 'COSMERE.Actor.Skill.HeavyWeapons',
             attribute: Attribute.Strength,
-            attrLabel: 'COSMERE.Actor.Attribute.Strength.short',
+            core: true,
         },
         [Skill.LightWeapons]: {
             key: Skill.LightWeapons,
             label: 'COSMERE.Actor.Skill.LightWeapons',
             attribute: Attribute.Speed,
-            attrLabel: 'COSMERE.Actor.Attribute.Speed.short',
+            core: true,
         },
         [Skill.Stealth]: {
             key: Skill.Stealth,
             label: 'COSMERE.Actor.Skill.Stealth',
             attribute: Attribute.Speed,
-            attrLabel: 'COSMERE.Actor.Attribute.Speed.short',
+            core: true,
         },
         [Skill.Thievery]: {
             key: Skill.Thievery,
             label: 'COSMERE.Actor.Skill.Thievery',
             attribute: Attribute.Speed,
-            attrLabel: 'COSMERE.Actor.Attribute.Speed.short',
+            core: true,
         },
 
         [Skill.Crafting]: {
             key: Skill.Crafting,
             label: 'COSMERE.Actor.Skill.Crafting',
             attribute: Attribute.Intellect,
-            attrLabel: 'COSMERE.Actor.Attribute.Intellect.short',
+            core: true,
         },
         [Skill.Deduction]: {
             key: Skill.Deduction,
             label: 'COSMERE.Actor.Skill.Deduction',
             attribute: Attribute.Intellect,
-            attrLabel: 'COSMERE.Actor.Attribute.Intellect.short',
+            core: true,
         },
         [Skill.Discipline]: {
             key: Skill.Discipline,
             label: 'COSMERE.Actor.Skill.Discipline',
             attribute: Attribute.Willpower,
-            attrLabel: 'COSMERE.Actor.Attribute.Willpower.short',
+            core: true,
         },
         [Skill.Intimidation]: {
             key: Skill.Intimidation,
             label: 'COSMERE.Actor.Skill.Intimidation',
             attribute: Attribute.Willpower,
-            attrLabel: 'COSMERE.Actor.Attribute.Willpower.short',
+            core: true,
         },
         [Skill.Lore]: {
             key: Skill.Lore,
             label: 'COSMERE.Actor.Skill.Lore',
             attribute: Attribute.Intellect,
-            attrLabel: 'COSMERE.Actor.Attribute.Intellect.short',
+            core: true,
         },
         [Skill.Medicine]: {
             key: Skill.Medicine,
             label: 'COSMERE.Actor.Skill.Medicine',
             attribute: Attribute.Intellect,
-            attrLabel: 'COSMERE.Actor.Attribute.Intellect.short',
+            core: true,
         },
 
         [Skill.Deception]: {
             key: Skill.Deception,
             label: 'COSMERE.Actor.Skill.Deception',
             attribute: Attribute.Presence,
-            attrLabel: 'COSMERE.Actor.Attribute.Presence.short',
+            core: true,
         },
         [Skill.Insight]: {
             key: Skill.Insight,
             label: 'COSMERE.Actor.Skill.Insight',
             attribute: Attribute.Awareness,
-            attrLabel: 'COSMERE.Actor.Attribute.Awareness.short',
+            core: true,
         },
         [Skill.Leadership]: {
             key: Skill.Leadership,
             label: 'COSMERE.Actor.Skill.Leadership',
             attribute: Attribute.Presence,
-            attrLabel: 'COSMERE.Actor.Attribute.Presence.short',
+            core: true,
         },
         [Skill.Perception]: {
             key: Skill.Perception,
             label: 'COSMERE.Actor.Skill.Perception',
             attribute: Attribute.Awareness,
-            attrLabel: 'COSMERE.Actor.Attribute.Awareness.short',
+            core: true,
         },
         [Skill.Persuasion]: {
             key: Skill.Persuasion,
             label: 'COSMERE.Actor.Skill.Persuasion',
             attribute: Attribute.Presence,
-            attrLabel: 'COSMERE.Actor.Attribute.Presence.short',
+            core: true,
         },
         [Skill.Survival]: {
             key: Skill.Survival,
             label: 'COSMERE.Actor.Skill.Survival',
             attribute: Attribute.Awareness,
-            attrLabel: 'COSMERE.Actor.Attribute.Awareness.short',
+            core: true,
         },
     },
 
@@ -376,54 +384,84 @@ const COSMERE: CosmereRPGConfig = {
             [ItemType.Weapon]: {
                 label: 'COSMERE.Item.Type.Weapon.label',
                 labelPlural: 'COSMERE.Item.Type.Weapon.label_plural',
+                desc_placeholder: 'COSMERE.Item.Type.Weapon.desc_placeholder',
             },
             [ItemType.Armor]: {
                 label: 'COSMERE.Item.Type.Armor.label',
                 labelPlural: 'COSMERE.Item.Type.Armor.label_plural',
+                desc_placeholder: 'COSMERE.Item.Type.Armor.desc_placeholder',
             },
             [ItemType.Equipment]: {
                 label: 'COSMERE.Item.Type.Equipment.label',
                 labelPlural: 'COSMERE.Item.Type.Equipment.label_plural',
+                desc_placeholder:
+                    'COSMERE.Item.Type.Equipment.desc_placeholder',
             },
             [ItemType.Loot]: {
                 label: 'COSMERE.Item.Type.Loot.label',
                 labelPlural: 'COSMERE.Item.Type.Loot.label_plural',
+                desc_placeholder: 'COSMERE.Item.Type.Loot.desc_placeholder',
             },
             [ItemType.Ancestry]: {
                 label: 'COSMERE.Item.Type.Ancestry.label',
                 labelPlural: 'COSMERE.Item.Type.Ancestry.label_plural',
+                desc_placeholder: 'COSMERE.Item.Type.Ancestry.desc_placeholder',
             },
             [ItemType.Culture]: {
                 label: 'COSMERE.Item.Type.Culture.label',
                 labelPlural: 'COSMERE.Item.Type.Culture.label_plural',
+                desc_placeholder: 'COSMERE.Item.Type.Culture.desc_placeholder',
             },
             [ItemType.Path]: {
                 label: 'COSMERE.Item.Type.Path.label',
                 labelPlural: 'COSMERE.Item.Type.Path.label_plural',
+                desc_placeholder: 'COSMERE.Item.Type.Path.desc_placeholder',
             },
             [ItemType.Specialty]: {
                 label: 'COSMERE.Item.Type.Specialty.label',
                 labelPlural: 'COSMERE.Item.Type.Specialty.label_plural',
+                desc_placeholder:
+                    'COSMERE.Item.Type.Specialty.desc_placeholder',
             },
             [ItemType.Talent]: {
                 label: 'COSMERE.Item.Type.Talent.label',
                 labelPlural: 'COSMERE.Item.Type.Talent.label_plural',
+                desc_placeholder: 'COSMERE.Item.Type.Talent.desc_placeholder',
             },
             [ItemType.Action]: {
                 label: 'COSMERE.Item.Type.Action.label',
                 labelPlural: 'COSMERE.Item.Type.Action.label_plural',
+                desc_placeholder: 'COSMERE.Item.Type.Action.desc_placeholder',
             },
             [ItemType.Trait]: {
                 label: 'COSMERE.Item.Type.Trait.label',
                 labelPlural: 'COSMERE.Item.Type.Trait.label_plural',
+                desc_placeholder: 'COSMERE.Item.Type.Trait.desc_placeholder',
             },
             [ItemType.Injury]: {
                 label: 'COSMERE.Item.Type.Injury.label',
                 labelPlural: 'COSMERE.Item.Type.Injury.label_plural',
+                desc_placeholder: 'COSMERE.Item.Type.Injury.desc_placeholder',
             },
             [ItemType.Connection]: {
                 label: 'COSMERE.Item.Type.Connection.label',
                 labelPlural: 'COSMERE.Item.Type.Connection.label_plural',
+                desc_placeholder:
+                    'COSMERE.Item.Type.Connection.desc_placeholder',
+            },
+            [ItemType.Goal]: {
+                label: 'COSMERE.Item.Type.Goal.label',
+                labelPlural: 'COSMERE.Item.Type.Goal.label_plural',
+                desc_placeholder: 'COSMERE.Item.Type.Goal.desc_placeholder',
+            },
+            [ItemType.Power]: {
+                label: 'COSMERE.Item.Type.Power.label',
+                labelPlural: 'COSMERE.Item.Type.Power.label_plural',
+                desc_placeholder: 'COSMERE.Item.Type.Power.desc_placeholder',
+            },
+            [ItemType.TalentTree]: {
+                label: 'COSMERE.Item.Type.TalentTree.label',
+                labelPlural: 'COSMERE.Item.Type.TalentTree.label_plural',
             },
         },
         activation: {
@@ -496,6 +534,55 @@ const COSMERE: CosmereRPGConfig = {
             types: {
                 [EquipmentType.Basic]: {
                     label: 'COSMERE.Item.Equipment.Type.Basic',
+                },
+            },
+        },
+        goal: {
+            rewards: {
+                types: {
+                    [Goal.Reward.Type.Items]:
+                        'COSMERE.Item.Goal.Reward.Type.Items',
+                    [Goal.Reward.Type.SkillRanks]:
+                        'COSMERE.Item.Goal.Reward.Type.SkillRanks',
+                },
+            },
+        },
+        talent: {
+            types: {
+                [Talent.Type.Ancestry]: {
+                    label: 'COSMERE.Item.Talent.Type.Ancestry',
+                },
+                [Talent.Type.Path]: {
+                    label: 'COSMERE.Item.Talent.Type.Path',
+                },
+                [Talent.Type.Power]: {
+                    label: 'COSMERE.Item.Talent.Type.Power',
+                },
+            },
+            prerequisite: {
+                types: {
+                    [Talent.Prerequisite.Type.Talent]:
+                        'COSMERE.Item.Talent.Prerequisite.Type.Talent',
+                    [Talent.Prerequisite.Type.Attribute]:
+                        'COSMERE.Item.Talent.Prerequisite.Type.Attribute',
+                    [Talent.Prerequisite.Type.Skill]:
+                        'COSMERE.Item.Talent.Prerequisite.Type.Skill',
+                    [Talent.Prerequisite.Type.Connection]:
+                        'COSMERE.Item.Talent.Prerequisite.Type.Connection',
+                    [Talent.Prerequisite.Type.Level]:
+                        'COSMERE.Item.Talent.Prerequisite.Type.Level',
+                },
+                modes: {
+                    [Talent.Prerequisite.Mode.AnyOf]:
+                        'COSMERE.Item.Talent.Prerequisite.Mode.AnyOf',
+                    [Talent.Prerequisite.Mode.AllOf]:
+                        'COSMERE.Item.Talent.Prerequisite.Mode.AllOf',
+                },
+            },
+            grantRules: {
+                types: {
+                    [Talent.GrantRule.Type.Items]:
+                        'COSMERE.Item.Talent.GrantRule.Type.Items',
                 },
             },
         },
@@ -612,6 +699,9 @@ const COSMERE: CosmereRPGConfig = {
             [ArmorTraitId.Presentable]: {
                 label: 'COSMERE.Item.Armor.Trait.Presentable',
             },
+            [ArmorTraitId.Unique]: {
+                label: 'COSMERE.Item.Armor.Trait.Unique',
+            },
         },
     },
 
@@ -646,6 +736,10 @@ const COSMERE: CosmereRPGConfig = {
                 label: 'COSMERE.Item.Action.Type.Basic.label',
                 labelPlural: 'COSMERE.Item.Action.Type.Basic.label_plural',
             },
+            [ActionType.Ancestry]: {
+                label: 'COSMERE.Item.Action.Type.Ancestry.label',
+                labelPlural: 'COSMERE.Item.Action.Type.Ancestry.label_plural',
+            },
         },
         costs: {
             [ActionCostType.Action]: {
@@ -674,6 +768,15 @@ const COSMERE: CosmereRPGConfig = {
         },
     },
 
+    power: {
+        types: {
+            [PowerType.None]: {
+                label: 'COSMERE.Item.Type.Power.label',
+                plural: 'COSMERE.Item.Type.Power.label_plural',
+            },
+        },
+    },
+
     damageTypes: {
         [DamageType.Energy]: {
             label: 'COSMERE.DamageTypes.Energy',
@@ -695,15 +798,6 @@ const COSMERE: CosmereRPGConfig = {
         [DamageType.Healing]: {
             label: 'COSMERE.DamageTypes.Healing',
             ignoreDeflect: true,
-        },
-    },
-
-    talentTypes: {
-        [TalentType.Ancestry]: {
-            label: 'COSMERE.Talent.Type.Ancestry',
-        },
-        [TalentType.Path]: {
-            label: 'COSMERE.Talent.Type.Path',
         },
     },
 

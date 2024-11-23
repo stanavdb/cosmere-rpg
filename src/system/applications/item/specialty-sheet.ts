@@ -1,5 +1,6 @@
 import { SpecialtyItem } from '@system/documents/item';
 import { DeepPartial } from '@system/types/utils';
+import { SYSTEM_ID } from '@src/system/constants';
 
 // Base
 import { BaseItemSheet } from './base';
@@ -8,7 +9,7 @@ export class SpecialtyItemSheet extends BaseItemSheet {
     static DEFAULT_OPTIONS = foundry.utils.mergeObject(
         foundry.utils.deepClone(super.DEFAULT_OPTIONS),
         {
-            classes: ['cosmere-rpg', 'sheet', 'item', 'specialty'],
+            classes: [SYSTEM_ID, 'sheet', 'item', 'specialty'],
             position: {
                 width: 550,
                 height: 500,
@@ -25,6 +26,7 @@ export class SpecialtyItemSheet extends BaseItemSheet {
         {
             details: {
                 label: 'COSMERE.Item.Sheet.Tabs.Details',
+                icon: '<i class="fa-solid fa-circle-info"></i>',
                 sortIndex: 15,
             },
         },

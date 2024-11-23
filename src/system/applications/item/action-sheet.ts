@@ -1,5 +1,6 @@
 import { ActionItem } from '@system/documents/item';
 import { DeepPartial } from '@system/types/utils';
+import { SYSTEM_ID } from '@src/system/constants';
 
 // Base
 import { BaseItemSheet } from './base';
@@ -8,7 +9,7 @@ export class ActionItemSheet extends BaseItemSheet {
     static DEFAULT_OPTIONS = foundry.utils.mergeObject(
         foundry.utils.deepClone(super.DEFAULT_OPTIONS),
         {
-            classes: ['cosmere-rpg', 'sheet', 'item', 'action'],
+            classes: [SYSTEM_ID, 'sheet', 'item', 'action'],
             position: {
                 width: 550,
             },
@@ -24,6 +25,7 @@ export class ActionItemSheet extends BaseItemSheet {
         {
             details: {
                 label: 'COSMERE.Item.Sheet.Tabs.Details',
+                icon: '<i class="fa-solid fa-circle-info"></i>',
                 sortIndex: 15,
             },
         },
@@ -34,7 +36,8 @@ export class ActionItemSheet extends BaseItemSheet {
         {
             'sheet-content': {
                 template:
-                    'systems/cosmere-rpg/templates/item/parts/sheet-content.hbs',
+                    'systems/cosmere-rpg/templates/item/action/parts/sheet-content.hbs',
+                scrollable: ['.tab-body'],
             },
         },
     );

@@ -259,6 +259,8 @@ namespace foundry {
             readonly system: Schema;
 
             get flags(): Record<string, any>;
+            get pack(): string | undefined;
+            get compendium(): CompendiumCollection<Document> | undefined;
 
             /**
              * The canonical name of this Document type, for example "Actor".
@@ -530,6 +532,105 @@ namespace foundry {
              * @returns The updated document instance
              */
             async unsetFlag(scope: string, key: string): Promise<Document>;
+
+            /* --- Database Creation Operations --- */
+
+            /**
+             * Pre-process a creation operation for a single Document instance. Pre-operation events only occur for the client
+             * which requested the operation.
+             *
+             * Modifications to the pending Document instance must be performed using {@link Document#updateSource}.
+             *
+             * @param data                          The initial data object provided to the document creation request
+             * @param options                       Additional options which modify the creation request
+             * @param user                          The User requesting the document creation
+             *                                      Return false to exclude this Document from the creation operation
+             * @internal
+             */
+            async _preCreate(
+                data: object,
+                options: object,
+                user: documents.BaseUser,
+            ): Promise<boolean | void>;
+
+            /**
+             * Post-process a creation operation for a single Document instance. Post-operation events occur for all connected
+             * clients.
+             *
+             * @param data                          The initial data object provided to the document creation request
+             * @param options                       Additional options which modify the creation request
+             * @param userId                        The id of the User requesting the document update
+             * @internal
+             */
+            _onCreate(data: object, options: object, userId: string): void;
+
+            /**
+             * Pre-process a creation operation, potentially altering its instructions or input data. Pre-operation events only
+             * occur for the client which requested the operation.
+             *
+             * This batch-wise workflow occurs after individual {@link Document#_preCreate} workflows and provides a final
+             * pre-flight check before a database operation occurs.
+             *
+             * Modifications to pending documents must mutate the documents array or alter individual document instances using
+             * {@link Document#updateSource}.
+             *
+             * @param documents                     Pending document instances to be created
+             * @param operation                     Parameters of the database creation operation
+             * @param user                          The User requesting the creation operation
+             * @returns                             Return false to cancel the creation operation entirely
+             * @internal
+             */
+            static async _preCreateOperation(
+                documents: Document[],
+                operation: DatabaseCreateOperation,
+                user: documents.BaseUser,
+            ): Promise<boolean | void>;
+
+            /**
+             * Post-process a creation operation, reacting to database changes which have occurred. Post-operation events occur
+             * for all connected clients.
+             *
+             * This batch-wise workflow occurs after individual {@link Document#_onCreate} workflows.
+             *
+             * @param documents                     The Document instances which were created
+             * @param operation                     Parameters of the database creation operation
+             * @param user                          The User who performed the creation operation
+             * @internal
+             */
+            static async _onCreateOperation(
+                documents: Document[],
+                operation: DatabaseCreateOperation,
+                user: documents.BaseUser,
+            ): Promise<void>;
+
+            /* --- Database Update Operations --- */
+
+            /**
+             * Pre-process an update operation for a single Document instance. Pre-operation events only occur for the client
+             * which requested the operation.
+             *
+             * @param changes                       The candidate changes to the Document
+             * @param options                       Additional options which modify the update request
+             * @param user                          The User requesting the document update
+             * @returns                             A return value of false indicates the update operation should be cancelled.
+             * @internal
+             */
+            async _preUpdate(
+                changes: object,
+                options: object,
+                user: documents.BaseUser,
+            ): Promise<boolean | void>;
+
+            /**
+             * Post-process an update operation for a single Document instance. Post-operation events occur for all connected
+             * clients.
+             *
+             * @param changed                       The differential data that was changed relative to the documents prior values
+             * @param options                       Additional options which modify the update request
+             * @param userId                        The id of the User requesting the document update
+             * @internal
+             */
+            _onUpdate(changed: object, options: object, userId: string);
         }
 
         interface DataValidationOptions {
@@ -685,7 +786,7 @@ namespace foundry {
              * @param options Options provided to the model constructor
              * @returns Migrated and cleaned source data which will be stored to the model instance
              */
-            _initializeSource(
+            protected _initializeSource(
                 data: object | DataModel,
                 options?: object,
             ): object;
@@ -703,7 +804,7 @@ namespace foundry {
              * This mirrors the workflow of SchemaField#initialize but with some added functionality.
              * @param options Options provided to the model constructor
              */
-            _initialize(options?: object);
+            protected _initialize(options?: object);
 
             /**
              * Reset the state of this data instance back to mirror the contained source data, erasing any changes.
