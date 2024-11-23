@@ -1,7 +1,7 @@
 .sheet.actor.adversary.minimized {border: none;}
 
 .sheet.actor.adversary {
-    border: 3px solid var(--plotweaver-color-base-6);
+    border: 3px solid var(--plotweaver-color-accent);
     background: linear-gradient(var(--plotweaver-color-sheet) 35%, transparent);
 
     .decorations {
@@ -23,7 +23,7 @@
             left: -3px;
 
             path {
-                fill: var(--plotweaver-color-base-6);
+                fill: var(--plotweaver-color-accent);
             }
         }
 
@@ -37,7 +37,7 @@
             right: -3px;
 
             path {
-                fill: var(--plotweaver-color-base-6);
+                fill: var(--plotweaver-color-accent);
             }
         }
 
@@ -51,7 +51,7 @@
             left: -3px;
 
             path {
-                fill: var(--plotweaver-color-base-6);
+                fill: var(--plotweaver-color-accent);
             }
         }
 
@@ -65,14 +65,20 @@
             right: -3px;
 
             path {
-                fill: var(--plotweaver-color-base-6);
+                fill: var(--plotweaver-color-accent);
             }
         }
     }
 
     nav {
+        left: 100%;
+
         > a {
-            border: 1px solid var(--plotweaver-color-base-6);
+            border: 1px solid var(--plotweaver-color-accent);
+
+            &.active {
+                left: 2px;
+            }
         }
     }
 
@@ -92,16 +98,24 @@
         .level-details {
             .level {
                 .container {
-                    position: relative;
-                    border-radius: 5%;
+                    width: 42px;
+                    height: 42px;
+
+                    .border {
+                        position: absolute;
+                        left: -2px;
+                        top: -2px;
+                        width: calc(100% + 4px);
+                        height: calc(100% + 4px);
+                        border-image: url("/systems/cosmere-rpg/assets/icons/ui/border_level.svg") fill 21 / 42px;
+                        filter: var(--plotweaver-color-accent-filter);
+                        pointer-events: none;
+                        z-index: 1;
+                    }
 
                     svg {
-                        position: absolute;
-                        width: 3rem;
-                        left: 0;
-
                         path {
-                            fill: var(--plotweaver-color-base-6);
+                            fill: var(--plotweaver-color-base-4);
                         }
                     }
                 }
@@ -148,6 +162,29 @@
     app-actor-details{
         .deflect { // Placeholder as bg svg / mask is not yet ready
             border: 1px solid var(--plotweaver-color-base-5);
+        }
+    }
+
+    app-adversary-skills-group {
+        position: relative;
+
+        &:has(> *) {
+            display: flex;
+            padding: 0.4rem 0.2rem;
+            margin-bottom: calc(1.25rem - 1px);
+
+            background: var(--plotweaver-color-base-1);
+
+            .border {
+                position: absolute;
+                left: -3px;
+                top: -3px;
+                width: calc(100% + 6px);
+                height: calc(100% + 6px);
+                border-image: url("/systems/cosmere-rpg/assets/icons/ui/border_full_100x100.svg") fill 80 / 58px;
+                filter: var(--plotweaver-color-accent-filter);
+                pointer-events: none;
+            }
         }
     }
 }
