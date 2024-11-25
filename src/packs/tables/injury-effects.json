@@ -12,7 +12,7 @@
       ],
       "drawn": false,
       "_id": "gpJNDSRsoaWUM0T0",
-      "text": "<strong>Exausted(-1)</strong> Any Injury that lowers your overall stamina.",
+      "text": "<strong>Exausted (-1)</strong> Any Injury that lowers your overall stamina.",
       "img": "icons/svg/sleep.svg",
       "documentId": null,
       "flags": {}
@@ -26,7 +26,7 @@
       ],
       "drawn": false,
       "_id": "hp5hWMYB10llrOtH",
-      "text": "<strong>Exausted(-2)</strong> Any Injury that lowers your overall stamina.",
+      "text": "<strong>Exausted (-2)</strong> Any Injury that lowers your overall stamina.",
       "img": "icons/svg/sleep.svg",
       "documentId": null,
       "flags": {}
@@ -91,21 +91,7 @@
   "replacement": true,
   "displayRoll": true,
   "folder": null,
-  "flags": {
-    "exportSource": {
-      "world": "b9test",
-      "system": "cosmere-rpg",
-      "coreVersion": "12.331",
-      "systemVersion": "0.2.1"
-    }
-  },
-  "_stats": {
-    "coreVersion": "12.331",
-    "systemId": "cosmere-rpg",
-    "systemVersion": "0.2.1",
-    "createdTime": 1732504183989,
-    "modifiedTime": 1732507522837,
-    "lastModifiedBy": "mlhqK8ft6P9hbaYE"
-  },
+  "flags": {},
+  "_stats": {},
   "formula": "1d8"
 }
