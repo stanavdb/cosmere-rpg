@@ -92,6 +92,5 @@
   "displayRoll": true,
   "folder": null,
   "flags": {},
-  "_stats": {},
-  "formula": "1d8"
+    "formula": "1d8"
 }
