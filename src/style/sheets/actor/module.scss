@@ -274,7 +274,6 @@
                         z-index: 1;
                         font-size: 2rem;
 
-                        margin-left: 2px;
                         margin-bottom: 2px;
                     }
                 }
@@ -700,7 +699,7 @@
                 z-index: 1;
                 font-size: 8pt;
 
-                color: var(--plotweaver-color-faded);
+                color: var(--plotweaver-color-off-white-1);
             }
 
             .value {
@@ -802,6 +801,7 @@
     }
 
     .list-component {
+        overflow: visible;
         position: relative;
         width: 100%;
 
