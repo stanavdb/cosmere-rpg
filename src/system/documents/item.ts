@@ -619,6 +619,9 @@ export class CosmereItem<
             actor.system.skills[damageSkillId].attribute;
 
         options.skillTest ??= {};
+        options.skillTest.parts ??= this.system.activation.modifierFormula
+            ? [this.system.activation.modifierFormula]
+            : [];
         options.damage ??= {};
 
         // Handle key modifiers
