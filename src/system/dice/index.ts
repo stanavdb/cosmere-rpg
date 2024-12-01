@@ -89,7 +89,11 @@ export async function d20Roll(
 
     // Construct the roll
     const roll = new D20Roll(
-        ['1d20'].concat(config.parts ?? []).join(' + '),
+        ['1d20']
+            .concat(config.parts ?? [])
+            .join(' + ')
+            .replace(/\+ -/, '-')
+            .replace(/\+ \+/, '+'),
         config.data,
         { ...config },
     );

@@ -403,6 +403,9 @@ export class CosmereItem<
             actor,
         );
 
+        const parts = ['@mod'].concat(options.parts ?? []);
+        if (options.temporaryModifiers) parts.push(options.temporaryModifiers);
+
         // Perform the roll
         const roll = await d20Roll(
             foundry.utils.mergeObject(options, {
@@ -412,7 +415,7 @@ export class CosmereItem<
                     CONFIG.COSMERE.skills[skillId].label,
                 )})`,
                 defaultAttribute: skill.attribute,
-                parts: ['@mod'].concat(options.parts ?? []),
+                parts: parts,
                 plotDie: options.plotDie ?? this.system.activation.plotDie,
                 opportunity:
                     options.opportunity ?? this.system.activation.opportunity,
@@ -677,6 +680,9 @@ export class CosmereItem<
             // If the dialog was closed, exit out of rolls
             if (!attackConfig) return null;
 
+            options.skillTest.temporaryModifiers =
+                attackConfig.skillTest.temporaryModifiers;
+
             skillTestAttributeId = attackConfig.attribute;
             options.rollMode = attackConfig.rollMode;
 
@@ -934,6 +940,9 @@ export class CosmereItem<
                     rolls.push(...damageRolls);
                 }
 
+                options.parts ??= this.system.activation.modifierFormula
+                    ? [this.system.activation.modifierFormula]
+                    : [];
                 if (this.system.activation.type === ActivationType.SkillTest) {
                     const roll = await this.roll({
                         ...options,
@@ -1282,6 +1291,11 @@ export namespace CosmereItem {
         parts?: string[];
 
         /**
+         * A dice formula stating any miscellanious other bonuses or negatives to the specific roll
+         */
+        temporaryModifiers?: string;
+
+        /**
          * What advantage modifier to apply to the roll
          *
          * @default AdvantageMode.None
@@ -1321,6 +1335,7 @@ export namespace CosmereItem {
             | 'skill'
             | 'attribute'
             | 'parts'
+            | 'temporaryModifiers'
             | 'opportunity'
             | 'complication'
             | 'plotDie'
