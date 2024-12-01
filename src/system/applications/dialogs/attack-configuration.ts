@@ -290,8 +290,8 @@ export class AttackConfigurationDialog extends ComponentHandlebarsApplicationMix
         const skillTestFormula = foundry.dice.Roll.replaceFormulaData(
             this.data.skillTest.parts
                 .join(' + ')
-                .replace(/\+ -/, '-')
-                .replace(/\+ \+/, '+'),
+                .replace(/\+ -/g, '-')
+                .replace(/\+ \+/g, '+'),
             this.data.skillTest.data,
             {
                 missing: '0',
@@ -301,8 +301,8 @@ export class AttackConfigurationDialog extends ComponentHandlebarsApplicationMix
         const damageRollFormula = foundry.dice.Roll.replaceFormulaData(
             this.data.damageRoll.parts
                 .join(' + ')
-                .replace(/\+ -/, '-')
-                .replace(/\+ \+/, '+'),
+                .replace(/\+ -/g, '-')
+                .replace(/\+ \+/g, '+'),
             this.data.damageRoll.data,
             {
                 missing: '0',
