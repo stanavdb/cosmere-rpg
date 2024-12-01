@@ -245,8 +245,8 @@ export class RollConfigurationDialog extends ComponentHandlebarsApplicationMixin
         const formula = foundry.dice.Roll.replaceFormulaData(
             this.data.parts
                 .join(' + ')
-                .replace(/\+ -/, '-')
-                .replace(/\+ \+/, '+'),
+                .replace(/\+ -/g, '-')
+                .replace(/\+ \+/g, '+'),
             this.data.data,
             {
                 missing: '0',

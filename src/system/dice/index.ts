@@ -92,8 +92,8 @@ export async function d20Roll(
         ['1d20']
             .concat(config.parts ?? [])
             .join(' + ')
-            .replace(/\+ -/, '-')
-            .replace(/\+ \+/, '+'),
+            .replace(/\+ -/g, '-')
+            .replace(/\+ \+/g, '+'),
         config.data,
         { ...config },
     );
