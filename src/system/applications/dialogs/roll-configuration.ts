@@ -30,7 +30,7 @@ export namespace RollConfigurationDialog {
         parts: string[];
 
         /**
-         * A dice formula stating any miscellanious other bonuses or negatives to the specific roll
+         * A dice formula stating any miscellaneous other bonuses or negatives to the specific roll
          */
         temporaryModifiers?: string;
 
