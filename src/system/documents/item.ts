@@ -10,7 +10,7 @@ import {
 } from '@system/types/cosmere';
 import { Goal } from '@system/types/item';
 import { GoalItemData } from '@system/data/item/goal';
-import { DeepPartial } from '@system/types/utils';
+import { DeepPartial, NONE, Noneable } from '@system/types/utils';
 
 import { CosmereActor } from './actor';
 
@@ -66,7 +66,7 @@ import { RollMode } from '@system/dice/types';
 import {
     determineConfigurationMode,
     getTargetDescriptors,
-    hasKey,
+    isNone,
 } from '../utils/generic';
 import { MESSAGE_TYPES } from './chat-message';
 import { renderSystemTemplate, TEMPLATES } from '../utils/templates';
@@ -76,8 +76,6 @@ const CONSUME_CONFIGURATION_DIALOG_TEMPLATE =
     'systems/cosmere-rpg/templates/item/dialog/item-consume.hbs';
 const ACTIVITY_CARD_TEMPLATE =
     'systems/cosmere-rpg/templates/chat/activity-card.hbs';
-const NONE = 'none';
-type None = typeof NONE;
 
 interface ShowConsumeDialogOptions {
     /**
@@ -612,13 +610,13 @@ export class CosmereItem<
             skillTestSkillId;
 
         // Get the attribute to use during the skill test
-        let skillTestAttributeId: Attribute | None =
+        let skillTestAttributeId: Noneable<Attribute> =
             options.skillTest?.attribute ??
             this.system.activation.attribute ??
             NONE;
 
         // Get the attribute to use during the damage roll
-        const damageAttributeId: Attribute | None =
+        const damageAttributeId: Noneable<Attribute> =
             options.damage?.attribute ??
             this.system.damage.attribute ??
             actor.system.skills[damageSkillId].attribute;
@@ -1174,14 +1172,13 @@ export class CosmereItem<
 
     protected getSkillTestRollData(
         skillId: Skill,
-        attributeId: Attribute | None,
+        attributeId: Noneable<Attribute>,
         actor: CosmereActor,
     ): D20RollData {
         const skill = actor.system.skills[skillId];
-        const attribute =
-            attributeId !== NONE
-                ? actor.system.attributes[attributeId]
-                : { value: 0, bonus: 0 };
+        const attribute = !isNone(attributeId)
+            ? actor.system.attributes[attributeId]
+            : { value: 0, bonus: 0 };
         const mod = skill.rank + attribute.value + attribute.bonus;
 
         return {
@@ -1191,7 +1188,7 @@ export class CosmereItem<
                 id: skillId,
                 rank: skill.rank,
                 mod: Derived.getValue(skill.mod) ?? 0,
-                attribute: attributeId !== NONE ? attributeId : skill.attribute,
+                attribute: !isNone(attributeId) ? attributeId : skill.attribute,
             },
             attribute: attribute.value,
         };
@@ -1199,12 +1196,12 @@ export class CosmereItem<
 
     protected getDamageRollData(
         skillId: Skill | undefined,
-        attributeId: Attribute | None | undefined,
+        attributeId: Noneable<Attribute> | undefined,
         actor: CosmereActor,
     ): DamageRollData {
         const skill = skillId ? actor.system.skills[skillId] : undefined;
         const attribute = attributeId
-            ? attributeId !== NONE
+            ? !isNone(attributeId)
                 ? actor.system.attributes[attributeId]
                 : { value: 0, bonus: 0 }
             : undefined;
@@ -1252,7 +1249,7 @@ export namespace CosmereItem {
          * The attribute to be used with this item roll.
          * Used to roll the item with an alternate attribute.
          */
-        attribute?: Attribute | None;
+        attribute?: Noneable<Attribute>;
 
         /**
          * Whether or not to generate a chat message for this roll.

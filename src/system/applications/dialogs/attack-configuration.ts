@@ -1,7 +1,8 @@
 import { Attribute } from '@system/types/cosmere';
 import { RollMode } from '@system/dice/types';
 import { AdvantageMode } from '@system/types/roll';
-import { AnyObject } from '@system/types/utils';
+import { AnyObject, NONE, Noneable } from '@system/types/utils';
+import { isNone } from '@src/system/utils/generic';
 
 import { D20RollData } from '@system/dice/d20-roll';
 import { DamageRollData } from '@system/dice/damage-roll';
@@ -17,8 +18,6 @@ const ADVANTAGE_MODE_COLORS = {
     [AdvantageMode.Advantage]: 'rgb(49 69 118)',
     [AdvantageMode.None]: null,
 };
-const NONE = 'none';
-type None = typeof NONE;
 
 export namespace AttackConfigurationDialog {
     export interface Data {
@@ -85,7 +84,7 @@ export namespace AttackConfigurationDialog {
         /**
          * The attribute that is used for the roll by default
          */
-        defaultAttribute?: Attribute | None;
+        defaultAttribute?: Noneable<Attribute>;
 
         /**
          * The roll mode that should be selected by default
@@ -94,7 +93,7 @@ export namespace AttackConfigurationDialog {
     }
 
     export interface Result {
-        attribute: Attribute | None;
+        attribute: Noneable<Attribute>;
         rollMode: RollMode;
         skillTest: {
             plotDie: boolean;
@@ -194,7 +193,7 @@ export class AttackConfigurationDialog extends ComponentHandlebarsApplicationMix
     ) {
         if (event instanceof SubmitEvent) return;
 
-        const attribute = formData.get('attribute') as Attribute | None;
+        const attribute = formData.get('attribute') as Noneable<Attribute>;
         const rollMode = formData.get('rollMode') as RollMode;
         const plotDie = formData.get('plotDie') === 'true';
         const tempMod = formData.get('temporaryMod')?.valueOf() as string;
@@ -208,17 +207,16 @@ export class AttackConfigurationDialog extends ComponentHandlebarsApplicationMix
         this.data.skillTest.temporaryModifiers = tempMod;
 
         const skill = this.data.skillTest.data.skill;
-        const attributeData =
-            attribute !== NONE
-                ? this.data.skillTest.data.attributes[attribute]
-                : { value: 0, bonus: 0 };
+        const attributeData = !isNone(attribute)
+            ? this.data.skillTest.data.attributes[attribute]
+            : { value: 0, bonus: 0 };
         const rank = skill.rank;
         const value = attributeData.value + attributeData.bonus;
 
         this.data.skillTest.data.mod = rank + value;
         this.data.skillTest.plotDie = plotDie;
 
-        this.data.defaultAttribute = attribute !== NONE ? attribute : undefined;
+        this.data.defaultAttribute = !isNone(attribute) ? attribute : undefined;
         this.data.defaultRollMode = rollMode;
 
         void this.render();
@@ -234,7 +232,7 @@ export class AttackConfigurationDialog extends ComponentHandlebarsApplicationMix
             temporaryMod: HTMLInputElement;
         };
 
-        const attribute = form.attribute.value as Attribute | 'none';
+        const attribute = form.attribute.value as Noneable<Attribute>;
         const rollMode = form.rollMode.value as RollMode;
 
         const plotDie = form.plotDie.checked;
@@ -350,7 +348,7 @@ export class AttackConfigurationDialog extends ComponentHandlebarsApplicationMix
                 {},
             ),
             attributes: {
-                none: 'GENERIC.None',
+                [NONE]: 'GENERIC.None',
                 ...Object.entries(CONFIG.COSMERE.attributes).reduce(
                     (acc, [key, config]) => ({
                         ...acc,
