@@ -10,7 +10,7 @@ import {
 } from '@system/types/cosmere';
 import { Goal } from '@system/types/item';
 import { GoalItemData } from '@system/data/item/goal';
-import { DeepPartial } from '@system/types/utils';
+import { DeepPartial, NONE, Noneable } from '@system/types/utils';
 
 import { CosmereActor } from './actor';
 
@@ -66,7 +66,7 @@ import { RollMode } from '@system/dice/types';
 import {
     determineConfigurationMode,
     getTargetDescriptors,
-    hasKey,
+    isNone,
 } from '../utils/generic';
 import { MESSAGE_TYPES } from './chat-message';
 import { renderSystemTemplate, TEMPLATES } from '../utils/templates';
@@ -403,6 +403,9 @@ export class CosmereItem<
             actor,
         );
 
+        const parts = ['@mod'].concat(options.parts ?? []);
+        if (options.temporaryModifiers) parts.push(options.temporaryModifiers);
+
         // Perform the roll
         const roll = await d20Roll(
             foundry.utils.mergeObject(options, {
@@ -412,7 +415,7 @@ export class CosmereItem<
                     CONFIG.COSMERE.skills[skillId].label,
                 )})`,
                 defaultAttribute: skill.attribute,
-                parts: ['@mod'].concat(options.parts ?? []),
+                parts: parts,
                 plotDie: options.plotDie ?? this.system.activation.plotDie,
                 opportunity:
                     options.opportunity ?? this.system.activation.opportunity,
@@ -607,18 +610,21 @@ export class CosmereItem<
             skillTestSkillId;
 
         // Get the attribute to use during the skill test
-        let skillTestAttributeId =
+        let skillTestAttributeId: Noneable<Attribute> =
             options.skillTest?.attribute ??
             this.system.activation.attribute ??
-            actor.system.skills[skillTestSkillId].attribute;
+            NONE;
 
         // Get the attribute to use during the damage roll
-        const damageAttributeId =
+        const damageAttributeId: Noneable<Attribute> =
             options.damage?.attribute ??
             this.system.damage.attribute ??
             actor.system.skills[damageSkillId].attribute;
 
         options.skillTest ??= {};
+        options.skillTest.parts ??= this.system.activation.modifierFormula
+            ? [this.system.activation.modifierFormula]
+            : [];
         options.damage ??= {};
 
         // Handle key modifiers
@@ -673,6 +679,9 @@ export class CosmereItem<
 
             // If the dialog was closed, exit out of rolls
             if (!attackConfig) return null;
+
+            options.skillTest.temporaryModifiers =
+                attackConfig.skillTest.temporaryModifiers;
 
             skillTestAttributeId = attackConfig.attribute;
             options.rollMode = attackConfig.rollMode;
@@ -931,6 +940,9 @@ export class CosmereItem<
                     rolls.push(...damageRolls);
                 }
 
+                options.parts ??= this.system.activation.modifierFormula
+                    ? [this.system.activation.modifierFormula]
+                    : [];
                 if (this.system.activation.type === ActivationType.SkillTest) {
                     const roll = await this.roll({
                         ...options,
@@ -1160,11 +1172,13 @@ export class CosmereItem<
 
     protected getSkillTestRollData(
         skillId: Skill,
-        attributeId: Attribute,
+        attributeId: Noneable<Attribute>,
         actor: CosmereActor,
     ): D20RollData {
         const skill = actor.system.skills[skillId];
-        const attribute = actor.system.attributes[attributeId];
+        const attribute = !isNone(attributeId)
+            ? actor.system.attributes[attributeId]
+            : { value: 0, bonus: 0 };
         const mod = skill.rank + attribute.value + attribute.bonus;
 
         return {
@@ -1174,7 +1188,7 @@ export class CosmereItem<
                 id: skillId,
                 rank: skill.rank,
                 mod: Derived.getValue(skill.mod) ?? 0,
-                attribute: attributeId,
+                attribute: !isNone(attributeId) ? attributeId : skill.attribute,
             },
             attribute: attribute.value,
         };
@@ -1182,12 +1196,14 @@ export class CosmereItem<
 
     protected getDamageRollData(
         skillId: Skill | undefined,
-        attributeId: Attribute | undefined,
+        attributeId: Noneable<Attribute> | undefined,
         actor: CosmereActor,
     ): DamageRollData {
         const skill = skillId ? actor.system.skills[skillId] : undefined;
         const attribute = attributeId
-            ? actor.system.attributes[attributeId]
+            ? !isNone(attributeId)
+                ? actor.system.attributes[attributeId]
+                : { value: 0, bonus: 0 }
             : undefined;
         const mod =
             skill !== undefined || attribute !== undefined
@@ -1204,7 +1220,9 @@ export class CosmereItem<
                       id: skillId!,
                       rank: skill.rank,
                       mod: Derived.getValue(skill.mod) ?? 0,
-                      attribute: attributeId!,
+                      attribute: !isNone(attributeId!)
+                          ? attributeId!
+                          : skill.attribute,
                   }
                 : undefined,
             attribute: attribute?.value,
@@ -1230,7 +1248,7 @@ export namespace CosmereItem {
          * The attribute to be used with this item roll.
          * Used to roll the item with an alternate attribute.
          */
-        attribute?: Attribute;
+        attribute?: Noneable<Attribute>;
 
         /**
          * Whether or not to generate a chat message for this roll.
@@ -1279,6 +1297,11 @@ export namespace CosmereItem {
         parts?: string[];
 
         /**
+         * A dice formula stating any miscellanious other bonuses or negatives to the specific roll
+         */
+        temporaryModifiers?: string;
+
+        /**
          * What advantage modifier to apply to the roll
          *
          * @default AdvantageMode.None
@@ -1318,6 +1341,7 @@ export namespace CosmereItem {
             | 'skill'
             | 'attribute'
             | 'parts'
+            | 'temporaryModifiers'
             | 'opportunity'
             | 'complication'
             | 'plotDie'

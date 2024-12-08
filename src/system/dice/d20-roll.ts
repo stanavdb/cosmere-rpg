@@ -7,8 +7,9 @@ import { RollConfigurationDialog } from '@system/applications/dialogs/roll-confi
 
 import { PlotDie } from './plot-die';
 import { RollMode } from './types';
-import { hasKey } from '../utils/generic';
+import { hasKey, isNone } from '../utils/generic';
 import { renderSystemTemplate, TEMPLATES } from '../utils/templates';
+import { Noneable } from '../types/utils';
 
 // Constants
 const CONFIGURATION_DIALOG_TEMPLATE =
@@ -29,7 +30,7 @@ export type D20RollData<
         id: Skill;
         rank: number;
         mod: number;
-        attribute: Attribute;
+        attribute: Noneable<Attribute>;
     };
     attribute: number;
 };
@@ -255,7 +256,9 @@ export class D20Roll extends foundry.dice.Roll<D20RollData> {
         if (result.attribute !== this.options.defaultAttribute) {
             this.data.skill.attribute = result.attribute;
             const skill = this.data.skill;
-            const attribute = this.data.attributes[result.attribute];
+            const attribute = !isNone(result.attribute)
+                ? this.data.attributes[result.attribute]
+                : { value: 0, bonus: 0 };
             this.terms[2] = new foundry.dice.terms.NumericTerm({
                 number: skill.rank + attribute.value,
             });
@@ -265,6 +268,12 @@ export class D20Roll extends foundry.dice.Roll<D20RollData> {
         this.options.plotDie = result.plotDie;
         this.options.advantageMode = result.advantageMode;
         this.options.advantageModePlot = result.advantageModePlot;
+        if (result.temporaryModifiers) {
+            const tempTerms = new Roll(`0 + ${result.temporaryModifiers}`)
+                .terms;
+            this.terms = this.terms.concat(tempTerms.slice(1));
+            this.resetFormula();
+        }
 
         this.configureModifiers();
         return this;

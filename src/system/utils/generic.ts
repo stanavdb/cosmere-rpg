@@ -7,6 +7,7 @@ import {
     TargetingOptions,
 } from '../settings';
 import { AdvantageMode } from '../types/roll';
+import { NONE } from '../types/utils';
 
 /**
  * Determine if the keys of a requested keybinding are pressed.
@@ -57,6 +58,15 @@ export function hasKey<T extends object>(
     key: PropertyKey,
 ): key is keyof T {
     return key in obj;
+}
+
+/**
+ * Simple check to confirm whether a given value equates to our constant "none" string.
+ * @param value The value to be checked.
+ * @returns {boolean} Whether the value passed is the NONE constant or not.
+ */
+export function isNone(value: unknown) {
+    return value === NONE;
 }
 
 /**

@@ -4,6 +4,11 @@ export {
     EmptyObject,
 } from '@league-of-foundry-developers/foundry-vtt-types/src/types/utils.mjs';
 
+export const NONE = 'none';
+export type None = typeof NONE;
+
+export type Noneable<T> = T | None;
+
 export type SharedKeys<T, U> = keyof T & keyof U;
 
 // NOTE: Using `any` in the below types as the resulting types don't rely on the `any`s
