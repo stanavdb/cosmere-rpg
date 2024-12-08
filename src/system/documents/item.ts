@@ -1220,10 +1220,9 @@ export class CosmereItem<
                       id: skillId!,
                       rank: skill.rank,
                       mod: Derived.getValue(skill.mod) ?? 0,
-                      attribute:
-                          attributeId! !== NONE
-                              ? attributeId!
-                              : skill.attribute,
+                      attribute: !isNone(attributeId!)
+                          ? attributeId!
+                          : skill.attribute,
                   }
                 : undefined,
             attribute: attribute?.value,
