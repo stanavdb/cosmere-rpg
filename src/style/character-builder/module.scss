@@ -1,0 +1,228 @@
+.application.character-builder {
+    z-index: 200;
+
+    border: none;
+    border-radius: unset;
+    background: var(--plotweaver-color-dark-1);
+
+    display: flex;
+    padding: 1em;
+
+    header {
+        display: flex;
+        align-items: center;
+
+        .title {
+            font-size: 18pt;
+            font-weight: bold;
+            flex: 1;
+        }
+
+        .controls a {
+            font-size: 18pt;
+        }
+    }
+
+    .content {
+        flex: 1;
+        display: flex;
+        min-height: 0;
+
+        section.steps {
+            flex: 1;
+
+            ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+    
+                li {
+                    a {
+                        display: flex;
+                        align-items: center;
+    
+                        .icon {
+                            font-size: 16pt;
+                            margin-right: 1rem;
+                        }
+    
+                        .description {
+                            flex: 1;
+                            display: flex;
+                            flex-direction: column;
+    
+                            .label {
+                                font-size: 12pt;
+                            }
+    
+                            .description {
+                                font-size: 9pt;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        section.actions {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            overflow: auto;
+
+            .action {
+                display: flex;
+                flex-direction: column;
+                margin-bottom: 2rem;
+
+                .header {
+                    display: flex;
+                    align-items: center;
+                    font-size: 18pt;
+                    margin-bottom: 0.5rem;
+
+                    .icon {
+                        margin-right: 1rem;
+                    }
+
+                    .title {
+                        font-weight: bold;
+                    }
+                }
+
+                .body {
+                    display: flex;
+                    flex-direction: column;
+
+                    .task {
+                        margin-top: 1rem;
+                        font-size: 12pt;
+                    }
+
+                    .items-list {
+                        display: flex;
+                        flex-wrap: wrap;
+    
+                        .item {
+                            display: flex;
+                            flex-direction: row;
+                            align-items: center;
+                            background: var(--plotweaver-color-dark-5);
+                            width: 12rem;
+                            padding: 0.25rem 0.5rem;
+                            border-radius: 0.3rem;
+                            margin: 0 0.5rem 0.5rem 0;
+                            cursor: pointer;
+    
+                            .img {
+                                width: 2.5rem;
+                                margin-right: 0.5rem;
+                            }
+    
+                            .name {
+                                flex: 1;
+                                font-size: 12pt;
+                                text-shadow: 0 0 0.5rem black;
+                            }
+                        }
+                    }
+
+                    .attributes-assign {
+                        display: flex;
+                        flex-direction: column;
+
+                        .attribute {
+                            display: flex;
+                            align-items: center;
+                            font-size: 11pt;
+                            margin-top: 0.5rem;
+
+                            .name {
+                                flex: 1;
+                            }
+                        }
+                    }
+
+                    .skills-assign {
+                        .group {
+                            margin-top: 1rem;
+
+                            > .name {
+                                font-weight: bold;
+                            }
+
+                            .skill {
+                                display: flex;
+                                align-items: center;
+                                margin-top: .2rem;
+
+                                .name {
+                                    flex: 2;
+                                }
+
+                                .attribute {
+                                    flex: 1;
+                                }
+                            }
+                        }
+                    }
+
+                    .attributes-assign, .skills-assign {
+                        .value {
+                            width: 1rem;
+                            text-align: center;
+                        }
+
+                        .btn {
+                            width: 1.25rem;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            border-radius: 0.3rem;
+                            font-weight: bold;
+
+                            &:first-of-type {
+                                background: var(--plotweaver-color-dark-3);
+                                margin-right: 0.5rem;
+                            }
+
+                            &:last-of-type {
+                                background: var(--plotweaver-color-base-4);
+                                margin-left: 0.5rem;
+                            }
+                        }
+                    }
+
+                    .input-field {
+                        display: flex;
+                        align-items: center;
+                        margin-top: 1rem;
+
+                        label {
+                            flex: 1;
+                            font-size: 11pt;
+                        }
+
+                        input {
+                            flex: 3;
+                        }
+                    }
+                }
+
+
+            }
+        }
+
+        section.details {
+            flex: 2;
+        }
+
+        section {
+            padding: 0 2rem;
+        }
+
+        section:not(:last-child) {
+            border-right: 1px solid var(--plotweaver-color-dark-2);
+        }
+    }
+}

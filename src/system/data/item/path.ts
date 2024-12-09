@@ -9,11 +9,21 @@ import {
     DescriptionItemMixin,
     DescriptionItemData,
 } from './mixins/description';
+import {
+    TriggerableItemMixin,
+    TriggerableItemData,
+} from './mixins/triggerable';
 
 export interface PathItemData
     extends IdItemData,
         TypedItemData<PathType>,
-        DescriptionItemData {
+        DescriptionItemData,
+        TriggerableItemData {
+    /**
+     * The UUIDs of the talent trees linked to this path.
+     */
+    talentTrees: string[];
+
     /**
      * The non-core skills linked to this path.
      * These skills are displayed with the path in the sheet.
@@ -29,7 +39,7 @@ export class PathItemDataModel extends DataModelMixin<
     TypedItemMixin<CosmereItem, PathType>({
         initial: PathType.Heroic,
         choices: () => {
-            return Object.entries(CONFIG.COSMERE.paths.types).reduce(
+            return Object.entries(CONFIG.COSMERE.path.types).reduce(
                 (acc, [key, value]) => ({
                     ...acc,
                     [key]: value.label,
@@ -41,9 +51,20 @@ export class PathItemDataModel extends DataModelMixin<
     DescriptionItemMixin({
         value: 'COSMERE.Item.Type.Path.desc_placeholder',
     }),
+    TriggerableItemMixin(),
 ) {
     static defineSchema() {
         return foundry.utils.mergeObject(super.defineSchema(), {
+            talentTrees: new foundry.data.fields.ArrayField(
+                new foundry.data.fields.DocumentUUIDField({
+                    blank: false,
+                }),
+                {
+                    required: true,
+                    nullable: false,
+                    initial: [],
+                },
+            ),
             linkedSkills: new foundry.data.fields.ArrayField(
                 new foundry.data.fields.StringField({
                     required: true,
@@ -74,6 +95,6 @@ export class PathItemDataModel extends DataModelMixin<
     }
 
     get typeLabel(): string {
-        return CONFIG.COSMERE.paths.types[this.type].label;
+        return CONFIG.COSMERE.path.types[this.type].label;
     }
 }

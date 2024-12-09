@@ -364,10 +364,12 @@ export class TalentItemDataModel extends DataModelMixin<
                 (prerequisite) => {
                     switch (prerequisite.type) {
                         case Talent.Prerequisite.Type.Talent:
-                            return actor.items.some(
-                                (item) =>
-                                    item.isTalent() &&
-                                    item.id === prerequisite.id,
+                            return prerequisite.talents.every((ref) =>
+                                actor.items.some(
+                                    (item) =>
+                                        item.isTalent() &&
+                                        item.system.id === ref.id,
+                                ),
                             );
                         case Talent.Prerequisite.Type.Skill:
                             return (

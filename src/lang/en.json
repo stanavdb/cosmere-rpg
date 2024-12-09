@@ -145,6 +145,9 @@
                 "Humanoid": "Humanoid",
                 "Animal": "Animal"
             },
+            "Level": {
+                "Label": "Level"
+            },
             "Sheet": {
                 "Header": {
                     "Editable": "Editable",

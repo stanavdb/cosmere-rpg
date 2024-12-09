@@ -371,7 +371,55 @@ const COSMERE: CosmereRPGConfig = {
         },
     },
 
-    paths: {
+    advancement: {
+        rules: [
+            {
+                attributePoints: 12,
+                health: 10,
+                healthIncludeStrength: true,
+                skillRanks: 4,
+                talents: 1,
+            }, // Level 1
+            { health: 5, skillRanks: 2, talents: 1 }, // Level 2
+            { attributePoints: 1, health: 5, skillRanks: 2, talents: 1 }, // Level 3
+            { health: 5, skillRanks: 2, talents: 1 }, // Level 4
+            { health: 5, skillRanks: 2, talents: 1 }, // Level 5
+            {
+                attributePoints: 1,
+                health: 4,
+                healthIncludeStrength: true,
+                skillRanks: 2,
+                talents: 1,
+            }, // Level 6
+            { health: 4, skillRanks: 2, talents: 1 }, // Level 7
+            { health: 4, skillRanks: 2, talents: 1 }, // Level 8
+            { attributePoints: 1, health: 4, skillRanks: 2, talents: 1 }, // Level 9
+            { health: 4, skillRanks: 2, talents: 1 }, // Level 10
+            {
+                health: 3,
+                healthIncludeStrength: true,
+                skillRanks: 2,
+                talents: 1,
+            }, // Level 11
+            { attributePoints: 1, health: 3, skillRanks: 2, talents: 1 }, // Level 12
+            { health: 3, skillRanks: 2, talents: 1 }, // Level 13
+            { health: 3, skillRanks: 2, talents: 1 }, // Level 14
+            { attributePoints: 1, health: 3, skillRanks: 2, talents: 1 }, // Level 15
+            {
+                health: 2,
+                healthIncludeStrength: true,
+                skillRanks: 2,
+                talents: 1,
+            }, // Level 16
+            { health: 2, skillRanks: 2, talents: 1 }, // Level 17
+            { attributePoints: 1, health: 2, skillRanks: 2, talents: 1 }, // Level 18
+            { health: 2, skillRanks: 2, talents: 1 }, // Level 19
+            { health: 2, skillRanks: 2, talents: 1 }, // Level 20
+            { health: 1, skillRanksOrTalents: 1 }, // Level 21
+        ],
+    },
+
+    path: {
         types: {
             [PathType.Heroic]: {
                 label: 'COSMERE.Paths.Types.Heroic.Label',
@@ -803,6 +851,7 @@ const COSMERE: CosmereRPGConfig = {
 
     cultures: {},
     ancestries: {},
+    paths: {},
 
     units: {
         weight: ['lb'],

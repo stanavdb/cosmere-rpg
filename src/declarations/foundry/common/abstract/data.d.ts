@@ -882,11 +882,43 @@ namespace foundry {
              * Called before {@link ClientDocument#prepareDerivedData} in {@link ClientDocument#prepareData}.
              */
             public prepareDerivedData();
+
+            /* --- Deprecations and Compatibility --- */
+
+            /**
+             * Migrate candidate source data for this DataModel which may require initial cleaning or transformations.
+             * @param source           The candidate source data from which the model will be constructed
+             * @returns                Migrated source data, if necessary
+             */
+            public static migrateData(source: object): object;
+
+            /**
+             * Wrap data migration in a try/catch which attempts it safely
+             * @param source           The candidate source data from which the model will be constructed
+             * @returns                Migrated source data, if necessary
+             */
+            public static migrateDataSafe(source: object): object;
         }
 
         declare class TypeDataModel<
             Schema extends DataSchema = DataSchema,
             Parent extends Document | null = Document | null,
-        > extends DataModel<Schema, Parent> {}
+        > extends DataModel<Schema, Parent> {
+            /**
+             * Called by {@link ClientDocument#_preUpdate}.
+             *
+             * @param changes               The candidate changes to the Document
+             * @param options               Additional options which modify the update request
+             * @param user                  The User requesting the document update
+             * @returns                     A return value of false indicates the update operation should be cancelled.
+             * @protected
+             * @internal
+             */
+            protected async _preUpdate(
+                changes: object,
+                options: object,
+                user: documents.BaseUser,
+            ): Promise<boolean | void>;
+        }
     }
 }

@@ -56,6 +56,10 @@ Handlebars.registerHelper('hasKey', (obj: AnyObject, path: string) => {
     );
 });
 
+Handlebars.registerHelper('includes', (arr: unknown[], value: unknown) =>
+    arr.includes(value),
+);
+
 Handlebars.registerHelper(
     'replace',
     (from: string, searchValue: string, replaceValue: string) => {

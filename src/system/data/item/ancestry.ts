@@ -27,6 +27,12 @@ export interface AncestryItemData extends IdItemData, DescriptionItemData {
         custom?: string | null;
         subtype?: string | null;
     };
+
+    /**
+     * The UUIDs of the talent trees linked to this path.
+     */
+    talentTrees: string[];
+
     advancement: {
         extraPath: string; // UUID of the PathItem
 
@@ -91,6 +97,16 @@ export class AncestryItemDataModel extends DataModelMixin<
                     nullable: true,
                 }),
             }),
+            talentTrees: new foundry.data.fields.ArrayField(
+                new foundry.data.fields.DocumentUUIDField({
+                    blank: false,
+                }),
+                {
+                    required: true,
+                    nullable: false,
+                    initial: [],
+                },
+            ),
             advancement: new foundry.data.fields.SchemaField({
                 extraPath: new foundry.data.fields.DocumentUUIDField({
                     type: 'Item',

@@ -13,6 +13,7 @@ import {
     SkillConfig,
     PowerTypeConfig,
     ActionTypeConfig,
+    PathConfig,
 } from '@system/types/config';
 
 interface SkillConfigData extends Omit<SkillConfig, 'key'> {
@@ -92,7 +93,7 @@ export function registerPathType(data: PathTypeConfigData, force = false) {
     }
 
     // Add to path config
-    CONFIG.COSMERE.paths.types[data.id as PathType] = {
+    CONFIG.COSMERE.path.types[data.id as PathType] = {
         label: data.label,
     };
 }
@@ -244,6 +245,29 @@ export function registerAncestry(data: AncestryConfigData, force = false) {
     };
 }
 
+interface PathConfigData extends PathConfig {
+    id: string;
+}
+
+export function registerPath(data: PathConfigData, force = false) {
+    if (!CONFIG.COSMERE)
+        throw new Error('Cannot access api until after system is initialized.');
+
+    if (data.id in CONFIG.COSMERE.path.types && !force)
+        throw new Error('Cannot override existing path config.');
+
+    if (force) {
+        console.warn('Registering path with force=true.');
+    }
+
+    // Add to path config
+    CONFIG.COSMERE.paths[data.id] = {
+        label: data.label,
+        isStartingPath: data.isStartingPath,
+        reference: data.reference,
+    };
+}
+
 interface CurrencyConfigData extends CurrencyConfig {
     id: string;
 }
@@ -298,5 +322,6 @@ export default {
     registerArmor,
     registerCulture,
     registerAncestry,
+    registerPath,
     registerCurrency,
 };

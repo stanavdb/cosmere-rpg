@@ -66,7 +66,7 @@ export class CharacterPathsComponent extends HandlebarsApplicationComponent<
                 ...path,
                 id: path.id,
                 img: path.img,
-                typeLabel: CONFIG.COSMERE.paths.types[path.system.type].label,
+                typeLabel: CONFIG.COSMERE.path.types[path.system.type].label,
                 skills: path.system.linkedSkills
                     .filter(
                         (skillId) =>
@@ -85,9 +85,9 @@ export class CharacterPathsComponent extends HandlebarsApplicationComponent<
                             .rank,
                         mod: this.application.actor.system.skills[skillId].mod,
                     })),
-                level: this.application.actor.system.level.paths[
-                    path.system.id
-                ],
+                level: this.application.actor.talents.filter(
+                    (talent) => talent.system.path === path.id,
+                ).length,
             })),
         });
     }

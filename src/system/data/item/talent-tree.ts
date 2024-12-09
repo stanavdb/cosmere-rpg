@@ -22,6 +22,11 @@ export interface TalentTreeItemData {
      * The available height of the tree
      */
     height: number;
+
+    /**
+     * The UUIDs of the talents in the tree
+     */
+    readonly talentUUIDs: string[]; // Accessor
 }
 
 export class TalentTreeItemDataModel extends DataModelMixin<
@@ -54,5 +59,9 @@ export class TalentTreeItemDataModel extends DataModelMixin<
                 label: 'COSMERE.Item.TalentTree.Height.Label',
             }),
         });
+    }
+
+    public get talentUUIDs(): string[] {
+        return this.nodes.map((node) => node.uuid);
     }
 }

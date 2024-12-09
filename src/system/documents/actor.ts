@@ -216,14 +216,161 @@ export class CosmereActor<
         this.updateSource({ prototypeToken });
     }
 
+    public override async update(
+        data?: object,
+        operation?: Partial<
+            Omit<
+                foundry.abstract.DatabaseUpdateOperation,
+                'updates' | '_result'
+            >
+        > & { recordChanges?: boolean; levelContext?: number },
+    ): Promise<foundry.abstract.Document> {
+        data = foundry.utils.expandObject(data ?? {});
+
+        // Perform update
+        const result = await super.update(data, operation);
+
+        // Record changes, if required
+        if (
+            data &&
+            (foundry.utils.hasProperty(data, 'system.attributes') ||
+                foundry.utils.hasProperty(data, 'system.skills')) &&
+            this.isCharacter() &&
+            operation?.recordChanges !== false
+        ) {
+            const level = operation?.levelContext ?? this.system.level;
+
+            // Set up levels array
+            const levels = Array.from({ length: level }, (_, i) => i + 1);
+
+            // Attribute scores
+            if (
+                Object.keys(CONFIG.COSMERE.attributes).some((attrId) =>
+                    foundry.utils.hasProperty(
+                        data,
+                        `system.attributes.${attrId}.value`,
+                    ),
+                )
+            ) {
+                // Get attribute value changes from data
+                const newAttrValues = Object.keys(CONFIG.COSMERE.attributes)
+                    .map(
+                        (attrId) =>
+                            [
+                                attrId,
+                                foundry.utils.getProperty(
+                                    data,
+                                    `system.attributes.${attrId}.value`,
+                                ),
+                            ] as [Attribute, number],
+                    )
+                    .filter(([_, value]) => !!value);
+
+                const attrValueChanges = newAttrValues
+                    .map(([attrId, value]) => {
+                        // Calculate previous value (up to this level)
+                        const previousValue = levels
+                            .slice(0, -1)
+                            .map(
+                                (l) =>
+                                    this.getFlag<number | null>(
+                                        SYSTEM_ID,
+                                        `meta.changes.level${l}.attributes.${attrId}`,
+                                    ) ?? 0,
+                            )
+                            .reduce((acc, val) => acc + val, 0);
+
+                        // Calculate change
+                        return [attrId, value - previousValue];
+                    })
+                    .reduce(
+                        (acc, [attrId, value]) => ({
+                            ...acc,
+                            [attrId]: value,
+                        }),
+                        {} as Record<Attribute, number>,
+                    );
+
+                // Set changes
+                await this.setFlag(
+                    SYSTEM_ID,
+                    `meta.changes.level${level}.attributes`,
+                    attrValueChanges,
+                );
+            }
+
+            // Skill ranks
+            if (
+                Object.keys(CONFIG.COSMERE.skills).some((skillId) =>
+                    foundry.utils.hasProperty(
+                        data,
+                        `system.skills.${skillId}.rank`,
+                    ),
+                )
+            ) {
+                // Get skill rank changes from data
+                const newSkillRanks = Object.keys(CONFIG.COSMERE.skills)
+                    .map(
+                        (skillId) =>
+                            [
+                                skillId,
+                                foundry.utils.getProperty(
+                                    data,
+                                    `system.skills.${skillId}.rank`,
+                                ),
+                            ] as [Skill, number],
+                    )
+                    .filter(([_, value]) => !!value);
+
+                const skillRankChanges = newSkillRanks
+                    .map(([skillId, value]) => {
+                        // Calculate previous rank (up to this level)
+                        const previousRank = levels
+                            .slice(0, -1)
+                            .map(
+                                (l) =>
+                                    this.getFlag<number | null>(
+                                        SYSTEM_ID,
+                                        `meta.changes.level${l}.skills.${skillId}`,
+                                    ) ?? 0,
+                            )
+                            .reduce((acc, val) => acc + val, 0);
+
+                        // Calculate change
+                        return [skillId, value - previousRank];
+                    })
+                    .reduce(
+                        (acc, [skillId, value]) => ({
+                            ...acc,
+                            [skillId]: value,
+                        }),
+                        {} as Record<Skill, number>,
+                    );
+
+                // Set changes
+                await this.setFlag(
+                    SYSTEM_ID,
+                    `meta.changes.level${level}.skills`,
+                    skillRankChanges,
+                );
+            }
+        }
+
+        // Return result
+        return result;
+    }
+
     public override async createEmbeddedDocuments(
         embeddedName: string,
         data: object[],
-        opertion?: Partial<foundry.abstract.DatabaseCreateOperation>,
+        operation?: Partial<foundry.abstract.DatabaseCreateOperation> & {
+            recordChanges?: boolean;
+            levelContext?: number;
+        },
     ): Promise<foundry.abstract.Document[]> {
         // Pre create actions
         if (
-            this.preCreateEmbeddedDocuments(embeddedName, data, opertion) ===
+            this.preCreateEmbeddedDocuments(embeddedName, data, operation) ===
             false
         )
             return [];
@@ -232,13 +379,83 @@ export class CosmereActor<
         const result = await super.createEmbeddedDocuments(
             embeddedName,
             data,
-            opertion,
+            operation,
         );
 
+        // Record changes, if required
+        if (this.isCharacter() && operation?.recordChanges !== false) {
+            const level = operation?.levelContext ?? this.system.level;
+
+            await this.setFlag(
+                SYSTEM_ID,
+                `meta.changes.level${level}.items`,
+                (
+                    this.getFlag<string[]>(
+                        SYSTEM_ID,
+                        `meta.changes.level${level}.items`,
+                    ) ?? []
+                ).concat(result.map((i) => `+${i.id}`)),
+            );
+        }
+
         // Post create actions
-        this.postCreateEmbeddedDocuments(embeddedName, result);
+        result.concat(
+            await this.postCreateEmbeddedDocuments(
+                embeddedName,
+                result,
+                operation,
+            ),
+        );
 
         // Return result
+        return result;
+    }
+
+    public override async deleteEmbeddedDocuments(
+        embeddedName: string,
+        ids: string[],
+        operation?: Partial<foundry.abstract.DatabaseDeleteOperation> & {
+            recordChanges?: boolean;
+            levelContext?: number;
+        },
+    ): Promise<foundry.abstract.Document[]> {
+        // Perform delete
+        const result = await super.deleteEmbeddedDocuments(
+            embeddedName,
+            ids,
+            operation,
+        );
+
+        // Record changes, if required
+        if (this.isCharacter() && operation?.recordChanges) {
+            const level = operation?.levelContext ?? this.system.level;
+
+            // Get item changes for this level
+            const changes =
+                this.getFlag<string[]>(
+                    SYSTEM_ID,
+                    `meta.changes.level${level}.items`,
+                ) ?? [];
+
+            result.map((i) => {
+                // Check if the item was added at this level
+                if (changes.includes(`+${i.id}`)) {
+                    // Remove the item from the changes
+                    changes.splice(changes.indexOf(`+${i.id}`), 1);
+                } else {
+                    // Add the item to the changes
+                    changes.push(`-${i.id}`);
+                }
+            });
+
+            // Set changes
+            await this.setFlag(
+                SYSTEM_ID,
+                `meta.changes.level${level}.items`,
+                changes,
+            );
+        }
+
         return result;
     }
 
@@ -287,7 +504,7 @@ export class CosmereActor<
     protected preCreateEmbeddedDocuments(
         embeddedName: string,
         data: object[],
-        opertion?: Partial<foundry.abstract.DatabaseCreateOperation>,
+        operation?: Partial<foundry.abstract.DatabaseCreateOperation>,
     ): boolean | void {
         if (embeddedName === 'Item') {
             const itemData = data as CosmereItemData[];
@@ -340,24 +557,53 @@ export class CosmereActor<
         }
     }
 
-    protected postCreateEmbeddedDocuments(
+    protected async postCreateEmbeddedDocuments(
         embeddedName: string,
         documents: foundry.abstract.Document[],
-    ): void {
-        documents.forEach((doc) => {
-            if (embeddedName === 'Item') {
-                const item = doc as CosmereItem;
+        operation?: Partial<foundry.abstract.DatabaseCreateOperation> & {
+            recordChanges?: boolean;
+            levelContext?: number;
+        },
+    ): Promise<foundry.abstract.Document[]> {
+        return (
+            await Promise.all(
+                documents.map(async (doc) => {
+                    const newDocs: foundry.abstract.Document[] = [];
 
-                if (item.isAncestry()) {
-                    this.onAncestryAdded(item);
-                } else if (item.isTalent()) {
-                    this.onTalentAdded(item);
-                }
-            }
-        });
+                    if (embeddedName === 'Item') {
+                        const item = doc as CosmereItem;
+
+                        if (item.isAncestry()) {
+                            this.onAncestryAdded(item, operation);
+                        } else if (item.isTalent()) {
+                            this.onTalentAdded(item);
+                        } else if (item.hasTriggers()) {
+                            newDocs.concat(
+                                await this.handleItemAddTriggers(
+                                    item,
+                                    operation
+                                        ? {
+                                              recordChanges:
+                                                  operation.recordChanges,
+                                              levelContext:
+                                                  operation.levelContext,
+                                          }
+                                        : {},
+                                ),
+                            );
+                        }
+                    }
+
+                    return newDocs;
+                }),
+            )
+        ).flat();
     }
 
-    protected onAncestryAdded(item: AncestryItem) {
+    protected onAncestryAdded(
+        item: AncestryItem,
+        options?: { recordChanges?: boolean; levelContext?: number },
+    ) {
         // Find any other ancestry items
         const otherAncestries = this.items.filter(
             (i) => i.isAncestry() && i.id !== item.id,
@@ -365,7 +611,7 @@ export class CosmereActor<
 
         // Remove other ancestries
         otherAncestries.forEach((i) => {
-            void i.delete();
+            void this.deleteEmbeddedDocuments('Item', [i.id], options);
         });
     }
 
@@ -415,6 +661,62 @@ export class CosmereActor<
                 }
             });
         }
+    }
+
+    protected async handleItemAddTriggers(
+        item: CosmereItem,
+        options?: { recordChanges?: boolean; levelContext?: number },
+    ): Promise<foundry.abstract.Document[]> {
+        if (!item.hasTriggers()) return [];
+
+        const newDocs: foundry.abstract.Document[] = [];
+
+        // Get triggers
+        const triggers = item.system.triggers;
+
+        // Get all applicable on-add triggers
+        const onAddTriggers = triggers
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
+            .filter(
+                (t) =>
+                    t.event === 'add-to-actor' ||
+                    (t.event === 'add-to-character' && this.isCharacter()),
+            );
+
+        // Process triggers
+        await Promise.all(
+            onAddTriggers.map(async (trigger) => {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
+                if (trigger.action.type === 'grant-items') {
+                    // Get uuids
+                    const uuids = trigger.action.data.items;
+
+                    // Get the items
+                    const items = await Promise.all(
+                        uuids.map(
+                            async (uuid) =>
+                                (await fromUuid(
+                                    uuid,
+                                )) as unknown as CosmereItem,
+                        ),
+                    );
+
+                    // Add the items to the actor
+                    newDocs.concat(
+                        await this.createEmbeddedDocuments(
+                            'Item',
+                            items.map((i) => i.toObject()),
+                            options,
+                        ),
+                    );
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
+                } else if (trigger.action.type === 'remove-items') {
+                    // TODO
+                }
+            }),
+        );
+
+        return newDocs;
     }
 
     /* --- Functions --- */

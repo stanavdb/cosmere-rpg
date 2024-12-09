@@ -1,0 +1,98 @@
+<div class="content">
+    <section class="steps">
+        <ul>
+            {{#each steps as |step index|}}
+                <li class="step {{step.css}}" data-id="{{step.id}}" data-index="{{index}}">
+                    <a data-action="select-step">
+                        <span class="icon">
+                            <i class="fa-solid fa-{{step.icon}}"></i>
+                        </span>
+                        <div class="description">
+                            <span class="label">{{step.label}}</span>
+                            <span class="description">{{step.description}}</span>
+                        </div>
+                    </a>
+                </li>
+            {{/each}}
+        </ul>
+    </section>
+
+    <section class="actions">
+        {{#with (lookup steps currentStep) as |step|}}
+            {{#each step.actions as |action index|}}
+                <div class="action" data-type="{{action.type}}" data-index="{{index}}">
+                    <div class="header">
+                        <i class="icon {{action.icon}}"></i>
+                        <span class="title">{{action.label}}</span>
+                    </div>
+                    <div class="body">
+                        <span class="description">{{action.description}}</span>
+                        {{#if (eq action.type "select-items")}}
+                            <span class="task">Select items ({{action.selected.length}}/{{action.max}})</span>
+                            <div class="items-list">
+                                {{#each action.items as |item|}}
+                                    <div class="item {{#if (includes action.selected item.system.id)}}selected{{/if}}" data-uuid="{{item.uuid}}" data-action="select-item">
+                                        <img class="img" src="{{item.img}}"/>
+                                        <span class="name">{{item.name}}</span>
+                                        <input 
+                                            type="checkbox" 
+                                            {{#if (includes action.selected item.system.id)}}checked{{/if}}
+                                        >
+                                    </div>
+                                {{/each}}
+                            </div>
+                        {{else if (eq action.type "assign-attributes")}}
+                            <span class="task">Assign Attributes ({{action.assigned.total}}/{{action.points}})</span>
+                            <div class="attributes-assign">
+                                {{#each @root.ATTRIBUTES as |attr|}}
+                                    <div class="attribute" data-id="{{attr.id}}">
+                                        <span class="name">{{localize attr.label}}</span>
+                                        <a class="btn" data-action="assign-attribute" data-value="-1">-</a>
+                                        <span class="value">{{lookup action.assigned.scores attr.id}}</span>
+                                        <a class="btn" data-action="assign-attribute" data-value="1">+</a>
+                                    </div>
+                                {{/each}}
+                            </div>
+                        {{else if (eq action.type "assign-skills")}}
+                            <span class="task">Assign Skills ({{action.assigned.total}}/{{action.ranks}})</span>
+                            <div class="skills-assign">
+                                {{#each @root.ATTRIBUTE_GROUPS as |attrGroup|}}
+                                    <div class="group">
+                                        <span class="name">{{localize attrGroup.label}}</span>
+                                        {{#each attrGroup.skills as |skill|}}
+                                            {{#if skill.core}}
+                                                <div class="skill" data-id="{{skill.id}}">
+                                                    <span class="name">{{localize skill.label}}</span>
+                                                    <span class="attribute">{{localize skill.attributeLabel}}</span>
+                                                    <a class="btn" data-action="assign-skill" data-value="-1">-</a>
+                                                    <span class="value">{{lookup action.assigned.ranks skill.id}}</span>
+                                                    <a class="btn" data-action="assign-skill" data-value="1">+</a>
+                                                </div>
+                                            {{/if}}
+                                        {{/each}}
+                                    </div>
+                                {{/each}}
+                            </div>
+                        {{else if (eq action.type "configure-goals")}}
+                            <div class="input-field">
+                                <label>Goal</label>
+                                <input type="text" value="{{action.value}}">
+                            </div>
+                        {{else if (eq action.type "input")}}
+                            {{#each action.inputs as |inputConfig index|}}
+                                <div class="input-field" data-index="{{index}}">
+                                    <label>{{localize inputConfig.label}}</label>
+                                    <input type="text" value="{{lookup (lookup action.inputs index) "value"}}">
+                                </div>
+                            {{/each}}
+                        {{else}}
+                        <span>Unknown Action Type</span>
+                        {{/if}}
+                    </div>
+                </div>
+            {{/each}}
+        {{/with}}
+    </section>
+
+    <section class="details"></section>
+</div>

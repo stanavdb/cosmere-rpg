@@ -221,3 +221,16 @@ export function getTargetDescriptors() {
 
     return Array.from(targets.values());
 }
+
+/**
+ * Derive a valid ID from a given name.
+ */
+export function deriveIdFromName(name: string) {
+    return name
+        .toLowerCase()
+        .replace(/[^a-z0-9-_\s]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .split(' ')
+        .join('-');
+}

@@ -43,7 +43,16 @@
         <div class="level">
             <span class="label">{{localize "COSMERE.Actor.Sheet.Level"}}</span>
             <div class="container">
-                <span class="value">{{derived actor.system.level.total}}</span>
+                {{#if isEditMode}}
+                <input name="system.level"
+                    type="number"
+                    value="{{actor.system.level}}"
+                    min="1"
+                    step="1"
+                >
+                {{else}}
+                <span class="value">{{actor.system.level}}</span>
+                {{/if}}
             </div>
         </div>
     </div>

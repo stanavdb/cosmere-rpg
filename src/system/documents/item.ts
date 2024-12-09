@@ -51,6 +51,7 @@ import { EquippableItemData } from '@system/data/item/mixins/equippable';
 import { DescriptionItemData } from '@system/data/item/mixins/description';
 import { IdItemData } from '@system/data/item/mixins/id';
 import { ModalityItemData } from '@system/data/item/mixins/modality';
+import { TriggerableItemData } from '@system/data/item/mixins/triggerable';
 
 // Rolls
 import {
@@ -242,6 +243,13 @@ export class CosmereItem<
      */
     public hasModality(): this is CosmereItem<ModalityItemData> {
         return 'modality' in this.system;
+    }
+
+    /**
+     * Does this item have triggers?
+     */
+    public hasTriggers(): this is CosmereItem<TriggerableItemData> {
+        return 'triggers' in this.system;
     }
 
     /* --- Accessors --- */

@@ -2,10 +2,15 @@ import './components';
 
 import { ItemType } from '@system/types/cosmere';
 import { CharacterActor } from '@system/documents';
-import { SYSTEM_ID } from '@src/system/constants';
+
+// Character builder
+import { CharacterBuilder } from '@system/applications/character-builder';
 
 // Base
 import { BaseActorSheet } from './base';
+
+// Constants
+import { SYSTEM_ID } from '@src/system/constants';
 
 const enum CharacterSheetTab {
     Details = 'details',
@@ -13,6 +18,7 @@ const enum CharacterSheetTab {
 }
 
 export class CharacterSheet extends BaseActorSheet {
+    /* eslint-disable @typescript-eslint/unbound-method */
     static DEFAULT_OPTIONS = foundry.utils.mergeObject(
         foundry.utils.deepClone(super.DEFAULT_OPTIONS),
         {
@@ -21,8 +27,12 @@ export class CharacterSheet extends BaseActorSheet {
                 width: 850,
                 height: 1000,
             },
+            actions: {
+                'show-character-builder': this._onShowCharacterBuilder,
+            },
         },
     );
+    /* eslint-enable @typescript-eslint/unbound-method */
 
     static PARTS = foundry.utils.mergeObject(
         foundry.utils.deepClone(super.PARTS),
@@ -59,6 +69,32 @@ export class CharacterSheet extends BaseActorSheet {
         return super.document;
     }
 
+    /* --- Actions --- */
+
+    private static _onShowCharacterBuilder(this: CharacterSheet) {
+        void CharacterBuilder.show(this.actor);
+    }
+
+    /* --- Lifecycle --- */
+
+    protected _getHeaderControls(): foundry.applications.api.ApplicationV2.HeaderControlsEntry[] {
+        const controls = super._getHeaderControls();
+
+        if (
+            !controls.some(
+                (control) => control.action === 'show-character-builder',
+            )
+        ) {
+            controls.push({
+                action: 'show-character-builder',
+                label: 'Show Character Builder',
+                icon: 'fa-solid fa-trowel-bricks',
+            });
+        }
+
+        return controls;
+    }
+
     /* --- Context --- */
 
     public async _prepareContext(
@@ -82,7 +118,7 @@ export class CharacterSheet extends BaseActorSheet {
 
             pathTypes: pathTypes.map((type) => ({
                 type,
-                typeLabel: CONFIG.COSMERE.paths.types[type].label,
+                typeLabel: CONFIG.COSMERE.path.types[type].label,
                 paths: pathItems.filter((i) => i.system.type === type),
             })),
 

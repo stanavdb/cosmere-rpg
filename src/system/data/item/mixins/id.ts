@@ -1,5 +1,8 @@
 import { CosmereItem } from '@system/documents';
 
+// Utils
+import { deriveIdFromName } from '@system/utils/generic';
+
 interface IdItemMixinOptions<Type extends string = string> {
     initialFromName?: boolean;
     initial?: Type | (() => Type);
@@ -66,13 +69,7 @@ export function IdItemMixin<
                 super.prepareDerivedData();
 
                 if (this.id === '<id>' && options.initialFromName) {
-                    this.id = this.parent.name
-                        .toLowerCase()
-                        .replace(/[^a-z0-9-_\s]/g, '')
-                        .replace(/\s+/g, ' ')
-                        .trim()
-                        .split(' ')
-                        .join('-') as Type;
+                    this.id = deriveIdFromName(this.parent.name) as Type;
                 }
             }
         };
