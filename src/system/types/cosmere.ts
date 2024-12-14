@@ -66,29 +66,29 @@ export const enum Resource {
     Investiture = 'inv',
 }
 
-export const Skills = {
-    Agility: 'agi',
-    Athletics: 'ath',
-    HeavyWeapons: 'hwp',
-    LightWeapons: 'lwp',
-    Stealth: 'stl',
-    Thievery: 'thv',
+export enum Skill {
+    Agility = 'agi',
+    Athletics = 'ath',
+    HeavyWeapons = 'hwp',
+    LightWeapons = 'lwp',
+    Stealth = 'stl',
+    Thievery = 'thv',
 
-    Crafting: 'cra',
-    Deduction: 'ded',
-    Discipline: 'dis',
-    Intimidation: 'inm',
-    Lore: 'lor',
-    Medicine: 'med',
+    Crafting = 'cra',
+    Deduction = 'ded',
+    Discipline = 'dis',
+    Intimidation = 'inm',
+    Lore = 'lor',
+    Medicine = 'med',
 
-    Deception: 'dec',
-    Insight: 'ins',
-    Leadership: 'lea',
-    Perception: 'prc',
-    Persuasion: 'prs',
-    Survival: 'sur',
-} as const;
-export type Skill = (typeof Skills)[keyof typeof Skills];
+    Deception = 'dec',
+    Insight = 'ins',
+    Leadership = 'lea',
+    Perception = 'prc',
+    Persuasion = 'prs',
+    Survival = 'sur',
+}
+// export type Skill = (typeof Skills)[keyof typeof Skills];
 
 export const enum DerivedStatistic {
     MovementRate = 'mvr',
