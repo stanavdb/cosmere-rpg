@@ -166,7 +166,13 @@ export function getConstantFromRoll(roll: Roll) {
  * @returns {string} The human readable display string for the formula (without terms aggregated).
  */
 export function getFormulaDisplayString(diceParts: string[]) {
-    return diceParts.join(' + ').replace(/\+ -/g, '-').replace(/\+ \+/g, '+');
+    const joined = diceParts
+        .join(' + ')
+        .replace(/\+ -/g, '-')
+        .replace(/\+ \+/g, '+');
+    return joined.endsWith(' + ') || joined.endsWith(' - ')
+        ? joined.substring(0, joined.length - 3)
+        : joined;
 }
 
 /**
