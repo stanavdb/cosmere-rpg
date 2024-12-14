@@ -1099,6 +1099,10 @@
         }
     },
     "SETTINGS": {
+        "actorSheetInlineTabs": {
+            "name": "Horizontal Inline Tabs for Actor Sheets",
+            "hint": "If enabled, actor sheets will use horizontal tabs within the bounds of the sheet, as per foundry default sheets. This setting is meant as a work-around solution for the Pop-Out! module, for those who want to use it."
+        },
         "itemSheetSideTabs": {
             "name": "Vertical Side Tabs for Item Sheets",
             "hint": "If enabled, item sheets use vertical tabs down the right-hand side, similar to the character sheet, instead of the default in-line horizontal ones."
