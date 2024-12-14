@@ -4,10 +4,11 @@ export {
     EmptyObject,
 } from '@league-of-foundry-developers/foundry-vtt-types/src/types/utils.mjs';
 
+// Constant to improve UI consistency
 export const NONE = 'none';
-export type None = typeof NONE;
 
-export type Noneable<T> = T | None;
+// Simple utility type for easier null definitions, but general rule: only use it when you have one type that is nullable (i.e. prefer X | Y | null over Nullable<X | Y>)
+export type Nullable<T> = T | null;
 
 export type SharedKeys<T, U> = keyof T & keyof U;
 

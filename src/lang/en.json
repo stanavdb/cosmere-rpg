@@ -1010,6 +1010,7 @@
     "GENERIC": {
         "Unknown": "Unknown",
         "None": "None",
+        "Custom": "Custom",
         "Default": "Default",
         "Document": "Document",
         "Formula": "Formula",

@@ -16,7 +16,7 @@ import {
     getApplyTargets,
     getConstantFromRoll,
     TargetDescriptor,
-    isNone,
+    isNull,
 } from '../utils/generic';
 
 export const MESSAGE_TYPES = {
@@ -191,8 +191,10 @@ export class CosmereChatMessage extends ChatMessage {
                 icon: 'fa-regular fa-dice-d20',
                 title: game.i18n!.localize('GENERIC.SkillTest'),
                 subtitle: {
-                    skill: CONFIG.COSMERE.skills[skill.id].label,
-                    attribute: !isNone(skill.attribute)
+                    skill: skill.id
+                        ? CONFIG.COSMERE.skills[skill.id].label
+                        : `${game.i18n!.localize('GENERIC.Custom')} ${game.i18n!.localize('GENERIC.Skill')}`,
+                    attribute: !isNull(skill.attribute)
                         ? CONFIG.COSMERE.attributes[skill.attribute].labelShort
                         : game.i18n?.localize('GENERIC.None'),
                 },

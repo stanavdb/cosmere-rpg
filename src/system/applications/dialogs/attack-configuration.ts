@@ -1,8 +1,12 @@
 import { Attribute } from '@system/types/cosmere';
 import { RollMode } from '@system/dice/types';
 import { AdvantageMode } from '@system/types/roll';
-import { AnyObject, NONE, Noneable } from '@system/types/utils';
-import { isNone } from '@src/system/utils/generic';
+import { AnyObject, NONE, Nullable } from '@system/types/utils';
+import {
+    getFormulaDisplayString,
+    getNullableFromFormInput,
+    isNull,
+} from '@src/system/utils/generic';
 
 import { D20RollData } from '@system/dice/d20-roll';
 import { DamageRollData } from '@system/dice/damage-roll';
@@ -84,7 +88,7 @@ export namespace AttackConfigurationDialog {
         /**
          * The attribute that is used for the roll by default
          */
-        defaultAttribute?: Noneable<Attribute>;
+        defaultAttribute?: Nullable<Attribute>;
 
         /**
          * The roll mode that should be selected by default
@@ -93,7 +97,7 @@ export namespace AttackConfigurationDialog {
     }
 
     export interface Result {
-        attribute: Noneable<Attribute>;
+        attribute: Nullable<Attribute>;
         rollMode: RollMode;
         skillTest: {
             plotDie: boolean;
@@ -193,7 +197,9 @@ export class AttackConfigurationDialog extends ComponentHandlebarsApplicationMix
     ) {
         if (event instanceof SubmitEvent) return;
 
-        const attribute = formData.get('attribute') as Noneable<Attribute>;
+        const attribute = getNullableFromFormInput<Attribute>(
+            formData.get('attribute') as string,
+        );
         const rollMode = formData.get('rollMode') as RollMode;
         const plotDie = formData.get('plotDie') === 'true';
         const tempMod = formData.get('temporaryMod')?.valueOf() as string;
@@ -207,7 +213,7 @@ export class AttackConfigurationDialog extends ComponentHandlebarsApplicationMix
         this.data.skillTest.temporaryModifiers = tempMod;
 
         const skill = this.data.skillTest.data.skill;
-        const attributeData = !isNone(attribute)
+        const attributeData = !isNull(attribute)
             ? this.data.skillTest.data.attributes[attribute]
             : { value: 0, bonus: 0 };
         const rank = skill.rank;
@@ -216,7 +222,7 @@ export class AttackConfigurationDialog extends ComponentHandlebarsApplicationMix
         this.data.skillTest.data.mod = rank + value;
         this.data.skillTest.plotDie = plotDie;
 
-        this.data.defaultAttribute = !isNone(attribute) ? attribute : undefined;
+        this.data.defaultAttribute = !isNull(attribute) ? attribute : undefined;
         this.data.defaultRollMode = rollMode;
 
         void this.render();
@@ -232,7 +238,10 @@ export class AttackConfigurationDialog extends ComponentHandlebarsApplicationMix
             temporaryMod: HTMLInputElement;
         };
 
-        const attribute = form.attribute.value as Noneable<Attribute>;
+        const attribute = getNullableFromFormInput<Attribute>(
+            form.attribute.value,
+        );
+
         const rollMode = form.rollMode.value as RollMode;
 
         const plotDie = form.plotDie.checked;
@@ -291,10 +300,7 @@ export class AttackConfigurationDialog extends ComponentHandlebarsApplicationMix
 
     protected _prepareContext() {
         const skillTestFormula = foundry.dice.Roll.replaceFormulaData(
-            this.data.skillTest.parts
-                .join(' + ')
-                .replace(/\+ -/g, '-')
-                .replace(/\+ \+/g, '+'),
+            getFormulaDisplayString(this.data.skillTest.parts),
             this.data.skillTest.data,
             {
                 missing: '0',
@@ -302,10 +308,7 @@ export class AttackConfigurationDialog extends ComponentHandlebarsApplicationMix
         );
 
         const damageRollFormula = foundry.dice.Roll.replaceFormulaData(
-            this.data.damageRoll.parts
-                .join(' + ')
-                .replace(/\+ -/g, '-')
-                .replace(/\+ \+/g, '+'),
+            getFormulaDisplayString(this.data.damageRoll.parts),
             this.data.damageRoll.data,
             {
                 missing: '0',

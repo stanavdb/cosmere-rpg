@@ -7,9 +7,9 @@ import { RollConfigurationDialog } from '@system/applications/dialogs/roll-confi
 
 import { PlotDie } from './plot-die';
 import { RollMode } from './types';
-import { hasKey, isNone } from '../utils/generic';
+import { hasKey, isNull } from '../utils/generic';
 import { renderSystemTemplate, TEMPLATES } from '../utils/templates';
-import { Noneable } from '../types/utils';
+import { Nullable } from '../types/utils';
 
 // Constants
 const CONFIGURATION_DIALOG_TEMPLATE =
@@ -27,10 +27,10 @@ export type D20RollData<
 } & {
     mod: number;
     skill: {
-        id: Skill;
+        id: Nullable<Skill>;
         rank: number;
         mod: number;
-        attribute: Noneable<Attribute>;
+        attribute: Nullable<Attribute>;
     };
     attribute: number;
 };
@@ -256,7 +256,7 @@ export class D20Roll extends foundry.dice.Roll<D20RollData> {
         if (result.attribute !== this.options.defaultAttribute) {
             this.data.skill.attribute = result.attribute;
             const skill = this.data.skill;
-            const attribute = !isNone(result.attribute)
+            const attribute = !isNull(result.attribute)
                 ? this.data.attributes[result.attribute]
                 : { value: 0, bonus: 0 };
             this.terms[2] = new foundry.dice.terms.NumericTerm({

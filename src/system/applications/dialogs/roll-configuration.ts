@@ -1,8 +1,12 @@
 import { Attribute } from '@system/types/cosmere';
 import { RollMode } from '@system/dice/types';
 import { AdvantageMode } from '@system/types/roll';
-import { AnyObject, NONE, Noneable } from '@system/types/utils';
-import { isNone } from '@src/system/utils/generic';
+import { AnyObject, NONE, Nullable } from '@system/types/utils';
+import {
+    getFormulaDisplayString,
+    getNullableFromFormInput,
+    isNull,
+} from '@src/system/utils/generic';
 
 import { D20RollData } from '@system/dice/d20-roll';
 
@@ -48,7 +52,7 @@ export namespace RollConfigurationDialog {
         /**
          * The attribute that is used for the roll by default
          */
-        defaultAttribute?: Noneable<Attribute>;
+        defaultAttribute?: Nullable<Attribute>;
 
         /**
          * The roll mode that should be selected by default
@@ -67,7 +71,7 @@ export namespace RollConfigurationDialog {
     }
 
     export interface Result {
-        attribute: Noneable<Attribute>;
+        attribute: Nullable<Attribute>;
         rollMode: RollMode;
         plotDie: boolean;
         advantageMode: AdvantageMode;
@@ -155,7 +159,9 @@ export class RollConfigurationDialog extends ComponentHandlebarsApplicationMixin
     ) {
         if (event instanceof SubmitEvent) return;
 
-        const attribute = formData.get('attribute') as Noneable<Attribute>;
+        const attribute = getNullableFromFormInput<Attribute>(
+            formData.get('attribute') as string,
+        );
         const rollMode = formData.get('rollMode') as RollMode;
         const plotDie = formData.get('plotDie') === 'true';
         const tempMod = formData.get('temporaryMod')?.valueOf() as string;
@@ -169,14 +175,14 @@ export class RollConfigurationDialog extends ComponentHandlebarsApplicationMixin
         this.data.temporaryModifiers = tempMod;
 
         const skill = this.data.data.skill;
-        const attributeData = !isNone(attribute)
+        const attributeData = !isNull(attribute)
             ? this.data.data.attributes[attribute]
             : { value: 0, bonus: 0 };
         const rank = skill.rank;
         const value = attributeData.value + attributeData.bonus;
 
         this.data.data.mod = rank + value;
-        this.data.defaultAttribute = !isNone(attribute) ? attribute : undefined;
+        this.data.defaultAttribute = !isNull(attribute) ? attribute : undefined;
         this.data.defaultRollMode = rollMode;
         this.data.plotDie = plotDie;
 
@@ -193,7 +199,9 @@ export class RollConfigurationDialog extends ComponentHandlebarsApplicationMixin
             temporaryMod: HTMLInputElement;
         };
 
-        const attribute = form.attribute.value as Noneable<Attribute>;
+        const attribute = getNullableFromFormInput<Attribute>(
+            form.attribute.value,
+        );
         const rollMode = form.rollMode.value as RollMode;
         const plotDie = form.plotDie.checked;
 
@@ -246,10 +254,7 @@ export class RollConfigurationDialog extends ComponentHandlebarsApplicationMixin
 
     protected _prepareContext() {
         const formula = foundry.dice.Roll.replaceFormulaData(
-            this.data.parts
-                .join(' + ')
-                .replace(/\+ -/g, '-')
-                .replace(/\+ \+/g, '+'),
+            getFormulaDisplayString(this.data.parts),
             this.data.data,
             {
                 missing: '0',

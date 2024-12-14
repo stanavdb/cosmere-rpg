@@ -61,12 +61,19 @@ export function hasKey<T extends object>(
 }
 
 /**
- * Simple check to confirm whether a given value equates to our constant "none" string.
- * @param value The value to be checked.
- * @returns {boolean} Whether the value passed is the NONE constant or not.
+ * Simple check to confirm whether a given variable has been specifically defined as empty (null).
+ * @param value The variable to be checked.
+ * @returns {boolean} Whether the variable passed is null or not.
  */
-export function isNone(value: unknown) {
-    return value === NONE;
+export function isNull(value: unknown) {
+    return value === null;
+}
+
+/**
+ * Converts entries from input forms that will include human-readable "none" into nulls for easier identification in code.
+ */
+export function getNullableFromFormInput<T>(formField: string | null) {
+    return formField && formField !== NONE ? (formField as T) : null;
 }
 
 /**
@@ -150,6 +157,16 @@ export function getConstantFromRoll(roll: Roll) {
     }
 
     return constant;
+}
+
+/**
+ * Converts a list of the various parts of a formula into a displayable string.
+ *
+ * @param {string[]} diceParts A parts array as provided from the foundry Roll API.
+ * @returns {string} The human readable display string for the formula (without terms aggregated).
+ */
+export function getFormulaDisplayString(diceParts: string[]) {
+    return diceParts.join(' + ').replace(/\+ -/g, '-').replace(/\+ \+/g, '+');
 }
 
 /**
