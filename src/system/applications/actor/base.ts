@@ -65,12 +65,12 @@ export class BaseActorSheet<
     );
     /* eslint-enable @typescript-eslint/unbound-method */
 
-    static PARTS = foundry.utils.mergeObject(super.PARTS, {
-        navigation: {
-            template:
-                'systems/cosmere-rpg/templates/actors/parts/navigation.hbs',
-        },
-    });
+    // static PARTS = foundry.utils.mergeObject(super.PARTS, {
+    //     navigation: {
+    //         template:
+    //             'systems/cosmere-rpg/templates/actors/parts/navigation.hbs',
+    //     },
+    // });
 
     static TABS = foundry.utils.mergeObject(super.TABS, {
         [BaseSheetTab.Actions]: {

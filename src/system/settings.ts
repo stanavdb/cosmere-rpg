@@ -8,6 +8,7 @@ import { setTheme } from './utils/templates';
 export const SETTINGS = {
     INTERNAL_FIRST_CREATION: 'firstTimeWorldCreation',
     INTERNAL_LATEST_VERSION: 'latestVersion',
+    ACTOR_SHEET_INLINE_TABS: 'actorSheetInlineTabs',
     ITEM_SHEET_SIDE_TABS: 'itemSheetSideTabs',
     ROLL_SKIP_DIALOG_DEFAULT: 'skipRollDialogByDefault',
     CHAT_ENABLE_OVERLAY_BUTTONS: 'enableOverlayButtons',
@@ -47,6 +48,7 @@ export function registerSystemSettings() {
 
     // SHEET SETTINGS
     const sheetOptions = [
+        { name: SETTINGS.ACTOR_SHEET_INLINE_TABS, default: false },
         { name: SETTINGS.ITEM_SHEET_SIDE_TABS, default: false },
     ];
 
