@@ -5,7 +5,6 @@ import { AnyObject, NONE, Nullable } from '@system/types/utils';
 import {
     getFormulaDisplayString,
     getNullableFromFormInput,
-    isNull,
 } from '@src/system/utils/generic';
 
 import { D20RollData } from '@system/dice/d20-roll';
@@ -175,14 +174,14 @@ export class RollConfigurationDialog extends ComponentHandlebarsApplicationMixin
         this.data.temporaryModifiers = tempMod;
 
         const skill = this.data.data.skill;
-        const attributeData = !isNull(attribute)
+        const attributeData = attribute
             ? this.data.data.attributes[attribute]
             : { value: 0, bonus: 0 };
         const rank = skill.rank;
         const value = attributeData.value + attributeData.bonus;
 
         this.data.data.mod = rank + value;
-        this.data.defaultAttribute = !isNull(attribute) ? attribute : undefined;
+        this.data.defaultAttribute = attribute ?? undefined;
         this.data.defaultRollMode = rollMode;
         this.data.plotDie = plotDie;
 

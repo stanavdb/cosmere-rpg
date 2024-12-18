@@ -66,7 +66,6 @@ import { RollMode } from '@system/dice/types';
 import {
     determineConfigurationMode,
     getTargetDescriptors,
-    isNull,
 } from '../utils/generic';
 import { MESSAGE_TYPES } from './chat-message';
 import { renderSystemTemplate, TEMPLATES } from '../utils/templates';
@@ -1185,10 +1184,10 @@ export class CosmereItem<
         attributeId: Nullable<Attribute>,
         actor: CosmereActor,
     ): D20RollData {
-        const skill = !isNull(skillId)
+        const skill = skillId
             ? actor.system.skills[skillId]
             : { attribute: null, rank: 0, mod: {} };
-        const attribute = !isNull(attributeId)
+        const attribute = attributeId
             ? actor.system.attributes[attributeId]
             : { value: 0, bonus: 0 };
         const mod = skill.rank + attribute.value + attribute.bonus;
@@ -1200,7 +1199,7 @@ export class CosmereItem<
                 id: skillId ?? null,
                 rank: skill.rank,
                 mod: Derived.getValue(skill.mod) ?? 0,
-                attribute: !isNull(attributeId) ? attributeId : skill.attribute,
+                attribute: attributeId ? attributeId : skill.attribute,
             },
             attribute: attribute.value,
         };
@@ -1213,7 +1212,7 @@ export class CosmereItem<
     ): DamageRollData {
         const skill = skillId ? actor.system.skills[skillId] : undefined;
         const attribute = attributeId
-            ? !isNull(attributeId)
+            ? attributeId
                 ? actor.system.attributes[attributeId]
                 : { value: 0, bonus: 0 }
             : undefined;
@@ -1232,9 +1231,7 @@ export class CosmereItem<
                       id: skillId!,
                       rank: skill.rank,
                       mod: Derived.getValue(skill.mod) ?? 0,
-                      attribute: !isNull(attributeId!)
-                          ? attributeId!
-                          : skill.attribute,
+                      attribute: attributeId! ? attributeId : skill.attribute,
                   }
                 : undefined,
             attribute: attribute?.value,

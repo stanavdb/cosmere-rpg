@@ -5,7 +5,6 @@ import { AnyObject, NONE, Nullable } from '@system/types/utils';
 import {
     getFormulaDisplayString,
     getNullableFromFormInput,
-    isNull,
 } from '@src/system/utils/generic';
 
 import { D20RollData } from '@system/dice/d20-roll';
@@ -213,7 +212,7 @@ export class AttackConfigurationDialog extends ComponentHandlebarsApplicationMix
         this.data.skillTest.temporaryModifiers = tempMod;
 
         const skill = this.data.skillTest.data.skill;
-        const attributeData = !isNull(attribute)
+        const attributeData = attribute
             ? this.data.skillTest.data.attributes[attribute]
             : { value: 0, bonus: 0 };
         const rank = skill.rank;
@@ -222,7 +221,7 @@ export class AttackConfigurationDialog extends ComponentHandlebarsApplicationMix
         this.data.skillTest.data.mod = rank + value;
         this.data.skillTest.plotDie = plotDie;
 
-        this.data.defaultAttribute = !isNull(attribute) ? attribute : undefined;
+        this.data.defaultAttribute = attribute ?? undefined;
         this.data.defaultRollMode = rollMode;
 
         void this.render();

@@ -61,15 +61,6 @@ export function hasKey<T extends object>(
 }
 
 /**
- * Simple check to confirm whether a given variable has been specifically defined as empty (null).
- * @param value The variable to be checked.
- * @returns {boolean} Whether the variable passed is null or not.
- */
-export function isNull(value: unknown) {
-    return value === null;
-}
-
-/**
  * Converts entries from input forms that will include human-readable "none" into nulls for easier identification in code.
  */
 export function getNullableFromFormInput<T>(formField: string | null) {
